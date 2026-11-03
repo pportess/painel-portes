@@ -449,6 +449,44 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
 .pc-retform { display: grid; gap: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--field); }
 .pc-retform input { font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
 .pc-dados input[type="tel"] { font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); }
+/* desafios diários na aba Conteúdo */
+.ds-seg { flex-wrap: wrap; border-radius: 16px; }
+.ds-resumo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+.ds-resumo > div { border: 1px solid var(--line); border-radius: var(--radius); padding: 12px 14px; background: var(--panel); display: grid; gap: 6px; align-content: start; }
+.ds-big { font-size: 28px; font-weight: 800; line-height: 1; }
+.ds-big small { font-size: 14px; color: var(--muted); font-weight: 700; }
+.ds-dias { display: flex; gap: 4px; }
+.ds-dias span { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; font-size: 11px; font-weight: 800; background: var(--field); color: var(--muted); }
+.ds-dias span.on { background: var(--accent); color: #fff; }
+.ds-dias span.hoje { outline: 2px solid var(--fg); outline-offset: 1px; }
+.ds-barra { height: 8px; border-radius: 99px; background: var(--field); overflow: hidden; }
+.ds-barra i { display: block; height: 100%; background: var(--accent); border-radius: 99px; }
+.ds-card, .ds-fim { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px; background: var(--panel); display: grid; gap: 8px; }
+.ds-card h2, .ds-fim h2 { margin: 0; font-size: 22px; }
+.ds-card h3 { margin: 6px 0 0; font-size: 14px; }
+.ds-top { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.ds-n { font-size: 12px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: var(--accent); margin-right: 4px; }
+.ds-porque { margin: 0; }
+.ds-passos { margin: 0; padding-left: 20px; display: grid; gap: 4px; }
+.ds-rot { background: var(--accent-soft); border-radius: 12px; padding: 10px 14px; display: grid; gap: 4px; }
+.ds-rot p { margin: 0; }
+.ds-rot .btn { justify-self: start; margin-top: 4px; background: var(--panel); }
+.ds-min { margin: 0; padding: 8px 12px; border-radius: 10px; background: var(--field); font-size: 14px; }
+.ds-ok { font-weight: 800; color: var(--accent); }
+.ds-regra { margin-top: 12px; }
+.ds-nivel { margin-bottom: 18px; }
+.ds-nivel h2 { font-size: 17px; margin: 0 0 2px; }
+.ds-nivel h2 span { color: var(--muted); font-family: var(--font-mono); font-weight: 500; font-size: 14px; }
+.ds-lista { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 6px; }
+.ds-item { width: 100%; display: grid; grid-template-columns: 30px 1fr; column-gap: 10px; align-items: center; text-align: left; border: 1px solid var(--line); border-radius: 12px; padding: 8px 12px; background: var(--panel); font: inherit; }
+.ds-item .hint { grid-column: 2; }
+.ds-num { grid-row: span 2; width: 28px; height: 28px; border-radius: 50%; display: grid; place-items: center; font-size: 13px; font-weight: 800; background: var(--field); color: var(--muted); }
+.ds-tit { font-weight: 700; }
+.ds-item.feito .ds-num { background: var(--accent); color: #fff; }
+.ds-item.feito .ds-tit { color: var(--muted); }
+.ds-item.atual { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+.ds-item.atual .ds-num { background: var(--fg); color: var(--bg); }
+@media (max-width: 520px) { .ds-resumo { grid-template-columns: 1fr; } }
 .nav .pc-badge { margin-left: auto; min-width: 20px; padding: 1px 6px; border-radius: 999px; background: var(--bad); color: #fff; font-size: 11px; font-weight: 800; text-align: center; }
 .ct-title { font-size: 20px; font-weight: 800; margin: 4px 0 14px; }
 .ct-title span { font-family: var(--font-mono); font-size: 14px; color: var(--muted); font-weight: 500; }
@@ -1321,8 +1359,9 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
   var PACIENTE = { nao: 'Sem paciente', autorizado: 'Paciente com autorização (TCLE)', sem_tcle: 'Paciente SEM autorização' };
   var MIDIA_ST = { novo: 'Novo', analisado: 'Analisado pela Duda', agendado: 'No cronograma', postado: 'Postado' };
   var POST_ST = { proposto: 'Proposta da Duda', aprovado: 'Aprovado', postado: 'Postado', descartado: 'Descartado' };
-  var ct = { assets: null, downloads: null, ready: false, view: 'banco', pastas: null, midia: null, posts: null, pasta: '', usage: null,
-    up: null, upErr: null, prog: null, sel: null, confirmDel: false, msg: null, newFolder: null, showOld: false };
+  var ct = { assets: null, downloads: null, ready: false, view: 'hoje', pastas: null, midia: null, posts: null, pasta: '', usage: null,
+    up: null, upErr: null, prog: null, sel: null, confirmDel: false, msg: null, newFolder: null, showOld: false,
+    desafios: null, dsAdiantar: false, dsVer: null };
 
   function blobUrl(id) { return window.painelBlobUrl ? window.painelBlobUrl(id) : '/_blob/' + id; }
   function mb(n) { return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB'; }
@@ -1344,7 +1383,8 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     var u = ct.up; if (!u) return '';
     var pastas = ct.pastas || [];
     if (ct.prog) return '<div class="ag-form"><h2>Enviando</h2><p class="hint">' + esc(ct.prog) + '</p><p class="hint">Não feche o painel até terminar.</p></div>';
-    return '<div class="ag-form"><h2>Enviar fotos e vídeos</h2>' +
+    if (u.pasta === '__desafios') pastas = pastas.concat([{ id: '__desafios', nome: 'Desafios (pasta nova)' }]);
+    return '<div class="ag-form"><h2>' + (u.desafio ? 'Enviar o desafio ' + u.desafio : 'Enviar fotos e vídeos') + '</h2>' +
       '<div class="grid"><label>Pasta<select data-ct-f="pasta"><option value="">Escolha…</option>' + pastas.map(function (p) {
         return '<option value="' + esc(p.id) + '"' + (u.pasta === p.id ? ' selected' : '') + '>' + esc(p.nome) + '</option>'; }).join('') + '</select></label>' +
       '<label>Arquivos<input type="file" multiple accept="image/*,video/*" data-ct-file="1"></label></div>' +
@@ -1476,19 +1516,256 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
         (ct.showOld ? '<div class="posts old">' + old.map(ctPost).join('') + '</div>' : '') : '');
   }
 
+  // ---------- desafios diários (02/11/2026): uma trilha de 30 passos pequenos para quem nunca postou ----------
+  // Progresso em config/desafios = { inicio: 'aaaa-mm-dd', feitos: { '<n>': { data, tipo: 'feito'|'minimo'|'gravado', midia } } }.
+  // Meta: 5 dias por semana. Não há "sequência" que zera: perder um dia não apaga nada.
+  var DS_CFO = 'Nome e CRO na legenda ou no vídeo. Sem preço, sem "grátis", sem prometer resultado.';
+  var DS_NIVEIS = [
+    { n: 1, nome: 'Aquecimento', desc: 'Arrumar a casa e se acostumar a postar, quase sem aparecer.' },
+    { n: 2, nome: 'Voz', desc: 'Aparecer aos poucos: primeiro a voz, depois o rosto, em vídeos curtos.' },
+    { n: 3, nome: 'Ritmo', desc: 'Gravar em lote e postar com frequência, sem sofrer toda vez.' },
+    { n: 4, nome: 'Conversão', desc: 'Transformar quem assiste em mensagem no WhatsApp e consulta.' }
+  ];
+  var DESAFIOS = [
+    { nivel: 1, tipo: 'Perfil', tempo: '10 min', titulo: 'Arrume a bio do Instagram',
+      porque: 'Quem chega por indicação confere o perfil antes de marcar. A bio diz em 3 segundos quem você é e como marcar.',
+      passos: ['Nome: "Dr. Pedro Portes · Dentista"', 'Primeira linha: o que você faz (resina, placa de bruxismo, prevenção do desgaste)', 'Segunda linha: onde atende ("Curitiba · Santa Felicidade")', 'CRO na bio e link do WhatsApp'],
+      minimo: 'Só coloque o CRO e o link do WhatsApp.', cfo: 'O CRO na bio é obrigatório para perfil profissional.' },
+    { nivel: 1, tipo: 'Story', tempo: '5 min', gravar: true, titulo: 'Story de bastidor, sem rosto',
+      porque: 'Mostra que você atende de verdade. Bastidor gera proximidade sem exigir coragem.',
+      passos: ['No próximo atendimento, tire uma foto do consultório arrumado ou do seu jaleco', 'Escreva por cima: "Quinta de atendimento ✔"', 'Poste no story'],
+      minimo: 'Poste uma foto antiga do consultório.', cfo: 'Sem paciente na foto e sem material com sangue ou tecido.' },
+    { nivel: 1, tipo: 'Pauta', tempo: '10 min', titulo: 'Anote 5 dúvidas que pacientes já te fizeram',
+      porque: 'Cada dúvida real é um vídeo pronto. Conteúdo que responde dúvida é o que mais traz paciente.',
+      passos: ['Lembre das últimas consultas: o que perguntaram?', 'Escreva 5 perguntas do jeito que o paciente falou ("dente sensível é normal?")', 'Guarde no bloco de notas do celular: vão virar vídeos no nível 2'],
+      minimo: 'Anote 2 dúvidas.', cfo: 'Só a dúvida, sem nome nem dado do paciente.' },
+    { nivel: 1, tipo: 'Story', tempo: '3 min', titulo: 'Caixinha de perguntas',
+      porque: 'Seus 800 seguidores são amigos e família: eles são a porta da indicação. A caixinha te lembra para eles como "o meu dentista".',
+      passos: ['Story com o sticker "Perguntas"', 'Texto: "Qual dúvida você tem sobre seus dentes? Respondo essa semana"', 'Poste e esqueça até amanhã'],
+      minimo: 'Mesmo story, com fundo preto e só o texto.', cfo: DS_CFO },
+    { nivel: 1, tipo: 'Reels', tempo: '15 min', titulo: 'Poste o vídeo das bebidas ácidas',
+      porque: 'Já está gravado e editado. Postar o primeiro tira o peso dos próximos: o segundo é sempre mais fácil.',
+      passos: ['Pegue o vídeo editado (aba Edição ou Banco de mídia)', 'Legenda: o gancho + 2 frases + "Dr. Pedro Portes · CRO-PR …"', 'Poste e não olhe os números hoje'],
+      minimo: 'Poste nos stories em vez do feed.', cfo: DS_CFO },
+    { nivel: 1, tipo: 'Story', tempo: '5 min', gravar: true, titulo: 'Story pessoal: a guitarra',
+      porque: 'O pessoal aproxima, o profissional converte. A regra é 2 de dentista para 1 pessoal.',
+      passos: ['Grave 15 segundos tocando guitarra ou violão', 'Texto: "Fora do consultório 🎸"', 'Poste'],
+      minimo: 'Uma foto do violão.', cfo: 'Pessoal: sem regra do CFO, só bom senso.' },
+    { nivel: 1, tipo: 'Story', tempo: '10 min', titulo: 'Responda 1 pergunta da caixinha, só em texto',
+      porque: 'Responder em público mostra que você explica bem: é o que faz alguém pensar "quero ir nele".',
+      passos: ['Abra as respostas da caixinha', 'Escolha uma e toque em "Compartilhar resposta"', 'Responda em 2 ou 3 frases simples'],
+      minimo: 'Se ninguém perguntou, responda uma das 5 dúvidas que você anotou.', cfo: 'Explique, não diagnostique: "vale avaliar com um dentista".' },
+    { nivel: 2, tipo: 'Story', tempo: '5 min', gravar: true, titulo: 'Primeiro story falando: 15 segundos',
+      porque: 'As pessoas marcam com quem elas sentem que conhecem. Ver o seu rosto falando cria isso mais rápido que qualquer post.',
+      passos: ['Câmera frontal, luz de janela na sua frente', 'Fale o roteiro uma vez só. Errou? Siga.', 'Poste sem regravar mais de 2 vezes'],
+      roteiro: { gancho: 'Oi! Sou o Pedro, dentista aqui em Curitiba.', fala: 'Essa semana vou responder as dúvidas que vocês mandaram sobre dentes.', chamada: 'Manda a sua aqui na caixinha.' },
+      minimo: 'Grave só o áudio por cima de uma foto sua.', cfo: DS_CFO },
+    { nivel: 2, tipo: 'Reels', tempo: '20 min', gravar: true, titulo: 'Reels: 3 sinais de que você aperta os dentes',
+      porque: 'Bruxismo é o seu público ideal: jovem, ansioso, com dor. E a placa é um tratamento que você já faz.',
+      passos: ['Grave sentado, com o celular em pé (vertical) na altura dos olhos', 'Até 40 segundos', 'Suba aqui: a Duda analisa e o Rafa põe gancho e assinatura'],
+      roteiro: { gancho: 'Você pode estar apertando os dentes e nem saber.', fala: '1. Acorda com a mandíbula cansada ou com dor de cabeça. 2. Os dentes estão ficando mais curtos ou lascando na ponta. 3. Sente o dente sensível ao gelado sem ter cárie.', chamada: 'Se você se identificou, vale uma avaliação. Me chama no direct.' },
+      minimo: 'Faça um carrossel de 4 telas de texto no Canva com os 3 sinais.', cfo: DS_CFO },
+    { nivel: 2, tipo: 'Story', tempo: '10 min', gravar: true, titulo: 'Responda uma dúvida falando, 20 segundos',
+      porque: 'Mesma resposta de antes, agora com rosto. É o treino para os Reels.',
+      passos: ['Pegue uma dúvida da caixinha ou da sua lista', 'Leia a pergunta em voz alta e responda em 3 frases', 'Poste'],
+      minimo: 'Responda em áudio por cima da pergunta.', cfo: 'Explique, não diagnostique.' },
+    { nivel: 2, tipo: 'Pauta', tempo: '10 min', titulo: 'Peça a autorização (TCLE) dos casos já gravados',
+      porque: 'Os casos da cárie oculta e da troca de amálgama são o formato que você admira (relato com história). Sem autorização por escrito, não podem ir ao ar.',
+      passos: ['Imprima ou mande o termo de autorização de uso de imagem', 'Peça a assinatura das duas pacientes', 'No painel, marque o arquivo como "com autorização"'],
+      minimo: 'Mande a mensagem pedindo, mesmo que assinem depois.', cfo: 'Antes e depois só de procedimento seu, com TCLE (Res. CFO 196/2019).' },
+    { nivel: 2, tipo: 'Post', tempo: '10 min', gravar: true, titulo: 'Post de apresentação: "Prazer, Pedro"',
+      porque: 'Quem cai no seu perfil precisa saber quem é você. Esse post fica fixado depois.',
+      passos: ['Escolha uma foto sua de jaleco (ou peça para alguém tirar)', 'Legenda: quem você é, o que gosta de tratar, onde atende, como marcar', 'Poste no feed'],
+      roteiro: { gancho: 'Prazer, sou o Pedro.', fala: 'Sou dentista em Curitiba e gosto de caso com detalhe: resina, placa para quem aperta os dentes e prevenção do desgaste. Atendo cada paciente sem pressa.', chamada: 'Para marcar, o link do WhatsApp está na bio.' },
+      minimo: 'Use uma foto que você já tem.', cfo: 'Nada de "o melhor" ou "referência": o CFO veta autopromoção comparativa.' },
+    { nivel: 2, tipo: 'Reels', tempo: '20 min', gravar: true, titulo: 'Reels: limão em jejum faz bem para os dentes?',
+      porque: 'Fala com quem tem vida "saudável" e está desgastando os dentes sem saber: o seu paciente ideal.',
+      passos: ['Até 40 segundos, falando para a câmera', 'Se quiser, mostre o copo de água com limão', 'Suba aqui para a Duda e o Rafa'],
+      roteiro: { gancho: 'Água com limão em jejum: seus dentes não gostam.', fala: 'O ácido amolece o esmalte. Todo dia, isso vira desgaste e sensibilidade. Se for tomar, use canudo, enxágue a boca com água e espere uns 30 minutos para escovar.', chamada: 'Já sente o dente sensível? Me chama para avaliar.' },
+      minimo: 'Story falando só a dica do canudo e da escova.', cfo: 'Sem gerar medo: informe e oriente.' },
+    { nivel: 2, tipo: 'Revisão', tempo: '10 min', titulo: 'Revisão da semana: o que trouxe mensagem?',
+      porque: 'O critério é paciente na cadeira, não curtida. Olhar os números toda semana mostra o que repetir.',
+      passos: ['Para cada post da semana: visualizações, compartilhamentos e mensagens recebidas', 'Anote qual trouxe mais mensagem', 'Esse formato vira prioridade no nível 3'],
+      minimo: 'Anote só quantas mensagens chegaram.', cfo: '-' },
+    { nivel: 3, tipo: 'Reels', tempo: '30 min', gravar: true, titulo: 'Dia de lote: grave 3 vídeos de uma vez',
+      porque: 'Gravar um por dia cansa. Em lote, você se arruma uma vez e tem uma semana de conteúdo.',
+      passos: ['Escolha 3 dúvidas da sua lista', 'Mesma roupa, mesma luz, mesmo lugar', 'Um vídeo de até 40 s para cada uma; suba os três aqui'],
+      roteiro: { gancho: 'Comece cada vídeo com a pergunta do paciente, do jeito que ele falou.', fala: 'Responda em 3 frases: o que é, por que acontece, o que fazer.', chamada: 'Termine sempre com: "Se for o seu caso, me chama no direct."' },
+      minimo: 'Grave 2 vídeos.', cfo: DS_CFO },
+    { nivel: 3, tipo: 'Story', tempo: '3 min', titulo: 'Enquete: "Você acorda com a mandíbula cansada?"',
+      porque: 'Quem responde "sim" é um lead: dá para puxar conversa no direct com naturalidade.',
+      passos: ['Story com o sticker de enquete: Sim / Não', 'No dia seguinte, veja quem votou "sim"', 'Mande para 2 pessoas: "Vi que você marcou sim, quer que eu te explique o que pode ser?"'],
+      minimo: 'Só poste a enquete.', cfo: 'Na conversa, oriente e convide para avaliar, sem diagnóstico pelo direct.' },
+    { nivel: 3, tipo: 'Reels', tempo: '10 min', titulo: 'Poste o 1º vídeo do lote',
+      porque: 'Frequência faz o Instagram mostrar você para quem não te segue.',
+      passos: ['Pegue o vídeo editado pelo Rafa (aba Edição)', 'Cole a legenda do cronograma ou escreva 2 frases + CRO', 'Poste'],
+      minimo: 'Poste nos stories.', cfo: DS_CFO },
+    { nivel: 3, tipo: 'Story', tempo: '5 min', gravar: true, titulo: 'Bastidor com você aparecendo',
+      porque: 'Você de jaleco no consultório reforça "esse é o meu dentista".',
+      passos: ['Peça para alguém gravar 10 s de você se arrumando ou organizando a bancada', 'Texto: "Começando mais um dia em [bairro]"', 'Poste'],
+      minimo: 'Selfie de jaleco.', cfo: 'Sem paciente e sem procedimento na imagem.' },
+    { nivel: 3, tipo: 'Reels', tempo: '10 min', titulo: 'Poste o 2º vídeo do lote',
+      porque: 'Segundo post da semana: o ritmo começa a virar hábito.',
+      passos: ['Vídeo editado + legenda curta + CRO', 'Responda todo comentário em até 1 hora'],
+      minimo: 'Poste nos stories.', cfo: DS_CFO },
+    { nivel: 3, tipo: 'Carrossel', tempo: '25 min', gravar: true, titulo: 'Carrossel: para que serve a placa de bruxismo',
+      porque: 'Carrossel é salvo e compartilhado. Explica o tratamento antes da consulta, e o paciente chega convencido.',
+      passos: ['5 telas no Canva: 1) "Placa de bruxismo: para que serve?" 2) protege os dentes do desgaste 3) alivia a mandíbula 4) é feita sob medida 5) "Aperta os dentes? Me chama"', 'Use as cores do seu perfil', 'Suba as imagens aqui e poste'],
+      minimo: '3 telas.', cfo: 'Sem prometer cura: "ajuda a proteger" em vez de "resolve".' },
+    { nivel: 3, tipo: 'Reels', tempo: '10 min', titulo: 'Poste o 3º vídeo do lote',
+      porque: 'Três vídeos na semana: você saiu do zero.',
+      passos: ['Poste', 'Compare com os outros dois: qual trouxe mais mensagem?'],
+      minimo: 'Poste nos stories.', cfo: DS_CFO },
+    { nivel: 4, tipo: 'Perfil', tempo: '10 min', titulo: 'Fixe 3 posts no topo do perfil',
+      porque: 'Quem chega pela indicação vê primeiro o que mais convence.',
+      passos: ['Fixe: a apresentação, o vídeo com mais mensagens e um vídeo de dúvida', 'Confira se a bio tem o link do WhatsApp funcionando'],
+      minimo: 'Fixe só a apresentação.', cfo: '-' },
+    { nivel: 4, tipo: 'Story', tempo: '15 min', titulo: 'Destaque "Como marcar"',
+      porque: 'Tira o atrito: a pessoa decide e já sabe o caminho.',
+      passos: ['3 stories: onde você atende, dias de atendimento, "Me chama no WhatsApp" com o link', 'Salve num destaque chamado "Marcar"'],
+      minimo: 'Um story só, com o link, salvo no destaque.', cfo: 'Sem preço e sem "avaliação grátis".' },
+    { nivel: 4, tipo: 'Reels', tempo: '30 min', gravar: true, titulo: 'Relato de caso com história',
+      porque: 'É o formato da Carol Raimondi e da Gabriela Sabino Marques: história real convence mais que explicação.',
+      passos: ['Só com o TCLE assinado', 'Sentado, falando para a câmera: o problema, o que você viu, o que fez', 'Suba aqui; marque "com autorização"'],
+      roteiro: { gancho: 'Esse dente parecia só manchado. Estava oco por dentro.', fala: 'Conte o caso da cárie oculta: a mancha cinza, a desconfiança, o raio-x, a restauração. Termine com o que o paciente deve observar no próprio dente.', chamada: 'Tem um dente escurecido assim? Vale avaliar. Me chama.' },
+      minimo: 'Conte a história sem mostrar imagens do paciente.', cfo: 'Antes e depois só com TCLE, sem sensacionalismo e sem mostrar sangue ou tecido.' },
+    { nivel: 4, tipo: 'Story', tempo: '5 min', gravar: true, titulo: 'Story com chamada direta',
+      porque: 'Muita gente quer marcar e só precisa de um convite claro.',
+      passos: ['15 s falando: "Se você aperta os dentes ou sente sensibilidade, me chama no direct que eu te explico como funciona a avaliação"', 'Poste'],
+      minimo: 'Mesmo texto, sem falar.', cfo: 'Sem preço e sem "grátis".' },
+    { nivel: 4, tipo: 'Pauta', tempo: '20 min', titulo: 'Dia de resposta rápida',
+      porque: 'Lead que espera mais de 30 minutos esfria. Hoje o treino é responder rápido.',
+      passos: ['Responda todos os directs e comentários em até 1 hora', 'Quem demonstrar interesse: ofereça dois horários para escolher'],
+      minimo: 'Responda tudo até o fim do dia.', cfo: 'Pelo direct, oriente e convide; diagnóstico só na consulta.' },
+    { nivel: 4, tipo: 'Reels', tempo: '25 min', gravar: true, titulo: 'Reels: como é uma avaliação comigo',
+      porque: 'Tira o medo do desconhecido: a pessoa já sabe o que vai acontecer na cadeira.',
+      passos: ['Fale o passo a passo da sua avaliação: conversa, exame, fotos, explicação das opções', 'Até 45 s'],
+      roteiro: { gancho: 'O que acontece na primeira consulta comigo?', fala: 'Primeiro a gente conversa. Depois examino com calma, tiro fotos e te mostro o que eu vi. Você sai sabendo as opções e o porquê de cada uma.', chamada: 'Para marcar, o link está na bio.' },
+      minimo: 'Story com o texto do roteiro.', cfo: 'Sem preço. Não chame a avaliação de gratuita.' },
+    { nivel: 4, tipo: 'Reels', tempo: '20 min', gravar: true, titulo: 'Por que escolhi a prótese',
+      porque: 'História pessoal cria conexão e explica o seu cuidado com detalhe.',
+      passos: ['Conte em 40 s: o tio, a especialização, o que te encanta em devolver o sorriso', 'Suba aqui'],
+      minimo: 'Story em texto com a sua história.', cfo: 'Sem prometer resultado.' },
+    { nivel: 4, tipo: 'Pauta', tempo: '15 min', titulo: 'Peça uma avaliação no Google',
+      porque: '80% das pessoas pesquisam no Google antes de marcar. Avaliação é prova social.',
+      passos: ['Escolha 3 pacientes que gostaram do atendimento', 'Mande o link do seu Perfil de Empresa pedindo uma avaliação'],
+      minimo: 'Peça para 1 paciente.', cfo: 'Pedir avaliação pode; oferecer algo em troca, não.' },
+    { nivel: 4, tipo: 'Revisão', tempo: '20 min', titulo: 'Revisão do mês: o que trouxe paciente?',
+      porque: 'Fecha o ciclo: você sai sabendo o que dobrar no próximo mês.',
+      passos: ['Some as mensagens e as consultas que vieram do Instagram', 'Escolha os 2 formatos que mais trouxeram mensagem', 'Conte para a IA no chat: ela monta a trilha do mês que vem'],
+      minimo: 'Anote só quantas consultas vieram do Instagram.', cfo: '-' }
+  ];
+  DESAFIOS.forEach(function (d, i) { d.n = i + 1; });
+
+  function dsFeitos() { return (ct.desafios && ct.desafios.feitos) || {}; }
+  function dsAtual() { var f = dsFeitos(); return DESAFIOS.find(function (d) { return !f[d.n]; }); }
+  function dsFeitoHoje() { var f = dsFeitos(), h = todayIso(); return Object.keys(f).filter(function (k) { return f[k].data === h; }).map(Number); }
+  // dias da semana atual (segunda a domingo) em que algum desafio foi feito
+  function dsSemana() {
+    var d = new Date(), seg = new Date(d.getFullYear(), d.getMonth(), d.getDate() - (d.getDay() + 6) % 7), dias = [], f = dsFeitos();
+    for (var i = 0; i < 7; i++) { var x = new Date(seg.getFullYear(), seg.getMonth(), seg.getDate() + i); dias.push(isoOf(x)); }
+    return dias.map(function (iso) { return { iso: iso, feito: Object.keys(f).some(function (k) { return f[k].data === iso; }) }; });
+  }
+  function dsMarcar(n, tipo, midia) {
+    var cur = ct.desafios || {}, f = Object.assign({}, cur.feitos || {});
+    if (tipo) f[n] = midia ? { data: todayIso(), tipo: tipo, midia: midia } : { data: todayIso(), tipo: tipo };
+    else delete f[n];
+    ct.desafios = { inicio: cur.inicio || todayIso(), feitos: f };   // mostra já; o banco confirma em seguida
+    render();
+    return state.db.doc('config/desafios').set(ct.desafios).catch(function () { ct.msg = 'O desafio não foi salvo. Tente de novo.'; render(); });
+  }
+
+  function dsCard(d, feito) {
+    var nv = DS_NIVEIS[d.nivel - 1], r = d.roteiro;
+    return '<article class="ds-card"><div class="ds-top"><span class="ds-n">Desafio ' + d.n + ' de ' + DESAFIOS.length + '</span>' +
+      '<span class="chip">Nível ' + d.nivel + ' · ' + esc(nv.nome) + '</span><span class="chip">' + esc(d.tipo) + '</span><span class="chip">⏱ ' + esc(d.tempo) + '</span></div>' +
+      '<h2>' + esc(d.titulo) + '</h2><p class="ds-porque"><b>Por que traz paciente:</b> ' + esc(d.porque) + '</p>' +
+      '<h3>Como fazer</h3><ol class="ds-passos">' + d.passos.map(function (p) { return '<li>' + esc(p) + '</li>'; }).join('') + '</ol>' +
+      (r ? '<div class="ds-rot"><h3>Roteiro pronto</h3><p><b>Gancho (3 primeiros segundos):</b> ' + esc(r.gancho) + '</p><p><b>Fala:</b> ' + esc(r.fala) + '</p><p><b>Chamada:</b> ' + esc(r.chamada) + '</p>' +
+        '<button type="button" class="btn" data-ds-copy="' + d.n + '">Copiar roteiro</button></div>' : '') +
+      '<p class="ds-min"><b>Sem coragem ou sem tempo hoje?</b> Versão mínima: ' + esc(d.minimo) + '</p>' +
+      (d.cfo && d.cfo !== '-' ? '<p class="hint">CFO: ' + esc(d.cfo) + '</p>' : '') +
+      (feito ? '<div class="acts"><span class="ds-ok">✓ ' + (feito.tipo === 'minimo' ? 'Feito na versão mínima' : feito.tipo === 'gravado' ? 'Gravado e enviado' : 'Feito') + ' · ' + esc(fmtDay(feito.data)) + '</span>' +
+          '<button type="button" class="btn" data-ds-desfaz="' + d.n + '">Desmarcar</button></div>'
+        : '<div class="acts">' + (d.gravar && ct.assets ? '<button type="button" class="btn primary" data-ds-gravar="' + d.n + '">Enviar o que gravei</button>' : '') +
+          '<button type="button" class="btn' + (d.gravar && ct.assets ? '' : ' primary') + '" data-ds-fiz="' + d.n + '">Fiz ✓</button>' +
+          '<button type="button" class="btn" data-ds-min="' + d.n + '">Fiz a versão mínima</button></div>') + '</article>';
+  }
+
+  function dsResumo() {
+    var f = dsFeitos(), total = Object.keys(f).length, sem = dsSemana(), nSem = sem.filter(function (x) { return x.feito; }).length, h = todayIso();
+    return '<div class="ds-resumo"><div><span class="ds-big">' + nSem + '<small> de 5</small></span><span class="hint">dias com desafio nesta semana</span>' +
+      '<div class="ds-dias">' + sem.map(function (x, i) { return '<span class="' + (x.feito ? 'on' : '') + (x.iso === h ? ' hoje' : '') + '" title="' + esc(fmtDay(x.iso)) + '">' + 'STQQSSD'.charAt(i) + '</span>'; }).join('') + '</div></div>' +
+      '<div><span class="ds-big">' + total + '<small> de ' + DESAFIOS.length + '</small></span><span class="hint">desafios da trilha</span>' +
+      '<div class="ds-barra"><i style="width:' + Math.round(total / DESAFIOS.length * 100) + '%"></i></div></div></div>';
+  }
+
+  function ctHoje() {
+    if (ct.desafios == null) return '<div class="empty">Carregando…</div>';
+    var hoje = dsFeitoHoje(), d = dsAtual(), duda = state.days[0] && state.days[0].data === todayIso() ? (state.days[0].opcoes || []).length : 0;
+    var corpo;
+    if (!d) corpo = '<div class="ds-fim"><h2>Trilha completa 🎉</h2><p>Você fez os ' + DESAFIOS.length + ' desafios. Conte no chat o que trouxe mais mensagem: a IA monta a próxima trilha a partir disso.</p></div>';
+    else if (hoje.length && !ct.dsAdiantar) {
+      var feito = DESAFIOS[hoje[hoje.length - 1] - 1];
+      corpo = '<div class="ds-fim"><h2>✓ Desafio de hoje feito</h2><p>' + esc(feito.titulo) + '. Isso já é mais do que você fazia semana passada.</p>' +
+        '<p class="hint">Amanhã: <b>' + esc(d.titulo) + '</b> (' + esc(d.tempo) + ')</p>' +
+        '<div class="acts"><button type="button" class="btn" data-ds-adiantar="1">Quero adiantar o de amanhã</button></div></div>';
+    } else corpo = dsCard(d, null);
+    return dsResumo() + corpo +
+      '<p class="hint ds-regra">Um desafio por dia, meta de 5 dias por semana. Perdeu um dia? Nada zera: é só fazer o próximo. ' +
+      'O que você gravar sobe aqui: a Duda analisa e o Rafa edita.' + (duda ? ' <button type="button" class="link-btn" style="margin:0" data-ds-duda="1">A Duda trouxe ' + duda + ' ideias hoje</button>' : '') + '</p>';
+  }
+
+  function ctTrilha() {
+    var f = dsFeitos(), atual = dsAtual();
+    if (ct.dsVer) { var d = DESAFIOS[ct.dsVer - 1]; return '<button type="button" class="back" data-ds-ver="">← Trilha</button>' + dsCard(d, f[d.n]); }
+    return DS_NIVEIS.map(function (nv) {
+      var l = DESAFIOS.filter(function (d) { return d.nivel === nv.n; }), ok = l.filter(function (d) { return f[d.n]; }).length;
+      return '<section class="ds-nivel"><h2>Nível ' + nv.n + ' · ' + esc(nv.nome) + ' <span>' + ok + '/' + l.length + '</span></h2><p class="hint">' + esc(nv.desc) + '</p><ol class="ds-lista">' +
+        l.map(function (d) {
+          var cls = f[d.n] ? 'feito' : atual && atual.n === d.n ? 'atual' : '';
+          return '<li><button type="button" class="ds-item ' + cls + '" data-ds-ver="' + d.n + '"><span class="ds-num">' + (f[d.n] ? '✓' : d.n) + '</span>' +
+            '<span class="ds-tit">' + esc(d.titulo) + '</span><span class="hint">' + esc(d.tipo + ' · ' + d.tempo) + '</span></button></li>';
+        }).join('') + '</ol></section>';
+    }).join('');
+  }
+
+  function dsClick(t) {
+    var a, n;
+    if ((a = t.closest('[data-ds-fiz]'))) { n = +a.getAttribute('data-ds-fiz'); ct.dsAdiantar = false; ct.dsVer = null; dsMarcar(n, 'feito'); window.scrollTo(0, 0); return true; }
+    if ((a = t.closest('[data-ds-min]'))) { n = +a.getAttribute('data-ds-min'); ct.dsAdiantar = false; ct.dsVer = null; dsMarcar(n, 'minimo'); window.scrollTo(0, 0); return true; }
+    if ((a = t.closest('[data-ds-desfaz]'))) { dsMarcar(+a.getAttribute('data-ds-desfaz'), null); return true; }
+    if (t.closest('[data-ds-adiantar]')) { ct.dsAdiantar = true; render(); return true; }
+    if ((a = t.closest('[data-ds-ver]'))) { ct.dsVer = +a.getAttribute('data-ds-ver') || null; render(); window.scrollTo(0, 0); return true; }
+    if (t.closest('[data-ds-duda]')) { state.section = 'agentes'; state.agent = 'marketing'; render(); window.scrollTo(0, 0); return true; }
+    if ((a = t.closest('[data-ds-gravar]'))) {
+      var d = DESAFIOS[+a.getAttribute('data-ds-gravar') - 1], tem = (ct.pastas || []).some(function (p) { return p.id === 'desafios'; });
+      ct.up = { pasta: tem ? 'desafios' : '__desafios', paciente: /caso/i.test(d.titulo) ? '' : 'nao', nota: 'Desafio ' + d.n + ': ' + d.titulo, files: null, desafio: d.n }; ct.upErr = null; ct.msg = null;
+      render(); window.scrollTo(0, 0); return true;
+    }
+    if ((a = t.closest('[data-ds-copy]'))) {
+      var r = DESAFIOS[+a.getAttribute('data-ds-copy') - 1].roteiro;
+      if (navigator.clipboard) navigator.clipboard.writeText('Gancho: ' + r.gancho + '\n\n' + r.fala + '\n\n' + r.chamada).then(function () { a.textContent = 'Copiado ✓'; }, function () { a.textContent = 'Selecione e copie à mão'; });
+      return true;
+    }
+    return false;
+  }
+
   function renderConteudo() {
     var head = '<header class="page-head"><span class="eyebrow">Conteúdo</span><h1>Conteúdo</h1>' +
-      '<p>Suba aqui tudo o que você gravar, separado por pasta. A Duda analisa e monta o cronograma de posts com legenda; o Rafa edita os vídeos.</p></header>';
+      '<p>Um desafio pequeno por dia para você sair do zero no Instagram. O que você gravar sobe aqui: a Duda analisa e o Rafa edita.</p></header>';
     if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b> Abra o painel pelo claude.ai, logado na sua conta.') + '</div>';
     var nPost = (ct.posts || []).filter(function (p) { return p.data >= todayIso() && p.estado !== 'descartado'; }).length;
-    var bar = '<div class="ag-bar"><div class="seg" role="group" aria-label="Visão"><button type="button" data-ct-view="banco" aria-pressed="' + (ct.view === 'banco') + '">Banco de mídia</button>' +
-      '<button type="button" data-ct-view="cronograma" aria-pressed="' + (ct.view === 'cronograma') + '">Cronograma' + (nPost ? ' (' + nPost + ')' : '') + '</button></div>' +
-      (ct.assets ? '<button type="button" class="btn primary" data-ct-up="1">+ Enviar fotos e vídeos</button>' : '') + '</div>';
+    var views = [['hoje', 'Desafio de hoje'], ['trilha', 'Trilha'], ['banco', 'Meus arquivos'], ['cronograma', 'Cronograma' + (nPost ? ' (' + nPost + ')' : '')]];
+    var bar = '<div class="ag-bar"><div class="seg ds-seg" role="group" aria-label="Visão">' + views.map(function (v) {
+        return '<button type="button" data-ct-view="' + v[0] + '" aria-pressed="' + (ct.view === v[0]) + '">' + esc(v[1]) + '</button>'; }).join('') + '</div>' +
+      (ct.assets && (ct.view === 'banco' || ct.view === 'cronograma') ? '<button type="button" class="btn primary" data-ct-up="1">+ Enviar fotos e vídeos</button>' : '') + '</div>';
     var notes = '';
-    if (ct.ready && !ct.assets) notes += '<div class="ag-warn">Só quem edita o painel pode enviar arquivos, e isso só funciona abrindo pelo claude.ai.</div>';
+    if (ct.ready && !ct.assets) notes += '<div class="ag-warn">Só quem edita o painel pode enviar arquivos.</div>';
     if (ct.msg) notes += '<div class="ag-warn">' + esc(ct.msg) + '</div>';
-    if (ct.usage) notes += '<p class="ag-status">Armazenamento: ' + mb(ct.usage.bytes) + ' de ' + mb(ct.usage.maxBytes) + ' · ' + ct.usage.files + ' arquivos</p>';
-    return head + bar + notes + ctUploadForm() + (ct.view === 'banco' ? ctBanco() : ctCrono());
+    if (ct.usage && ct.view === 'banco') notes += '<p class="ag-status">Armazenamento: ' + mb(ct.usage.bytes) + ' de ' + mb(ct.usage.maxBytes) + ' · ' + ct.usage.files + ' arquivos</p>';
+    var corpo = ct.view === 'hoje' ? ctHoje() : ct.view === 'trilha' ? ctTrilha() : ct.view === 'banco' ? ctBanco() : ctCrono();
+    return head + bar + notes + ctUploadForm() + (ct.up && (ct.view === 'hoje' || ct.view === 'trilha') ? '' : corpo);
   }
 
   // foto: redesenha em JPEG (no máx. 2560 px), o que também tira a localização do GPS
@@ -1505,12 +1782,24 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     var u = ct.up;
     ct.upErr = !u.pasta ? 'Escolha a pasta.' : !u.files || !u.files.length ? 'Escolha os arquivos.' : !u.paciente ? 'Diga se aparece paciente.' : null;
     if (ct.upErr) { render(); return; }
-    var files = Array.prototype.slice.call(u.files), done = 0, fails = [];
+    // primeira vez que sobe um desafio: cria a pasta "Desafios"
+    if (u.pasta === '__desafios') {
+      ct.prog = 'Criando a pasta Desafios…'; render();
+      var novas = (ct.pastas || []).concat([{ id: 'desafios', nome: 'Desafios' }]);
+      state.db.doc('config/conteudo').set({ pastas: novas })
+        .then(function () { ct.pastas = novas; u.pasta = 'desafios'; ct.prog = null; ctSend(); }, function () { ct.prog = null; ct.upErr = 'A pasta não foi criada. Tente de novo.'; render(); });
+      return;
+    }
+    var files = Array.prototype.slice.call(u.files), done = 0, fails = [], ultimo = null;
     function next(i) {
       if (i >= files.length) {
         ct.prog = null; ct.usage = null;
-        ct.msg = done + (done === 1 ? ' arquivo enviado' : ' arquivos enviados') + ' para ' + pastaNome(u.pasta) + '.' + (fails.length ? ' Não foram: ' + fails.join('; ') + '.' : '');
-        ct.up = fails.length && !done ? u : null; ct.view = 'banco'; ct.pasta = u.pasta; render(); ctEnter(); return;
+        ct.msg = done + (done === 1 ? ' arquivo enviado' : ' arquivos enviados') + ' para ' + pastaNome(u.pasta) + '.' + (fails.length ? ' Não foram: ' + fails.join('; ') + '.' : '') +
+          (u.desafio && done ? ' Desafio ' + u.desafio + ' marcado como feito. A Duda analisa amanhã às 7h.' : '');
+        ct.up = fails.length && !done ? u : null;
+        if (u.desafio) { if (done) { ct.dsAdiantar = false; ct.dsVer = null; dsMarcar(u.desafio, 'gravado', ultimo); } }
+        else { ct.view = 'banco'; ct.pasta = u.pasta; }
+        render(); ctEnter(); return;
       }
       var f = files[i], video = /^video\//.test(f.type) || /\.(mov|mp4|m4v|webm)$/i.test(f.name);
       ct.prog = 'Enviando ' + (i + 1) + ' de ' + files.length + '…'; render();
@@ -1519,8 +1808,11 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
         : prepImage(f).then(function (b) { return { blob: b, type: 'image/jpeg' }; }, function () { return Promise.reject({ code: 'decode' }); });
       prep.then(function (x) {
         return ct.assets.upload(x.blob, { type: x.type }).then(function (r) {
-          return state.db.doc('midia/' + r.id).set({ asset: r.id, tipo: video ? 'video' : 'foto', pasta: u.pasta, paciente: u.paciente, nota: (u.nota || '').trim(),
-            criado: new Date().toISOString(), tamanho: r.sizeBytes, status: 'novo' });
+          var doc = { asset: r.id, tipo: video ? 'video' : 'foto', pasta: u.pasta, paciente: u.paciente, nota: (u.nota || '').trim(),
+            criado: new Date().toISOString(), tamanho: r.sizeBytes, status: 'novo' };
+          if (u.desafio) doc.desafio = u.desafio;   // a Duda sabe de qual desafio veio
+          ultimo = r.id;
+          return state.db.doc('midia/' + r.id).set(doc);
         });
       }).then(function () { done++; }, function (e) {
         var c = e && e.code;
@@ -1533,7 +1825,8 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
 
   function ctClick(t) {
     var a;
-    if ((a = t.closest('[data-ct-view]'))) { ct.view = a.getAttribute('data-ct-view'); render(); return; }
+    if (dsClick(t)) return;
+    if ((a = t.closest('[data-ct-view]'))) { ct.view = a.getAttribute('data-ct-view'); ct.dsVer = null; ct.dsAdiantar = false; render(); return; }
     if ((a = t.closest('[data-ct-pasta]'))) { ct.pasta = a.getAttribute('data-ct-pasta'); ct.sel = null; render(); return; }
     if (t.closest('[data-ct-up]')) { ct.up = { pasta: ct.pasta || '', paciente: '', nota: '', files: null }; ct.upErr = null; ct.msg = null; render(); window.scrollTo(0, 0); return; }
     if ((a = t.closest('[data-goto]'))) { state.section = a.getAttribute('data-goto'); try { localStorage.setItem('painel:aba', state.section); } catch (err) {} render(); window.scrollTo(0, 0); return; }
@@ -2021,6 +2314,10 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
         ct.pastas = ((snap.exists ? snap.data() : null) || {}).pastas || [];
         if (state.section === 'conteudo') render();
       }, function () { ct.pastas = []; });
+      db.doc('config/desafios').onSnapshot(function (snap) {
+        ct.desafios = (snap.exists ? snap.data() : null) || {};
+        if (state.section === 'conteudo') render();
+      }, function () { ct.desafios = ct.desafios || {}; });
       ctSub(db.collection('midia').orderBy('criado', 'desc').limit(500), 'midia');
       ctSub(db.collection('cronograma').orderBy('data', 'desc').limit(200), 'posts');
       // pacientes: só para o dono (o banco também recusa os outros)
