@@ -1,0 +1,16 @@
+{
+  "name": "Painel Portes",
+  "short_name": "Painel Portes",
+  "description": "Painel do consultório do Dr. Pedro Portes",
+  "lang": "pt-BR",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#323033",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "icones/icone-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icones/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icones/icone-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

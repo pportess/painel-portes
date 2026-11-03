@@ -6,6 +6,8 @@
 *.jpeg
 *.heic
 *.png
+# exceção: os ícones do site
+!icones/*.png
 # segredos
 .env
 *.local
