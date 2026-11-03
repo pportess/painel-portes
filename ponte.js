@@ -154,8 +154,11 @@
         });
         return;
       }
-      fecharTela(); ligarAoVivo(); liberar(true);
-      sb.rpc('e_dono').then(function (d) { barra(!!d.data); });
+      // o painel precisa saber se é o dono antes de liberar: só ele vê os pacientes
+      sb.rpc('e_dono').then(function (d) {
+        window.painelDono = !!d.data;
+        fecharTela(); ligarAoVivo(); liberar(true); barra(window.painelDono);
+      });
     });
   }
 
@@ -225,16 +228,24 @@
   });
 
   // ---------- links dos arquivos ----------
-  function assetsDe(data, out) {
+  // fotos de pacientes ficam noutra pasta privada, com links que valem só 1 hora
+  var PRAZO = { midia: 86400, pacientes: 3600 };
+  var vence = {};           // id do arquivo -> quando o link deixa de valer (ms)
+  function bucketDe(col) { return col === 'pacientes' ? 'pacientes' : BUCKET; }
+  function precisa(id) { return typeof id === 'string' && (!urls[id] || vence[id] < Date.now() + 300000); }
+  function assetsDe(col, data, out) {
     if (!data || typeof data !== 'object') return;
-    if (typeof data.asset === 'string' && !urls[data.asset]) out.push(data.asset);
-    if (data.edicao && typeof data.edicao.asset === 'string' && !urls[data.edicao.asset]) out.push(data.edicao.asset);
+    if (col === 'pacientes') { (data.fotos || []).forEach(function (f) { if (f && precisa(f.asset)) out.push(f.asset); }); return; }
+    if (precisa(data.asset)) out.push(data.asset);
+    if (data.edicao && precisa(data.edicao.asset)) out.push(data.edicao.asset);
   }
-  function assinar(ids) {
+  function assinar(ids, bucket) {
+    bucket = bucket || BUCKET;
     ids = ids.filter(function (id, i) { return ids.indexOf(id) === i; });
     if (!ids.length) return Promise.resolve();
-    return sb.storage.from(BUCKET).createSignedUrls(ids, 86400).then(function (r) {
-      (r.data || []).forEach(function (x) { if (x.signedUrl && x.path) urls[x.path] = x.signedUrl; });
+    var seg = PRAZO[bucket] || 3600;
+    return sb.storage.from(bucket).createSignedUrls(ids, seg).then(function (r) {
+      (r.data || []).forEach(function (x) { if (x.signedUrl && x.path) { urls[x.path] = x.signedUrl; vence[x.path] = Date.now() + seg * 1000; } });
     });
   }
   window.painelBlobUrl = function (id) { return urls[id] || ''; };
@@ -296,8 +307,8 @@
               return ordem.desc ? -c : c;
             });
             rows = rows.slice(0, lim);
-            var falta = []; rows.forEach(function (r) { assetsDe(r.data, falta); });
-            return assinar(falta).then(function () { return rows; });
+            var falta = []; rows.forEach(function (r) { assetsDe(col, r.data, falta); });
+            return assinar(falta, bucketDe(col)).then(function () { return rows; });
           }).then(function (rows) {
             if (!sub.off) fn({ docs: rows.map(function (r) { return snapDoc(r.id, r); }), metadata: { fromCache: false } });
           }, function (e) { if (onErr && !sub.off) onErr(erro(e)); });
@@ -318,6 +329,8 @@
     document.addEventListener('visibilitychange', function () {
       if (!document.hidden) subs.map(function (s) { return s.col; }).forEach(refazer);
     });
+    // renova os links das fotos de pacientes antes de vencerem
+    setInterval(function () { refazer('pacientes'); }, 20 * 60000);
   }
 
   // ---------- arquivos ----------
@@ -327,21 +340,25 @@
   }
   var assets = {
     upload: function (blob, o) {
-      var id = novoId(), tipo = (o && o.type) || blob.type;
-      return sb.storage.from(BUCKET).upload(id, blob, { contentType: tipo, upsert: false }).then(function (r) {
+      var id = novoId(), tipo = (o && o.type) || blob.type, bucket = (o && o.bucket) || BUCKET;
+      return sb.storage.from(bucket).upload(id, blob, { contentType: tipo, upsert: false }).then(function (r) {
         if (r.error) throw erro({ code: /size|large/i.test(r.error.message) ? 'too_large' : 'upload', message: r.error.message });
-        return assinar([id]);
+        return assinar([id], bucket);
       }).then(function () { return { id: id, url: urls[id] || '', sizeBytes: blob.size, contentType: tipo }; });
     },
+    // o 1 GB do plano grátis vale para as duas pastas juntas
     list: function () {
-      return sb.storage.from(BUCKET).list('', { limit: 1000 }).then(ok).then(function (a) {
-        a = a.filter(function (x) { return x.id; });
-        var bytes = a.reduce(function (s, x) { return s + ((x.metadata && x.metadata.size) || 0); }, 0);
+      function ler(b) { return sb.storage.from(b).list('', { limit: 1000 }).then(function (r) { return (r.data || []).filter(function (x) { return x.id; }); }); }
+      return Promise.all([ler(BUCKET), window.painelDono ? ler('pacientes') : Promise.resolve([])]).then(function (rs) {
+        var a = rs[0], todos = rs[0].concat(rs[1]);
+        var bytes = todos.reduce(function (s, x) { return s + ((x.metadata && x.metadata.size) || 0); }, 0);
         return { assets: a.map(function (x) { return { id: x.name, sizeBytes: x.metadata && x.metadata.size, contentType: x.metadata && x.metadata.mimetype }; }),
-          usage: { files: a.length, bytes: bytes, maxFiles: 5000, maxBytes: 1073741824 } };
+          usage: { files: todos.length, bytes: bytes, maxFiles: 5000, maxBytes: 1073741824 } };
       });
     },
-    delete: function (id) { return sb.storage.from(BUCKET).remove([id]).then(ok).then(function () { delete urls[id]; return { deleted: true }; }); }
+    delete: function (id, o) {
+      return sb.storage.from((o && o.bucket) || BUCKET).remove([id]).then(ok).then(function () { delete urls[id]; return { deleted: true }; });
+    }
   };
 
   var downloads = {

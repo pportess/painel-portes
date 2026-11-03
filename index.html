@@ -405,6 +405,37 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
 .tile { transition: transform .15s ease, box-shadow .15s ease; }
 .tile.new { background: var(--field); color: var(--muted); border: 1.5px dashed #cfcdc6; justify-content: center; align-items: center; text-align: center; gap: 8px; }
 .tile.new input { font: inherit; font-size: 14px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; width: 100%; }
+.tile.tile-ad { background: linear-gradient(160deg, #8a5a33, #4a2410); }
+
+/* pacientes: lista com busca, ficha e comparação antes/depois */
+.pc-busca { flex: 1 1 220px; min-width: 0; font: inherit; padding: 10px 14px; border: 1px solid var(--line); border-radius: 999px; background: var(--field); }
+.pc-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 10px; }
+.pc-item { display: grid; gap: 4px; text-align: left; border: 1px solid var(--line); border-radius: 14px; padding: 8px; background: var(--panel); font: inherit; }
+.pc-item img, .pc-ini { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; background: var(--field); }
+.pc-ini { display: grid; place-items: center; font-size: 32px; font-weight: 800; color: var(--muted); }
+.pc-nome { font-weight: 800; overflow-wrap: anywhere; }
+.pc-item:hover { border-color: var(--accent); }
+.pc-cmp { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0 16px; }
+.pc-cmp figure { margin: 0; display: grid; gap: 6px; }
+.pc-cmp figcaption { font-size: 13px; font-weight: 800; color: var(--muted); }
+.pc-cmp img, .pc-vazio { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; background: var(--field); }
+.pc-vazio { display: grid; place-items: center; color: var(--muted); font-size: 13px; text-align: center; padding: 8px; }
+.pc-fase { margin-top: 16px; }
+.pc-fase h3, .pc-dados h3 { font-size: 15px; margin: 0 0 8px; }
+.pc-fase h3 span { color: var(--muted); font-family: var(--font-mono); font-weight: 500; }
+.pc-ths { display: flex; flex-wrap: wrap; gap: 8px; }
+.pc-th { position: relative; width: 104px; border: 2px solid transparent; border-radius: 12px; padding: 0; overflow: hidden; background: var(--field); font: inherit; }
+.pc-th img { display: block; width: 100%; aspect-ratio: 1; object-fit: cover; }
+.pc-th span { position: absolute; left: 0; right: 0; bottom: 0; font-size: 10px; padding: 2px 4px; background: rgba(0,0,0,.55); color: #fff; }
+.pc-th.on { border-color: var(--accent); }
+.pc-ver { display: grid; gap: 10px; }
+.pc-ver img { width: 100%; max-height: 70vh; object-fit: contain; border-radius: 12px; background: #111; }
+.pc-dados { margin-top: 24px; padding-top: 16px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.pc-dados textarea { font: inherit; width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); }
+.pc-check { display: flex; gap: 8px; align-items: flex-start; font-weight: 600; }
+.pc-nomeedit { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+.pc-nomeedit input { flex: 1 1 200px; font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; }
+@media (max-width: 720px) { .pc-th { width: calc(33.3% - 6px); } }
 .ct-title { font-size: 20px; font-weight: 800; margin: 4px 0 14px; }
 .ct-title span { font-family: var(--font-mono); font-size: 14px; color: var(--muted); font-weight: 500; }
 .ct-tags .ok { background: #2f8a5f; }
@@ -561,7 +592,8 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     { id: 'agenda', label: 'Agenda' },
     { id: 'conteudo', label: 'Conteúdo' },
     { id: 'edicao', label: 'Edição' },
-    { id: 'pacientes', label: 'Pacientes', soon: 'Só números e canais (de onde veio, o que fez). Nenhum nome ou dado pessoal, por sigilo e LGPD.' },
+    // 02/11/2026: a pedido do Pedro, a aba passou a ter nome e fotos de antes e depois (só ele vê; os agentes não leem)
+    { id: 'pacientes', label: 'Pacientes' },
     { id: 'financeiro', label: 'Financeiro', soon: 'Entradas por clínica, metas do mês e o caminho até o consultório próprio.' },
     { id: 'estudos', label: 'Estudos', soon: 'As aulas resumidas, o registro de horas e os temas do mês.' }
   ];
@@ -608,7 +640,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
   var state = { section: 'escritorio', agent: null, week: 0, days: [], selected: null, loading: true, slow: false, error: null, db: null, saving: {} };
 
   // abre na última aba usada neste aparelho (no celular, normalmente o Conteúdo)
-  try { var aba = localStorage.getItem('painel:aba'); if (aba === 'agenda' || aba === 'conteudo' || aba === 'edicao' || aba === 'agentes') state.section = aba; } catch (err) {}
+  try { var aba = localStorage.getItem('painel:aba'); if (aba === 'agenda' || aba === 'conteudo' || aba === 'edicao' || aba === 'agentes' || aba === 'pacientes') state.section = aba; } catch (err) {}
 
   var nav = document.getElementById('nav');
   var main = document.getElementById('main');
@@ -1366,7 +1398,10 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
       return '<button type="button" class="back" data-ct-pasta="">← Pastas</button><h2 class="ct-title">' + esc(pastaNome(ct.pasta)) + ' <span>' + list.length + '</span></h2>' +
         (list.length ? '<div class="ct-grid">' + list.map(card).join('') + '</div>' : '<div class="empty">Nada nesta pasta ainda. Toque em "+ Enviar fotos e vídeos".</div>');
     }
-    return '<div class="ct-tiles">' + pastas.map(function (p) {
+    // "Antes e depois" leva às fichas dos pacientes (só o Pedro vê)
+    var ad = window.painelDono ? '<button type="button" class="tile tile-ad" data-goto="pacientes"><span class="tile-n">' + ((pc.lista || []).length) + '</span>' +
+      '<span class="tile-name">Antes e depois · pacientes</span></button>' : '';
+    return '<div class="ct-tiles">' + ad + pastas.map(function (p) {
       var items = all.filter(function (x) { return x.pasta === p.id; }), last = items[0];
       return '<button type="button" class="tile" data-ct-pasta="' + esc(p.id) + '">' + (last ? thumb(last, 'tile-bg') : '') +
         '<span class="tile-n">' + items.length + '</span><span class="tile-name">' + esc(p.nome) + '</span></button>';
@@ -1551,6 +1586,230 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     if (t.closest('[data-ct-old]')) { ct.showOld = !ct.showOld; render(); return; }
   }
 
+  // ---------- pacientes: ficha com fotos de antes e depois (só o Pedro vê) ----------
+  // Banco: pacientes/<id> = { nome, busca, criado, divulgacao: 'nao'|'sim', obs, fotos: [{ asset, fase: 'antes'|'depois', data, enviado }] }.
+  // As fotos ficam na pasta privada "pacientes", separada do banco de mídia; a Duda e o Rafa não leem nada daqui.
+  var pc = { lista: null, busca: '', sel: null, novo: null, up: null, prog: null, msg: null, foto: null, cmp: { antes: null, depois: null }, confirmDel: false, editNome: null };
+
+  function semAcento(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
+  function pcId() { var b = new Uint8Array(8); crypto.getRandomValues(b); return Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); }
+  function pcAtual() { return pc.sel && (pc.lista || []).find(function (p) { return p.id === pc.sel; }); }
+  function fotosDe(p, fase) {
+    return (p.fotos || []).filter(function (f) { return f.fase === fase; }).sort(function (a, b) { return (a.data || '').localeCompare(b.data || ''); });
+  }
+
+  // data em que a foto foi tirada (EXIF do JPEG); sem EXIF, a data do arquivo
+  function dataDaFoto(file) {
+    function doArquivo() { var d = new Date(file.lastModified || Date.now()); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+    return file.slice(0, 262144).arrayBuffer().then(function (buf) {
+      var v = new DataView(buf);
+      if (v.byteLength < 4 || v.getUint16(0) !== 0xFFD8) return null;
+      var o = 2;
+      while (o + 4 < v.byteLength) {
+        var mk = v.getUint16(o), len = v.getUint16(o + 2);
+        if (mk === 0xFFE1 && o + 10 < v.byteLength && v.getUint32(o + 4) === 0x45786966) {
+          var t = o + 10, le = v.getUint16(t) === 0x4949;
+          var g16 = function (p) { return v.getUint16(p, le); }, g32 = function (p) { return v.getUint32(p, le); };
+          var ascii = function (e) {
+            var n = g32(e + 4), off = n > 4 ? t + g32(e + 8) : e + 8, s = '';
+            for (var k = 0; k < n - 1 && off + k < v.byteLength; k++) s += String.fromCharCode(v.getUint8(off + k));
+            return s;
+          };
+          var scan = function (ifd, want) {
+            if (ifd + 2 > v.byteLength) return;
+            var n = g16(ifd);
+            for (var i = 0; i < n && ifd + 14 + i * 12 <= v.byteLength; i++) { var e = ifd + 2 + i * 12, tag = g16(e); if (want[tag]) want[tag](e); }
+          };
+          var exif = null, dt = null, w = {};
+          w[0x8769] = function (e) { exif = t + g32(e + 8); };
+          w[0x0132] = function (e) { dt = ascii(e); };
+          scan(t + g32(t + 4), w);
+          if (exif) { var w2 = {}; w2[0x9003] = function (e) { dt = ascii(e); }; scan(exif, w2); }
+          var m = dt && dt.match(/^(\d{4}):(\d{2}):(\d{2})/);
+          return m && m[1] !== '0000' ? m[1] + '-' + m[2] + '-' + m[3] : null;
+        }
+        if ((mk & 0xFF00) !== 0xFF00 || mk === 0xFFDA) break;
+        o += 2 + len;
+      }
+      return null;
+    }).then(function (d) { return d || doArquivo(); }, doArquivo);
+  }
+
+  function pcFoto(f, extra) {
+    return '<button type="button" class="pc-th' + (extra || '') + '" data-pc-foto="' + esc(f.asset) + '"><img src="' + blobUrl(f.asset) + '" alt="" loading="lazy">' +
+      '<span>' + esc(fmtDay(f.data || '')) + '</span></button>';
+  }
+
+  function pcUploadForm(p) {
+    var u = pc.up; if (!u) return '';
+    if (pc.prog) return '<div class="ag-form"><h2>Enviando</h2><p class="hint">' + esc(pc.prog) + '</p><p class="hint">Não feche o painel até terminar.</p></div>';
+    return '<div class="ag-form"><h2>Adicionar fotos de ' + esc(p.nome) + '</h2>' +
+      '<label>Fotos<input type="file" multiple accept="image/*" data-pc-file="1"></label>' +
+      '<fieldset class="ct-radio"><legend>Antes ou depois?</legend>' +
+      [['auto', 'Separar sozinho pela data da foto (a mais antiga é o antes)'], ['antes', 'Todas são de antes'], ['depois', 'Todas são de depois']].map(function (o) {
+        return '<label><input type="radio" name="pc-fase" data-pc-f="fase" value="' + o[0] + '"' + (u.fase === o[0] ? ' checked' : '') + '> ' + o[1] + '</label>'; }).join('') + '</fieldset>' +
+      '<p class="hint">Dá para trocar antes e depois de cada foto depois, com um toque. As fotos são reduzidas e perdem a localização do GPS antes de subir.</p>' +
+      (u.err ? '<p class="hint bad">' + esc(u.err) + '</p>' : '') +
+      '<div class="acts"><button type="button" class="btn primary" data-pc-send="1">Enviar</button><button type="button" class="btn" data-pc-upcancel="1">Cancelar</button></div></div>';
+  }
+
+  function pcLista() {
+    var q = semAcento(pc.busca).trim(), l = (pc.lista || []).slice().sort(function (a, b) { return semAcento(a.nome).localeCompare(semAcento(b.nome)); });
+    if (q) l = l.filter(function (p) { return semAcento(p.nome).indexOf(q) >= 0; });
+    if (!pc.lista.length) return '<div class="empty"><b>Nenhum paciente ainda.</b> Toque em "+ Novo paciente" e depois adicione as fotos do sorriso.</div>';
+    if (!l.length) return '<div class="empty">Nenhum paciente com "' + esc(pc.busca) + '".</div>';
+    return '<div class="pc-list">' + l.map(function (p) {
+      var a = fotosDe(p, 'antes'), d = fotosDe(p, 'depois'), capa = d[d.length - 1] || a[0];
+      return '<button type="button" class="pc-item" data-pc-sel="' + esc(p.id) + '">' + (capa ? '<img src="' + blobUrl(capa.asset) + '" alt="" loading="lazy">' : '<span class="pc-ini">' + esc((p.nome || '?').charAt(0).toUpperCase()) + '</span>') +
+        '<span class="pc-nome">' + esc(p.nome) + '</span><span class="hint">' + a.length + ' antes · ' + d.length + ' depois</span></button>';
+    }).join('') + '</div>';
+  }
+
+  function pcFicha(p) {
+    var a = fotosDe(p, 'antes'), d = fotosDe(p, 'depois');
+    var ca = (pc.cmp.antes && a.find(function (f) { return f.asset === pc.cmp.antes; })) || a[0];
+    var cd = (pc.cmp.depois && d.find(function (f) { return f.asset === pc.cmp.depois; })) || d[d.length - 1];
+    var foto = pc.foto && (p.fotos || []).find(function (f) { return f.asset === pc.foto; });
+    var cab = '<button type="button" class="back" data-pc-voltar="1">← Pacientes</button>' +
+      (pc.editNome != null ? '<div class="pc-nomeedit"><input type="text" maxlength="80" data-pc-f="editNome" value="' + esc(pc.editNome) + '"><button type="button" class="btn primary" data-pc-nomeok="1">Salvar</button><button type="button" class="btn" data-pc-nomeno="1">Cancelar</button></div>'
+        : '<h2 class="ct-title">' + esc(p.nome) + ' <button type="button" class="link-btn" data-pc-nome="1">editar nome</button></h2>');
+    if (foto) return cab + '<div class="pc-ver"><img src="' + blobUrl(foto.asset) + '" alt="">' +
+      '<div class="acts"><span class="hint">' + esc(fmtDay(foto.data || '')) + '</span>' +
+      '<div class="seg" role="group" aria-label="Fase"><button type="button" data-pc-fase="antes" aria-pressed="' + (foto.fase === 'antes') + '">Antes</button><button type="button" data-pc-fase="depois" aria-pressed="' + (foto.fase === 'depois') + '">Depois</button></div>' +
+      (pc.confirmDel === 'foto' ? '<span class="hint bad">Apagar esta foto de vez?</span><button type="button" class="btn" data-pc-fotodelok="1">Sim, apagar</button><button type="button" class="btn" data-pc-delno="1">Não</button>'
+        : '<button type="button" class="btn" data-pc-fotodel="1">Apagar foto</button>') +
+      '<button type="button" class="btn" data-pc-fotofecha="1">Fechar</button></div></div>';
+    return cab +
+      (pc.msg ? '<div class="ag-warn">' + esc(pc.msg) + '</div>' : '') + pcUploadForm(p) +
+      (a.length || d.length ? '<div class="pc-cmp">' +
+        '<figure><figcaption>Antes' + (ca ? ' · ' + esc(fmtDay(ca.data || '')) : '') + '</figcaption>' + (ca ? '<img src="' + blobUrl(ca.asset) + '" alt="Antes">' : '<div class="pc-vazio">Sem foto de antes</div>') + '</figure>' +
+        '<figure><figcaption>Depois' + (cd ? ' · ' + esc(fmtDay(cd.data || '')) : '') + '</figcaption>' + (cd ? '<img src="' + blobUrl(cd.asset) + '" alt="Depois">' : '<div class="pc-vazio">Sem foto de depois</div>') + '</figure></div>' : '') +
+      (pc.up ? '' : '<div class="acts"><button type="button" class="btn primary" data-pc-up="1">+ Adicionar fotos</button></div>') +
+      ['antes', 'depois'].map(function (fase) {
+        var l = fase === 'antes' ? a : d, sel = fase === 'antes' ? ca : cd;
+        return '<section class="pc-fase"><h3>' + (fase === 'antes' ? 'Antes' : 'Depois') + ' <span>' + l.length + '</span></h3>' +
+          (l.length ? '<div class="pc-ths">' + l.map(function (f) { return pcFoto(f, sel && sel.asset === f.asset ? ' on' : ''); }).join('') + '</div>' +
+            '<p class="hint">Toque numa foto para pôr na comparação; toque de novo para abrir, trocar de lado ou apagar.</p>' : '<p class="hint">Nenhuma.</p>') + '</section>';
+      }).join('') +
+      '<section class="pc-dados"><h3>Ficha</h3>' +
+      '<label class="pc-check"><input type="checkbox" data-pc-div="1"' + (p.divulgacao === 'sim' ? ' checked' : '') + '> Assinou a autorização de uso de imagem (TCLE) para divulgação</label>' +
+      '<p class="hint">' + (p.divulgacao === 'sim' ? 'Pode virar post, mas só se você mesmo levar a foto para o Conteúdo.' : 'Sem autorização: estas fotos não podem ir para post.') + ' A Duda e o Rafa não veem esta aba.</p>' +
+      '<label>Observações<textarea rows="3" maxlength="2000" data-pc-f="obs" placeholder="Ex.: facetas em resina 13 a 23">' + esc(p.obs || '') + '</textarea></label>' +
+      '<div class="acts"><button type="button" class="btn" data-pc-obs="1">Salvar observações</button>' +
+      (pc.confirmDel === 'pac' ? '<span class="hint bad">Apagar o paciente e todas as fotos?</span><button type="button" class="btn" data-pc-pacdelok="1">Sim, apagar tudo</button><button type="button" class="btn" data-pc-delno="1">Não</button>'
+        : '<button type="button" class="btn" data-pc-pacdel="1">Apagar paciente</button>') + '</div></section>';
+  }
+
+  function renderPacientes() {
+    var head = '<header class="page-head"><span class="eyebrow">Pacientes</span><h1>Pacientes</h1>' +
+      '<p>A ficha de cada paciente com as fotos do sorriso, de antes e de depois. Só você vê esta aba.</p></header>';
+    if (!window.painelDono) return head + '<div class="empty"><b>Só o Pedro vê os pacientes.</b> Por sigilo e LGPD, esta aba não abre para outras contas.</div>';
+    if (!state.db || pc.lista == null) return head + '<div class="empty">Carregando…</div>';
+    var p = pcAtual();
+    if (p) return head + pcFicha(p);
+    return head + '<div class="ag-bar"><input type="search" class="pc-busca" placeholder="Buscar paciente pelo nome" data-pc-busca="1" value="' + esc(pc.busca) + '" autocomplete="off">' +
+      '<button type="button" class="btn primary" data-pc-novo="1">+ Novo paciente</button></div>' +
+      (pc.novo != null ? '<div class="ag-form"><h2>Novo paciente</h2><label>Nome<input type="text" maxlength="80" data-pc-f="novo" value="' + esc(pc.novo) + '" placeholder="Nome do paciente"></label>' +
+        '<div class="acts"><button type="button" class="btn primary" data-pc-criar="1">Criar ficha</button><button type="button" class="btn" data-pc-novocancel="1">Cancelar</button></div></div>' : '') +
+      (pc.msg ? '<div class="ag-warn">' + esc(pc.msg) + '</div>' : '') +
+      '<div id="pc-lista">' + pcLista() + '</div>';
+  }
+
+  function pcSalvar(p, patch, erroMsg) {
+    return state.db.doc('pacientes/' + p.id).update(patch).catch(function () { pc.msg = erroMsg || 'Não salvou. Tente de novo.'; render(); });
+  }
+
+  function pcSend() {
+    var p = pcAtual(), u = pc.up; if (!p || !u) return;
+    if (!u.files || !u.files.length) { u.err = 'Escolha as fotos.'; render(); return; }
+    var files = Array.prototype.slice.call(u.files), novas = [], fails = 0;
+    pc.prog = 'Lendo as datas das fotos…'; render();
+    Promise.all(files.map(dataDaFoto)).then(function (datas) {
+      // automático: as fotos do dia mais antigo são o antes; se todas forem do mesmo dia, comparam-se com as que o paciente já tem
+      var menor = datas.slice().sort()[0], todasIguais = datas.every(function (d) { return d === menor; });
+      var jaAntes = fotosDe(p, 'antes')[0];
+      function fase(d) {
+        if (u.fase !== 'auto') return u.fase;
+        if (todasIguais) return jaAntes && jaAntes.data < d ? 'depois' : 'antes';
+        return d === menor ? 'antes' : 'depois';
+      }
+      function next(i) {
+        if (i >= files.length) {
+          var ok = function () { pc.prog = null; pc.up = null; pc.cmp = { antes: null, depois: null };
+            pc.msg = novas.length + (novas.length === 1 ? ' foto enviada' : ' fotos enviadas') + (fails ? '; ' + fails + ' não foram (formato não aceito ou falha na rede)' : '') + '.'; render(); };
+          if (!novas.length) { ok(); return; }
+          state.db.doc('pacientes/' + p.id).get().then(function (s) {
+            var atuais = (s.exists && s.data().fotos) || [];
+            return state.db.doc('pacientes/' + p.id).update({ fotos: atuais.concat(novas) });
+          }).then(ok, function () { pc.prog = null; pc.msg = 'As fotos subiram, mas a ficha não salvou. Tente de novo.'; render(); });
+          return;
+        }
+        pc.prog = 'Enviando ' + (i + 1) + ' de ' + files.length + '…'; render();
+        prepImage(files[i]).then(function (b) { return ct.assets.upload(b, { type: 'image/jpeg', bucket: 'pacientes' }); }).then(function (r) {
+          novas.push({ asset: r.id, fase: fase(datas[i]), data: datas[i], enviado: new Date().toISOString() });
+        }, function () { fails++; }).then(function () { next(i + 1); });
+      }
+      next(0);
+    });
+  }
+
+  function pcClick(t) {
+    var a, p = pcAtual();
+    if (t.closest('[data-pc-novo]')) { pc.novo = ''; pc.msg = null; render(); return; }
+    if (t.closest('[data-pc-novocancel]')) { pc.novo = null; render(); return; }
+    if (t.closest('[data-pc-criar]')) {
+      var nome = (pc.novo || '').trim(); if (!nome) return;
+      var id = pcId();
+      state.db.doc('pacientes/' + id).set({ nome: nome, busca: semAcento(nome), criado: new Date().toISOString(), divulgacao: 'nao', obs: '', fotos: [] })
+        .then(function () { pc.novo = null; pc.sel = id; pc.up = { fase: 'auto', files: null }; }, function () { pc.msg = 'A ficha não foi criada. Tente de novo.'; }).then(render);
+      return;
+    }
+    if ((a = t.closest('[data-pc-sel]'))) { pc.sel = a.getAttribute('data-pc-sel'); pc.foto = null; pc.up = null; pc.msg = null; pc.confirmDel = false; pc.cmp = { antes: null, depois: null }; render(); window.scrollTo(0, 0); return; }
+    if (t.closest('[data-pc-voltar]')) { pc.sel = null; pc.foto = null; pc.up = null; pc.msg = null; pc.editNome = null; render(); return; }
+    if (!p) return;
+    if (t.closest('[data-pc-up]')) { pc.up = { fase: 'auto', files: null }; pc.msg = null; render(); return; }
+    if (t.closest('[data-pc-upcancel]')) { pc.up = null; render(); return; }
+    if (t.closest('[data-pc-send]')) { pcSend(); return; }
+    if ((a = t.closest('[data-pc-foto]'))) {
+      var as = a.getAttribute('data-pc-foto'), f = (p.fotos || []).find(function (x) { return x.asset === as; }); if (!f) return;
+      if (pc.cmp[f.fase] === as || (!pc.cmp[f.fase] && a.classList.contains('on'))) pc.foto = as; else pc.cmp[f.fase] = as;
+      pc.confirmDel = false; render(); return;
+    }
+    if (t.closest('[data-pc-fotofecha]')) { pc.foto = null; pc.confirmDel = false; render(); return; }
+    if ((a = t.closest('[data-pc-fase]'))) {
+      var nf = a.getAttribute('data-pc-fase');
+      pcSalvar(p, { fotos: (p.fotos || []).map(function (x) { return x.asset === pc.foto ? Object.assign({}, x, { fase: nf }) : x; }) });
+      pc.cmp = { antes: null, depois: null }; return;
+    }
+    if (t.closest('[data-pc-fotodel]')) { pc.confirmDel = 'foto'; render(); return; }
+    if (t.closest('[data-pc-pacdel]')) { pc.confirmDel = 'pac'; render(); return; }
+    if (t.closest('[data-pc-delno]')) { pc.confirmDel = false; render(); return; }
+    if (t.closest('[data-pc-fotodelok]')) {
+      var alvo = pc.foto;
+      ct.assets.delete(alvo, { bucket: 'pacientes' }).then(function () {
+        return state.db.doc('pacientes/' + p.id).update({ fotos: (p.fotos || []).filter(function (x) { return x.asset !== alvo; }) });
+      }).then(function () { pc.foto = null; pc.confirmDel = false; pc.cmp = { antes: null, depois: null }; }, function () { pc.msg = 'Não deu para apagar agora.'; pc.foto = null; }).then(render);
+      return;
+    }
+    if (t.closest('[data-pc-pacdelok]')) {
+      Promise.all((p.fotos || []).map(function (x) { return ct.assets.delete(x.asset, { bucket: 'pacientes' }).catch(function () {}); }))
+        .then(function () { return state.db.doc('pacientes/' + p.id).delete(); })
+        .then(function () { pc.sel = null; pc.confirmDel = false; pc.msg = 'Paciente apagado.'; }, function () { pc.msg = 'Não deu para apagar agora.'; }).then(render);
+      return;
+    }
+    if (t.closest('[data-pc-nome]')) { pc.editNome = p.nome; render(); return; }
+    if (t.closest('[data-pc-nomeno]')) { pc.editNome = null; render(); return; }
+    if (t.closest('[data-pc-nomeok]')) {
+      var nn = (pc.editNome || '').trim(); if (!nn) return;
+      pcSalvar(p, { nome: nn, busca: semAcento(nn) }); pc.editNome = null; return;
+    }
+    if ((a = t.closest('[data-pc-obs]'))) {
+      var tx = main.querySelector('[data-pc-f="obs"]');
+      pcSalvar(p, { obs: tx ? tx.value : '' }).then(function () { a.textContent = 'Salvo ✓'; });
+      return;
+    }
+  }
+
   function renderSoon(s) {
     return '<header class="page-head soon-page"><span class="eyebrow">' + esc(s.label) + '</span><h1>Em breve</h1><p>' + esc(s.soon) + '</p></header>';
   }
@@ -1561,6 +1820,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     else if (state.section === 'agenda') main.innerHTML = renderAgenda();
     else if (state.section === 'conteudo') main.innerHTML = renderConteudo();
     else if (state.section === 'edicao') main.innerHTML = renderEdicao();
+    else if (state.section === 'pacientes') main.innerHTML = renderPacientes();
     else if (state.section === 'agentes') main.innerHTML = state.agent === 'marketing' ? renderMarketing() : state.agent ? renderArriving(AGENTS.find(function (a) { return a.id === state.agent; })) : renderTeam();
     else main.innerHTML = renderSoon(SECTIONS.find(function (s) { return s.id === state.section; }));
   }
@@ -1578,6 +1838,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     var t;
     if (state.section === 'agenda') { agClick(e.target); return; }
     if (state.section === 'conteudo' || state.section === 'edicao') { ctClick(e.target); return; }
+    if (state.section === 'pacientes') { pcClick(e.target); return; }
     if ((t = e.target.closest('[data-agent]'))) { state.agent = t.getAttribute('data-agent'); render(); window.scrollTo(0, 0); return; }
     if ((t = e.target.closest('[data-back]'))) { state.agent = null; render(); return; }
     if ((t = e.target.closest('[data-week]'))) { state.week = Math.max(0, Math.min(3, state.week + +t.getAttribute('data-week'))); render(); return; }
@@ -1594,11 +1855,22 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     var cf = e.target.getAttribute && e.target.getAttribute('data-ct-f');
     if (cf === 'newFolder') ct.newFolder = e.target.value;
     else if (cf && ct.up) ct.up[cf] = e.target.value;
+    // pacientes: a busca filtra só a lista, sem redesenhar o campo
+    if (e.target.hasAttribute && e.target.hasAttribute('data-pc-busca')) {
+      pc.busca = e.target.value;
+      var box = document.getElementById('pc-lista'); if (box) box.innerHTML = pcLista();
+    }
+    var pf = e.target.getAttribute && e.target.getAttribute('data-pc-f');
+    if (pf === 'novo') pc.novo = e.target.value;
+    else if (pf === 'editNome') pc.editNome = e.target.value;
   });
   // conteúdo: arquivos escolhidos e mudanças de pasta / paciente de um arquivo
   main.addEventListener('change', function (e) {
     var el = e.target, id;
     if (el.hasAttribute('data-ct-file') && ct.up) { ct.up.files = el.files; return; }
+    if (el.hasAttribute('data-pc-file') && pc.up) { pc.up.files = el.files; pc.up.err = null; return; }
+    if (el.getAttribute('data-pc-f') === 'fase' && pc.up) { pc.up.fase = el.value; return; }
+    if (el.hasAttribute('data-pc-div')) { var pd = pcAtual(); if (pd) pcSalvar(pd, { divulgacao: el.checked ? 'sim' : 'nao' }); return; }
     if ((id = el.getAttribute('data-ct-move'))) state.db.doc('midia/' + id).update({ pasta: el.value }).catch(function () { ct.msg = 'Não mudou de pasta.'; render(); });
     if ((id = el.getAttribute('data-ct-pac'))) state.db.doc('midia/' + id).update({ paciente: el.value }).catch(function () { ct.msg = 'Não salvou.'; render(); });
   });
@@ -1644,6 +1916,11 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
       }, function () { ct.pastas = []; });
       ctSub(db.collection('midia').orderBy('criado', 'desc').limit(500), 'midia');
       ctSub(db.collection('cronograma').orderBy('data', 'desc').limit(200), 'posts');
+      // pacientes: só para o dono (o banco também recusa os outros)
+      if (window.painelDono) db.collection('pacientes').limit(1000).onSnapshot(function (snap) {
+        pc.lista = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
+        if (state.section === 'pacientes' || (state.section === 'conteudo' && !ct.pasta && !ct.sel)) render();
+      }, function () { pc.lista = pc.lista || []; render(); });
       var timer = setTimeout(function () { state.slow = true; render(); }, 10000);
       db.collection('marketing').orderBy('data', 'desc').limit(30).onSnapshot(function (snap) {
         state.days = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
