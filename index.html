@@ -436,6 +436,20 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
 .pc-nomeedit { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .pc-nomeedit input { flex: 1 1 200px; font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; }
 @media (max-width: 720px) { .pc-th { width: calc(33.3% - 6px); } }
+.pc-rets { display: grid; gap: 8px; margin-bottom: 16px; }
+.pc-rets h2 { font-size: 16px; margin: 0; }
+.pc-ret { display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: center; border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 12px; padding: 10px 12px; background: var(--panel); }
+.pc-ret.atrasado { border-left-color: var(--bad); }
+.pc-ret .pc-ret-txt { flex: 1 1 200px; min-width: 0; display: grid; gap: 2px; }
+.pc-ret .pc-ret-txt b { overflow-wrap: anywhere; }
+.pc-ret .quando { font-size: 13px; color: var(--muted); }
+.pc-ret.atrasado .quando { color: var(--bad); font-weight: 700; }
+.pc-ret .acts { display: flex; flex-wrap: wrap; gap: 6px; }
+.pc-ret a.btn { text-decoration: none; color: inherit; }
+.pc-retform { display: grid; gap: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--field); }
+.pc-retform input { font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
+.pc-dados input[type="tel"] { font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); }
+.nav .pc-badge { margin-left: auto; min-width: 20px; padding: 1px 6px; border-radius: 999px; background: var(--bad); color: #fff; font-size: 11px; font-weight: 800; text-align: center; }
 .ct-title { font-size: 20px; font-weight: 800; margin: 4px 0 14px; }
 .ct-title span { font-family: var(--font-mono); font-size: 14px; color: var(--muted); font-weight: 500; }
 .ct-tags .ok { background: #2f8a5f; }
@@ -659,7 +673,8 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
   function renderNav() {
     nav.innerHTML = SECTIONS.map(function (s) {
       return '<li><button type="button" data-sec="' + s.id + '"' + (state.section === s.id ? ' aria-current="page"' : '') + '>' +
-        ICONS[s.id] + '<span>' + esc(s.label) + '</span>' + (s.soon ? '<span class="soon">em breve</span>' : '') + '</button></li>';
+        ICONS[s.id] + '<span>' + esc(s.label) + '</span>' + (s.soon ? '<span class="soon">em breve</span>' : '') +
+        (s.id === 'pacientes' && pcVencidos() ? '<span class="pc-badge" title="Retornos para chamar">' + pcVencidos() + '</span>' : '') + '</button></li>';
     }).join('');
   }
 
@@ -1587,15 +1602,81 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
   }
 
   // ---------- pacientes: ficha com fotos de antes e depois (só o Pedro vê) ----------
-  // Banco: pacientes/<id> = { nome, busca, criado, divulgacao: 'nao'|'sim', obs, fotos: [{ asset, fase: 'antes'|'depois', data, enviado }] }.
+  // Banco: pacientes/<id> = { nome, busca, criado, divulgacao: 'nao'|'sim', obs, telefone, fotos: [{ asset, fase: 'antes'|'depois', data, enviado }],
+  //   retornos: [{ id, data: 'aaaa-mm-dd', motivo, feito: null | data ISO }] }  (retornos desde 02/11/2026)
   // As fotos ficam na pasta privada "pacientes", separada do banco de mídia; a Duda e o Rafa não leem nada daqui.
-  var pc = { lista: null, busca: '', sel: null, novo: null, up: null, prog: null, msg: null, foto: null, cmp: { antes: null, depois: null }, confirmDel: false, editNome: null };
+  var pc = { lista: null, busca: '', sel: null, novo: null, up: null, prog: null, msg: null, foto: null, cmp: { antes: null, depois: null }, confirmDel: false, editNome: null,
+    ret: { motivo: '', data: '' }, verFeitos: false };
+  var PC_JANELA = 30;   // a lista "para chamar" mostra os atrasados e os dos próximos 30 dias
 
   function semAcento(s) { return String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, ''); }
   function pcId() { var b = new Uint8Array(8); crypto.getRandomValues(b); return Array.prototype.map.call(b, function (x) { return ('0' + x.toString(16)).slice(-2); }).join(''); }
   function pcAtual() { return pc.sel && (pc.lista || []).find(function (p) { return p.id === pc.sel; }); }
   function fotosDe(p, fase) {
     return (p.fotos || []).filter(function (f) { return f.fase === fase; }).sort(function (a, b) { return (a.data || '').localeCompare(b.data || ''); });
+  }
+
+  // ---------- retornos ----------
+  function diasAte(iso) {
+    var a = String(iso).split('-'), h = new Date(); h.setHours(0, 0, 0, 0);
+    return Math.round((new Date(+a[0], +a[1] - 1, +a[2]) - h) / 86400000);
+  }
+  function maisMeses(n) {
+    var d = new Date(); d.setMonth(d.getMonth() + n);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+  function quando(iso) {
+    var n = diasAte(iso), ano = iso.slice(0, 4) !== todayIso().slice(0, 4) ? ' ' + iso.slice(0, 4) : '';
+    return fmtDay(iso) + ano + ' · ' + (n < 0 ? 'atrasado há ' + (-n) + (n === -1 ? ' dia' : ' dias') : n === 0 ? 'hoje' : n === 1 ? 'amanhã' : 'em ' + n + ' dias');
+  }
+  function retPendentes(p) {
+    return (p.retornos || []).filter(function (r) { return !r.feito; }).sort(function (a, b) { return a.data.localeCompare(b.data); });
+  }
+  // todos os retornos em aberto, de todos os pacientes, do mais antigo para o mais novo
+  function pcAgenda() {
+    var l = [];
+    (pc.lista || []).forEach(function (p) { retPendentes(p).forEach(function (r) { l.push({ p: p, r: r }); }); });
+    return l.sort(function (a, b) { return a.r.data.localeCompare(b.r.data); });
+  }
+  function pcVencidos() { return window.painelDono ? pcAgenda().filter(function (x) { return diasAte(x.r.data) <= 0; }).length : 0; }
+  // link do WhatsApp com a mensagem pronta (o Pedro revisa antes de mandar)
+  function pcZap(p, r) {
+    var n = String(p.telefone || '').replace(/\D/g, '');
+    if (n.length === 10 || n.length === 11) n = '55' + n;
+    if (n.length < 12) return '';
+    var txt = 'Olá, ' + String(p.nome || '').trim().split(/\s+/)[0] + '! Aqui é o Dr. Pedro Portes. Já está na hora do seu retorno' +
+      (r.motivo ? ' (' + r.motivo.toLowerCase() + ')' : '') + '. Qual dia e horário ficam melhores para você?';
+    return 'https://wa.me/' + n + '?text=' + encodeURIComponent(txt);
+  }
+  function pcRetLinha(p, r, comNome) {
+    var zap = pcZap(p, r);
+    return '<div class="pc-ret' + (diasAte(r.data) < 0 ? ' atrasado' : '') + '"><div class="pc-ret-txt">' +
+      (comNome ? '<b><button type="button" class="link-btn" style="margin:0" data-pc-sel="' + esc(p.id) + '">' + esc(p.nome) + '</button></b>' : '') +
+      '<span>' + esc(r.motivo || 'Retorno') + '</span><span class="quando">' + esc(quando(r.data)) + '</span></div><div class="acts">' +
+      (zap ? '<a class="btn" href="' + esc(zap) + '" target="_blank" rel="noopener">WhatsApp</a>' : '') +
+      '<button type="button" class="btn primary" data-pc-retok="' + esc(p.id) + '|' + esc(r.id) + '">Feito</button>' +
+      (comNome ? '' : '<button type="button" class="btn" data-pc-retdel="' + esc(r.id) + '">Apagar</button>') + '</div></div>';
+  }
+  function pcRetPainel() {
+    var l = pcAgenda(), perto = l.filter(function (x) { return diasAte(x.r.data) <= PC_JANELA; }), depois = l.length - perto.length;
+    if (!l.length) return '';
+    return '<section class="pc-rets"><h2>Retornos para chamar' + (perto.length ? ' (' + perto.length + ')' : '') + '</h2>' +
+      (perto.length ? perto.map(function (x) { return pcRetLinha(x.p, x.r, true); }).join('') : '<p class="hint">Nenhum nos próximos ' + PC_JANELA + ' dias.</p>') +
+      (depois ? '<p class="hint">Mais ' + depois + (depois === 1 ? ' retorno agendado' : ' retornos agendados') + ' depois disso.</p>' : '') + '</section>';
+  }
+  function pcRetFicha(p) {
+    var pend = retPendentes(p), feitos = (p.retornos || []).filter(function (r) { return r.feito; }).sort(function (a, b) { return b.data.localeCompare(a.data); });
+    return '<section class="pc-fase"><h3>Retornos <span>' + pend.length + '</span></h3><div class="pc-rets">' +
+      pend.map(function (r) { return pcRetLinha(p, r, false); }).join('') +
+      '<div class="pc-retform"><label>Motivo<input type="text" maxlength="80" list="pc-motivos" data-pc-f="retMotivo" value="' + esc(pc.ret.motivo) + '" placeholder="Ex.: revisão da prótese"></label>' +
+      '<datalist id="pc-motivos"><option value="Revisão"><option value="Profilaxia"><option value="Revisão da prótese"><option value="Controle da resina"><option value="Ajuste da placa"></datalist>' +
+      '<div class="acts"><button type="button" class="btn" data-pc-retmes="3">Em 3 meses</button><button type="button" class="btn" data-pc-retmes="6">Em 6 meses</button><button type="button" class="btn" data-pc-retmes="12">Em 1 ano</button></div>' +
+      '<label>Data<input type="date" data-pc-f="retData" value="' + esc(pc.ret.data) + '"></label>' +
+      '<div class="acts"><button type="button" class="btn primary" data-pc-retadd="1">Agendar retorno</button></div></div>' +
+      (p.telefone ? '' : '<p class="hint">Coloque o telefone na ficha para chamar pelo WhatsApp com um toque.</p>') +
+      (feitos.length ? '<button type="button" class="link-btn" data-pc-retfeitos="1">' + (pc.verFeitos ? 'Esconder' : 'Ver') + ' ' + feitos.length + (feitos.length === 1 ? ' retorno feito' : ' retornos feitos') + '</button>' +
+        (pc.verFeitos ? feitos.map(function (r) { return '<p class="hint">✓ ' + esc(r.motivo || 'Retorno') + ' · ' + esc(fmtDay(r.data)) + ' ' + r.data.slice(0, 4) + '</p>'; }).join('') : '') : '') +
+      '</div></section>';
   }
 
   // data em que a foto foi tirada (EXIF do JPEG); sem EXIF, a data do arquivo
@@ -1691,11 +1772,13 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
           (l.length ? '<div class="pc-ths">' + l.map(function (f) { return pcFoto(f, sel && sel.asset === f.asset ? ' on' : ''); }).join('') + '</div>' +
             '<p class="hint">Toque numa foto para pôr na comparação; toque de novo para abrir, trocar de lado ou apagar.</p>' : '<p class="hint">Nenhuma.</p>') + '</section>';
       }).join('') +
+      pcRetFicha(p) +
       '<section class="pc-dados"><h3>Ficha</h3>' +
+      '<label>Telefone (WhatsApp)<input type="tel" maxlength="20" data-pc-f="tel" value="' + esc(p.telefone || '') + '" placeholder="(41) 99999-9999"></label>' +
       '<label class="pc-check"><input type="checkbox" data-pc-div="1"' + (p.divulgacao === 'sim' ? ' checked' : '') + '> Assinou a autorização de uso de imagem (TCLE) para divulgação</label>' +
       '<p class="hint">' + (p.divulgacao === 'sim' ? 'Pode virar post, mas só se você mesmo levar a foto para o Conteúdo.' : 'Sem autorização: estas fotos não podem ir para post.') + ' A Duda e o Rafa não veem esta aba.</p>' +
       '<label>Observações<textarea rows="3" maxlength="2000" data-pc-f="obs" placeholder="Ex.: facetas em resina 13 a 23">' + esc(p.obs || '') + '</textarea></label>' +
-      '<div class="acts"><button type="button" class="btn" data-pc-obs="1">Salvar observações</button>' +
+      '<div class="acts"><button type="button" class="btn" data-pc-obs="1">Salvar telefone e observações</button>' +
       (pc.confirmDel === 'pac' ? '<span class="hint bad">Apagar o paciente e todas as fotos?</span><button type="button" class="btn" data-pc-pacdelok="1">Sim, apagar tudo</button><button type="button" class="btn" data-pc-delno="1">Não</button>'
         : '<button type="button" class="btn" data-pc-pacdel="1">Apagar paciente</button>') + '</div></section>';
   }
@@ -1707,7 +1790,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     if (!state.db || pc.lista == null) return head + '<div class="empty">Carregando…</div>';
     var p = pcAtual();
     if (p) return head + pcFicha(p);
-    return head + '<div class="ag-bar"><input type="search" class="pc-busca" placeholder="Buscar paciente pelo nome" data-pc-busca="1" value="' + esc(pc.busca) + '" autocomplete="off">' +
+    return head + pcRetPainel() + '<div class="ag-bar"><input type="search" class="pc-busca" placeholder="Buscar paciente pelo nome" data-pc-busca="1" value="' + esc(pc.busca) + '" autocomplete="off">' +
       '<button type="button" class="btn primary" data-pc-novo="1">+ Novo paciente</button></div>' +
       (pc.novo != null ? '<div class="ag-form"><h2>Novo paciente</h2><label>Nome<input type="text" maxlength="80" data-pc-f="novo" value="' + esc(pc.novo) + '" placeholder="Nome do paciente"></label>' +
         '<div class="acts"><button type="button" class="btn primary" data-pc-criar="1">Criar ficha</button><button type="button" class="btn" data-pc-novocancel="1">Cancelar</button></div></div>' : '') +
@@ -1764,9 +1847,30 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
         .then(function () { pc.novo = null; pc.sel = id; pc.up = { fase: 'auto', files: null }; }, function () { pc.msg = 'A ficha não foi criada. Tente de novo.'; }).then(render);
       return;
     }
-    if ((a = t.closest('[data-pc-sel]'))) { pc.sel = a.getAttribute('data-pc-sel'); pc.foto = null; pc.up = null; pc.msg = null; pc.confirmDel = false; pc.cmp = { antes: null, depois: null }; render(); window.scrollTo(0, 0); return; }
+    if ((a = t.closest('[data-pc-sel]'))) { pc.sel = a.getAttribute('data-pc-sel'); pc.foto = null; pc.up = null; pc.msg = null; pc.confirmDel = false; pc.cmp = { antes: null, depois: null }; pc.ret = { motivo: '', data: '' }; pc.verFeitos = false; render(); window.scrollTo(0, 0); return; }
     if (t.closest('[data-pc-voltar]')) { pc.sel = null; pc.foto = null; pc.up = null; pc.msg = null; pc.editNome = null; render(); return; }
+    // retorno feito: funciona na lista geral e na ficha
+    if ((a = t.closest('[data-pc-retok]'))) {
+      var par = a.getAttribute('data-pc-retok').split('|'), pr = (pc.lista || []).find(function (x) { return x.id === par[0]; }); if (!pr) return;
+      a.disabled = true;
+      pcSalvar(pr, { retornos: (pr.retornos || []).map(function (r) { return r.id === par[1] ? Object.assign({}, r, { feito: new Date().toISOString() }) : r; }) });
+      return;
+    }
     if (!p) return;
+    if ((a = t.closest('[data-pc-retmes]'))) { pc.ret.data = maisMeses(+a.getAttribute('data-pc-retmes')); render(); return; }
+    if (t.closest('[data-pc-retfeitos]')) { pc.verFeitos = !pc.verFeitos; render(); return; }
+    if (t.closest('[data-pc-retadd]')) {
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(pc.ret.data)) { pc.msg = 'Escolha a data do retorno.'; render(); return; }
+      var novo = { id: pcId(), data: pc.ret.data, motivo: (pc.ret.motivo || '').trim() || 'Retorno', feito: null };
+      pc.msg = null;
+      pcSalvar(p, { retornos: (p.retornos || []).concat([novo]) }, 'O retorno não foi salvo. Tente de novo.').then(function () { if (!pc.msg) { pc.ret = { motivo: '', data: '' }; render(); } });
+      return;
+    }
+    if ((a = t.closest('[data-pc-retdel]'))) {
+      var rid = a.getAttribute('data-pc-retdel');
+      pcSalvar(p, { retornos: (p.retornos || []).filter(function (r) { return r.id !== rid; }) });
+      return;
+    }
     if (t.closest('[data-pc-up]')) { pc.up = { fase: 'auto', files: null }; pc.msg = null; render(); return; }
     if (t.closest('[data-pc-upcancel]')) { pc.up = null; render(); return; }
     if (t.closest('[data-pc-send]')) { pcSend(); return; }
@@ -1804,8 +1908,8 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
       pcSalvar(p, { nome: nn, busca: semAcento(nn) }); pc.editNome = null; return;
     }
     if ((a = t.closest('[data-pc-obs]'))) {
-      var tx = main.querySelector('[data-pc-f="obs"]');
-      pcSalvar(p, { obs: tx ? tx.value : '' }).then(function () { a.textContent = 'Salvo ✓'; });
+      var tx = main.querySelector('[data-pc-f="obs"]'), tel = main.querySelector('[data-pc-f="tel"]');
+      pcSalvar(p, { obs: tx ? tx.value : '', telefone: tel ? tel.value.trim() : (p.telefone || '') }).then(function () { a.textContent = 'Salvo ✓'; });
       return;
     }
   }
@@ -1863,6 +1967,8 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     var pf = e.target.getAttribute && e.target.getAttribute('data-pc-f');
     if (pf === 'novo') pc.novo = e.target.value;
     else if (pf === 'editNome') pc.editNome = e.target.value;
+    else if (pf === 'retMotivo') pc.ret.motivo = e.target.value;
+    else if (pf === 'retData') pc.ret.data = e.target.value;
   });
   // conteúdo: arquivos escolhidos e mudanças de pasta / paciente de um arquivo
   main.addEventListener('change', function (e) {
@@ -1870,6 +1976,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     if (el.hasAttribute('data-ct-file') && ct.up) { ct.up.files = el.files; return; }
     if (el.hasAttribute('data-pc-file') && pc.up) { pc.up.files = el.files; pc.up.err = null; return; }
     if (el.getAttribute('data-pc-f') === 'fase' && pc.up) { pc.up.fase = el.value; return; }
+    if (el.getAttribute('data-pc-f') === 'retData') { pc.ret.data = el.value; return; }
     if (el.hasAttribute('data-pc-div')) { var pd = pcAtual(); if (pd) pcSalvar(pd, { divulgacao: el.checked ? 'sim' : 'nao' }); return; }
     if ((id = el.getAttribute('data-ct-move'))) state.db.doc('midia/' + id).update({ pasta: el.value }).catch(function () { ct.msg = 'Não mudou de pasta.'; render(); });
     if ((id = el.getAttribute('data-ct-pac'))) state.db.doc('midia/' + id).update({ paciente: el.value }).catch(function () { ct.msg = 'Não salvou.'; render(); });
@@ -1919,7 +2026,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
       // pacientes: só para o dono (o banco também recusa os outros)
       if (window.painelDono) db.collection('pacientes').limit(1000).onSnapshot(function (snap) {
         pc.lista = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
-        if (state.section === 'pacientes' || (state.section === 'conteudo' && !ct.pasta && !ct.sel)) render();
+        if (state.section === 'pacientes' || (state.section === 'conteudo' && !ct.pasta && !ct.sel)) render(); else renderNav();   // o número de retornos aparece no menu
       }, function () { pc.lista = pc.lista || []; render(); });
       var timer = setTimeout(function () { state.slow = true; render(); }, 10000);
       db.collection('marketing').orderBy('data', 'desc').limit(30).onSnapshot(function (snap) {
