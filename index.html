@@ -1,0 +1,2070 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
+<title>Painel do Consultório</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: sempre branco, mesmo com o claude.ai no modo escuro; a seção escolhida fica verde (pedido do Pedro, 01/11/2026). */
+:root, :root[data-theme="dark"] {
+  color-scheme: light;
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --field: #f4f4f5;
+  --fg: #121214;
+  --muted: #76736c;
+  --line: #ececee;
+  --ink: #111113;
+  --on-ink: #ffffff;
+  --accent: #5f9483;
+  --accent-soft: #d7efe6;
+  --peach: #f1dcc4;
+  --bad: #c25d41;
+  --strong: #5f9483;
+  --mid: #b98a3e;
+  --weak: #8c8f97;
+  --font-ui: "Manrope", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
+  --radius: 14px;
+}
+html, body { height: 100%; background: #ffffff; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font-ui); font-size: 15px; line-height: 1.5; }
+* { box-sizing: border-box; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+h1, h2, h3 { text-wrap: balance; margin: 0; }
+
+.app { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100%; }
+
+/* barra lateral */
+.side { background: var(--panel); color: var(--fg); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 24px;
+  padding-block: 24px; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: 18px;
+  position: sticky; top: 0; height: 100vh; }
+.brand { display: flex; flex-direction: column; gap: 2px; padding-inline: 8px; }
+.brand b { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
+.brand span { font-size: 12px; opacity: .6; }
+.nav { display: flex; flex-direction: column; gap: 2px; list-style: none; margin: 0; padding: 0; }
+.nav button { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left;
+  border: 0; background: transparent; color: var(--fg); padding: 10px 10px; border-radius: 10px; opacity: .78;
+  transition: background .15s ease, color .15s ease; }
+.nav button:hover { opacity: 1; background: var(--field); }
+.nav button[aria-current="page"] { opacity: 1; background: var(--accent); color: #fff; font-weight: 700; }
+.nav .ic { width: 20px; height: 20px; flex: none; }
+.nav .soon { margin-left: auto; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; opacity: .55; }
+.side-foot { margin-top: auto; font-size: 12px; opacity: .55; padding-inline: 8px; }
+
+/* área principal */
+.main { min-width: 0; padding-block: 32px 48px; padding-left: max(16px, 4vw); padding-right: max(16px, env(safe-area-inset-right, 0px), 4vw); }
+.page-head { display: flex; flex-direction: column; gap: 6px; margin-bottom: 24px; max-width: 70ch; }
+.eyebrow { font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+.page-head h1 { font-size: clamp(24px, 3vw, 32px); font-weight: 800; letter-spacing: -0.02em; }
+.page-head p { margin: 0; color: var(--muted); }
+
+/* aba Agentes: uma faixa por nível (chefes, contratados, estagiários) e os cartões de cada um embaixo */
+.tiers { display: flex; flex-direction: column; gap: 26px; }
+.tier-band { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 10px 14px; margin-bottom: 12px;
+  border-radius: 10px; background: var(--field); border-left: 4px solid var(--accent); }
+.tier-band.chefe { border-left-color: var(--ink); }
+.tier-band.estagiario { border-left-color: var(--mid); }
+.tier-band h2 { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+.tier-band .n { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+.tier-band p { margin: 0; font-size: 13px; color: var(--muted); }
+.members { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+.member { display: flex; gap: 14px; align-items: flex-start; text-align: left; min-width: 0; border: 1px solid var(--line); border-radius: var(--radius);
+  background: var(--panel); padding: 16px; transition: transform .15s ease, box-shadow .15s ease; }
+button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(17,17,19,.08); }
+.member > div { min-width: 0; }
+.member h3 { font-size: 16px; font-weight: 800; }
+.member .role-line { display: block; font-size: 13px; font-weight: 600; color: var(--muted); }
+.member ul { margin: 8px 0 0; padding-left: 16px; font-size: 13px; color: var(--muted); }
+.member .state { display: inline-block; margin-top: 10px; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; font-weight: 700;
+  padding: 4px 10px; border-radius: 999px; background: var(--field); color: var(--muted); }
+.member .state.on { background: var(--accent-soft); color: #3f6f60; }
+.member.off { border-style: dashed; }
+.member.off h3 { color: var(--muted); }
+.member.off p { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
+
+/* rendimento da semana, embaixo do escritório */
+.perf { border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
+.perf-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
+.perf-head h2 { font-size: 15px; font-weight: 800; }
+.week-nav { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.week-nav button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); line-height: 1; }
+.week-nav button:disabled { opacity: .35; cursor: default; }
+.perf-row { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 16px; align-items: center; padding-top: 14px; border-top: 1px solid var(--line); }
+.perf-who { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.perf-who b { display: block; font-weight: 800; }
+.perf-who span { display: block; font-size: 12px; color: var(--muted); }
+.bars { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.bar-line { display: grid; grid-template-columns: 116px minmax(0, 1fr) 44px; gap: 10px; align-items: center; font-size: 13px; }
+.bar-line .lbl { color: var(--muted); font-weight: 600; }
+.bar { height: 10px; border-radius: 999px; background: var(--field); overflow: hidden; }
+.bar i { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
+.bar-line .pct { font-family: var(--font-mono); font-size: 12px; text-align: right; }
+.perf-note { font-size: 12px; color: var(--muted); margin: 0; }
+.perf-faces { display: flex; padding-left: 6px; }
+.perf-faces .face { margin-left: -6px; }
+.face.xs { width: 32px; height: 32px; margin-top: 0; box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--line); }
+.face.xs b { font-size: 13px; }
+
+.face { width: 108px; height: 108px; border-radius: 50%; background: #fff; display: grid; place-items: center; overflow: hidden; flex: none;
+  box-shadow: 0 0 0 10px #f4f4f2, 0 0 0 11px var(--line); margin-top: 10px; }
+.face img { width: 100%; height: 100%; display: block; }
+.face b { font-size: 36px; font-weight: 800; color: var(--muted); }
+.face.empty-face { color: #c9c7c1; box-shadow: 0 0 0 10px #f8f8f6; }
+.face.big { width: 120px; height: 120px; }
+.face.sm { width: 48px; height: 48px; margin-top: 0; box-shadow: 0 0 0 4px #f4f4f2, 0 0 0 5px var(--line); }
+.face.sm b { font-size: 18px; }
+.face.sm.empty-face { box-shadow: 0 0 0 4px #f8f8f6; }
+.agent-hero { margin: 4px 0 18px 10px; }
+
+/* escritório isométrico: as faces de frente e do lado escurecem a cor do topo */
+:root { --o-floor: #ece7df; --o-floor-accent: #d7efe6; --o-floor-warm: #f4e6d2; --o-wall: #dcd6cc; --o-desk: #c9a27c;
+  --o-chair: #3b3f46; --o-monitor: #2a2d33; --o-window: #bfe0f0; --o-frame: #f1dcc4; --o-paper: #fbfbf8;
+  --o-pot: #b8775a; --o-leaf: #6fa36b; --o-board: #fbfbf8; --o-cabinet: #a6abb3; --o-tag: #111113; --o-tag-fg: #fff; --o-bg: #f6f5f2; }
+.office-wrap { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px; overflow-x: auto; margin-bottom: 28px; }
+/* versão 3D: fundo bege de pôster, etiquetas em HTML por cima do canvas */
+.office-wrap.is-3d { padding: 0; overflow: hidden; background: var(--o-bg); }
+.o3d { position: relative; width: 100%; aspect-ratio: 16 / 11; }
+@media (max-width: 720px) {
+  .o3d-tag.room, .o3d-hint { display: none; }
+  .o3d-tag.who { padding: 4px 8px; }
+  .o3d-tag.who b { font-size: 10.5px; }
+  .o3d-tag.who span { font-size: 9.5px; }
+  .o3d-ctrl button { width: 30px; height: 30px; }
+}
+.o3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: grab; }
+.o3d-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
+.o3d-tag { position: absolute; left: 0; top: 0; margin-top: -6px; white-space: nowrap; font: 700 11px/1.25 var(--font-ui);
+  padding: 4px 9px; border-radius: 8px; border: 0; background: rgba(255,255,255,.88); color: #2a2a2c; box-shadow: 0 1px 4px rgba(0,0,0,.14); text-align: center; }
+.o3d-tag.who { background: #111113; color: #fff; padding: 5px 12px 5px 5px;
+  display: flex; align-items: center; gap: 8px; text-align: left; border-radius: 999px; }
+.o3d-tag.who img { width: 30px; height: 30px; border-radius: 50%; background: #fff; flex: none; }
+.o3d-tag.who b { display: block; font-weight: 800; font-size: 12px; }
+.o3d-tag.who span { display: block; font-size: 10.5px; font-weight: 600; opacity: .78; }
+.o3d-tag.who.live span { color: #b8e8d6; opacity: 1; }
+.o3d-tag.who::after { content: ""; position: absolute; left: 50%; bottom: -5px; margin-left: -5px; border: 5px solid transparent; border-bottom: 0; border-top-color: #111113; }
+.o3d-ctrl { position: absolute; right: 10px; bottom: 10px; display: flex; gap: 6px; }
+.o3d-ctrl button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(0,0,0,.1); background: rgba(255,255,255,.92); color: #222; font-size: 16px; line-height: 1; }
+.o3d-hint { position: absolute; left: 12px; bottom: 14px; font-size: 11px; color: #6d655b; pointer-events: none; }
+.office { display: block; width: 100%; min-width: 560px; height: auto; }
+.office .f { filter: brightness(.88); }
+.office .r { filter: brightness(.74); }
+.floor .t, .floor .f, .floor .r { fill: var(--o-floor); }
+.floor.accent polygon { fill: var(--o-floor-accent); }
+.floor.warm polygon { fill: var(--o-floor-warm); }
+.wall polygon { fill: var(--o-wall); }
+.desk polygon { fill: var(--o-desk); }
+.chair polygon { fill: var(--o-chair); }
+.monitor polygon { fill: var(--o-monitor); }
+.keyboard polygon { fill: var(--o-chair); }
+.window polygon { fill: var(--o-window); }
+.frame polygon { fill: var(--o-frame); }
+.paper polygon { fill: var(--o-paper); }
+.pot polygon { fill: var(--o-pot); }
+.cabinet polygon { fill: var(--o-cabinet); }
+.board polygon { fill: var(--o-board); }
+.leaf { fill: var(--o-leaf); }
+.room-label { font-size: 11px; font-weight: 700; fill: var(--fg); opacity: .75; letter-spacing: .02em;
+  paint-order: stroke; stroke: var(--o-floor); stroke-width: 4px; stroke-linejoin: round; }
+.room.has-agent { cursor: pointer; }
+.room.has-agent:hover .floor polygon, .room.has-agent:focus-visible .floor polygon { filter: brightness(.94); }
+.room:focus { outline: none; }
+.room:focus-visible .room-label { fill: var(--fg); text-decoration: underline; }
+.tag rect, .tag path { fill: var(--o-tag); }
+.tag text { text-anchor: middle; fill: var(--o-tag-fg); }
+.tag-name { font-size: 11px; font-weight: 800; }
+.tag-sub { font-size: 9.5px; opacity: .75; }
+.tag.live .tag-sub { opacity: 1; fill: var(--accent); }
+.typing { animation: typing .9s ease-in-out infinite; }
+@keyframes typing { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
+.tag.live { animation: float 3s ease-in-out infinite; }
+@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.team-title { font-size: 15px; font-weight: 800; margin-bottom: 12px; }
+
+/* detalhe do agente */
+.back { border: 0; background: transparent; color: var(--muted); padding: 0; margin-bottom: 12px; font-weight: 600; }
+.back:hover { color: var(--fg); }
+.detail { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 24px; align-items: start; }
+.panel { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; }
+.role h2 { font-size: 15px; font-weight: 800; margin-bottom: 8px; }
+.role p, .role li { font-size: 14px; color: var(--muted); }
+.role ul { padding-left: 18px; margin: 8px 0 0; }
+.meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+.chip { font-size: 12px; font-weight: 600; padding: 4px 10px; border-radius: 999px; background: var(--field); color: var(--fg); }
+.chip.ok { background: var(--accent-soft); }
+
+.day-head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 8px; margin-bottom: 4px; }
+.day-head h2 { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; }
+.date { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.focus { margin: 4px 0 16px; padding: 12px 14px; border-radius: 10px; background: var(--peach); font-size: 14px; }
+.focus b { font-weight: 700; }
+
+.options { display: flex; flex-direction: column; gap: 12px; }
+.opt { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px 18px;
+  display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.opt.done { opacity: .55; }
+.opt-top { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.force { font-size: 11px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; border: 1.5px solid currentColor; }
+.force.forte { color: var(--strong); }
+.force.medio { color: var(--mid); }
+.force.fraco { color: var(--weak); }
+.kind { font-size: 12px; color: var(--muted); font-weight: 600; }
+.time { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin-left: auto; }
+.opt h3 { font-size: 16px; font-weight: 800; }
+.hook { font-size: 15px; margin: 0; padding-left: 12px; border-left: 3px solid var(--accent); }
+.opt dl { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 12px; margin: 0; font-size: 14px; }
+.opt dt { color: var(--muted); font-weight: 600; }
+.opt dd { margin: 0; }
+.src { font-family: var(--font-mono); font-size: 12px; color: var(--muted); overflow-wrap: anywhere; }
+.acts { display: flex; gap: 8px; flex-wrap: wrap; }
+.btn { border: 1px solid var(--line); background: var(--field); padding: 7px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; }
+.btn.primary { background: var(--fg); color: var(--bg); border-color: transparent; }
+.btn[aria-pressed="true"] { background: var(--accent-soft); border-color: var(--accent); }
+
+.history h2 { font-size: 15px; font-weight: 800; margin-bottom: 10px; }
+.history ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+.history button { width: 100%; border: 0; background: transparent; text-align: left; padding: 8px 10px; border-radius: 8px;
+  display: flex; justify-content: space-between; gap: 8px; font-size: 14px; }
+.history button:hover { background: var(--field); }
+.history button[aria-current="true"] { background: var(--accent-soft); font-weight: 700; }
+.history .n { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+/* agenda: semana do Google Agenda, horários livres para particular e o formulário de consulta */
+.ag-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
+.ag-bar .week-nav { margin-right: auto; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 2px; background: var(--field); }
+.seg button { border: 0; background: transparent; padding: 5px 14px; border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--muted); }
+.seg button[aria-pressed="true"] { background: var(--panel); color: var(--fg); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+.ag-status { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
+.ag-warn { border: 1px solid #ecd9b8; background: #fbf4e6; border-radius: 10px; padding: 10px 14px; font-size: 13px; margin-bottom: 14px; }
+.ag-warn .btn { margin-top: 8px; }
+.week { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px; }
+.week.one { grid-template-columns: minmax(0, 1fr); max-width: 560px; }
+.day { border: 1px solid var(--line); border-radius: 12px; padding: 10px; min-height: 140px; display: flex; flex-direction: column; gap: 6px; min-width: 0; background: var(--panel); }
+.day.today { border-color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
+.day.past { opacity: .6; }
+.day h3 { font-size: 13px; font-weight: 800; display: flex; justify-content: space-between; gap: 6px; }
+.day h3 span { font-family: var(--font-mono); font-weight: 500; color: var(--muted); }
+.ev { border-radius: 8px; background: var(--field); padding: 6px 8px; font-size: 12.5px; min-width: 0; }
+.ev b { display: block; font-family: var(--font-mono); font-size: 11px; font-weight: 500; color: var(--muted); }
+.ev .t { display: block; font-weight: 700; overflow-wrap: anywhere; }
+.ev .acts { margin-top: 4px; }
+.ev .acts button, .ev .acts a { border: 0; background: transparent; padding: 0; font-size: 11.5px; font-weight: 700; color: var(--accent); text-decoration: none; }
+.ev[style] b, .ev[style] .acts button, .ev[style] .acts a { color: inherit; opacity: .9; }
+.ev[style] .acts button, .ev[style] .acts a { text-decoration: underline; }
+.free { border: 1.5px solid var(--accent); background: transparent; color: #2f5d4f; border-radius: 8px; padding: 6px 8px; font-size: 12px; text-align: left; width: 100%; }
+.free.maybe { border-style: dashed; }
+.legend { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; font-size: 12.5px; font-weight: 700; margin: -4px 0 14px; }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i, .cats i, .mev i, .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex: none; }
+.legend button, .ag-status button { border: 0; background: transparent; padding: 0; font-size: 12px; font-weight: 700; color: var(--accent); text-decoration: underline; }
+.dot { vertical-align: -1px; margin-right: 4px; }
+.sw { display: flex; flex-wrap: wrap; gap: 6px; }
+.swb { width: 26px; height: 26px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px var(--line); padding: 0; }
+.swb[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--fg); }
+.cats { display: flex; flex-wrap: wrap; gap: 6px; }
+.cats button { display: inline-flex; align-items: center; gap: 6px; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 5px 12px; font-size: 13px; font-weight: 700; }
+.cats button[aria-pressed="true"] { border-color: var(--fg); background: var(--field); }
+.ag-form .lbl { font-size: 12px; font-weight: 700; color: var(--muted); }
+.catrow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.catrow input { width: 160px; }
+.month { border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.mhead, .mgrid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); }
+.mhead span { font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; padding: 8px; border-bottom: 1px solid var(--line); }
+.mday { min-height: 104px; border: 0; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--panel); padding: 6px; text-align: left;
+  display: flex; flex-direction: column; gap: 3px; min-width: 0; font: inherit; }
+.mday:nth-child(7n) { border-right: 0; }
+.mday:hover { background: var(--field); }
+.mday.out { background: #fafaf8; color: var(--muted); }
+.mday .n { font-size: 12px; font-weight: 800; font-family: var(--font-mono); }
+.mday.today .n { background: var(--accent); color: #fff; border-radius: 999px; padding: 1px 7px; align-self: flex-start; }
+.mev { display: block; font-size: 11.5px; font-weight: 600; line-height: 1.35; padding: 1px 6px; border-radius: 4px; min-width: 0;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mev b { font-weight: 800; }
+.mday .more { font-size: 11px; color: var(--muted); font-weight: 700; }
+@media (max-width: 720px) {
+  .mday { min-height: 76px; padding: 3px 2px; gap: 2px; }
+  .mday .n { text-align: center; align-self: center; }
+  .mev { font-size: 9px; padding: 0 3px; border-radius: 3px; }
+  .mev b { display: none; }
+  .mday .more { font-size: 9px; text-align: center; }
+  .mhead span { padding: 6px 2px; text-align: center; font-size: 10px; }
+}
+/* conteúdo: pastas, banco de mídia e cronograma */
+.ct-folders { margin-bottom: 14px; }
+.ct-folders .n { font-family: var(--font-mono); font-size: 11px; color: var(--muted); font-weight: 500; }
+.ct-new { display: inline-flex; gap: 6px; }
+.ct-new input { font: inherit; font-size: 13px; padding: 5px 10px; border: 1px solid var(--line); border-radius: 999px; width: 160px; }
+.ct-radio { border: 0; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; font-size: 13.5px; }
+.ct-radio legend { font-size: 12px; font-weight: 700; color: var(--muted); margin-bottom: 4px; padding: 0; }
+.ct-radio label { flex-direction: row; align-items: center; gap: 8px; font-size: 13.5px; font-weight: 600; color: var(--fg); }
+.ct-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(170px, 1fr)); gap: 10px; }
+.ct-card { position: relative; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; padding: 0; background: var(--field); text-align: left; display: flex; flex-direction: column; min-width: 0; }
+.ct-card.on { outline: 2px solid var(--accent); outline-offset: 1px; }
+.ct-card .th { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; background: #e9e8e4; }
+.ct-tags { position: absolute; top: 6px; left: 6px; right: 6px; display: flex; flex-wrap: wrap; gap: 4px; }
+.ct-tags span { font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; padding: 2px 7px; border-radius: 999px; background: rgba(17,17,19,.72); color: #fff; }
+.ct-tags .st-analisado, .ct-tags .st-agendado { background: var(--accent); }
+.ct-tags .warn { background: var(--bad); }
+.ct-cap { font-size: 12px; font-weight: 600; padding: 7px 9px; background: var(--panel); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ct-detail { display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 16px; border: 1px solid var(--line); border-radius: var(--radius); padding: 14px; margin-bottom: 16px; }
+.ct-big img, .ct-big video { width: 100%; max-height: 70vh; object-fit: contain; border-radius: 10px; background: #111; display: block; }
+.ct-info { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ct-info h2 { font-size: 17px; font-weight: 800; overflow-wrap: anywhere; }
+.ct-info .hint { font-size: 12px; color: var(--muted); margin: 0; }
+.ct-info .hint.bad { color: var(--bad); }
+.ct-info label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 700; color: var(--muted); }
+.ct-info select { font: inherit; font-size: 14px; color: var(--fg); padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.ct-ana { background: var(--field); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; }
+.ct-ana p { margin: 4px 0; }
+.ct-ana ul { margin: 4px 0 0; padding-left: 18px; }
+.ct-info .acts, .post .acts, .ag-form .acts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.posts { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; }
+.posts.old { margin-top: 12px; opacity: .75; }
+.post { border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.post.st-aprovado { border-color: var(--accent); }
+.post.st-postado, .post.st-descartado { opacity: .7; }
+.post h3 { font-size: 16px; font-weight: 800; }
+.post .hint { font-size: 12.5px; color: var(--muted); margin: 0; }
+.post .hook { margin: 0; font-weight: 700; }
+.post-st { margin-left: auto; font-size: 11px; font-weight: 700; color: var(--muted); }
+.post-media { display: flex; gap: 6px; overflow-x: auto; }
+.post-media .pm { width: 84px; height: 105px; object-fit: cover; border-radius: 8px; flex: none; background: #e9e8e4; }
+.legenda { background: var(--field); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; }
+.legenda p { margin: 4px 0 8px; white-space: pre-wrap; }
+.ct-ed { margin: 0; font-size: 13px; font-weight: 600; color: #3f6f60; display: flex; flex-direction: column; gap: 6px; }
+.ct-ed.bad { color: var(--bad); }
+.ct-ed video { width: 100%; max-height: 420px; border-radius: 10px; background: #111; }
+.ct-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
+.tile { position: relative; aspect-ratio: 1; border: 0; border-radius: 16px; overflow: hidden; padding: 14px; text-align: left; font: inherit;
+  display: flex; flex-direction: column; justify-content: flex-end; color: #fff; background: linear-gradient(160deg, #6fa594, #3f6f60); isolation: isolate; }
+.tile:nth-child(5n+2) { background: linear-gradient(160deg, #d29a6b, #a5683f); }
+.tile:nth-child(5n+3) { background: linear-gradient(160deg, #7f8fc4, #4f5d94); }
+.tile:nth-child(5n+4) { background: linear-gradient(160deg, #c98aa0, #94546d); }
+.tile:nth-child(5n+5) { background: linear-gradient(160deg, #8c8f97, #5d6068); }
+.tile .tile-bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: -2; }
+.tile:has(.tile-bg)::before { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.05) 30%, rgba(0,0,0,.65)); z-index: -1; }
+.tile-n { font-size: 40px; font-weight: 800; line-height: 1; font-family: var(--font-mono); }
+.tile-name { font-size: 15px; font-weight: 800; margin-top: 4px; text-wrap: balance; }
+.tile:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(17,17,19,.14); }
+.tile { transition: transform .15s ease, box-shadow .15s ease; }
+.tile.new { background: var(--field); color: var(--muted); border: 1.5px dashed #cfcdc6; justify-content: center; align-items: center; text-align: center; gap: 8px; }
+.tile.new input { font: inherit; font-size: 14px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; width: 100%; }
+.ct-title { font-size: 20px; font-weight: 800; margin: 4px 0 14px; }
+.ct-title span { font-family: var(--font-mono); font-size: 14px; color: var(--muted); font-weight: 500; }
+.ct-tags .ok { background: #2f8a5f; }
+.fb { border-radius: 12px; padding: 12px 14px; font-size: 13.5px; border: 1.5px solid; }
+.fb b { font-size: 15px; }
+.fb b span { font-weight: 600; font-size: 12px; opacity: .7; }
+.fb p { margin: 6px 0; }
+.fb h4 { margin: 10px 0 2px; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; }
+.fb ul { margin: 2px 0; padding-left: 18px; }
+.fb.good { background: #e8f5ee; border-color: #8fcbab; color: #1f5c3d; }
+.fb.bad { background: #fbeceb; border-color: #e8a39a; color: #8a2d22; }
+.fb.wait { background: var(--field); border-color: var(--line); color: var(--muted); }
+.fb .acts { margin-top: 10px; }
+.fb .acts .hint { font-size: 12px; color: inherit; opacity: .8; }
+.fb-care { font-weight: 700; }
+.fb-ed { font-weight: 700; margin: 10px 0 0 !important; }
+.ct-more { font-size: 13px; }
+.ct-more summary { cursor: pointer; font-weight: 700; color: var(--muted); }
+.ct-more[open] { display: flex; flex-direction: column; gap: 10px; }
+.ed-group { margin-bottom: 22px; }
+.ed-group h2 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; margin-bottom: 10px; }
+.ed-group h2 span { font-family: var(--font-mono); color: var(--muted); }
+.ed-list { display: flex; flex-direction: column; gap: 10px; }
+.ed-item { display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 14px; border: 1px solid var(--line); border-radius: var(--radius); padding: 12px; border-left: 4px solid var(--line); }
+.ed-item.st-editando { border-left-color: var(--mid); }
+.ed-item.st-pedida { border-left-color: var(--weak); }
+.ed-item.st-pronta { border-left-color: #2f8a5f; }
+.ed-item.st-falhou { border-left-color: var(--bad); }
+.ed-media video, .ed-media .pm { width: 100%; max-height: 320px; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 10px; background: #111; display: block; height: auto; }
+.ed-info { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ed-info h3 { font-size: 16px; font-weight: 800; }
+.ed-info p { margin: 0; font-size: 13.5px; }
+.ed-info .hint { font-size: 12.5px; color: var(--muted); }
+@media (max-width: 720px) {
+  .ct-tiles { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .tile-n { font-size: 30px; }
+  .tile-name { font-size: 13.5px; }
+  .ed-item { grid-template-columns: 110px minmax(0, 1fr); }
+}
+.link-btn { border: 0; background: transparent; padding: 0; margin-top: 14px; font-size: 13px; font-weight: 700; color: var(--accent); text-decoration: underline; }
+@media (max-width: 720px) {
+  .ct-detail { grid-template-columns: minmax(0, 1fr); }
+  .ct-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .posts { grid-template-columns: minmax(0, 1fr); }
+}
+/* semana e dia: grade de horários, como no Google */
+.tg { --ph: 46px; border: 1px solid var(--line); border-radius: 12px; overflow: hidden; background: var(--panel); }
+.tg-row { display: grid; grid-template-columns: 44px repeat(var(--n), minmax(0, 1fr)); }
+.tg-head > div { padding: 8px 4px; text-align: center; border-bottom: 1px solid var(--line); border-left: 1px solid var(--line); min-width: 0; }
+.tg-head > div:first-child, .tg-all > div:first-child { border-left: 0; }
+.tg-head .dn { display: block; font-size: 11px; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+.tg-head .dd { display: inline-block; font-size: 18px; font-weight: 800; font-family: var(--font-mono); padding: 0 6px; border-radius: 999px; }
+.tg-head .today .dd { background: var(--accent); color: #fff; }
+.tg-all > div { border-left: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 3px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.tg-all .lbl { font-size: 9.5px; color: var(--muted); text-align: right; padding: 4px 4px 0 0; }
+.tg-body { position: relative; }
+.tg-hours > div { height: var(--ph); font-size: 10px; font-family: var(--font-mono); color: var(--muted); text-align: right; padding-right: 6px; transform: translateY(-6px); }
+.tg-col { position: relative; border-left: 1px solid var(--line);
+  background-image: linear-gradient(var(--line) 1px, transparent 1px); background-size: 100% var(--ph); }
+.tg-col.past { background-color: #fafaf8; }
+.tev { position: absolute; border: 0; border-radius: 5px; padding: 2px 5px; text-align: left; font: inherit; font-size: 11.5px; line-height: 1.25;
+  overflow: hidden; z-index: 2; box-shadow: 0 0 0 1px #fff; }
+.tev .t { display: block; font-weight: 700; overflow: hidden; text-overflow: ellipsis; }
+.tev .h { display: block; font-size: 10.5px; opacity: .9; }
+.tg-col.past .tev { opacity: .65; }
+.tfree { position: absolute; left: 3px; right: 3px; border: 1.5px solid var(--accent); border-radius: 6px; background: rgba(255,255,255,.6); color: #2f5d4f;
+  font: inherit; font-size: 10.5px; font-weight: 700; text-align: left; padding: 2px 5px; z-index: 1; overflow: hidden; }
+.tfree.maybe { border-style: dashed; }
+.tblock { position: absolute; left: 0; right: 0; background: repeating-linear-gradient(45deg, #fbf4e6, #fbf4e6 6px, #f6ead2 6px, #f6ead2 12px); z-index: 0;
+  font-size: 10.5px; font-weight: 700; color: #7a5a22; padding: 4px 5px; }
+.tnow { position: absolute; left: 0; right: 0; height: 2px; background: #d50000; z-index: 3; }
+.tnow::before { content: ""; position: absolute; left: -5px; top: -4px; width: 10px; height: 10px; border-radius: 50%; background: #d50000; }
+.alld { display: block; font-size: 11px; font-weight: 700; padding: 1px 5px; border-radius: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@media (max-width: 720px) {
+  .tg { --ph: 38px; }
+  .tg-row { grid-template-columns: 30px repeat(var(--n), minmax(0, 1fr)); }
+  .tg-head .dd { font-size: 14px; padding: 0 4px; }
+  .tg-head .dn { font-size: 9px; }
+  .tev { font-size: 9px; padding: 1px 2px; border-radius: 3px; }
+  .tev .h { display: none; }
+  .tfree { font-size: 8.5px; padding: 1px 2px; }
+  .tfree span { display: none; }
+  .alld { font-size: 9px; padding: 0 2px; }
+  .tg-hours > div { font-size: 8.5px; padding-right: 3px; }
+}
+.free b { display: block; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; }
+.free.block { border-color: var(--mid); background: #fbf4e6; color: #7a5a22; cursor: default; }
+.ag-empty { font-size: 12px; color: var(--muted); }
+.ag-form { border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; margin-bottom: 16px; display: grid; gap: 12px; max-width: 640px; }
+.ag-form h2 { font-size: 15px; font-weight: 800; }
+.ag-form .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; }
+.ag-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12px; font-weight: 700; color: var(--muted); }
+.ag-form input, .ag-form select { font: inherit; font-size: 14px; color: var(--fg); padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); }
+.ag-form .hint { font-size: 12px; color: var(--muted); margin: 0; }
+.ag-form .hint.bad { color: var(--bad); }
+.ag-confirm { background: var(--field); border-radius: 10px; padding: 12px 14px; font-size: 14px; }
+@media (max-width: 980px) { .week { grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); } }
+@media (max-width: 720px) { .week { grid-template-columns: minmax(0, 1fr); } .day { min-height: 0; } }
+
+.note { color: var(--muted); font-size: 14px; }
+.empty { border: 1.5px dashed var(--line); border-radius: var(--radius); padding: 24px; color: var(--muted); }
+.empty b { color: var(--fg); }
+.soon-page { max-width: 60ch; }
+
+@media (max-width: 860px) {
+  .detail { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 720px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .side { position: sticky; top: env(safe-area-inset-top, 0px); height: auto; z-index: 5; flex-direction: column; gap: 10px;
+    padding-block: 12px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel); }
+  .side { border-right: 0; border-bottom: 1px solid var(--line); }
+  .brand { flex-direction: row; align-items: baseline; gap: 8px; padding: 0; }
+  .nav { flex-direction: row; overflow-x: auto; gap: 4px; scrollbar-width: none; }
+  .nav button { white-space: nowrap; padding: 8px 12px; }
+  .nav .soon, .side-foot { display: none; }
+  .main { padding-block: 20px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+  .members { grid-template-columns: minmax(0, 1fr); }
+  .perf { padding: 16px; }
+  .perf-row { grid-template-columns: minmax(0, 1fr); gap: 10px; }
+  .bar-line { grid-template-columns: 100px minmax(0, 1fr) 40px; }
+}
+@media (prefers-reduced-motion: reduce) { .member { transition: none; } button.member:hover { transform: none; } .typing, .tag.live { animation: none; } }
+</style>
+
+<div class="app">
+  <aside class="side">
+    <div class="brand"><b>Consultório</b><span>Dr. Pedro Portes</span></div>
+    <ul class="nav" id="nav"></ul>
+    <div class="side-foot">Organização do consultório</div>
+  </aside>
+  <main class="main" id="main"></main>
+</div>
+
+<script>
+(function () {
+  var ICONS = {
+    escritorio: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V6.5L12 3l8 3.5V20"/><path d="M3 20h18M9 20v-5h6v5M8.5 9.5h.01M12 9.5h.01M15.5 9.5h.01"/></svg>',
+    agentes: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01M9 16h6"/></svg>',
+    agenda: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+    conteudo: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="m10 9.5 5 2.5-5 2.5z"/></svg>',
+    edicao: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8.2 7.3 20 17M8.2 16.7 20 7"/></svg>',
+    pacientes: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>',
+    financeiro: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-6"/></svg>',
+    estudos: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 5.5C6.5 4.5 9.5 4.5 12 6c2.5-1.5 5.5-1.5 8-.5V19c-2.5-1-5.5-1-8 .5-2.5-1.5-5.5-1.5-8-.5z"/><path d="M12 6v13.5"/></svg>',
+    tooth: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 3.5c-2.5 0-4 2-4 4.5 0 3 1.5 4.5 2 7.5.4 2.6 1 5 2.5 5s1.8-3 2.5-5c.4-1 .8-1.5 2-1.5s1.6.5 2 1.5c.7 2 1 5 2.5 5s2.1-2.4 2.5-5c.5-3 2-4.5 2-7.5 0-2.5-1.5-4.5-4-4.5-2 0-3 1-5 1s-3-1-5-1z"/></svg>',
+    dot: '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="7"/></svg>'
+  };
+
+  var SECTIONS = [
+    { id: 'escritorio', label: 'Escritório' },
+    { id: 'agentes', label: 'Agentes' },
+    { id: 'agenda', label: 'Agenda' },
+    { id: 'conteudo', label: 'Conteúdo' },
+    { id: 'edicao', label: 'Edição' },
+    { id: 'pacientes', label: 'Pacientes', soon: 'Só números e canais (de onde veio, o que fez). Nenhum nome ou dado pessoal, por sigilo e LGPD.' },
+    { id: 'financeiro', label: 'Financeiro', soon: 'Entradas por clínica, metas do mês e o caminho até o consultório próprio.' },
+    { id: 'estudos', label: 'Estudos', soon: 'As aulas resumidas, o registro de horas e os temas do mês.' }
+  ];
+
+  // Equipe: cada agente tem um nível (tier) e, quem tem "pos", uma sala no desenho em SVG. Salas sem "name" são vagas.
+  // Contratação de 01/11/2026: Luzi, Nina, Ana Paula, Amanda, Bruno e Caio chegam com funções propostas pela IA; só a Duda roda sozinha.
+  var AGENTS = [
+    { id: 'luzi', name: 'Luzi', role: 'Gerente do consultório', desc: 'Monta a semana do consultório e coordena os outros agentes.', tier: 'chefe', when: 'Toda segunda às 7h30',
+      funcs: ['Toda segunda: plano da semana (dias de paciente, metas e o que cada agente entrega)', 'Mede a semana contra a meta de pacientes novos do mês', 'Aponta o que travou e quem precisa agir'] },
+    { id: 'marketing', name: 'Duda', role: 'Marketing e captação', room: 'Agência de marketing', desc: 'Lê o second brain e traz opções de captação todo dia às 7h.', live: true, tier: 'contratado', when: 'Todo dia às 7h',
+      funcs: ['Lê o second brain e entrega de 3 a 5 opções de captação por dia, às 7h', 'Analisa as fotos e os vídeos do banco de mídia e monta o cronograma de posts com legenda', 'Pede ao Rafa a edição dos vídeos', 'Todo conteúdo passa pelo Bruno (CFO) antes de postar'],
+      look: { skin: '#e3b48e', hair: '#3a261b', shirt: '#5f9483', pants: '#2f3a44' }, pos: [0, 0] },
+    // contratado pela Duda em 02/11/2026, a pedido do Pedro
+    { id: 'rafa', name: 'Rafa', role: 'Edição de vídeo', desc: 'Trabalha com a Duda: edita os vídeos do cronograma de posts.', tier: 'contratado', active: true, when: 'Todo dia às 8h, depois da Duda',
+      funcs: ['Edita os vídeos que a Duda pede no cronograma: cortes, formato vertical 9:16, texto do gancho e assinatura', 'Deixa cada vídeo pronto para postar, com até 20 MB', 'Não ouve o áudio: corta pelo que vê e pelo pedido da Duda'] },
+    { id: 'kim', name: 'Kim', role: 'Financeiro', room: 'Financeiro', desc: 'Entradas, metas, custos de laboratório e o caminho até o consultório próprio.', tier: 'contratado', when: 'Todo domingo e no fim do mês',
+      funcs: ['Registra entradas por clínica e procedimento (só valores, nunca nomes)', 'Fecha o mês contra a meta e mostra quanto sobra depois do laboratório', 'Alerta de impostos (carnê-leão, PF ou PJ) e reserva do consultório', 'Faz as contas das propostas de trabalho (ex.: 70/30 com o tio Zé)'],
+      look: { skin: '#c99a72', hair: '#1c1c1f', shirt: '#d9a441', pants: '#3a3a40' }, pos: [1, 0] },
+    { id: 'nina', name: 'Nina', role: 'Estudos e especialização', room: 'Estudos', desc: 'Organiza a especialização em prótese e os temas de estudo.', tier: 'contratado', when: 'Todo domingo e quando você mandar uma aula',
+      funcs: ['Resume aulas e artigos da especialização em prótese', 'Monta perguntas de revisão da semana', 'Cuida do menu de temas de domingo e do registro de horas de estudo'],
+      look: { skin: '#e3b48e', hair: '#5a3a24', shirt: '#c98b6b', pants: '#3a3a40' }, pos: [1, 1] },
+    { id: 'anapaula', name: 'Ana Paula', role: 'Planejamento clínico', desc: 'Transforma os achados de um caso num plano de tratamento claro.', tier: 'contratado', when: 'Quando você mandar um caso',
+      funcs: ['Plano de tratamento faseado, com opções, a partir dos achados (anonimizados)', 'Versão simples para explicar ao paciente', 'Checklist do caso: fotos, TCLE, laboratório e prazos'] },
+    { id: 'amanda', name: 'Amanda', role: 'Atendimento e relacionamento', room: 'Atendimento', desc: 'Cuida da conversa com o paciente, do primeiro contato ao retorno.', tier: 'contratado', when: 'Sob demanda; fase 2 com WhatsApp',
+      funcs: ['Mensagens prontas: primeira resposta, triagem, confirmação e pós-consulta', 'Lembra retornos (profilaxia em 6 meses) e pedidos de indicação', 'Depois: responder WhatsApp e direct, com regras de LGPD'],
+      look: { skin: '#f2c3a0', hair: '#e0bd6e', shirt: '#7fa8c9', pants: '#3a3a40' }, pos: [0, 1] },
+    { id: 'reuniao', room: 'Sala de reunião', meeting: true, pos: [2, 0] },
+    { id: 'treino', room: 'Treino e dieta', desc: 'Treinos da semana e alimentação.', tier: 'contratado', pos: [2, 1] },
+    { id: 'bruno', name: 'Bruno', role: 'Revisor CFO e LGPD', desc: 'Confere tudo o que vai a público antes de sair.', tier: 'estagiario', when: 'Antes de cada post ou mensagem-modelo',
+      funcs: ['Revisa os conteúdos da Duda pelas regras de publicidade do CFO', 'Revisa as mensagens da Amanda pela LGPD', 'Devolve o que mudar, com o motivo'] },
+    { id: 'caio', name: 'Caio', role: 'Pesquisa de evidência', desc: 'Busca artigos e referências quando outro agente pedir.', tier: 'estagiario', when: 'Quando a Nina, a Ana Paula ou a Duda pedirem',
+      funcs: ['Busca artigos (PubMed) sobre o tema pedido', 'Dá base científica aos conteúdos e aos planos de tratamento', 'Entrega referências curtas, com link'] }
+  ];
+
+  // Níveis da aba Agentes. A ideia é um agente principal (chefe) comandar os outros no futuro.
+  var TIERS = [
+    { id: 'chefe', label: 'Chefes', desc: 'Coordenam a equipe e distribuem o trabalho.',
+      vaga: { room: 'Agente principal', desc: 'Vai comandar os outros agentes e distribuir as tarefas.' } },
+    { id: 'contratado', label: 'Contratados', desc: 'Cuidam de uma área fixa e trabalham sozinhos.' },
+    { id: 'estagiario', label: 'Estagiários', desc: 'Tarefas pequenas e pontuais, a mando de um chefe ou contratado.',
+      vaga: { room: 'Sem estagiários', desc: 'Entram quando um agente precisar de ajuda numa tarefa curta.' } }
+  ];
+
+  var state = { section: 'escritorio', agent: null, week: 0, days: [], selected: null, loading: true, slow: false, error: null, db: null, saving: {} };
+
+  // abre na última aba usada neste aparelho (no celular, normalmente o Conteúdo)
+  try { var aba = localStorage.getItem('painel:aba'); if (aba === 'agenda' || aba === 'conteudo' || aba === 'edicao' || aba === 'agentes') state.section = aba; } catch (err) {}
+
+  var nav = document.getElementById('nav');
+  var main = document.getElementById('main');
+
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  var MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
+  var SEMANA = ['domingo', 'segunda', 'terça', 'quarta', 'quinta', 'sexta', 'sábado'];
+  function fmtDay(iso) {
+    var p = String(iso).split('-'); if (p.length !== 3) return iso;
+    var d = new Date(+p[0], +p[1] - 1, +p[2]);
+    return SEMANA[d.getDay()] + ', ' + (+p[2]) + ' ' + MESES[+p[1] - 1];
+  }
+  function todayIso() { var d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  var FORCE = { forte: 'Lead forte', medio: 'Lead médio', fraco: 'Lead fraco' };
+
+  function renderNav() {
+    nav.innerHTML = SECTIONS.map(function (s) {
+      return '<li><button type="button" data-sec="' + s.id + '"' + (state.section === s.id ? ' aria-current="page"' : '') + '>' +
+        ICONS[s.id] + '<span>' + esc(s.label) + '</span>' + (s.soon ? '<span class="soon">em breve</span>' : '') + '</button></li>';
+    }).join('');
+  }
+
+  // ---------- escritório isométrico ----------
+  var S = 30, CX = Math.cos(Math.PI / 6) * S, SY = Math.sin(Math.PI / 6) * S;
+  var RW = 5, RD = 4.4, WALL = 2.1, PART = 0.75;
+  function P(x, y, z) { return [((x - y) * CX).toFixed(1), (((x + y) * SY) - z * S).toFixed(1)]; }
+  function pts(a) { return a.map(function (p) { return p.join(','); }).join(' '); }
+  function shade(hex, f) {
+    var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
+    function c(v) { return Math.max(0, Math.min(255, Math.round(v * f))); }
+    return 'rgb(' + c(r) + ',' + c(g) + ',' + c(b) + ')';
+  }
+  // caixa com as 3 faces visíveis: topo, frente (y+d) e lado direito (x+w)
+  function box(x, y, z, w, d, h, cls, color) {
+    var t = [P(x, y, z + h), P(x + w, y, z + h), P(x + w, y + d, z + h), P(x, y + d, z + h)];
+    var f = [P(x, y + d, z), P(x + w, y + d, z), P(x + w, y + d, z + h), P(x, y + d, z + h)];
+    var r = [P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, z + h), P(x + w, y, z + h)];
+    if (color) return '<g><polygon points="' + pts(t) + '" fill="' + shade(color, 1.08) + '"/><polygon points="' + pts(f) + '" fill="' + shade(color, 0.86) + '"/><polygon points="' + pts(r) + '" fill="' + shade(color, 0.72) + '"/></g>';
+    return '<g class="' + cls + '"><polygon class="t" points="' + pts(t) + '"/><polygon class="f" points="' + pts(f) + '"/><polygon class="r" points="' + pts(r) + '"/></g>';
+  }
+
+  function person(x, y, a, typing) {
+    var L = a.look, s = '';
+    s += box(x - 0.1, y - 0.25, 0.42, 0.75, 0.12, 0.85, 'chair');          // encosto
+    s += box(x - 0.1, y - 0.15, 0.4, 0.75, 0.6, 0.08, 'chair');            // assento
+    s += '<g class="' + (typing ? 'typing' : 'idle') + '">';
+    s += box(x, y - 0.1, 0.48, 0.55, 0.38, 0.62, null, L.shirt);           // tronco
+    var h = P(x + 0.27, y + 0.09, 1.32), r = 0.21 * S;
+    s += '<circle cx="' + h[0] + '" cy="' + h[1] + '" r="' + r.toFixed(1) + '" fill="' + L.hair + '"/>';
+    s += '<circle cx="' + h[0] + '" cy="' + (+h[1] + r * 0.22).toFixed(1) + '" r="' + (r * 0.8).toFixed(1) + '" fill="' + L.skin + '"/>';
+    s += box(x + 0.6, y + 0.15, 0.85, 0.12, 0.42, 0.12, null, L.shirt);    // braço até o teclado
+    s += '</g>';
+    return s;
+  }
+
+  function nameTag(x, y, z, text, sub, live) {
+    var p = P(x, y, z), w = Math.max(text.length, sub.length) * 6.4 + 22;
+    // grupo de fora posiciona; o de dentro anima (transform do CSS sobrescreveria o atributo)
+    return '<g transform="translate(' + p[0] + ',' + p[1] + ')"><g class="tag' + (live ? ' live' : '') + '">' +
+      '<rect x="' + (-w / 2).toFixed(1) + '" y="-34" width="' + w.toFixed(1) + '" height="30" rx="8"/>' +
+      '<path d="M-5 -4 L0 3 L5 -4 Z"/>' +
+      '<text x="0" y="-21" class="tag-name">' + esc(text) + '</text>' +
+      '<text x="0" y="-9" class="tag-sub">' + esc(sub) + '</text></g></g>';
+  }
+
+  // nomes das salas e balões vão por cima de tudo, senão as paredes da sala da frente cobrem
+  function room(a, top) {
+    var rx = a.pos[0] * RW, ry = a.pos[1] * RD, s = '';
+    var backH = a.pos[1] === 0 ? WALL : PART, leftH = a.pos[0] === 0 ? WALL : PART;
+    s += '<g class="room' + (a.live ? ' live' : '') + '">';
+    s += box(rx + 0.06, ry + 0.06, 0, RW - 0.12, RD - 0.12, 0.06, a.live ? 'floor accent' : (a.name ? 'floor warm' : 'floor'));
+    s += box(rx, ry, 0, RW, 0.12, backH, 'wall');
+    s += box(rx, ry, 0, 0.12, RD, leftH, 'wall');
+    if (a.pos[1] === 0) {                                                   // quadro e janela na parede do fundo
+      s += box(rx + 0.6, ry + 0.12, 1.0, 1.3, 0.02, 0.8, 'window');
+      s += box(rx + 3.1, ry + 0.12, 1.05, 0.9, 0.02, 0.6, 'frame');
+    }
+    if (a.meeting) {
+      s += box(rx + 1.1, ry + 1.2, 0, 2.8, 1.5, 0.72, 'desk');
+      [[1.3, 0.8], [2.2, 0.8], [3.1, 0.8], [1.3, 2.75], [2.2, 2.75], [3.1, 2.75]].forEach(function (c) { s += box(rx + c[0], ry + c[1], 0, 0.55, 0.45, 0.42, 'chair'); });
+      s += box(rx + 4.3, ry + 0.4, 0.6, 0.05, 1.6, 1.0, 'board');
+    } else {
+      var px = rx + 1.9, py = ry + 1.25;
+      if (a.name) s += person(px, py, a, a.live);
+      else s += box(px - 0.1, py - 0.15, 0, 0.75, 0.6, 0.48, 'chair');
+      s += box(rx + 1.2, ry + 1.95, 0, 2.1, 0.85, 0.74, 'desk');
+      if (a.name) s += box(rx + 1.85, ry + 2.0, 0.74, 0.7, 0.35, 0.03, 'keyboard');
+      s += box(rx + 1.75, ry + 2.45, 0.74, 0.95, 0.08, 0.58, 'monitor');
+      s += box(rx + 2.9, ry + 2.1, 0.74, 0.3, 0.4, 0.12, 'paper');
+      s += box(rx + 4.1, ry + 0.4, 0, 0.45, 0.45, 0.4, 'pot');
+      var lp = P(rx + 4.32, ry + 0.62, 0.85);
+      s += '<circle class="leaf" cx="' + lp[0] + '" cy="' + lp[1] + '" r="' + (0.38 * S).toFixed(1) + '"/>';
+      if (a.id === 'kim') s += box(rx + 0.4, ry + 2.9, 0, 0.6, 0.8, 1.2, 'cabinet');
+    }
+    var lab = P(rx + 0.5, ry + RD - 0.35, 0.07);
+    var t = '<text class="room-label" x="' + lab[0] + '" y="' + lab[1] + '">' + esc(a.room) + (a.name || a.meeting ? '' : ' · vaga') + '</text>';
+    if (a.name) {
+      var sub = a.live ? statusLine() : 'chegando';
+      t += nameTag(rx + 2.17, ry + 1.34, 1.85, a.name + ' · ' + a.role, sub, a.live);
+    }
+    top.push(t);
+    return s + '</g>';
+  }
+
+  function statusLine() {
+    if (state.loading) return 'conectando…';
+    var last = state.days[0];
+    if (last && last.data === todayIso()) return 'entregou ' + (last.opcoes || []).length + ' opções hoje';
+    return 'trabalhando nas opções de amanhã';
+  }
+
+  function office() {
+    var order = AGENTS.filter(function (a) { return a.pos; }).sort(function (a, b) { return (a.pos[0] + a.pos[1]) - (b.pos[0] + b.pos[1]) || a.pos[1] - b.pos[1]; });
+    var minX = -(2 * RD) * CX - 30, maxX = 3 * RW * CX + 30, minY = -WALL * S - 60, maxY = (3 * RW + 2 * RD) * SY + 20;
+    return '<svg class="office" viewBox="' + [minX, minY, maxX - minX, maxY - minY].map(function (n) { return n.toFixed(0); }).join(' ') + '" role="img" aria-label="Escritório do consultório com as salas dos agentes">' +
+      (function () { var top = []; return order.map(function (a) { return room(a, top); }).join('') + top.join(''); })() + '</svg>';
+  }
+
+  // página inicial: o escritório só para ver; abrir cada agente fica na aba Agentes
+  function renderOffice() {
+    return '<header class="page-head"><span class="eyebrow">Escritório</span><h1>O escritório</h1>' +
+      '<p>Cada agente tem a sua sala. As funções e o trabalho de cada um ficam na aba Agentes.</p></header>' +
+      '<div class="office-wrap" id="office-slot">' + office() + '</div>' + renderPerf();
+  }
+
+  // ---------- rendimento da semana (segunda a domingo) ----------
+  function isoOf(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
+  function weekRange(offset) {
+    var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - (d.getDay() + 6) % 7 - 7 * offset);
+    var end = new Date(d); end.setDate(d.getDate() + 6);
+    return { start: d, end: end };
+  }
+  function shortDay(d) { return d.getDate() + ' ' + MESES[d.getMonth()]; }
+  var DAY_MS = 86400000;
+
+  // Duda: entrega = dias com opções / dias que ela já devia ter trabalhado; aproveitamento = opções feitas / opções entregues
+  function dudaWeek(offset) {
+    var w = weekRange(offset), s = isoOf(w.start), e = isoOf(w.end), today = todayIso();
+    var all = state.days.map(function (d) { return d.data; }).sort();
+    if (!all.length || all[0] > e) return null;
+    var from = all[0] > s ? all[0] : s, to = today < e ? today : e;
+    var p1 = from.split('-'), p2 = to.split('-');
+    var due = Math.max(1, Math.round((new Date(+p2[0], +p2[1] - 1, +p2[2]) - new Date(+p1[0], +p1[1] - 1, +p1[2])) / DAY_MS) + 1);
+    var days = state.days.filter(function (d) { return d.data >= s && d.data <= e; });
+    var total = 0, feitas = 0, desc = 0;
+    days.forEach(function (d) {
+      total += (d.opcoes || []).length;
+      Object.keys(d.estado || {}).forEach(function (k) { if (d.estado[k] === 'feito') feitas++; else if (d.estado[k] === 'descartado') desc++; });
+    });
+    return { delivered: days.length, due: due, total: total, feitas: feitas, desc: desc };
+  }
+
+  function bar(label, pct) {
+    var shown = pct == null ? '—' : pct + '%';
+    return '<div class="bar-line"><span class="lbl">' + label + '</span>' +
+      '<span class="bar" role="img" aria-label="' + label + ': ' + shown + '"><i style="width:' + (pct || 0) + '%"></i></span>' +
+      '<span class="pct">' + shown + '</span></div>';
+  }
+
+  function renderPerf() {
+    var w = weekRange(state.week);
+    var title = state.week === 0 ? 'Esta semana' : state.week === 1 ? 'Semana passada' : 'Há ' + state.week + ' semanas';
+    // só quem já trabalha sozinho ganha barra; quem está chegando fica numa linha no fim
+    var rows = AGENTS.filter(function (a) { return a.live; }).map(function (a) {
+      var bars, note;
+      var r = state.db && !state.loading ? dudaWeek(state.week) : null;
+      if (state.loading) { bars = bar('Entrega', null) + bar('Aproveitamento', null); note = 'Carregando…'; }
+      else if (!state.db) { bars = bar('Entrega', null) + bar('Aproveitamento', null); note = 'Os dados só aparecem abrindo o painel pelo claude.ai.'; }
+      else if (!r) { bars = bar('Entrega', null) + bar('Aproveitamento', null); note = 'Ela ainda não trabalhava nesta semana.'; }
+      else {
+        bars = bar('Entrega', Math.min(100, Math.round(r.delivered / r.due * 100))) + bar('Aproveitamento', r.total ? Math.round(r.feitas / r.total * 100) : null);
+        note = r.delivered + ' de ' + r.due + (r.due === 1 ? ' dia' : ' dias') + ' com opções · ' + r.feitas + ' de ' + r.total + ' opções feitas' + (r.desc ? ', ' + r.desc + ' descartadas' : '');
+      }
+      return '<div class="perf-row"><div class="perf-who">' + face(a, 'sm') + '<div><b>' + esc(a.name) + '</b><span>' + esc(a.role) + '</span></div></div>' +
+        '<div class="bars">' + bars + '<p class="perf-note">' + esc(note) + '</p></div></div>';
+    }).join('');
+    var arriving = AGENTS.filter(function (a) { return a.name && !a.live; });
+    if (arriving.length) rows += '<div class="perf-row arriving"><div class="perf-faces">' + arriving.map(function (a) { return face(a, 'xs'); }).join('') + '</div>' +
+      '<p class="perf-note">Chegando, ainda sem rendimento: ' + esc(arriving.map(function (a) { return a.name; }).join(', ')) + '. A barra aparece quando cada um começar a trabalhar sozinho.</p></div>';
+    return '<section class="perf" aria-label="Rendimento da semana"><div class="perf-head"><h2>Rendimento · ' + title + '</h2>' +
+      '<div class="week-nav"><button type="button" data-week="1" aria-label="Semana anterior"' + (state.week >= 3 ? ' disabled' : '') + '>‹</button>' +
+      '<span>' + shortDay(w.start) + ' – ' + shortDay(w.end) + '</span>' +
+      '<button type="button" data-week="-1" aria-label="Semana seguinte"' + (state.week === 0 ? ' disabled' : '') + '>›</button></div></div>' + rows + '</section>';
+  }
+
+  // aba Agentes: uma faixa por nível, com os cartões e as funções de cada agente
+  function renderTeam() {
+    var tiers = TIERS.map(function (t) {
+      var list = AGENTS.filter(function (a) { return a.tier === t.id; });
+      var n = list.filter(function (a) { return a.name; }).length;
+      var cards = list.map(function (a) {
+        if (!a.name) return vacancy(a);
+        var st = a.live ? '<span class="state on">● ' + esc(statusLine()) + '</span>' : a.active ? '<span class="state on">● trabalhando · ' + esc(a.when) + '</span>' : '<span class="state">chegando · ' + esc(a.when) + '</span>';
+        return '<button type="button" class="member" data-agent="' + a.id + '">' + face(a, 'sm') + '<div><h3>' + esc(a.name) + '</h3>' +
+          '<span class="role-line">' + esc(a.role) + '</span><ul>' + a.funcs.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' + st + '</div></button>';
+      });
+      if (!list.length && t.vaga) cards.push(vacancy(t.vaga));
+      return '<section><div class="tier-band ' + t.id + '"><h2>' + esc(t.label) + '</h2><span class="n">' + n + (n === 1 ? ' agente' : ' agentes') + '</span><p>' + esc(t.desc) + '</p></div>' +
+        '<div class="members">' + cards.join('') + '</div></section>';
+    }).join('');
+    return '<header class="page-head"><span class="eyebrow">Agentes</span><h1>A equipe</h1>' +
+      '<p>Todos os agentes, o nível de cada um e o que eles fazem. Clique num agente para ver o trabalho dele.</p></header>' +
+      '<div class="tiers">' + tiers + '</div>';
+  }
+
+  function vacancy(v) {
+    return '<div class="member off"><span class="face sm empty-face">' + ICONS.dot + '</span><div><h3>' + esc(v.room) + '</h3>' +
+      '<span class="role-line">vaga</span><p>' + esc(v.desc) + '</p></div></div>';
+  }
+
+  // rosto 3D do agente: desenhado pelo módulo do escritório; até ele chegar, fica a inicial
+  function face(a, cls) {
+    var src = window.Office3D && window.Office3D.faces && window.Office3D.faces[a.id];
+    return '<span class="face ' + (cls || '') + '" data-face="' + a.id + '">' +
+      (src ? '<img src="' + src + '" alt="">' : '<b>' + esc(a.name.charAt(0)) + '</b>') + '</span>';
+  }
+
+  // página de quem ainda não trabalha sozinho: as funções propostas e quando vai rodar
+  function renderArriving(a) {
+    var tier = TIERS.find(function (t) { return t.id === a.tier; });
+    return '<button type="button" class="back" data-back="1">← Agentes</button>' +
+      '<div class="agent-hero">' + face(a, 'big') + '</div>' +
+      '<header class="page-head"><span class="eyebrow">' + esc(a.name + ' · ' + a.role) + '</span><h1>' + esc(a.name) + (a.active ? '' : ' está chegando') + '</h1>' +
+      '<p>' + esc(a.desc) + '</p></header>' +
+      '<div class="detail">' + (a.active ? '<div class="empty"><b>Já trabalha sozinho.</b> As edições aparecem na aba Conteúdo, dentro do cronograma, em cada post de vídeo.</div>'
+        : '<div class="empty"><b>Ainda não trabalha sozinho.</b> As funções são uma proposta da IA. Quando você aprovar, ' + esc(a.name) + ' ganha a tarefa agendada e passa a entregar como a Duda.</div>') +
+      '<section class="panel role"><h2>Funções</h2><ul>' + a.funcs.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' +
+      '<div class="meta"><span class="chip">' + esc(a.when) + '</span>' + (tier ? '<span class="chip">' + esc(tier.label.replace(/s$/, '')) + '</span>' : '') + '</div></section></div>';
+  }
+
+  function renderOption(o, day) {
+    var st = (day.estado || {})[o.id];
+    var busy = state.saving[day.id + ':' + o.id];
+    var rows = '';
+    if (o.angulo) rows += '<dt>Ângulo</dt><dd>' + esc(o.angulo) + '</dd>';
+    if (o.cta) rows += '<dt>Chamada</dt><dd>' + esc(o.cta) + '</dd>';
+    if (o.porque) rows += '<dt>Por que capta</dt><dd>' + esc(o.porque) + '</dd>';
+    if (o.cuidado) rows += '<dt>Cuidado</dt><dd>' + esc(o.cuidado) + '</dd>';
+    return '<article class="opt' + (st === 'feito' || st === 'descartado' ? ' done' : '') + '">' +
+      '<div class="opt-top"><span class="force ' + esc(o.forca) + '">' + esc(FORCE[o.forca] || o.forca) + '</span>' +
+      '<span class="kind">' + esc(o.tipo || '') + '</span>' + (o.tempo ? '<span class="time">' + esc(o.tempo) + '</span>' : '') + '</div>' +
+      '<h3>' + esc(o.titulo) + '</h3>' +
+      (o.gancho ? '<p class="hook">' + esc(o.gancho) + '</p>' : '') +
+      (rows ? '<dl>' + rows + '</dl>' : '') +
+      (o.fontes && o.fontes.length ? '<div class="src">Fontes: ' + o.fontes.map(esc).join(' · ') + '</div>' : '') +
+      '<div class="acts">' +
+        '<button type="button" class="btn" data-mark="feito" data-day="' + esc(day.id) + '" data-opt="' + esc(o.id) + '" aria-pressed="' + (st === 'feito') + '"' + (busy ? ' disabled' : '') + '>' + (st === 'feito' ? '✓ Feito' : 'Marcar como feito') + '</button>' +
+        '<button type="button" class="btn" data-mark="descartado" data-day="' + esc(day.id) + '" data-opt="' + esc(o.id) + '" aria-pressed="' + (st === 'descartado') + '"' + (busy ? ' disabled' : '') + '>' + (st === 'descartado' ? 'Descartado' : 'Descartar') + '</button>' +
+      '</div></article>';
+  }
+
+  function renderMarketing() {
+    var html = '<button type="button" class="back" data-back="1">← Agentes</button>' +
+      '<div class="agent-hero">' + face(AGENTS[0], 'big') + '</div>' +
+      '<header class="page-head"><span class="eyebrow">Duda · Agência de marketing</span><h1>Opções para captar pacientes</h1>' +
+      '<p>Todo dia de manhã a Duda lê o second brain e traz o que fazer para encher a agenda.</p></header>';
+
+    var body = '';
+    if (!state.db && !state.loading) {
+      body = '<div class="empty"><b>As opções não carregaram nesta visualização.</b> Abra o painel pelo claude.ai, logado na sua conta.</div>';
+    } else if (state.error) {
+      body = '<div class="empty"><b>Não deu para ler as opções agora.</b> ' + esc(state.error) + '</div>';
+    } else if (state.loading) {
+      body = '<p class="note">' + (state.slow ? 'As opções ainda não chegaram. A conexão pode estar lenta.' : 'Carregando as opções…') + '</p>';
+    } else if (!state.days.length) {
+      body = '<div class="empty"><b>Ainda não há opções.</b> A primeira rodada sai na próxima manhã, às 7h, com o app do Claude aberto no computador.</div>';
+    } else {
+      var day = state.days.find(function (d) { return d.id === state.selected; }) || state.days[0];
+      var isToday = day.data === todayIso();
+      var done = Object.keys(day.estado || {}).filter(function (k) { return day.estado[k] === 'feito'; }).length;
+      body = '<div class="day-head"><h2>' + (isToday ? 'Hoje' : esc(fmtDay(day.data))) + '</h2><span class="date">' + esc(day.data) + ' · ' + done + '/' + (day.opcoes || []).length + ' feitas</span></div>' +
+        (day.foco ? '<div class="focus"><b>Foco do dia:</b> ' + esc(day.foco) + '</div>' : '') +
+        '<div class="options">' + (day.opcoes || []).map(function (o) { return renderOption(o, day); }).join('') + '</div>';
+    }
+
+    var aside = '<section class="panel role"><h2>Função</h2><p>Lê o second brain (briefing do agente, origem dos pacientes, ideias de vídeo, plano do mês, aulas recentes) e entrega de 3 a 5 opções por dia.</p>' +
+      '<ul><li>Meta: paciente na cadeira, não seguidor.</li><li>Regras do CFO em tudo: sem preço, sem promessa, nome e CRO.</li><li>Sem dados de pacientes.</li></ul>' +
+      '<div class="meta"><span class="chip ok">Todo dia às 7h</span><span class="chip">Fase 1: captação</span></div></section>';
+    if (state.days.length > 1 || (state.days.length && state.days[0].data !== todayIso())) {
+      aside += '<section class="panel history"><h2>Dias anteriores</h2><ol>' + state.days.slice(0, 14).map(function (d) {
+        var cur = (state.selected || state.days[0].id) === d.id;
+        return '<li><button type="button" data-day-pick="' + esc(d.id) + '" aria-current="' + cur + '"><span>' + esc(fmtDay(d.data)) + '</span><span class="n">' + (d.opcoes || []).length + ' opções</span></button></li>';
+      }).join('') + '</ol></section>';
+    }
+    return html + '<div class="detail"><div>' + body + '</div><div style="display:flex;flex-direction:column;gap:14px">' + aside + '</div></div>';
+  }
+
+  // ---------- agenda (Google Agenda pelo conector do claude.ai) ----------
+  // Os eventos só são mostrados: nada vai para o banco do painel (LGPD).
+  var GCAL = 'Google Calendar';
+  // horários para particular (rotina semanal, 30/10/2026): getDay() -> janela
+  var FREE = {
+    5: { from: 13, to: 19, place: 'Consultório do tio Zé', sure: true },
+    1: { from: 13, to: 19, place: 'Consultório da Andressa', sure: false },
+    2: { from: 13, to: 19, place: 'Consultório da Andressa', sure: false }
+  };
+  var PLACES = ['Consultório do tio Zé', 'Consultório da Andressa', 'Clínica em Araucária', 'Clínica em Santa Felicidade'];
+  var SPEC = /especializa|prime|m[óo]dulo/i;
+  var DIAS = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'];
+  // as 11 cores de evento do Google Agenda (colorId -> nome, cor); '' = cor padrão da agenda
+  var CORES = { '': ['Cor da agenda', '#039be5'], '1': ['Lavanda', '#7986cb'], '2': ['Sálvia', '#33b679'], '3': ['Uva', '#8e24aa'], '4': ['Flamingo', '#e67c73'],
+    '5': ['Banana', '#f6bf26'], '6': ['Tangerina', '#f4511e'], '7': ['Pavão', '#039be5'], '8': ['Grafite', '#616161'], '9': ['Mirtilo', '#3f51b5'],
+    '10': ['Manjericão', '#0b8043'], '11': ['Tomate', '#d50000'] };
+  var COR_IDS = ['6', '11', '4', '5', '10', '2', '7', '9', '1', '3', '8'];
+  function cor(id) { return CORES[id || ''] || CORES['']; }
+  function corFg(id) { return id === '5' ? '#3a2c00' : '#fff'; }
+  var ag = { mcp: null, ready: false, week: 0, view: 'semana', day: null, month: new Date(new Date().getFullYear(), new Date().getMonth(), 1), events: null, error: null, storedAt: null, key: null, unwatch: null,
+    form: null, confirm: false, busy: false, msg: null, cats: null, editCats: null, catsErr: null };
+  // categorias (nome -> cor) ficam no banco do painel, em config/agenda: não têm dado de paciente
+  function catOf(colorId) { return (ag.cats || []).find(function (c) { return c.cor === (colorId || ''); }); }
+
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function hm(d) { return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function localStamp(dateIso, time) { return dateIso + 'T' + time + ':00'; }
+  function addMin(dateIso, time, min) {
+    var p = dateIso.split('-'), t = time.split(':');
+    var d = new Date(+p[0], +p[1] - 1, +p[2], +t[0], +t[1] + min);
+    return { date: isoOf(d), time: hm(d) };
+  }
+  // mês = semanas inteiras (segunda a domingo) que cobrem o mês
+  function monthGrid() {
+    var y = ag.month.getFullYear(), m = ag.month.getMonth();
+    var start = new Date(y, m, 1); start.setDate(1 - (start.getDay() + 6) % 7);
+    var end = new Date(y, m + 1, 0); end.setDate(end.getDate() + 7 - (end.getDay() + 6) % 7);
+    return { start: start, end: end };
+  }
+  function agRange() {
+    if (ag.view === 'mes') { var g = monthGrid(); return { startTime: isoOf(g.start) + 'T00:00:00', endTime: isoOf(g.end) + 'T00:00:00' }; }
+    var w = weekRange(ag.week), end = new Date(w.start); end.setDate(end.getDate() + 7);
+    return { startTime: isoOf(w.start) + 'T00:00:00', endTime: isoOf(end) + 'T00:00:00' };
+  }
+  function eventsOn(iso, evs) {
+    return evs.filter(function (e) { var s = evStart(e); return s && (allDay(e) ? e.start.date <= iso && e.end.date > iso : isoOf(s) === iso); })
+      .sort(function (x, y) { return (allDay(y) - allDay(x)) || evStart(x) - evStart(y); });
+  }
+  function evStart(e) { return e.start && (e.start.dateTime ? new Date(e.start.dateTime) : e.start.date ? new Date(e.start.date + 'T00:00:00') : null); }
+  function evEnd(e) { return e.end && (e.end.dateTime ? new Date(e.end.dateTime) : e.end.date ? new Date(e.end.date + 'T00:00:00') : null); }
+  function allDay(e) { return !!(e.start && e.start.date && !e.start.dateTime); }
+
+  // assina a semana que está na tela; chamado na navegação, nunca dentro do render
+  function agWatch() {
+    if (!ag.mcp) return;
+    var input = Object.assign({ orderBy: 'startTime', pageSize: 250 }, agRange());
+    var key = input.startTime + '/' + input.endTime;
+    if (ag.key === key) return;
+    if (ag.unwatch) ag.unwatch();
+    ag.key = key; ag.events = null; ag.error = null;
+    ag.unwatch = ag.mcp.watchTool(GCAL, 'list_events', input, function (ev) {
+      if (ev.type === 'data') {
+        var p = ev.result.payload || {};
+        ag.events = (p.events || []).filter(function (e) { return e.status !== 'cancelled'; });
+        ag.storedAt = ev.result.cache ? ev.result.cache.storedAt : Date.now();
+        ag.error = null;
+      } else {
+        ag.error = ev.error || { code: 'upstream_error' };
+        // sem permissão ou sem conector: some o que estava na tela
+        if (/needs_reauth|server_not_connected|blocked_by_policy|approval_required|not_in_manifest|selection_required/.test(ag.error.code)) ag.events = null;
+      }
+      if (state.section === 'agenda') render();
+    }, { cache: { staleTime: 60000, gcTime: 600000 }, refetchInterval: 120000 });
+  }
+
+  function agRefresh() {
+    if (!ag.mcp) return Promise.resolve();
+    var input = Object.assign({ orderBy: 'startTime', pageSize: 250 }, agRange());
+    return ag.mcp.callTool(GCAL, 'list_events', input, { cache: { refresh: true, staleTime: 60000, gcTime: 600000 } }).catch(function () {});
+  }
+
+  function agErrorText(e) {
+    switch (e && e.code) {
+      case 'needs_reauth': return 'A conexão com o Google Agenda expirou. Reconecte em claude.ai → Configurações → Conectores.';
+      case 'server_not_connected': return 'O Google Agenda não está conectado. Adicione em claude.ai → Configurações → Conectores.';
+      case 'selection_required': return 'Há mais de um Google Agenda conectado. Escolha qual usar quando o claude.ai perguntar.';
+      case 'approval_required': case 'not_in_manifest': return 'O painel precisa da sua permissão para ler o Google Agenda.';
+      case 'blocked_by_policy': return 'A sua organização bloqueou o Google Agenda neste painel.';
+      case 'server_unavailable': return 'O Google Agenda não respondeu agora. A agenda tenta de novo sozinha a cada 2 minutos.';
+      case 'tool_error': return 'O Google Agenda recusou o pedido: ' + (e.message || '');
+      case 'not_granted': case 'capability_disabled': case 'capability_removed': return 'A agenda só carrega abrindo o painel pelo claude.ai.';
+      default: return 'Não deu para ler o Google Agenda agora.';
+    }
+  }
+
+  // horário livre = janela do dia menos os eventos que caem nela (sobras de 1h ou mais)
+  function freeSlots(d, evs) {
+    var w = FREE[d.getDay()]; if (!w) return [];
+    if (evs.some(function (e) { return SPEC.test(e.summary || ''); })) return [{ block: true }];
+    var a = new Date(d); a.setHours(w.from, 0, 0, 0);
+    var b = new Date(d); b.setHours(w.to, 0, 0, 0);
+    var now = new Date(); if (now > a) { a = new Date(now); a.setMinutes(a.getMinutes() < 30 ? 30 : 60, 0, 0); }
+    var busy = evs.filter(function (e) { return !allDay(e); }).map(function (e) { return [evStart(e), evEnd(e)]; })
+      .filter(function (x) { return x[0] && x[1] && x[1] > a && x[0] < b; }).sort(function (x, y) { return x[0] - y[0]; });
+    var out = [], cur = a;
+    busy.forEach(function (x) { if (x[0] - cur >= 3600000) out.push([cur, x[0]]); if (x[1] > cur) cur = x[1]; });
+    if (b - cur >= 3600000) out.push([cur, b]);
+    return out.map(function (x) { return { from: x[0], to: x[1], place: w.place, sure: w.sure }; });
+  }
+
+  // eventos que se cruzam dividem a largura da coluna (como no Google)
+  function lanes(list) {
+    var out = [], group = [], groupEnd = 0;
+    function flush() { var n = 0; group.forEach(function (x) { n = Math.max(n, x.lane + 1); }); group.forEach(function (x) { x.n = n; out.push(x); }); group = []; }
+    list.forEach(function (e) {
+      var s = evStart(e), en = evEnd(e); if (!s || !en) return;
+      if (group.length && s >= groupEnd) flush();
+      var used = group.filter(function (x) { return x.end > s; }).map(function (x) { return x.lane; }), lane = 0;
+      while (used.indexOf(lane) >= 0) lane++;
+      group.push({ e: e, start: s, end: en, lane: lane }); groupEnd = Math.max(groupEnd, +en);
+    });
+    flush(); return out;
+  }
+
+  // semana (7 colunas) ou dia (1 coluna): grade de horários com as barras dos eventos
+  function timeGrid(days, evs) {
+    var today = todayIso(), h0 = 7, h1 = 21;
+    var per = days.map(function (d) { return eventsOn(isoOf(d), evs); });
+    per.forEach(function (list) { list.forEach(function (e) {
+      if (allDay(e)) return;
+      var s = evStart(e), en = evEnd(e);
+      h0 = Math.min(h0, s.getHours()); h1 = Math.max(h1, isoOf(en) > isoOf(s) ? 24 : Math.ceil(en.getHours() + en.getMinutes() / 60));
+    }); });
+    var PH = window.matchMedia('(max-width: 720px)').matches ? 38 : 46;
+    function y(dt, iso) { var h = isoOf(dt) < iso ? h0 : isoOf(dt) > iso ? h1 : dt.getHours() + dt.getMinutes() / 60; return (Math.min(Math.max(h, h0), h1) - h0) * PH; }
+    var head = '<div class="tg-row tg-head"><div></div>' + days.map(function (d) {
+      var iso = isoOf(d);
+      return '<div class="' + (iso === today ? 'today' : '') + '"><span class="dn">' + DIAS[d.getDay()] + '</span><span class="dd">' + d.getDate() + '</span></div>';
+    }).join('') + '</div>';
+    var hasAll = per.some(function (l) { return l.some(allDay); });
+    var all = hasAll ? '<div class="tg-row tg-all"><div class="lbl">dia todo</div>' + per.map(function (l) {
+      return '<div>' + l.filter(allDay).map(function (e) {
+        return '<span class="alld" style="background:' + cor(e.colorId)[1] + ';color:' + corFg(e.colorId) + '" title="' + esc(e.summary || '') + '">' + esc(e.summary || '(sem título)') + '</span>';
+      }).join('') + '</div>';
+    }).join('') + '</div>' : '';
+    var hours = ''; for (var h = h0; h < h1; h++) hours += '<div>' + (h > h0 ? pad(h) + ':00' : '') + '</div>';
+    var cols = days.map(function (d, i) {
+      var iso = isoOf(d), list = per[i], html = '';
+      if (iso >= today) freeSlots(d, list).forEach(function (f) {
+        if (f.block) { html += '<div class="tblock" style="top:0;bottom:0">Especialização: sem paciente</div>'; return; }
+        var top = y(f.from, iso), hgt = y(f.to, iso) - top;
+        html += '<button type="button" class="tfree' + (f.sure ? '' : ' maybe') + '" data-ag-new="' + iso + '" data-ag-time="' + hm(f.from) + '" style="top:' + top + 'px;height:' + hgt + 'px" title="' +
+          esc((f.sure ? 'Livre para particular' : 'Talvez, a negociar') + ' · ' + hm(f.from) + '–' + hm(f.to) + ' · ' + f.place) + '">' + (f.sure ? 'Livre' : 'Talvez') + '<span> · ' + esc(f.place) + '</span></button>';
+      });
+      lanes(list.filter(function (e) { return !allDay(e); })).forEach(function (x) {
+        var e = x.e, top = y(x.start, iso), hgt = Math.max(y(x.end, iso) - top, 16), w = 100 / x.n, c = catOf(e.colorId);
+        html += '<button type="button" class="tev" data-ag-move="' + esc(e.id) + '" style="top:' + top + 'px;height:' + (hgt - 1) + 'px;left:calc(' + (x.lane * w) + '% + 2px);width:calc(' + w + '% - 4px);background:' +
+          cor(e.colorId)[1] + ';color:' + corFg(e.colorId) + '" title="' + esc((e.summary || '') + ' · ' + hm(x.start) + '–' + hm(x.end) + (c ? ' · ' + c.nome : '')) + '">' +
+          '<span class="t">' + esc(e.summary || '(sem título)') + '</span>' + (hgt >= 32 ? '<span class="h">' + hm(x.start) + '–' + hm(x.end) + '</span>' : '') + '</button>';
+      });
+      if (iso === today) { var n = new Date(), nh = n.getHours() + n.getMinutes() / 60; if (nh >= h0 && nh <= h1) html += '<div class="tnow" style="top:' + (nh - h0) * PH + 'px"></div>'; }
+      return '<div class="tg-col' + (iso < today ? ' past' : '') + '">' + html + '</div>';
+    }).join('');
+    return '<div class="tg" style="--n:' + days.length + '">' + head + all +
+      '<div class="tg-row tg-body" style="height:' + (h1 - h0) * PH + 'px"><div class="tg-hours">' + hours + '</div>' + cols + '</div></div>';
+  }
+
+  function monthView(evs) {
+    var g = monthGrid(), today = todayIso(), m = ag.month.getMonth(), cells = [];
+    for (var d = new Date(g.start); d < g.end; d.setDate(d.getDate() + 1)) {
+      var iso = isoOf(d), list = eventsOn(iso, evs);
+      var chips = list.slice(0, 4).map(function (e) {
+        return '<span class="mev" style="background:' + cor(e.colorId)[1] + ';color:' + corFg(e.colorId) + '">' + (allDay(e) ? '' : '<b>' + hm(evStart(e)) + '</b> ') + esc(e.summary || '(sem título)') + '</span>';
+      }).join('') + (list.length > 4 ? '<span class="more">+' + (list.length - 4) + ' mais</span>' : '');
+      cells.push('<button type="button" class="mday' + (d.getMonth() !== m ? ' out' : '') + (iso === today ? ' today' : '') + '" data-ag-goday="' + iso + '" aria-label="' + esc(fmtDay(iso)) + ', ' + list.length + ' eventos">' +
+        '<span class="n">' + d.getDate() + '</span>' + chips + '</button>');
+    }
+    return '<div class="month"><div class="mhead">' + ['Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb', 'Dom'].map(function (x) { return '<span>' + x + '</span>'; }).join('') + '</div>' +
+      '<div class="mgrid">' + cells.join('') + '</div></div>';
+  }
+
+  // bolinhas de cor: categorias primeiro, depois as 11 cores do Google
+  function swatches(sel, attr, withDefault) {
+    var ids = (withDefault ? [''] : []).concat(COR_IDS);
+    return '<div class="sw">' + ids.map(function (id) {
+      var c = cor(id), k = catOf(id);
+      return '<button type="button" class="swb" ' + attr + '="' + id + '" aria-pressed="' + (sel === id) + '" title="' + esc(c[0] + (k ? ' · ' + k.nome : '')) + '" style="background:' + c[1] + '"></button>';
+    }).join('') + '</div>';
+  }
+
+  function legend() {
+    if (ag.editCats) {
+      return '<div class="ag-form"><h2>Categorias e cores</h2><p class="hint">A cor é a mesma do Google Agenda. Mudar aqui não repinta eventos que já existem.</p>' +
+        ag.editCats.map(function (c, i) {
+          return '<div class="catrow"><input type="text" maxlength="30" data-ag-c="' + i + '" value="' + esc(c.nome) + '" placeholder="Nome">' +
+            swatches(c.cor, 'data-ag-cc="' + i + '" data-v', false) +
+            '<button type="button" class="btn" data-ag-cdel="' + i + '" aria-label="Tirar ' + esc(c.nome) + '">Tirar</button></div>';
+        }).join('') +
+        (ag.catsErr ? '<p class="hint bad">' + esc(ag.catsErr) + '</p>' : '') +
+        '<div class="acts"><button type="button" class="btn" data-ag-cadd="1">+ Categoria</button>' +
+        '<button type="button" class="btn primary" data-ag-csave="1">Salvar</button><button type="button" class="btn" data-ag-ccancel="1">Cancelar</button></div></div>';
+    }
+    var cats = ag.cats || [];
+    return '<div class="legend">' + cats.map(function (c) { return '<span><i style="background:' + cor(c.cor)[1] + '"></i>' + esc(c.nome) + '</span>'; }).join('') +
+      (cats.length ? '' : '<span class="ag-empty">Sem categorias de cor ainda.</span>') +
+      (state.db ? '<button type="button" data-ag-cedit="1">Editar cores</button>' : '') + '</div>';
+  }
+
+  function agForm() {
+    var f = ag.form; if (!f) return '';
+    var moving = f.mode === 'move';
+    var looksName = !moving && /^[A-ZÀ-Ý][a-zà-ÿ]+\s+[A-ZÀ-Ý][a-zà-ÿ]+/.test(f.title || '');
+    var end = addMin(f.date, f.time, +f.dur), k = catOf(f.color);
+    var dot = '<i class="dot" style="background:' + cor(f.color)[1] + '"></i>' + esc(k ? k.nome : cor(f.color)[0]);
+    if (ag.confirm) {
+      return '<div class="ag-form"><h2>Confirmar ' + (moving ? 'mudança' : 'evento') + '</h2><div class="ag-confirm">' +
+        (moving ? 'Mudar <b>' + esc(f.title) + '</b> para ' : 'Criar <b>' + esc(f.title) + '</b> em ') +
+        '<b>' + esc(fmtDay(f.date)) + ', ' + f.time + '–' + end.time + '</b>' + (!moving && f.place ? ' · ' + esc(f.place) : '') + ', no seu Google Agenda?' +
+        (!moving || f.color !== f.color0 ? '<br>Cor: ' + dot : '') + '</div>' +
+        (looksName ? '<p class="hint bad">O título parece um nome completo. Prefira só as iniciais ou um código (LGPD). Volte para mudar, se quiser.</p>' : '') +
+        '<div class="acts"><button type="button" class="btn primary" data-ag-do="1"' + (ag.busy ? ' disabled' : '') + '>' + (ag.busy ? 'Gravando…' : 'Confirmar') + '</button>' +
+        '<button type="button" class="btn" data-ag-back="1"' + (ag.busy ? ' disabled' : '') + '>Voltar</button></div></div>';
+    }
+    var cats = ag.cats || [];
+    return '<div class="ag-form"><h2>' + (moving ? 'Editar evento' : 'Novo evento') + '</h2>' +
+      (moving ? '<p class="hint">' + esc(f.title) + ' · hoje: ' + esc(f.was) +
+        (f.link ? ' · <a href="' + esc(f.link) + '" target="_blank" rel="noopener">abrir no Google</a>' : '') + '</p>' : '') +
+      (cats.length ? '<div class="cats" role="group" aria-label="Categoria">' + cats.map(function (c, i) {
+        return '<button type="button" data-ag-cat="' + i + '" aria-pressed="' + (f.color === c.cor) + '"><i style="background:' + cor(c.cor)[1] + '"></i>' + esc(c.nome) + '</button>';
+      }).join('') + '</div>' : '') +
+      '<div class="grid"><label>Dia<input type="date" data-ag-f="date" value="' + esc(f.date) + '"></label>' +
+      '<label>Início<input type="time" step="900" data-ag-f="time" value="' + esc(f.time) + '"></label>' +
+      (moving ? '' : '<label>Duração<select data-ag-f="dur">' + [30, 45, 60, 90, 120, 180, 240].map(function (m) { return '<option value="' + m + '"' + (+f.dur === m ? ' selected' : '') + '>' + (m < 120 ? m + ' min' : m / 60 + ' h') + '</option>'; }).join('') + '</select></label>' +
+        '<label>Local<select data-ag-f="place">' + PLACES.concat(['']).map(function (p) { return '<option value="' + esc(p) + '"' + (f.place === p ? ' selected' : '') + '>' + (p ? esc(p) : 'outro / sem local') + '</option>'; }).join('') + '</select></label>') +
+      '</div>' +
+      (moving ? '' : '<label>Título<input type="text" maxlength="80" data-ag-f="title" placeholder="M.S. · limpeza  ou  Academia" value="' + esc(f.title) + '"></label>' +
+        '<p class="hint">Paciente: só as iniciais ou um código e o procedimento (LGPD). Ex.: "M.S. · limpeza".</p>') +
+      '<div class="lbl">Cor: ' + dot + '</div>' + swatches(f.color, 'data-ag-color', !moving || f.color0 === '') +
+      (ag.formErr ? '<p class="hint bad">' + esc(ag.formErr) + '</p>' : '') +
+      '<div class="acts"><button type="button" class="btn primary" data-ag-review="1">Revisar</button>' +
+      '<button type="button" class="btn" data-ag-cancel="1">Cancelar</button></div></div>';
+  }
+
+  function renderAgenda() {
+    var w = weekRange(ag.week);
+    var head = '<header class="page-head"><span class="eyebrow">Agenda</span><h1>Agenda</h1>' +
+      '<p>É o seu próprio Google Agenda: o que você marca no celular aparece aqui, e o que você cria aqui aparece no celular, com a mesma cor. Os horários livres para particular ficam com contorno verde. Criar e editar pedem a sua confirmação.</p></header>';
+    var MES_LONGO = ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'];
+    var title = ag.view === 'dia' ? fmtDay(ag.day) : ag.view === 'mes' ? MES_LONGO[ag.month.getMonth()] + ' ' + ag.month.getFullYear() : shortDay(w.start) + ' – ' + shortDay(w.end);
+    var bar = '<div class="ag-bar"><div class="week-nav"><button type="button" data-ag-step="-1" aria-label="Anterior">‹</button><span>' + esc(title) + '</span>' +
+      '<button type="button" data-ag-step="1" aria-label="Seguinte">›</button><button type="button" class="btn" data-ag-today="1" style="width:auto;border-radius:999px;padding:4px 12px">Hoje</button></div>' +
+      '<div class="seg" role="group" aria-label="Visão">' + [['dia', 'Dia'], ['semana', 'Semana'], ['mes', 'Mês']].map(function (v) {
+        return '<button type="button" data-ag-view="' + v[0] + '" aria-pressed="' + (ag.view === v[0]) + '">' + v[1] + '</button>'; }).join('') + '</div>' +
+      '<button type="button" class="btn primary" data-ag-new="' + (ag.view === 'dia' ? ag.day : todayIso()) + '" data-ag-time="14:00">+ Novo evento</button></div>';
+    if (!ag.ready) return head + '<p class="note">Conectando ao Google Agenda…</p>';
+    if (!ag.mcp) return head + '<div class="empty"><b>A agenda não carregou nesta visualização.</b> Abra o painel pelo claude.ai, logado na sua conta, com o Google Agenda conectado.</div>';
+    var status = '';
+    if (ag.msg) status += '<div class="ag-warn">' + esc(ag.msg) + '</div>';
+    if (ag.error) status += '<div class="ag-warn">' + esc(agErrorText(ag.error)) +
+      (/approval_required|not_in_manifest|server_unavailable|upstream_error/.test(ag.error.code) ? '<br><button type="button" class="btn" data-ag-allow="1">' + (/approval|manifest/.test(ag.error.code) ? 'Permitir e carregar' : 'Tentar de novo') + '</button>' : '') + '</div>';
+    if (ag.events && ag.storedAt) status += '<p class="ag-status">Google Agenda · atualizado às ' + hm(new Date(ag.storedAt)) + ' · <button type="button" data-ag-allow="1">atualizar agora</button></p>';
+    var body;
+    if (!ag.events) body = ag.error ? '' : '<p class="note">Carregando…</p>';
+    else if (ag.view === 'mes') body = monthView(ag.events);
+    else if (ag.view === 'dia') { var p = ag.day.split('-'); body = timeGrid([new Date(+p[0], +p[1] - 1, +p[2])], ag.events); }
+    else {
+      var days = []; for (var i = 0; i < 7; i++) { var d = new Date(w.start); d.setDate(d.getDate() + i); days.push(d); }
+      body = timeGrid(days, ag.events);
+    }
+    return head + bar + legend() + status + agForm() + body;
+  }
+
+  function agSave() {
+    var f = ag.form; if (!f || ag.busy) return;
+    var end = addMin(f.date, f.time, +f.dur);
+    var call = f.mode === 'move'
+      ? ag.mcp.callTool(GCAL, 'update_event', Object.assign({ eventId: f.id, startTime: localStamp(f.date, f.time), endTime: localStamp(end.date, end.time) }, f.color && f.color !== f.color0 ? { colorId: f.color } : {}))
+      : ag.mcp.callTool(GCAL, 'create_event', Object.assign({ summary: f.title.trim(), startTime: localStamp(f.date, f.time), endTime: localStamp(end.date, end.time) }, f.place ? { location: f.place } : {}, f.color ? { colorId: f.color } : {}));
+    ag.busy = true; render();
+    call.then(function () {
+      ag.msg = f.mode === 'move' ? 'Mudado no Google Agenda.' : 'Evento criado no Google Agenda.';
+      ag.form = null; ag.confirm = false;
+    }, function (e) {
+      // gravação com resposta ambígua: pode ter ido; nada de repetir sozinho
+      ag.msg = /server_unavailable|upstream_error|cancelled/.test(e && e.code)
+        ? 'O Google Agenda não confirmou a gravação. Pode ter ido: confira a semana antes de tentar de novo.'
+        : agErrorText(e);
+      ag.confirm = false;
+    }).then(function () { ag.busy = false; return agRefresh(); }).then(render);
+  }
+
+  function agClick(t) {
+    var a;
+    if ((a = t.closest('[data-ag-step]'))) {
+      var s = +a.getAttribute('data-ag-step');
+      if (ag.view === 'dia') { var p = ag.day.split('-'); var d = new Date(+p[0], +p[1] - 1, +p[2] + s); ag.day = isoOf(d); agSyncWeek(d); }
+      else if (ag.view === 'mes') ag.month = new Date(ag.month.getFullYear(), ag.month.getMonth() + s, 1);
+      else ag.week = ag.week - s;
+      agWatch(); render(); return true;
+    }
+    if (t.closest('[data-ag-today]')) { var n0 = new Date(); ag.week = 0; ag.day = todayIso(); ag.month = new Date(n0.getFullYear(), n0.getMonth(), 1); agWatch(); render(); return true; }
+    if ((a = t.closest('[data-ag-view]'))) {
+      var v = a.getAttribute('data-ag-view'), base;
+      // dia de referência da visão atual, para a nova visão abrir no mesmo lugar
+      if (ag.view === 'dia') base = new Date(ag.day + 'T12:00:00');
+      else if (ag.view === 'mes') { var n1 = new Date(); base = n1.getMonth() === ag.month.getMonth() && n1.getFullYear() === ag.month.getFullYear() ? n1 : new Date(ag.month); }
+      else base = ag.week === 0 ? new Date() : weekRange(ag.week).start;
+      ag.view = v; ag.day = isoOf(base); agSyncWeek(base); ag.month = new Date(base.getFullYear(), base.getMonth(), 1);
+      agWatch(); render(); return true;
+    }
+    if ((a = t.closest('[data-ag-goday]'))) {
+      ag.view = 'dia'; ag.day = a.getAttribute('data-ag-goday'); agSyncWeek(new Date(ag.day + 'T12:00:00'));
+      agWatch(); render(); window.scrollTo(0, 0); return true;
+    }
+    if ((a = t.closest('[data-ag-new]'))) {
+      ag.form = { mode: 'new', date: a.getAttribute('data-ag-new'), time: a.getAttribute('data-ag-time') || '14:00', dur: 60, title: '', place: '', color: '' };
+      var day = new Date(ag.form.date + 'T12:00:00'), fw = FREE[day.getDay()];
+      if (a.classList.contains('free') && fw) {
+        ag.form.place = fw.place;
+        var pc = (ag.cats || []).find(function (c) { return /paciente/i.test(c.nome); }); if (pc) ag.form.color = pc.cor;
+      }
+      ag.confirm = false; ag.formErr = null; ag.msg = null; render(); window.scrollTo(0, 0); return true;
+    }
+    if ((a = t.closest('[data-ag-move]'))) {
+      var e = (ag.events || []).find(function (x) { return x.id === a.getAttribute('data-ag-move'); }); if (!e) return true;
+      var s0 = evStart(e), e0 = evEnd(e);
+      ag.form = { mode: 'move', id: e.id, title: e.summary || '(sem título)', date: isoOf(s0), time: hm(s0), dur: Math.round((e0 - s0) / 60000),
+        was: fmtDay(isoOf(s0)) + ', ' + hm(s0) + '–' + hm(e0), color: e.colorId || '', color0: e.colorId || '',
+        link: e.htmlLink && /^https:\/\/www\.google\.com\//.test(e.htmlLink) ? e.htmlLink : '' };
+      ag.confirm = false; ag.formErr = null; ag.msg = null; render(); window.scrollTo(0, 0); return true;
+    }
+    if ((a = t.closest('[data-ag-cat]'))) { var c0 = (ag.cats || [])[+a.getAttribute('data-ag-cat')]; if (c0 && ag.form) ag.form.color = c0.cor; render(); return true; }
+    if ((a = t.closest('[data-ag-color]'))) { if (ag.form) ag.form.color = a.getAttribute('data-ag-color'); render(); return true; }
+    if (t.closest('[data-ag-review]')) {
+      var f = ag.form;
+      ag.formErr = !f.date || !f.time ? 'Escolha o dia e o horário.' : f.mode === 'new' && !(f.title || '').trim() ? 'Escreva um título.' : null;
+      ag.confirm = !ag.formErr; render(); return true;
+    }
+    // editor de categorias
+    if (t.closest('[data-ag-cedit]')) { ag.editCats = (ag.cats || []).map(function (c) { return { nome: c.nome, cor: c.cor }; }); ag.catsErr = null; render(); return true; }
+    if ((a = t.closest('[data-ag-cc]'))) { ag.editCats[+a.getAttribute('data-ag-cc')].cor = a.getAttribute('data-v'); render(); return true; }
+    if ((a = t.closest('[data-ag-cdel]'))) { ag.editCats.splice(+a.getAttribute('data-ag-cdel'), 1); render(); return true; }
+    if (t.closest('[data-ag-cadd]')) { var used = ag.editCats.map(function (c) { return c.cor; }); ag.editCats.push({ nome: '', cor: COR_IDS.find(function (id) { return used.indexOf(id) < 0; }) || '8' }); render(); return true; }
+    if (t.closest('[data-ag-ccancel]')) { ag.editCats = null; render(); return true; }
+    if (t.closest('[data-ag-csave]')) { agSaveCats(); return true; }
+    if (t.closest('[data-ag-back]')) { ag.confirm = false; render(); return true; }
+    if (t.closest('[data-ag-cancel]')) { ag.form = null; ag.confirm = false; render(); return true; }
+    if (t.closest('[data-ag-do]')) { agSave(); return true; }
+    if (t.closest('[data-ag-allow]')) {
+      // um clique = uma chamada; se der certo, o watch passa a receber também
+      ag.error = null; render();
+      agRefresh().then(function () { ag.key = null; agWatch(); render(); });
+      return true;
+    }
+    return false;
+  }
+  function agSaveCats() {
+    var list = ag.editCats.map(function (c) { return { nome: (c.nome || '').trim(), cor: c.cor }; }).filter(function (c) { return c.nome; });
+    var seen = {};
+    if (list.some(function (c) { var dup = seen[c.cor]; seen[c.cor] = 1; return dup; })) { ag.catsErr = 'Duas categorias com a mesma cor: no Google não daria para saber qual é qual.'; render(); return; }
+    ag.catsErr = null;
+    state.db.doc('config/agenda').set({ categorias: list }).then(function () { ag.editCats = null; }, function () {
+      ag.catsErr = 'Não salvou. Só o dono do painel pode mudar as cores.';
+    }).then(render);
+  }
+  // ag.week segue a convenção de weekRange: positivo = semanas para trás
+  function agSyncWeek(d) {
+    var mon = new Date(d); mon.setHours(0, 0, 0, 0); mon.setDate(mon.getDate() - (mon.getDay() + 6) % 7);
+    ag.week = Math.round((weekRange(0).start - mon) / (7 * 864e5));
+  }
+
+  // ---------- conteúdo: banco de fotos e vídeos + cronograma da Duda ----------
+  // Os arquivos ficam no armazenamento do painel (assets); o índice fica no banco:
+  // config/conteudo (pastas), midia/<id do arquivo> e cronograma/<id> (escrito pela Duda e pelo Rafa).
+  var MAX_BYTES = 20 * 1024 * 1024;
+  var PACIENTE = { nao: 'Sem paciente', autorizado: 'Paciente com autorização (TCLE)', sem_tcle: 'Paciente SEM autorização' };
+  var MIDIA_ST = { novo: 'Novo', analisado: 'Analisado pela Duda', agendado: 'No cronograma', postado: 'Postado' };
+  var POST_ST = { proposto: 'Proposta da Duda', aprovado: 'Aprovado', postado: 'Postado', descartado: 'Descartado' };
+  var ct = { assets: null, downloads: null, ready: false, view: 'banco', pastas: null, midia: null, posts: null, pasta: '', usage: null,
+    up: null, upErr: null, prog: null, sel: null, confirmDel: false, msg: null, newFolder: null, showOld: false };
+
+  function blobUrl(id) { return '/_blob/' + id; }
+  function mb(n) { return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB'; }
+  function pastaNome(id) { var p = (ct.pastas || []).find(function (x) { return x.id === id; }); return p ? p.nome : 'Sem pasta'; }
+  function slug(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'pasta'; }
+
+  // chamado ao abrir a aba (nunca no render): uso do armazenamento
+  function ctEnter() {
+    if (!ct.assets || ct.usage) return;
+    ct.assets.list().then(function (r) { ct.usage = r.usage; if (state.section === 'conteudo') render(); }, function () {});
+  }
+
+  function thumb(m, cls) {
+    if (m.tipo === 'video') return '<video class="' + (cls || 'th') + '" src="' + blobUrl(m.asset) + '#t=0.5" preload="metadata" muted playsinline></video>';
+    return '<img class="' + (cls || 'th') + '" src="' + blobUrl(m.asset) + '" alt="" loading="lazy">';
+  }
+
+  function ctUploadForm() {
+    var u = ct.up; if (!u) return '';
+    var pastas = ct.pastas || [];
+    if (ct.prog) return '<div class="ag-form"><h2>Enviando</h2><p class="hint">' + esc(ct.prog) + '</p><p class="hint">Não feche o painel até terminar.</p></div>';
+    return '<div class="ag-form"><h2>Enviar fotos e vídeos</h2>' +
+      '<div class="grid"><label>Pasta<select data-ct-f="pasta"><option value="">Escolha…</option>' + pastas.map(function (p) {
+        return '<option value="' + esc(p.id) + '"' + (u.pasta === p.id ? ' selected' : '') + '>' + esc(p.nome) + '</option>'; }).join('') + '</select></label>' +
+      '<label>Arquivos<input type="file" multiple accept="image/*,video/*" data-ct-file="1"></label></div>' +
+      '<fieldset class="ct-radio"><legend>Aparece paciente (rosto, sorriso, nome, prontuário)?</legend>' +
+      [['nao', 'Não'], ['autorizado', 'Sim, e ele assinou a autorização de uso de imagem'], ['sem_tcle', 'Sim, mas ainda sem autorização']].map(function (o) {
+        return '<label><input type="radio" name="ct-pac" data-ct-f="paciente" value="' + o[0] + '"' + (u.paciente === o[0] ? ' checked' : '') + '> ' + o[1] + '</label>'; }).join('') + '</fieldset>' +
+      '<label>O que é (opcional)<input type="text" maxlength="140" data-ct-f="nota" value="' + esc(u.nota || '') + '" placeholder="Ex.: resina no 11, antes e depois · sem nome de paciente"></label>' +
+      '<p class="hint">Fotos são reduzidas e perdem a localização do GPS antes de subir. Vídeos: até 20 MB cada (cerca de 1 minuto em 720p). Sem autorização, a Duda não usa o arquivo em post.</p>' +
+      (ct.upErr ? '<p class="hint bad">' + esc(ct.upErr) + '</p>' : '') +
+      '<div class="acts"><button type="button" class="btn primary" data-ct-send="1">Enviar</button><button type="button" class="btn" data-ct-cancel="1">Cancelar</button></div></div>';
+  }
+
+  var ED_ST = { pedida: 'Na fila do Rafa', editando: 'Rafa editando', pronta: 'Editado', falhou: 'A edição falhou' };
+  function lista(arr) { return arr && arr.length ? '<ul>' + arr.map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') + '</ul>' : ''; }
+
+  // feedback da Duda: verde = está bom (pode ir para edição); vermelho = mudar antes
+  function feedback(m) {
+    var a = m.analise || {}, ed = m.edicao;
+    if (!a.resumo) return '<div class="fb wait"><b>A Duda ainda vai analisar.</b> Ela olha os arquivos novos todo dia às 7h.</div>';
+    var good = a.veredito !== 'mudar';
+    var btn = '';
+    if (m.tipo === 'video' && good) {
+      if (ed) btn = '<p class="fb-ed">✂ ' + esc(ED_ST[ed.status] || ed.status) + ' · <button type="button" class="link-btn" data-goto="edicao">ver em Edição</button></p>';
+      else if (m.paciente === 'sem_tcle') btn = '<p class="fb-ed">Sem autorização do paciente: não pode ir para edição.</p>';
+      else btn = '<div class="acts"><button type="button" class="btn primary" data-ct-edit="' + esc(m.id) + '">Enviar para edição</button>' +
+        '<span class="hint">' + esc((a.edicao_sugerida && a.edicao_sugerida.pedido) || 'O Rafa faz o corte vertical com gancho e assinatura.') + '</span></div>';
+    }
+    return '<div class="fb ' + (good ? 'good' : 'bad') + '"><b>' + (good ? '✓ Está bom' : '✕ Mudar antes de postar') + ' <span>· Duda</span></b>' +
+      '<p>' + esc(a.resumo) + '</p>' +
+      (a.pontos_fortes && a.pontos_fortes.length ? '<h4>O que funciona</h4>' + lista(a.pontos_fortes) : '') +
+      (a.mudar && a.mudar.length ? '<h4>' + (good ? 'Dá para melhorar' : 'O que mudar') + '</h4>' + lista(a.mudar) : '') +
+      (a.cuidado ? '<p class="fb-care">⚠ ' + esc(a.cuidado) + '</p>' : '') +
+      (a.ideias && a.ideias.length ? '<h4>Como usar</h4>' + lista(a.ideias) : '') + btn + '</div>';
+  }
+
+  function ctDetail(m) {
+    return '<button type="button" class="back" data-ct-close="1">← ' + esc(pastaNome(m.pasta)) + '</button>' +
+      '<div class="ct-detail"><div class="ct-big">' + (m.tipo === 'video' ? '<video src="' + blobUrl(m.asset) + '" controls playsinline preload="metadata"></video>' : '<img src="' + blobUrl(m.asset) + '" alt="">') + '</div>' +
+      '<div class="ct-info"><h2>' + esc(m.nota || (m.tipo === 'video' ? 'Vídeo' : 'Foto')) + '</h2>' +
+      '<p class="hint">' + esc(fmtDay((m.criado || '').slice(0, 10))) + ' · ' + mb(m.tamanho || 0) + ' · ' + esc(MIDIA_ST[m.status] || m.status || '') + '</p>' +
+      feedback(m) +
+      '<details class="ct-more"><summary>Pasta, paciente e apagar</summary>' +
+      '<label>Pasta<select data-ct-move="' + esc(m.id) + '">' + (ct.pastas || []).map(function (p) {
+        return '<option value="' + esc(p.id) + '"' + (m.pasta === p.id ? ' selected' : '') + '>' + esc(p.nome) + '</option>'; }).join('') + '</select></label>' +
+      '<label>Paciente<select data-ct-pac="' + esc(m.id) + '">' + Object.keys(PACIENTE).map(function (k) {
+        return '<option value="' + k + '"' + (m.paciente === k ? ' selected' : '') + '>' + PACIENTE[k] + '</option>'; }).join('') + '</select></label>' +
+      '<div class="acts">' + (ct.confirmDel ? '<span class="hint bad">Apagar de vez este arquivo?</span><button type="button" class="btn" data-ct-delyes="1">Sim, apagar</button><button type="button" class="btn" data-ct-delno="1">Não</button>'
+        : '<button type="button" class="btn" data-ct-del="1">Apagar</button>') + '</div></details></div></div>';
+  }
+
+  function card(m) {
+    var a = m.analise || {}, fb = !a.resumo ? '' : a.veredito === 'mudar' ? '<span class="warn">mudar</span>' : '<span class="ok">✓ bom</span>';
+    return '<button type="button" class="ct-card" data-ct-sel="' + esc(m.id) + '">' + thumb(m) +
+      '<span class="ct-tags">' + (m.tipo === 'video' ? '<span>vídeo</span>' : '') + (fb || '<span>' + esc(MIDIA_ST[m.status] || 'Novo') + '</span>') +
+      (m.edicao ? '<span>✂ ' + esc(ED_ST[m.edicao.status] || '') + '</span>' : '') + (m.paciente === 'sem_tcle' ? '<span class="warn">sem autorização</span>' : '') + '</span>' +
+      '<span class="ct-cap">' + esc(m.nota || pastaNome(m.pasta)) + '</span></button>';
+  }
+
+  // início: uma pasta por quadrado; dentro da pasta, os arquivos; dentro do arquivo, o feedback da Duda
+  function ctBanco() {
+    var pastas = ct.pastas || [], all = ct.midia || [];
+    var m = ct.sel && all.find(function (x) { return x.id === ct.sel; });
+    if (m) return ctDetail(m);
+    if (ct.pasta) {
+      var list = all.filter(function (x) { return x.pasta === ct.pasta; });
+      return '<button type="button" class="back" data-ct-pasta="">← Pastas</button><h2 class="ct-title">' + esc(pastaNome(ct.pasta)) + ' <span>' + list.length + '</span></h2>' +
+        (list.length ? '<div class="ct-grid">' + list.map(card).join('') + '</div>' : '<div class="empty">Nada nesta pasta ainda. Toque em "+ Enviar fotos e vídeos".</div>');
+    }
+    return '<div class="ct-tiles">' + pastas.map(function (p) {
+      var items = all.filter(function (x) { return x.pasta === p.id; }), last = items[0];
+      return '<button type="button" class="tile" data-ct-pasta="' + esc(p.id) + '">' + (last ? thumb(last, 'tile-bg') : '') +
+        '<span class="tile-n">' + items.length + '</span><span class="tile-name">' + esc(p.nome) + '</span></button>';
+    }).join('') +
+      (ct.newFolder != null ? '<div class="tile new"><input type="text" maxlength="40" data-ct-f="newFolder" value="' + esc(ct.newFolder) + '" placeholder="Nome da pasta"><button type="button" class="btn" data-ct-addyes="1">Criar</button></div>'
+        : '<button type="button" class="tile new" data-ct-addfolder="1"><span class="tile-n">+</span><span class="tile-name">Nova pasta</span></button>') + '</div>' +
+      (all.length ? '' : '<p class="note">O banco está vazio. Envie as fotos e os vídeos que você gravar; a Duda analisa cada um.</p>');
+  }
+
+  // aba Edição: o que está na fila, sendo editado, pronto ou com problema
+  function renderEdicao() {
+    var head = '<header class="page-head"><span class="eyebrow">Edição</span><h1>Edição</h1>' +
+      '<p>Os vídeos que você mandou para o Rafa. Ele edita todo dia às 8h: corte vertical, gancho na tela e assinatura.</p></header>';
+    if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
+    var items = (ct.midia || []).filter(function (m) { return m.edicao; });
+    if (!items.length) return head + '<div class="empty"><b>Nada em edição.</b> Abra um vídeo em Conteúdo e, se a Duda deu verde, toque em "Enviar para edição".</div>';
+    return head + ['editando', 'pedida', 'pronta', 'falhou'].map(function (st) {
+      var l = items.filter(function (m) { return m.edicao.status === st; }); if (!l.length) return '';
+      return '<section class="ed-group"><h2>' + esc(ED_ST[st]) + ' <span>' + l.length + '</span></h2><div class="ed-list">' + l.map(function (m) {
+        var e = m.edicao;
+        return '<article class="ed-item st-' + st + '"><div class="ed-media">' + (st === 'pronta' && e.asset ? '<video src="' + blobUrl(e.asset) + '" controls playsinline preload="metadata"></video>' : thumb(m, 'pm')) + '</div>' +
+          '<div class="ed-info"><h3>' + esc(m.nota || 'Vídeo') + '</h3><p class="hint">' + esc(pastaNome(m.pasta)) + (e.pedido_em ? ' · pedido em ' + esc(fmtDay(e.pedido_em.slice(0, 10))) : '') + '</p>' +
+          (e.pedido ? '<p><b>Pedido:</b> ' + esc(e.pedido) + '</p>' : '') + (e.notas ? '<p class="hint">' + esc(e.notas) + '</p>' : '') +
+          '<div class="acts">' + (st === 'pronta' && e.asset && ct.downloads ? '<button type="button" class="btn primary" data-ct-dl="' + esc(e.asset) + '" data-ct-dlname="' + esc(slug(m.nota || 'video')) + '-editado.mp4">Baixar vídeo</button>' : '') +
+          (st === 'pedida' || st === 'falhou' ? '<button type="button" class="btn" data-ct-unedit="' + esc(m.id) + '">Tirar da fila</button>' : '') +
+          (st === 'falhou' ? '<button type="button" class="btn" data-ct-retry="' + esc(m.id) + '">Tentar de novo</button>' : '') +
+          '<button type="button" class="btn" data-ct-open="' + esc(m.id) + '">Ver original</button></div></div></article>';
+      }).join('') + '</div></section>';
+    }).join('');
+  }
+
+  function ctPost(p) {
+    var midias = (p.midia || []).map(function (id) { return (ct.midia || []).find(function (m) { return m.id === id; }); }).filter(Boolean);
+    var withEd = midias.find(function (m) { return m.edicao; });
+    var ed = p.edicao || (withEd && withEd.edicao) || {}, st = p.estado || 'proposto';
+    var edicao = ed.status === 'pedida' || ed.status === 'editando' ? '<p class="ct-ed">✂ ' + (ed.status === 'editando' ? 'O Rafa está editando' : 'O Rafa vai editar') + ' este vídeo' + (ed.pedido ? ': ' + esc(ed.pedido) : '') + '</p>'
+      : ed.status === 'pronta' && ed.asset ? '<div class="ct-ed"><b>Vídeo editado pelo Rafa</b><video src="' + blobUrl(ed.asset) + '" controls playsinline preload="metadata"></video>' +
+        (ed.notas ? '<p class="hint">' + esc(ed.notas) + '</p>' : '') + (ct.downloads ? '<button type="button" class="btn" data-ct-dl="' + esc(ed.asset) + '" data-ct-dlname="post-' + esc(p.data || '') + '.mp4">Baixar vídeo</button>' : '') + '</div>'
+      : ed.status === 'falhou' ? '<p class="ct-ed bad">A edição não deu certo: ' + esc(ed.notas || '') + '</p>' : '';
+    return '<article class="post st-' + esc(st) + '"><div class="opt-top"><span class="kind">' + esc(p.formato || 'Post') + '</span><span class="time">' + esc(fmtDay(p.data) + (p.hora ? ' · ' + p.hora : '')) + '</span>' +
+      '<span class="post-st">' + esc(POST_ST[st] || st) + '</span></div>' +
+      (p.titulo ? '<h3>' + esc(p.titulo) + '</h3>' : '') + (p.gancho ? '<p class="hook">' + esc(p.gancho) + '</p>' : '') +
+      (midias.length ? '<div class="post-media">' + midias.map(function (m) { return thumb(m, 'pm'); }).join('') + '</div>' : '') +
+      (p.legenda ? '<div class="legenda"><b>Legenda</b><p>' + esc(p.legenda) + '</p><button type="button" class="btn" data-ct-copy="' + esc(p.id) + '">Copiar legenda</button></div>' : '') +
+      (p.cfo ? '<p class="hint">CFO: ' + esc(p.cfo) + '</p>' : '') + edicao +
+      '<div class="acts">' + [['aprovado', 'Aprovar'], ['postado', 'Postei'], ['descartado', 'Descartar']].map(function (x) {
+        return '<button type="button" class="btn' + (st === x[0] ? ' primary' : '') + '" data-ct-post="' + esc(p.id) + '" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div></article>';
+  }
+
+  function ctCrono() {
+    var today = todayIso(), posts = (ct.posts || []).slice().sort(function (a, b) { return (a.data + (a.hora || '')).localeCompare(b.data + (b.hora || '')); });
+    var next = posts.filter(function (p) { return p.data >= today && p.estado !== 'descartado'; });
+    var old = posts.filter(function (p) { return !(p.data >= today && p.estado !== 'descartado'); }).reverse();
+    if (!posts.length) return '<div class="empty"><b>Ainda não há cronograma.</b> Quando houver fotos e vídeos no banco, a Duda monta os próximos posts com legenda, e o Rafa edita os vídeos. Ela roda todo dia às 7h.</div>';
+    return '<div class="posts">' + (next.length ? next.map(ctPost).join('') : '<div class="empty">Nenhum post marcado daqui para a frente.</div>') + '</div>' +
+      (old.length ? '<button type="button" class="link-btn" data-ct-old="1">' + (ct.showOld ? 'Esconder' : 'Ver') + ' os anteriores e descartados (' + old.length + ')</button>' +
+        (ct.showOld ? '<div class="posts old">' + old.map(ctPost).join('') + '</div>' : '') : '');
+  }
+
+  function renderConteudo() {
+    var head = '<header class="page-head"><span class="eyebrow">Conteúdo</span><h1>Conteúdo</h1>' +
+      '<p>Suba aqui tudo o que você gravar, separado por pasta. A Duda analisa e monta o cronograma de posts com legenda; o Rafa edita os vídeos.</p></header>';
+    if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b> Abra o painel pelo claude.ai, logado na sua conta.') + '</div>';
+    var nPost = (ct.posts || []).filter(function (p) { return p.data >= todayIso() && p.estado !== 'descartado'; }).length;
+    var bar = '<div class="ag-bar"><div class="seg" role="group" aria-label="Visão"><button type="button" data-ct-view="banco" aria-pressed="' + (ct.view === 'banco') + '">Banco de mídia</button>' +
+      '<button type="button" data-ct-view="cronograma" aria-pressed="' + (ct.view === 'cronograma') + '">Cronograma' + (nPost ? ' (' + nPost + ')' : '') + '</button></div>' +
+      (ct.assets ? '<button type="button" class="btn primary" data-ct-up="1">+ Enviar fotos e vídeos</button>' : '') + '</div>';
+    var notes = '';
+    if (ct.ready && !ct.assets) notes += '<div class="ag-warn">Só quem edita o painel pode enviar arquivos, e isso só funciona abrindo pelo claude.ai.</div>';
+    if (ct.msg) notes += '<div class="ag-warn">' + esc(ct.msg) + '</div>';
+    if (ct.usage) notes += '<p class="ag-status">Armazenamento: ' + mb(ct.usage.bytes) + ' de ' + mb(ct.usage.maxBytes) + ' · ' + ct.usage.files + ' arquivos</p>';
+    return head + bar + notes + ctUploadForm() + (ct.view === 'banco' ? ctBanco() : ctCrono());
+  }
+
+  // foto: redesenha em JPEG (no máx. 2560 px), o que também tira a localização do GPS
+  function prepImage(file) {
+    return createImageBitmap(file, { imageOrientation: 'from-image' }).then(function (bmp) {
+      var s = Math.min(1, 2560 / Math.max(bmp.width, bmp.height)), c = document.createElement('canvas');
+      c.width = Math.round(bmp.width * s); c.height = Math.round(bmp.height * s);
+      c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+      return new Promise(function (ok) { c.toBlob(ok, 'image/jpeg', 0.88); });
+    });
+  }
+
+  function ctSend() {
+    var u = ct.up;
+    ct.upErr = !u.pasta ? 'Escolha a pasta.' : !u.files || !u.files.length ? 'Escolha os arquivos.' : !u.paciente ? 'Diga se aparece paciente.' : null;
+    if (ct.upErr) { render(); return; }
+    var files = Array.prototype.slice.call(u.files), done = 0, fails = [];
+    function next(i) {
+      if (i >= files.length) {
+        ct.prog = null; ct.usage = null;
+        ct.msg = done + (done === 1 ? ' arquivo enviado' : ' arquivos enviados') + ' para ' + pastaNome(u.pasta) + '.' + (fails.length ? ' Não foram: ' + fails.join('; ') + '.' : '');
+        ct.up = fails.length && !done ? u : null; ct.view = 'banco'; ct.pasta = u.pasta; render(); ctEnter(); return;
+      }
+      var f = files[i], video = /^video\//.test(f.type) || /\.(mov|mp4|m4v|webm)$/i.test(f.name);
+      ct.prog = 'Enviando ' + (i + 1) + ' de ' + files.length + '…'; render();
+      var prep = video
+        ? (f.size > MAX_BYTES ? Promise.reject({ code: 'too_large' }) : Promise.resolve({ blob: f, type: /webm/i.test(f.type) || /\.webm$/i.test(f.name) ? 'video/webm' : 'video/mp4' }))
+        : prepImage(f).then(function (b) { return { blob: b, type: 'image/jpeg' }; }, function () { return Promise.reject({ code: 'decode' }); });
+      prep.then(function (x) {
+        return ct.assets.upload(x.blob, { type: x.type }).then(function (r) {
+          return state.db.doc('midia/' + r.id).set({ asset: r.id, tipo: video ? 'video' : 'foto', pasta: u.pasta, paciente: u.paciente, nota: (u.nota || '').trim(),
+            criado: new Date().toISOString(), tamanho: r.sizeBytes, status: 'novo' });
+        });
+      }).then(function () { done++; }, function (e) {
+        var c = e && e.code;
+        fails.push((i + 1) + 'º arquivo: ' + (c === 'too_large' ? 'passa de 20 MB (corte o vídeo ou grave em 720p)' : c === 'decode' ? 'formato não aceito (foto HEIC: no iPhone use Ajustes › Câmera › Formatos › Mais compatível)'
+          : c === 'unsupported_type' ? 'formato não aceito' : c === 'quota_or_state' ? 'o armazenamento do painel está cheio' : 'falhou, tente de novo'));
+      }).then(function () { next(i + 1); });
+    }
+    next(0);
+  }
+
+  function ctClick(t) {
+    var a;
+    if ((a = t.closest('[data-ct-view]'))) { ct.view = a.getAttribute('data-ct-view'); render(); return; }
+    if ((a = t.closest('[data-ct-pasta]'))) { ct.pasta = a.getAttribute('data-ct-pasta'); ct.sel = null; render(); return; }
+    if (t.closest('[data-ct-up]')) { ct.up = { pasta: ct.pasta || '', paciente: '', nota: '', files: null }; ct.upErr = null; ct.msg = null; render(); window.scrollTo(0, 0); return; }
+    if ((a = t.closest('[data-goto]'))) { state.section = a.getAttribute('data-goto'); try { localStorage.setItem('painel:aba', state.section); } catch (err) {} render(); window.scrollTo(0, 0); return; }
+    if ((a = t.closest('[data-ct-open]'))) { state.section = 'conteudo'; ct.view = 'banco'; ct.sel = a.getAttribute('data-ct-open'); render(); window.scrollTo(0, 0); return; }
+    if ((a = t.closest('[data-ct-edit]'))) {
+      var me = (ct.midia || []).find(function (x) { return x.id === a.getAttribute('data-ct-edit'); }); if (!me) return;
+      var sug = (me.analise || {}).edicao_sugerida || {};
+      a.disabled = true;
+      state.db.doc('midia/' + me.id).update({ edicao: { status: 'pedida', pedido: sug.pedido || 'Corte vertical com gancho na tela e assinatura.', texto_gancho: sug.texto_gancho || '',
+        cortes: sug.cortes || [], pedido_em: new Date().toISOString() } }).catch(function () { ct.msg = 'Não foi para a edição. Tente de novo.'; render(); });
+      return;
+    }
+    if ((a = t.closest('[data-ct-retry]'))) {
+      var mr = (ct.midia || []).find(function (x) { return x.id === a.getAttribute('data-ct-retry'); }); if (!mr) return;
+      state.db.doc('midia/' + mr.id).update({ edicao: Object.assign({}, mr.edicao, { status: 'pedida', notas: '', pedido_em: new Date().toISOString() }) }).catch(function () {});
+      return;
+    }
+    if ((a = t.closest('[data-ct-unedit]'))) {
+      var mu = (ct.midia || []).find(function (x) { return x.id === a.getAttribute('data-ct-unedit'); }); if (!mu) return;
+      var body = Object.assign({}, mu); delete body.id; delete body.edicao;
+      state.db.doc('midia/' + mu.id).set(body).catch(function () { ct.msg = 'Não deu para tirar da fila.'; render(); });
+      return;
+    }
+    if (t.closest('[data-ct-cancel]')) { ct.up = null; render(); return; }
+    if (t.closest('[data-ct-send]')) { ctSend(); return; }
+    if ((a = t.closest('[data-ct-sel]'))) { ct.sel = a.getAttribute('data-ct-sel'); ct.confirmDel = false; render(); return; }
+    if (t.closest('[data-ct-close]')) { ct.sel = null; render(); return; }
+    if (t.closest('[data-ct-del]')) { ct.confirmDel = true; render(); return; }
+    if (t.closest('[data-ct-delno]')) { ct.confirmDel = false; render(); return; }
+    if (t.closest('[data-ct-delyes]')) {
+      var m = (ct.midia || []).find(function (x) { return x.id === ct.sel; }); if (!m) return;
+      ct.assets.delete(m.asset).then(function () { return state.db.doc('midia/' + m.id).delete(); }).then(function () {
+        ct.sel = null; ct.confirmDel = false; ct.usage = null; ctEnter();
+      }, function () { ct.msg = 'Não deu para apagar agora. Tente de novo.'; }).then(render);
+      return;
+    }
+    if (t.closest('[data-ct-addfolder]')) { ct.newFolder = ''; render(); return; }
+    if (t.closest('[data-ct-addyes]')) {
+      var nome = (ct.newFolder || '').trim(); if (!nome) { ct.newFolder = null; render(); return; }
+      var list = (ct.pastas || []).slice(), id = slug(nome);
+      while (list.some(function (p) { return p.id === id; })) id += '-2';
+      list.push({ id: id, nome: nome });
+      state.db.doc('config/conteudo').set({ pastas: list }).then(function () { ct.newFolder = null; ct.pasta = id; }, function () { ct.msg = 'A pasta não foi criada.'; }).then(render);
+      return;
+    }
+    if ((a = t.closest('[data-ct-post]'))) {
+      var id2 = a.getAttribute('data-ct-post'), v = a.getAttribute('data-v'), p = (ct.posts || []).find(function (x) { return x.id === id2; });
+      var nv = p && p.estado === v ? 'proposto' : v;
+      state.db.doc('cronograma/' + id2).update({ estado: nv }).catch(function () { ct.msg = 'Não salvou. Tente de novo.'; render(); });
+      return;
+    }
+    if ((a = t.closest('[data-ct-copy]'))) {
+      var p2 = (ct.posts || []).find(function (x) { return x.id === a.getAttribute('data-ct-copy'); });
+      if (p2 && navigator.clipboard) navigator.clipboard.writeText(p2.legenda).then(function () { a.textContent = 'Copiada ✓'; }, function () { a.textContent = 'Selecione e copie à mão'; });
+      return;
+    }
+    if ((a = t.closest('[data-ct-dl]'))) {
+      var name = a.getAttribute('data-ct-dlname');
+      a.disabled = true; a.textContent = 'Preparando…';
+      fetch(blobUrl(a.getAttribute('data-ct-dl'))).then(function (r) { if (!r.ok) throw 0; return r.blob(); })
+        .then(function (b) { return ct.downloads.save({ filename: name, data: b }); })
+        .then(function () { a.textContent = 'Baixar vídeo'; }, function () { a.textContent = 'Não baixou · tente de novo'; }).then(function () { a.disabled = false; });
+      return;
+    }
+    if (t.closest('[data-ct-old]')) { ct.showOld = !ct.showOld; render(); return; }
+  }
+
+  function renderSoon(s) {
+    return '<header class="page-head soon-page"><span class="eyebrow">' + esc(s.label) + '</span><h1>Em breve</h1><p>' + esc(s.soon) + '</p></header>';
+  }
+
+  function render() {
+    renderNav();
+    if (state.section === 'escritorio') main.innerHTML = renderOffice();
+    else if (state.section === 'agenda') main.innerHTML = renderAgenda();
+    else if (state.section === 'conteudo') main.innerHTML = renderConteudo();
+    else if (state.section === 'edicao') main.innerHTML = renderEdicao();
+    else if (state.section === 'agentes') main.innerHTML = state.agent === 'marketing' ? renderMarketing() : state.agent ? renderArriving(AGENTS.find(function (a) { return a.id === state.agent; })) : renderTeam();
+    else main.innerHTML = renderSoon(SECTIONS.find(function (s) { return s.id === state.section; }));
+  }
+
+  nav.addEventListener('click', function (e) {
+    var b = e.target.closest('[data-sec]'); if (!b) return;
+    state.section = b.getAttribute('data-sec'); state.agent = null;
+    try { localStorage.setItem('painel:aba', state.section); } catch (err) {}
+    if (state.section === 'agenda') agWatch();
+    if (state.section === 'conteudo') ctEnter();
+    render(); main.focus && window.scrollTo(0, 0);
+  });
+
+  main.addEventListener('click', function (e) {
+    var t;
+    if (state.section === 'agenda') { agClick(e.target); return; }
+    if (state.section === 'conteudo' || state.section === 'edicao') { ctClick(e.target); return; }
+    if ((t = e.target.closest('[data-agent]'))) { state.agent = t.getAttribute('data-agent'); render(); window.scrollTo(0, 0); return; }
+    if ((t = e.target.closest('[data-back]'))) { state.agent = null; render(); return; }
+    if ((t = e.target.closest('[data-week]'))) { state.week = Math.max(0, Math.min(3, state.week + +t.getAttribute('data-week'))); render(); return; }
+    if ((t = e.target.closest('[data-day-pick]'))) { state.selected = t.getAttribute('data-day-pick'); render(); return; }
+    if ((t = e.target.closest('[data-mark]'))) { mark(t.getAttribute('data-day'), t.getAttribute('data-opt'), t.getAttribute('data-mark')); }
+  });
+
+  // campos do formulário da agenda: guardam no estado sem redesenhar (senão o cursor sai do campo)
+  main.addEventListener('input', function (e) {
+    var k = e.target.getAttribute && e.target.getAttribute('data-ag-f');
+    if (k && ag.form) ag.form[k] = e.target.value;
+    var c = e.target.getAttribute && e.target.getAttribute('data-ag-c');
+    if (c != null && ag.editCats) ag.editCats[+c].nome = e.target.value;
+    var cf = e.target.getAttribute && e.target.getAttribute('data-ct-f');
+    if (cf === 'newFolder') ct.newFolder = e.target.value;
+    else if (cf && ct.up) ct.up[cf] = e.target.value;
+  });
+  // conteúdo: arquivos escolhidos e mudanças de pasta / paciente de um arquivo
+  main.addEventListener('change', function (e) {
+    var el = e.target, id;
+    if (el.hasAttribute('data-ct-file') && ct.up) { ct.up.files = el.files; return; }
+    if ((id = el.getAttribute('data-ct-move'))) state.db.doc('midia/' + id).update({ pasta: el.value }).catch(function () { ct.msg = 'Não mudou de pasta.'; render(); });
+    if ((id = el.getAttribute('data-ct-pac'))) state.db.doc('midia/' + id).update({ paciente: el.value }).catch(function () { ct.msg = 'Não salvou.'; render(); });
+  });
+
+  function mark(dayId, optId, value) {
+    if (!state.db) return;
+    var day = state.days.find(function (d) { return d.id === dayId; }); if (!day) return;
+    var cur = (day.estado || {})[optId];
+    var next = cur === value ? '' : value;
+    var key = dayId + ':' + optId;
+    state.saving[key] = true; render();
+    var patch = {}; patch[optId] = next || { __delete__: true };
+    var write = next ? state.db.doc('marketing/' + dayId).update({ estado: patch })
+      : state.db.doc('marketing/' + dayId).get().then(function (snap) {
+          var est = Object.assign({}, (snap.data() || {}).estado || {}); delete est[optId];
+          var body = Object.assign({}, snap.data() || {}); body.estado = est;
+          return state.db.doc('marketing/' + dayId).set(body);
+        });
+    write.catch(function (err) {
+      state.error = err && err.code === 'invalid_argument' ? 'Só o dono do painel pode marcar opções.' : 'A marcação não foi salva. Tente de novo.';
+    }).then(function () { delete state.saving[key]; render(); });
+  }
+
+  render();
+
+  if (window.claude && window.claude.use) {
+    window.claude.use('db').then(function (db) {
+      if (!db) { state.loading = false; render(); return; }
+      state.db = db;
+      db.doc('config/agenda').onSnapshot(function (snap) {
+        ag.cats = ((snap.exists ? snap.data() : null) || {}).categorias || [];
+        if (state.section === 'agenda') render();
+      }, function () { ag.cats = []; });
+      function ctSub(q, key) {
+        q.onSnapshot(function (snap) {
+          ct[key] = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
+          if (state.section === 'conteudo' || state.section === 'edicao') render();
+        }, function () { ct[key] = ct[key] || []; });
+      }
+      db.doc('config/conteudo').onSnapshot(function (snap) {
+        ct.pastas = ((snap.exists ? snap.data() : null) || {}).pastas || [];
+        if (state.section === 'conteudo') render();
+      }, function () { ct.pastas = []; });
+      ctSub(db.collection('midia').orderBy('criado', 'desc').limit(500), 'midia');
+      ctSub(db.collection('cronograma').orderBy('data', 'desc').limit(200), 'posts');
+      var timer = setTimeout(function () { state.slow = true; render(); }, 10000);
+      db.collection('marketing').orderBy('data', 'desc').limit(30).onSnapshot(function (snap) {
+        state.days = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
+        if (!snap.metadata.fromCache) { clearTimeout(timer); state.loading = false; state.slow = false; }
+        else if (state.days.length) state.loading = false;
+        render();
+      }, function (err) {
+        clearTimeout(timer); state.loading = false;
+        state.error = err && err.code === 'revoked' ? 'O acesso a este painel mudou.' : 'Tente abrir de novo daqui a pouco.';
+        render();
+      });
+    }, function () { state.loading = false; render(); });
+  } else {
+    state.loading = false; render();
+  }
+
+  // Google Agenda: só liga a aba quando o claude.ai entrega o mcp; sem ele, a aba explica o porquê
+  if (window.claude && window.claude.use) {
+    window.claude.use('mcp').then(function (m) { ag.mcp = m; ag.ready = true; if (state.section === 'agenda') agWatch(); render(); },
+      function () { ag.ready = true; render(); });
+  } else ag.ready = true;
+
+  // Conteúdo: enviar arquivos (só quem edita o painel) e baixar o vídeo editado
+  if (window.claude && window.claude.use) {
+    Promise.all([window.claude.use('assets'), window.claude.use('downloads')]).then(function (r) {
+      ct.assets = r[0]; ct.downloads = r[1]; ct.ready = true;
+      if (state.section === 'conteudo') { ctEnter(); render(); }
+    }, function () { ct.ready = true; render(); });
+  } else ct.ready = true;
+
+  // escritório 3D (script do módulo abaixo): monta no lugar do desenho em SVG
+  function mount3d() {
+    var faces = window.Office3D && window.Office3D.faces;
+    if (faces) document.querySelectorAll('[data-face]').forEach(function (el) {
+      var src = faces[el.getAttribute('data-face')];
+      if (src && !el.querySelector('img')) el.innerHTML = '<img src="' + src + '" alt="">';
+    });
+    var slot = document.getElementById('office-slot');
+    if (slot && window.Office3D) { window.Office3D.mount(slot); window.Office3D.update({ marketing: statusLine() }); }
+  }
+  window.addEventListener('office3d-ready', mount3d);
+  var baseRender = render;
+  render = function () { baseRender(); mount3d(); };
+  mount3d();
+})();
+</script>
+
+<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
+<script type="module">
+import * as THREE from 'three';
+
+// Escritório em 3D (three.js), em corte, visto de cima. Se o WebGL falhar, fica o desenho em SVG.
+(function () {
+  let renderer;
+  try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return; }
+  if (!renderer.getContext()) return;
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const H = 2.4, T = 0.14;
+  const C = { wall: '#ece8e1', plinth: '#4b3a2c', carpet: '#a59c8f', wood: '#b5875a', woodDark: '#7c5536', part: '#aaa59c',
+    trim: '#6e6961', post: '#3b3733', chair: '#3e4247', beige: '#ddd5c4', off: '#2b3236', metal: '#9ea3a8', white: '#f4f2ee',
+    leaf: '#5f8f58', pot: '#b9785b', box: '#c39463' };
+  const BOOKS = ['#8b3a3a', '#2f5d7c', '#d0a34a', '#4f7a4a', '#6b4f8a', '#c9c2b4', '#a8553a'];
+
+  const mats = new Map();
+  function mat(c) {
+    if (typeof c !== 'string') return c;
+    if (!mats.has(c)) mats.set(c, new THREE.MeshStandardMaterial({ color: c, roughness: 0.88, metalness: 0 }));
+    return mats.get(c);
+  }
+  function stripes(bg, line, n) {
+    const cv = document.createElement('canvas'); cv.width = 8; cv.height = 64;
+    const g = cv.getContext('2d'); g.fillStyle = bg; g.fillRect(0, 0, 8, 64); g.fillStyle = line;
+    for (let i = 0; i < n; i++) g.fillRect(0, i * 64 / n, 8, 1.6);
+    const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 3);
+    return t;
+  }
+  const blinds = new THREE.MeshStandardMaterial({ map: stripes('#ebe7df', '#b0a99b', 8), roughness: 0.9 });
+  const glow = new THREE.MeshStandardMaterial({ color: '#a8f0d8', emissive: '#7fdcbc', emissiveIntensity: 0.9 });
+  const vend = new THREE.MeshStandardMaterial({ color: '#cfe8ff', emissive: '#8fc4f0', emissiveIntensity: 0.7 });
+  const vend2 = new THREE.MeshStandardMaterial({ color: '#ffe0c2', emissive: '#f0b07a', emissiveIntensity: 0.6 });
+
+  const scene = new THREE.Scene();
+  const boxGeo = new THREE.BoxGeometry(1, 1, 1);
+  const sph = new Map();
+  function sphereGeo(r) { if (!sph.has(r)) sph.set(r, new THREE.SphereGeometry(r, 18, 12)); return sph.get(r); }
+  function add(m, parent) { m.castShadow = true; m.receiveShadow = true; (parent || scene).add(m); return m; }
+  // caixa com a base em y (não o centro)
+  function B(w, h, d, c, x, y, z, parent) { const m = new THREE.Mesh(boxGeo, mat(c)); m.scale.set(w, h, d); m.position.set(x, y + h / 2, z); return add(m, parent); }
+  function Cy(rt, rb, h, c, x, y, z, parent) { const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, 20), mat(c)); m.position.set(x, y + h / 2, z); return add(m, parent); }
+  function S(r, c, x, y, z, parent) { const m = new THREE.Mesh(sphereGeo(r), mat(c)); m.position.set(x, y, z); return add(m, parent); }
+  function grp(x, z, rot) { const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rot || 0; scene.add(g); return g; }
+  let seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
+
+  // ---------- paredes ----------
+  function segs(a, b, gaps) {
+    const out = []; let s = a;
+    (gaps || []).slice().sort((p, q) => p[0] - q[0]).forEach(g => { if (g[0] > s) out.push([s, g[0]]); s = Math.max(s, g[1]); });
+    if (b > s) out.push([s, b]);
+    return out;
+  }
+  function piece(along, x, z, L, h, d, c, y) { return along ? B(L, h, d, c, x, y || 0, z) : B(d, h, L, c, x, y || 0, z); }
+  function doors(along, x1, z1, gaps) {
+    (gaps || []).forEach(([s, e]) => {
+      const m = (s + e) / 2, L = e - s, x = along ? m : x1, z = along ? z1 : m;
+      piece(along, x, z, L, H - 2.1, T, C.wall, 2.1);
+      piece(along, x, z, L - 0.08, 2.08, 0.05, C.woodDark);
+      along ? S(0.035, '#d8c27a', x + L / 2 - 0.18, 1.0, z + 0.05) : S(0.035, '#d8c27a', x + 0.05, 1.0, z - L / 2 + 0.18);
+    });
+  }
+  function wall(x1, z1, x2, z2, o) {
+    o = o || {}; const along = z1 === z2, a = along ? x1 : z1, b = along ? x2 : z2;
+    segs(a, b, o.gaps).forEach(([s, e]) => { const m = (s + e) / 2; piece(along, along ? m : x1, along ? z1 : m, e - s, H, T, o.c || C.wall); });
+    doors(along, x1, z1, o.gaps);
+  }
+  function glass(x1, z1, x2, z2, o) {
+    o = o || {}; const along = z1 === z2, a = along ? x1 : z1, b = along ? x2 : z2;
+    segs(a, b, o.gaps).forEach(([s, e]) => {
+      const L = e - s, n = Math.max(1, Math.round(L / 1.3)), step = L / n, m = (s + e) / 2;
+      for (let i = 0; i <= n; i++) { const p = s + i * step; piece(along, along ? p : x1, along ? z1 : p, 0.08, 2.1, 0.1, C.post); }
+      for (let i = 0; i < n; i++) { const p = s + (i + 0.5) * step; piece(along, along ? p : x1, along ? z1 : p, step - 0.1, 1.95, 0.04, blinds, 0.08); }
+      piece(along, along ? m : x1, along ? z1 : m, L, H - 2.1, T, C.wall, 2.1);
+      piece(along, along ? m : x1, along ? z1 : m, L, 0.08, 0.12, C.post);
+    });
+    doors(along, x1, z1, o.gaps);
+  }
+  // janela e quadro na face de dentro das paredes do fundo (x = 0 ou z = 0)
+  function win(onX, a, b) {
+    const m = (a + b) / 2, L = b - a;
+    if (onX) { B(0.03, 1.37, L + 0.12, C.post, 0.1, 0.79, m); B(0.03, 1.25, L, blinds, 0.12, 0.85, m); }
+    else { B(L + 0.12, 1.37, 0.03, C.post, m, 0.79, 0.1); B(L, 1.25, 0.03, blinds, m, 0.85, 0.12); }
+  }
+  function pic(onX, p, y, w, h, c, at) {
+    const d = at || 0;
+    if (onX) { B(0.03, h + 0.08, w + 0.08, '#2c2824', d + 0.1, y - 0.04, p); B(0.02, h, w, c, d + 0.12, y, p); }
+    else { B(w + 0.08, h + 0.08, 0.03, '#2c2824', p, y - 0.04, d + 0.1); B(w, h, 0.02, c, p, y, d + 0.12); }
+  }
+
+  // ---------- móveis ----------
+  function crt(g, x, z, on) {
+    B(0.46, 0.4, 0.36, C.beige, x, 0.77, z, g); B(0.3, 0.28, 0.22, C.beige, x, 0.8, z + 0.27, g);
+    B(0.36, 0.28, 0.02, on ? glow : C.off, x, 0.83, z - 0.185, g);
+  }
+  function chair(g, x, z, rot) {
+    const c = new THREE.Group(); c.position.set(x, 0, z); c.rotation.y = rot || 0; g.add(c);
+    B(0.5, 0.08, 0.48, C.chair, 0, 0.44, 0, c); B(0.48, 0.55, 0.07, C.chair, 0, 0.55, -0.27, c);
+    Cy(0.03, 0.03, 0.38, C.metal, 0, 0.06, 0, c);
+    const b1 = B(0.52, 0.04, 0.06, C.chair, 0, 0.04, 0, c), b2 = B(0.52, 0.04, 0.06, C.chair, 0, 0.04, 0, c); b1.rotation.y = 0.6; b2.rotation.y = -0.6;
+    return c;
+  }
+  function station(x, z, rot, on) {
+    const g = grp(x, z, rot);
+    B(1.4, 0.05, 0.8, C.wood, 0, 0.72, 0.72, g); B(0.05, 0.72, 0.74, C.woodDark, -0.66, 0, 0.72, g); B(0.05, 0.72, 0.74, C.woodDark, 0.66, 0, 0.72, g);
+    B(1.3, 0.42, 0.03, C.woodDark, 0, 0.28, 1.08, g);
+    crt(g, 0.1, 0.78, on);
+    B(0.42, 0.03, 0.15, '#d6cfbf', 0.05, 0.77, 0.43, g); B(0.07, 0.03, 0.1, '#d6cfbf', 0.42, 0.77, 0.45, g);
+    B(0.25, 0.012, 0.32, '#fbfaf6', -0.45, 0.77, 0.62, g); Cy(0.045, 0.04, 0.1, rnd() > 0.5 ? '#c25d41' : '#f4f2ee', 0.55, 0.77, 0.85, g);
+    chair(g, 0, -0.05, 0);
+    return g;
+  }
+  function partition(x1, z1, x2, z2) {
+    const along = z1 === z2, L = along ? x2 - x1 : z2 - z1, mx = along ? (x1 + x2) / 2 : x1, mz = along ? z1 : (z1 + z2) / 2;
+    piece(along, mx, mz, L, 1.2, 0.06, C.part); piece(along, mx, mz, L, 0.04, 0.08, C.trim, 1.2);
+  }
+  function plant(x, z, s) {
+    s = s || 1; Cy(0.18 * s, 0.14 * s, 0.35 * s, C.pot, x, 0, z);
+    const f = new THREE.Mesh(new THREE.IcosahedronGeometry(0.34 * s, 0), new THREE.MeshStandardMaterial({ color: C.leaf, flatShading: true, roughness: 0.9 }));
+    f.position.set(x, 0.62 * s, z); add(f);
+    if (s > 1) { const f2 = f.clone(); f2.scale.setScalar(0.7); f2.position.set(x + 0.08, 1.05 * s, z - 0.05); add(f2); }
+  }
+  function shelf(x, z, rot, w) {
+    const g = grp(x, z, rot); B(w, 1.9, 0.36, C.woodDark, 0, 0, 0, g);
+    for (let r = 0; r < 4; r++) {
+      let px = -w / 2 + 0.08; const y = 0.08 + r * 0.46;
+      while (px < w / 2 - 0.12) { const bw = 0.05 + rnd() * 0.05, bh = 0.26 + rnd() * 0.12; if (rnd() > 0.15) B(bw, bh, 0.26, BOOKS[Math.floor(rnd() * BOOKS.length)], px + bw / 2, y, 0.07, g); px += bw + 0.01; }
+      B(w - 0.06, 0.03, 0.3, C.wood, 0, y - 0.03, 0.04, g);
+    }
+    return g;
+  }
+  function arcDesk(cx, cz) {
+    const s = new THREE.Shape(); s.absarc(0, 0, 1.45, -0.95, 0.95, false); s.absarc(0, 0, 1.0, 0.95, -0.95, true);
+    const body = new THREE.ExtrudeGeometry(s, { depth: 1.0, bevelEnabled: false, curveSegments: 28 }); body.rotateX(-Math.PI / 2);
+    const m = new THREE.Mesh(body, mat(C.wood)); m.position.set(cx, 0, cz); add(m);
+    const s2 = new THREE.Shape(); s2.absarc(0, 0, 1.52, -1.0, 1.0, false); s2.absarc(0, 0, 0.95, 1.0, -1.0, true);
+    const top = new THREE.ExtrudeGeometry(s2, { depth: 0.05, bevelEnabled: false, curveSegments: 28 }); top.rotateX(-Math.PI / 2);
+    const t = new THREE.Mesh(top, mat('#d9c7a8')); t.position.set(cx, 1.0, cz); add(t);
+  }
+
+  // ---------- personagens ----------
+  function person(look, pose) {
+    const root = new THREE.Group();
+    const skin = mat(look.skin), shirt = mat(look.shirt), pants = mat(look.pants), hair = mat(look.hair), shoe = mat('#2a2522');
+    const cap = (r, l, m, x, y, z, p) => { const o = new THREE.Mesh(new THREE.CapsuleGeometry(r, l, 4, 12), m); o.position.set(x, y, z); return add(o, p || root); };
+    const sit = pose === 'sit', hip = sit ? 0.52 : 0.9;
+    [-0.1, 0.1].forEach(sx => {
+      if (sit) { cap(0.08, 0.3, pants, sx, hip, 0.17).rotation.x = Math.PI / 2; cap(0.068, 0.3, pants, sx, 0.3, 0.36); B(0.13, 0.07, 0.24, shoe, sx, 0, 0.42, root); }
+      else { cap(0.08, 0.66, pants, sx, 0.47, 0); B(0.13, 0.07, 0.24, shoe, sx, 0, 0.04, root); }
+    });
+    cap(0.17, 0.32, shirt, 0, hip + 0.33, 0).scale.set(1.3, 1, 0.85);
+    if (look.tie) B(0.06, 0.26, 0.02, look.tie, 0, hip + 0.3, 0.15, root);
+    const sh = hip + 0.55;
+    const arm = (sx, a1, a2) => {
+      const up = new THREE.Group(); up.position.set(sx, sh, 0); up.rotation.x = a1; root.add(up);
+      cap(0.058, 0.2, shirt, 0, -0.15, 0, up);
+      const fo = new THREE.Group(); fo.position.set(0, -0.3, 0); fo.rotation.x = a2; up.add(fo);
+      cap(0.05, 0.18, look.sleeve ? shirt : skin, 0, -0.13, 0, fo); S(0.055, look.skin, 0, -0.27, 0, fo);
+      return fo;
+    };
+    const fl = arm(-0.27, sit ? -0.35 : -0.5, sit ? -1.15 : -1.0), fr = arm(0.27, sit ? -0.35 : -0.5, sit ? -1.15 : -1.0);
+    cap(0.05, 0.05, skin, 0, hip + 0.7, 0);
+    // a mesma cabeça dos rostos da equipe, em miniatura
+    const head = new THREE.Group(); head.position.set(0, hip + 0.9, 0); root.add(head);
+    const hm = headModel(look, 0.5); hm.scale.setScalar(0.17); head.add(hm);
+    return { root, head, fl, fr };
+  }
+
+  // ---------- rostos no estilo boneco de massinha: cabeça grande, nariz redondo, bochecha rosada ----------
+  // q: qualidade (1 nos retratos, menos no escritório, onde a cabeça é pequena)
+  function headModel(look, q) {
+    q = q || 1;
+    const g = new THREE.Group(), seg = n => Math.max(8, Math.round(n * q));
+    const clay = c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.72, metalness: 0 });
+    const skin = clay(look.skin), hair = clay(look.hair), dark = clay('#2a1d18');
+    hair.side = THREE.DoubleSide;
+    const m = (geo, mt, x, y, z) => { const o = new THREE.Mesh(geo, mt); o.position.set(x, y, z); o.castShadow = true; g.add(o); return o; };
+    m(new THREE.SphereGeometry(1, seg(48), seg(32)), skin, 0, 0, 0).scale.set(1, 1.04, 0.95);
+    [-1, 1].forEach(s => {
+      m(new THREE.SphereGeometry(0.26, seg(24), seg(16)), skin, s * 0.98, -0.08, -0.02).scale.set(0.55, 1, 0.8);
+      m(new THREE.SphereGeometry(0.085, seg(20), seg(14)), dark, s * 0.34, 0.04, 0.86);
+      m(new THREE.SphereGeometry(0.026, 10, 8), clay('#ffffff'), s * 0.34 + 0.03, 0.08, 0.925);
+      m(new THREE.CapsuleGeometry(0.032, 0.16, 4, 8), hair, s * 0.35, 0.3, 0.86).rotation.z = Math.PI / 2 + s * 0.12;
+      const ck = m(new THREE.CircleGeometry(0.15, 24), new THREE.MeshBasicMaterial({ color: '#f29a8f', transparent: true, opacity: 0.35 }), s * 0.55, -0.28, 0.79);
+      ck.rotation.y = s * 0.6; ck.castShadow = false;
+    });
+    m(new THREE.SphereGeometry(0.16, seg(24), seg(16)), clay(look.nose || look.skin), 0, -0.2, 0.95);
+    m(new THREE.TorusGeometry(0.16, 0.024, 8, 24, Math.PI), clay('#8a3f30'), 0, -0.42, 0.86).rotation.set(-0.2, 0, Math.PI);
+    if (look.style === 'long') {
+      // cabelo liso comprido com franja até a sobrancelha
+      m(new THREE.SphereGeometry(1.07, seg(48), seg(24), 0, Math.PI * 2, 0, Math.PI * 0.5), hair, 0, 0.02, -0.02).rotation.x = -0.18;
+      m(new THREE.SphereGeometry(1.09, seg(40), seg(16), Math.PI / 2 - 0.95, 1.9, 0.28, 0.95), hair, 0, 0.02, 0);
+      [-1, 1].forEach(s => m(new THREE.CapsuleGeometry(0.42, 1.5, 6, seg(16)), hair, s * 0.88, -0.75, -0.5).scale.set(0.62, 1, 1.05));
+      m(new THREE.CapsuleGeometry(0.8, 1.2, 6, seg(20)), hair, 0, -0.55, -0.5).scale.set(1.12, 1, 0.55);
+    } else {
+      // cabelo curto cacheado: bolinhas espalhadas pelo alto e pela nuca
+      m(new THREE.SphereGeometry(1.04, seg(48), seg(24), 0, Math.PI * 2, 0, Math.PI * 0.42), hair, 0, 0.02, 0).rotation.x = -0.3;
+      // "short": só a touca de cabelo, sem os cachos
+      const curl = new THREE.SphereGeometry(1, seg(16), seg(12));
+      for (let i = 0; look.style !== 'short' && i < 150; i++) {
+        const y = 1 - (i + 0.5) / 150 * 2, r = Math.sqrt(1 - y * y), a = i * 2.39996, x = Math.cos(a) * r, z = Math.sin(a) * r;
+        if (y > 0.45 || (y > 0.05 && z < 0.1)) m(curl, hair, x * 1.04, y * 1.06 + 0.02, z).scale.setScalar(0.19 + (i % 3) * 0.025);
+      }
+    }
+    return g;
+  }
+
+  // busto para o retrato: cabeça, pescoço e ombros
+  function bust(look) {
+    const g = new THREE.Group(), clay = c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.75, metalness: 0 });
+    g.add(headModel(look, 1));
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.32, 0.6, 32), clay(look.skin)); neck.position.y = -1.15; g.add(neck);
+    const body = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 24), clay(look.shirt)); body.scale.set(1.6, 0.95, 0.95); body.position.y = -2.15; g.add(body);
+    const collar = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.1, 12, 32), clay(look.collar || look.shirt)); collar.rotation.x = Math.PI / 2; collar.position.y = -1.38; g.add(collar);
+    if (look.tie) { const t = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.5, 0.05), clay(look.tie)); t.position.set(0, -1.72, 0.84); t.rotation.x = -0.45; g.add(t); }
+    return g;
+  }
+
+  const LOOKS = {
+    marketing: { skin: '#f2c3a0', nose: '#eba98a', hair: '#1f1814', shirt: '#4f8a78', collar: '#f4f1ea', pants: '#2f3a44', style: 'long' },
+    kim: { skin: '#dfa37c', nose: '#d68f6a', hair: '#6b3a22', shirt: '#7a7a45', collar: '#efe6d2', pants: '#3a3a40', style: 'curly', sleeve: true },
+    // contratados em 01/11/2026 (por enquanto só o retrato; no escritório ainda não têm boneco)
+    luzi: { skin: '#eab995', nose: '#e0a17e', hair: '#3b2418', shirt: '#2f3e57', collar: '#f4f1ea', style: 'long' },
+    nina: { skin: '#f0c6a6', nose: '#e8ab8a', hair: '#6a3f22', shirt: '#c98b6b', collar: '#f4f1ea', style: 'long' },
+    anapaula: { skin: '#d9a07a', nose: '#cc8c66', hair: '#241a16', shirt: '#eef1f3', collar: '#d6e6ee', style: 'long' },
+    amanda: { skin: '#f4cdb0', nose: '#ecb193', hair: '#e0bd6e', shirt: '#7fa8c9', collar: '#f4f1ea', style: 'long' },
+    bruno: { skin: '#f2c3a0', nose: '#eba98a', hair: '#8e8a86', shirt: '#6b7f99', collar: '#f4f1ea', style: 'short' },
+    caio: { skin: '#e3b48e', nose: '#d99f78', hair: '#b88a4a', shirt: '#8a6fae', collar: '#f4f1ea', style: 'curly' },
+    rafa: { skin: '#b8835e', nose: '#a8724f', hair: '#1c1714', shirt: '#2b2b30', collar: '#3d3d44', style: 'short' }
+  };
+
+  // os retratos saem como imagem, desenhados uma vez num canvas separado
+  const faces = {};
+  try {
+    const fr = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    fr.setPixelRatio(1); fr.setSize(360, 360, false);
+    const fs = new THREE.Scene(); fs.background = new THREE.Color('#ffffff');
+    fs.add(new THREE.HemisphereLight('#ffffff', '#d9c8b8', 1.7));
+    const key = new THREE.DirectionalLight('#fff4e8', 1.9); key.position.set(-3, 4, 6); fs.add(key);
+    const rim = new THREE.DirectionalLight('#ffffff', 0.6); rim.position.set(4, 2, -3); fs.add(rim);
+    const cam = new THREE.PerspectiveCamera(20, 1, 0.1, 50); cam.position.set(0, -0.45, 11); cam.lookAt(0, -0.5, 0);
+    Object.keys(LOOKS).forEach(id => { const b = bust(LOOKS[id]); fs.add(b); fr.render(fs, cam); faces[id] = fr.domElement.toDataURL('image/png'); fs.remove(b); });
+    fr.dispose(); fr.forceContextLoss();
+  } catch (e) {}
+
+  // ---------- planta do escritório (x: 0 a 22, z: 0 a 18; fundo em x = 0 e z = 0) ----------
+  B(22.6, 0.5, 18.6, C.plinth, 11, -0.5, 9);
+  B(22, 0.02, 18, C.carpet, 11, 0, 9);
+  const floor = (x1, z1, x2, z2, c) => B(x2 - x1, 0.025, z2 - z1, c, (x1 + x2) / 2, 0, (z1 + z2) / 2);
+  floor(0, 0, 8, 6, '#b59572'); floor(0, 6, 5, 12, '#b08a64'); floor(14, 0, 22, 6, '#d6d0c4');
+  floor(17, 6, 22, 12, '#5f6468'); floor(12, 12, 22, 18, '#8d8378');
+  const sh = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.ShadowMaterial({ opacity: 0.16 }));
+  sh.rotation.x = -Math.PI / 2; sh.position.set(11, -0.5, 9); sh.receiveShadow = true; scene.add(sh);
+
+  wall(0, 0, 0, 18); wall(0, 0, 22, 0);
+  B(7.8, H, 0.02, '#a9b8a4', 4, 0, 0.08);                       // parede verde da sala do Kim
+  B(0.02, H, 5.8, '#8a6fae', 0.08, 0, 15.05);                   // parede roxa da recepção
+  win(false, 2.6, 5.4); win(false, 9.4, 12.2); win(false, 17.6, 20.6); win(true, 6.6, 8.6);
+  wall(0, 6, 5, 6); glass(5, 6, 8, 6); glass(8, 0, 8, 6, { gaps: [[4.4, 5.4]] });
+  wall(5, 6, 5, 12, { gaps: [[10.4, 11.4]] }); wall(0, 12, 5, 12);
+  wall(14, 0, 14, 6, { gaps: [[4.4, 5.4]] }); wall(14, 6, 22, 6, { gaps: [[15, 16]] });
+  wall(17, 6, 17, 12, { gaps: [[10.2, 11.2]] });
+  glass(12, 12, 22, 12); wall(12, 12, 12, 18, { gaps: [[12.5, 13.5]] });
+
+  // sala do Kim (Financeiro)
+  shelf(0.25, 2.2, Math.PI / 2, 2.0); pic(true, 4.3, 1.3, 0.7, 0.5, '#6f8fa8'); pic(false, 6.8, 1.25, 0.6, 0.8, '#c9a46a');
+  station(3.4, 1.7, 0, false); plant(7.3, 0.6, 1.3); B(0.5, 1.3, 0.6, C.metal, 6.4, 0, 0.45);
+  Cy(0.02, 0.02, 1.6, C.post, 1.2, 0, 4.9); Cy(0.12, 0.2, 0.25, '#efe6cf', 1.2, 1.6, 4.9);
+  B(0.5, 0.4, 0.45, C.box, 6.6, 0, 3.2); B(0.45, 0.35, 0.4, C.box, 6.62, 0.4, 3.2); B(0.55, 0.38, 0.45, C.box, 7.2, 0, 2.5);
+
+  // estudos (vaga)
+  shelf(1.4, 6.3, 0, 2.2); shelf(3.7, 6.3, 0, 1.8); station(2.7, 9.2, -Math.PI / 2, false);
+  pic(true, 10.4, 1.35, 0.8, 0.55, '#8a6f52'); plant(4.4, 11.4); Cy(0.02, 0.02, 1.5, C.post, 0.6, 0, 11.3); Cy(0.1, 0.18, 0.22, '#efe6cf', 0.6, 1.5, 11.3);
+
+  // recepção / atendimento (vaga)
+  arcDesk(2.0, 15.0); chair(scene, 1.6, 15.0, Math.PI / 2);
+  const rc = grp(3.05, 14.55, Math.PI / 2); crt(rc, 0, 0, false); rc.position.y = 0.25;
+  B(0.5, 0.75, 1.8, C.wood, 0.4, 0, 13.4); shelf(0.25, 17.0, Math.PI / 2, 1.4); pic(true, 15.2, 1.4, 1.0, 0.65, '#d7c3a1');
+  plant(5.4, 17.3, 1.3); Cy(0.25, 0.25, 0.45, '#5b5f63', 4.6, 0, 12.8);
+
+  // corredor do fundo
+  B(0.8, 0.9, 0.6, '#d9d6cf', 9.3, 0, 0.5); B(0.8, 0.06, 0.6, '#bdb8ae', 9.3, 0.9, 0.5);
+  B(0.5, 1.3, 0.6, C.metal, 10.5, 0, 0.45); B(0.5, 1.3, 0.6, C.metal, 11.05, 0, 0.45);
+  B(0.32, 0.9, 0.32, '#e6e3dc', 12.4, 0, 0.4); Cy(0.13, 0.13, 0.36, '#7fb6d9', 12.4, 0.9, 0.4);
+  plant(13.4, 0.6, 1.3);
+
+  // agência de marketing: 6 baias, a Duda numa delas
+  partition(8.2, 9.6, 14.8, 9.6);
+  [8.2, 10.4, 12.6, 14.8].forEach(x => partition(x, 7.6, x, 11.6));
+  const desks = [];
+  [9.3, 11.5, 13.7].forEach(x => { desks.push([x, 8.15, 0]); desks.push([x, 11.05, Math.PI]); });
+  let dudaStation;
+  desks.forEach(([x, z, r]) => { const g = station(x, z, r, x === 9.3 && r === Math.PI); if (x === 9.3 && r === Math.PI) dudaStation = g; });
+  plant(6.4, 6.9, 1.3); plant(15.7, 6.9); plant(6.4, 12.4); Cy(0.16, 0.13, 0.35, '#5b5f63', 15.4, 0, 11.8);
+  B(0.7, 0.95, 0.55, '#dcd8d0', 11.0, 0, 14.6); B(0.7, 0.05, 0.55, '#bdb8ae', 11.0, 0.95, 14.6);
+
+  // copa
+  B(0.75, 1.9, 0.9, '#2b2d31', 14.5, 0, 1.2); B(0.02, 1.25, 0.6, vend, 14.885, 0.5, 1.2);
+  B(0.75, 1.9, 0.9, '#7a1f24', 14.5, 0, 2.25); B(0.02, 1.25, 0.6, vend2, 14.885, 0.5, 2.25);
+  B(3.4, 0.88, 0.62, C.white, 18.2, 0, 0.4); B(3.5, 0.05, 0.68, '#8f8a82', 18.2, 0.88, 0.42); B(0.55, 0.32, 0.4, '#3a3a3a', 17.2, 0.93, 0.38);
+  B(0.8, 1.95, 0.72, '#eeeeea', 21.3, 0, 0.45); Cy(0.04, 0.04, 0.12, '#f4f2ee', 18.9, 0.93, 0.35);
+  Cy(0.7, 0.7, 0.05, C.wood, 18.4, 0.72, 3.6); Cy(0.06, 0.06, 0.72, C.metal, 18.4, 0, 3.6);
+  chair(scene, 18.4, 2.6, 0); chair(scene, 19.4, 4.0, -2.2); chair(scene, 17.4, 4.0, 2.2);
+
+  // treino e dieta (vaga)
+  B(0.8, 0.22, 1.9, '#33363a', 18.4, 0, 8.6); B(0.06, 1.1, 0.06, '#33363a', 18.05, 0, 7.75); B(0.06, 1.1, 0.06, '#33363a', 18.75, 0, 7.75);
+  B(0.8, 0.12, 0.3, '#33363a', 18.4, 1.0, 7.75); B(0.7, 0.04, 1.7, '#4a4e53', 18.4, 0.22, 8.65);
+  B(1.3, 0.6, 0.4, '#4a4e53', 19.9, 0, 6.4); [19.4, 19.75, 20.1, 20.45].forEach((x, i) => { Cy(0.07, 0.07, 0.2, '#22252a', x, 0.62, 6.4).rotation.z = Math.PI / 2; });
+  B(0.7, 0.02, 1.8, '#6aa58f', 20.9, 0, 9.4); Cy(0.3, 0.3, 0.7, C.wood, 21.2, 0, 11.3);
+  S(0.08, '#e3913a', 21.15, 0.78, 11.25); S(0.08, '#8fbf4a', 21.3, 0.78, 11.35); S(0.08, '#d84b3a', 21.2, 0.82, 11.4);
+  pic(false, 19.6, 1.5, 0.9, 0.6, '#6aa58f', 6);
+
+  // sala de reunião
+  B(6, 0.06, 1.7, C.wood, 17.2, 0.72, 15.1); B(0.1, 0.72, 1.2, C.woodDark, 14.8, 0, 15.1); B(0.1, 0.72, 1.2, C.woodDark, 19.6, 0, 15.1);
+  [14.9, 16.1, 17.3, 18.5, 19.7].forEach(x => { chair(scene, x, 14.0, 0); chair(scene, x, 16.25, Math.PI); });
+  chair(scene, 13.75, 15.1, Math.PI / 2); chair(scene, 20.65, 15.1, -Math.PI / 2);
+  B(0.04, 1.08, 2.5, '#cfcac0', 12.09, 0.96, 15.6); B(0.03, 1.0, 2.4, '#fbfbf8', 12.11, 1.0, 15.6);
+  plant(21.5, 17.4, 1.3); [15.5, 17.2, 18.9].forEach(x => B(0.3, 0.01, 0.4, '#fbfaf6', x, 0.78, 14.8));
+
+  // ---------- a equipe ----------
+  const duda = person(LOOKS.marketing, 'sit');
+  dudaStation.add(duda.root); duda.root.userData.agent = 'marketing'; dudaStation.userData.agent = 'marketing';
+  const kim = person(LOOKS.kim, 'stand');
+  kim.root.position.set(5.0, 0, 3.7); kim.root.rotation.y = 0.5; scene.add(kim.root); kim.root.userData.agent = 'kim';
+  B(0.55, 0.38, 0.42, C.box, 0, 0.98, 0.42, kim.root); B(0.56, 0.012, 0.07, '#e4cf9e', 0, 1.36, 0.42, kim.root);
+
+  // ---------- luz e câmera ----------
+  scene.add(new THREE.HemisphereLight('#ffffff', '#b8a68f', 1.9));
+  const sun = new THREE.DirectionalLight('#fff6ea', 2.3);
+  sun.position.set(-4, 26, 16); sun.target.position.set(11, 0, 9); scene.add(sun, sun.target);
+  sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
+  Object.assign(sun.shadow.camera, { left: -20, right: 20, top: 20, bottom: -20, near: 1, far: 70 });
+  sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02;
+
+  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 200);
+  const center = new THREE.Vector3(11, 0.4, 9), EL = 0.66, R = 60, AZ0 = Math.PI / 4;
+  let az = AZ0, azT = AZ0;
+  function placeCam() {
+    camera.position.set(center.x + R * Math.cos(EL) * Math.sin(az), center.y + R * Math.sin(EL), center.z + R * Math.cos(EL) * Math.cos(az));
+    camera.lookAt(center);
+  }
+  placeCam();
+
+  // ---------- página ----------
+  const wrap = document.createElement('div'); wrap.className = 'o3d';
+  renderer.domElement.setAttribute('aria-label', 'Escritório em 3D com as salas dos agentes'); renderer.domElement.setAttribute('role', 'img');
+  wrap.appendChild(renderer.domElement);
+  const layer = document.createElement('div'); layer.className = 'o3d-layer'; wrap.appendChild(layer);
+  const tags = [];
+  function tag(pos, html, cls) {
+    const el = document.createElement('div'); el.className = 'o3d-tag ' + (cls || '');
+    el.innerHTML = html; layer.appendChild(el); tags.push({ el, pos: new THREE.Vector3(pos[0], pos[1], pos[2]) }); return el;
+  }
+  const faceImg = id => faces[id] ? '<img src="' + faces[id] + '" alt="">' : '';
+  const dudaTag = tag([9.3, 2.0, 11.05], faceImg('marketing') + '<div><b>Duda · Marketing e captação</b><span class="sub">trabalhando</span></div>', 'who live');
+  tag([5.0, 2.2, 3.7], faceImg('kim') + '<div><b>Kim · Financeiro</b><span class="sub">chegando</span></div>', 'who');
+  tag([11.5, 1.45, 7.3], 'Agência de marketing', 'room');
+  tag([2.6, 2.5, 9.0], 'Estudos · Nina (chegando)', 'room'); tag([2.4, 1.8, 15.2], 'Atendimento · Amanda (chegando)', 'room');
+  tag([19.5, 2.5, 9.2], 'Treino e dieta · vaga', 'room'); tag([18.3, 2.5, 3.0], 'Copa', 'room'); tag([17.2, 2.0, 15.1], 'Sala de reunião · Luzi (chegando)', 'room');
+  const ctrl = document.createElement('div'); ctrl.className = 'o3d-ctrl';
+  ctrl.innerHTML = '<button type="button" data-rot="1" aria-label="Girar para a esquerda">↺</button><button type="button" data-rot="-1" aria-label="Girar para a direita">↻</button>';
+  wrap.appendChild(ctrl);
+  const hint = document.createElement('div'); hint.className = 'o3d-hint'; hint.textContent = 'Arraste para girar'; wrap.appendChild(hint);
+  const clampAz = a => Math.max(AZ0 - 0.85, Math.min(AZ0 + 0.85, a));
+  ctrl.addEventListener('click', e => { const b = e.target.closest('[data-rot]'); if (b) azT = clampAz(azT + 0.42 * +b.getAttribute('data-rot')); });
+
+  // o escritório só gira; abrir os agentes fica na aba Agentes (pedido do Pedro, 01/11/2026)
+  const cv = renderer.domElement;
+  let down = null;
+  cv.addEventListener('pointerdown', e => { down = { x: e.clientX, az: azT }; });
+  cv.addEventListener('pointermove', e => {
+    if (down) { const dx = e.clientX - down.x; if (Math.abs(dx) > 4) azT = clampAz(down.az - dx * 0.006); cv.style.cursor = 'grabbing'; }
+  });
+  const up = () => { down = null; cv.style.cursor = 'grab'; };
+  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up); cv.addEventListener('pointerleave', () => { down = null; });
+
+  function fit() {
+    const w = wrap.clientWidth || 600, h = wrap.clientHeight || 420; renderer.setSize(w, h, false);
+    const a = w / h; let hh = 10.6, hw = hh * a; if (hw < 15.4) { hw = 15.4; hh = hw / a; }
+    Object.assign(camera, { left: -hw, right: hw, top: hh, bottom: -hh }); camera.updateProjectionMatrix();
+  }
+  new ResizeObserver(fit).observe(wrap);
+  let visible = true;
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(wrap);
+
+  const v = new THREE.Vector3();
+  function labels() {
+    const w = wrap.clientWidth, h = wrap.clientHeight;
+    tags.forEach(t => { v.copy(t.pos).project(camera); t.el.style.transform = 'translate(' + ((v.x * 0.5 + 0.5) * w).toFixed(1) + 'px,' + ((-v.y * 0.5 + 0.5) * h).toFixed(1) + 'px) translate(-50%,-100%)'; });
+  }
+  function animate(t) {
+    if (!reduce) {
+      duda.fl.rotation.x = -1.15 + Math.sin(t * 14) * 0.1; duda.fr.rotation.x = -1.15 + Math.sin(t * 14 + 1.7) * 0.1;
+      duda.head.rotation.y = Math.sin(t * 0.6) * 0.12; duda.head.rotation.x = 0.12 + Math.sin(t * 0.9) * 0.03;
+      kim.root.position.y = Math.abs(Math.sin(t * 2.4)) * 0.025; kim.head.rotation.y = Math.sin(t * 0.7) * 0.45;
+      glow.emissiveIntensity = 0.85 + Math.sin(t * 3) * 0.1;
+    }
+    az += (azT - az) * 0.12; placeCam();
+  }
+  let running = false;
+  function loop(ms) {
+    if (!wrap.isConnected) { running = false; return; }
+    requestAnimationFrame(loop);
+    if (!visible || document.hidden) return;
+    animate(ms / 1000); labels(); renderer.render(scene, camera);
+  }
+
+  window.Office3D = {
+    mount(slot) {
+      if (wrap.parentNode !== slot) { slot.innerHTML = ''; slot.appendChild(wrap); }
+      slot.classList.add('is-3d'); fit();
+      if (!running) { running = true; requestAnimationFrame(loop); }
+    },
+    faces,
+    update(s) { if (s && s.marketing != null) dudaTag.querySelector('.sub').textContent = s.marketing; }
+  };
+  window.dispatchEvent(new Event('office3d-ready'));
+})();
+</script>
+
+</body>
+</html>

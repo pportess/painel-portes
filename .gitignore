@@ -1,0 +1,11 @@
+# vídeos e fotos nunca entram no repositório
+*.mp4
+*.mov
+*.webm
+*.jpg
+*.jpeg
+*.heic
+*.png
+# segredos
+.env
+*.local
