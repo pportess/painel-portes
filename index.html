@@ -3,6 +3,23 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>
+#ponte-login { position: fixed; inset: 0; z-index: 1000; background: #ffffff; display: grid; place-items: center; padding: 16px; font-family: "Manrope", "Segoe UI", system-ui, sans-serif; color: #121214; }
+#ponte-login .pl-card { width: min(380px, 100%); display: grid; gap: 14px; }
+#ponte-login .pl-marca { font-weight: 800; font-size: 15px; color: #5f9483; }
+#ponte-login h1 { font-size: 24px; margin: 0; }
+#ponte-login p { margin: 0; color: #76736c; line-height: 1.5; }
+#ponte-login form { display: grid; gap: 10px; }
+#ponte-login input { font: inherit; padding: 12px 14px; border: 1px solid #ececee; border-radius: 12px; background: #f4f4f5; }
+#ponte-login button { font: inherit; font-weight: 700; padding: 12px 14px; border: 0; border-radius: 12px; background: #5f9483; color: #fff; cursor: pointer; }
+#ponte-login button:disabled { opacity: .6; }
+#ponte-login .pl-sec { background: #f4f4f5; color: #121214; }
+#ponte-login .pl-msg { color: #c25d41; }
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="config.js"></script>
+<script src="ponte.js"></script>
 </head>
 <body>
 <title>Painel do Consultório</title>
@@ -1102,7 +1119,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
         return '<button type="button" data-ag-view="' + v[0] + '" aria-pressed="' + (ag.view === v[0]) + '">' + v[1] + '</button>'; }).join('') + '</div>' +
       '<button type="button" class="btn primary" data-ag-new="' + (ag.view === 'dia' ? ag.day : todayIso()) + '" data-ag-time="14:00">+ Novo evento</button></div>';
     if (!ag.ready) return head + '<p class="note">Conectando ao Google Agenda…</p>';
-    if (!ag.mcp) return head + '<div class="empty"><b>A agenda não carregou nesta visualização.</b> Abra o painel pelo claude.ai, logado na sua conta, com o Google Agenda conectado.</div>';
+    if (!ag.mcp) return head + '<div class="empty"><b>A agenda ainda não está ligada neste site.</b> Por enquanto, use a Agenda pelo painel no claude.ai. A ligação com o Google é a próxima etapa.</div>';
     var status = '';
     if (ag.msg) status += '<div class="ag-warn">' + esc(ag.msg) + '</div>';
     if (ag.error) status += '<div class="ag-warn">' + esc(agErrorText(ag.error)) +
@@ -1221,14 +1238,14 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
   // ---------- conteúdo: banco de fotos e vídeos + cronograma da Duda ----------
   // Os arquivos ficam no armazenamento do painel (assets); o índice fica no banco:
   // config/conteudo (pastas), midia/<id do arquivo> e cronograma/<id> (escrito pela Duda e pelo Rafa).
-  var MAX_BYTES = 20 * 1024 * 1024;
+  var MAX_BYTES = 50 * 1024 * 1024;
   var PACIENTE = { nao: 'Sem paciente', autorizado: 'Paciente com autorização (TCLE)', sem_tcle: 'Paciente SEM autorização' };
   var MIDIA_ST = { novo: 'Novo', analisado: 'Analisado pela Duda', agendado: 'No cronograma', postado: 'Postado' };
   var POST_ST = { proposto: 'Proposta da Duda', aprovado: 'Aprovado', postado: 'Postado', descartado: 'Descartado' };
   var ct = { assets: null, downloads: null, ready: false, view: 'banco', pastas: null, midia: null, posts: null, pasta: '', usage: null,
     up: null, upErr: null, prog: null, sel: null, confirmDel: false, msg: null, newFolder: null, showOld: false };
 
-  function blobUrl(id) { return '/_blob/' + id; }
+  function blobUrl(id) { return window.painelBlobUrl ? window.painelBlobUrl(id) : '/_blob/' + id; }
   function mb(n) { return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB'; }
   function pastaNome(id) { var p = (ct.pastas || []).find(function (x) { return x.id === id; }); return p ? p.nome : 'Sem pasta'; }
   function slug(s) { return s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 40) || 'pasta'; }
@@ -1256,7 +1273,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
       [['nao', 'Não'], ['autorizado', 'Sim, e ele assinou a autorização de uso de imagem'], ['sem_tcle', 'Sim, mas ainda sem autorização']].map(function (o) {
         return '<label><input type="radio" name="ct-pac" data-ct-f="paciente" value="' + o[0] + '"' + (u.paciente === o[0] ? ' checked' : '') + '> ' + o[1] + '</label>'; }).join('') + '</fieldset>' +
       '<label>O que é (opcional)<input type="text" maxlength="140" data-ct-f="nota" value="' + esc(u.nota || '') + '" placeholder="Ex.: resina no 11, antes e depois · sem nome de paciente"></label>' +
-      '<p class="hint">Fotos são reduzidas e perdem a localização do GPS antes de subir. Vídeos: até 20 MB cada (cerca de 1 minuto em 720p). Sem autorização, a Duda não usa o arquivo em post.</p>' +
+      '<p class="hint">Fotos são reduzidas e perdem a localização do GPS antes de subir. Vídeos: até 50 MB cada (cerca de 1 minuto em 1080p). Sem autorização, a Duda não usa o arquivo em post.</p>' +
       (ct.upErr ? '<p class="hint bad">' + esc(ct.upErr) + '</p>' : '') +
       '<div class="acts"><button type="button" class="btn primary" data-ct-send="1">Enviar</button><button type="button" class="btn" data-ct-cancel="1">Cancelar</button></div></div>';
   }
@@ -1425,7 +1442,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
         });
       }).then(function () { done++; }, function (e) {
         var c = e && e.code;
-        fails.push((i + 1) + 'º arquivo: ' + (c === 'too_large' ? 'passa de 20 MB (corte o vídeo ou grave em 720p)' : c === 'decode' ? 'formato não aceito (foto HEIC: no iPhone use Ajustes › Câmera › Formatos › Mais compatível)'
+        fails.push((i + 1) + 'º arquivo: ' + (c === 'too_large' ? 'passa de 50 MB (corte o vídeo ou grave em 720p)' : c === 'decode' ? 'formato não aceito (foto HEIC: no iPhone use Ajustes › Câmera › Formatos › Mais compatível)'
           : c === 'unsupported_type' ? 'formato não aceito' : c === 'quota_or_state' ? 'o armazenamento do painel está cheio' : 'falhou, tente de novo'));
       }).then(function () { next(i + 1); });
     }
