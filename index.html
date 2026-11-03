@@ -449,6 +449,11 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
 .pc-retform { display: grid; gap: 8px; border: 1px solid var(--line); border-radius: 12px; padding: 12px; background: var(--field); }
 .pc-retform input { font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); }
 .pc-dados input[type="tel"] { font: inherit; padding: 8px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); }
+/* feedback da edição (aba Edição) */
+.ed-fb { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
+.ed-fb label { display: grid; gap: 6px; font-weight: 700; font-size: 14px; }
+.ed-fb textarea { font: inherit; font-weight: 400; width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); }
+.ed-fbpedido { padding: 8px 12px; border-radius: 10px; background: var(--accent-soft); }
 /* desafios diários na aba Conteúdo */
 .ds-seg { flex-wrap: wrap; border-radius: 16px; }
 .ds-resumo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
@@ -1361,7 +1366,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
   var POST_ST = { proposto: 'Proposta da Duda', aprovado: 'Aprovado', postado: 'Postado', descartado: 'Descartado' };
   var ct = { assets: null, downloads: null, ready: false, view: 'hoje', pastas: null, midia: null, posts: null, pasta: '', usage: null,
     up: null, upErr: null, prog: null, sel: null, confirmDel: false, msg: null, newFolder: null, showOld: false,
-    desafios: null, dsAdiantar: false, dsVer: null };
+    desafios: null, dsAdiantar: false, dsVer: null, confirmEd: null };
 
   function blobUrl(id) { return window.painelBlobUrl ? window.painelBlobUrl(id) : '/_blob/' + id; }
   function mb(n) { return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB'; }
@@ -1472,6 +1477,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
       '<p>Os vídeos que você mandou para o Rafa. Ele edita todo dia às 8h: corte vertical, gancho na tela e assinatura.</p></header>';
     if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
     var items = (ct.midia || []).filter(function (m) { return m.edicao; });
+    if (ct.msg) head += '<div class="ag-warn">' + esc(ct.msg) + '</div>';
     if (!items.length) return head + '<div class="empty"><b>Nada em edição.</b> Abra um vídeo em Conteúdo e, se a Duda deu verde, toque em "Enviar para edição".</div>';
     return head + ['editando', 'pedida', 'pronta', 'falhou'].map(function (st) {
       var l = items.filter(function (m) { return m.edicao.status === st; }); if (!l.length) return '';
@@ -1479,11 +1485,20 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
         var e = m.edicao;
         return '<article class="ed-item st-' + st + '"><div class="ed-media">' + (st === 'pronta' && e.asset ? '<video src="' + blobUrl(e.asset) + '" controls playsinline preload="metadata"></video>' : thumb(m, 'pm')) + '</div>' +
           '<div class="ed-info"><h3>' + esc(m.nota || 'Vídeo') + '</h3><p class="hint">' + esc(pastaNome(m.pasta)) + (e.pedido_em ? ' · pedido em ' + esc(fmtDay(e.pedido_em.slice(0, 10))) : '') + '</p>' +
-          (e.pedido ? '<p><b>Pedido:</b> ' + esc(e.pedido) + '</p>' : '') + (e.notas ? '<p class="hint">' + esc(e.notas) + '</p>' : '') +
+          (e.pedido ? '<p><b>Pedido:</b> ' + esc(e.pedido) + '</p>' : '') +
+          (e.feedback && (st === 'pedida' || st === 'editando') ? '<p class="ed-fbpedido"><b>Seu ajuste' + (e.rodada > 1 ? ' (versão ' + e.rodada + ')' : '') + ':</b> ' + esc(e.feedback) + '</p>' : '') +
+          (e.notas ? '<p class="hint">' + esc(e.notas) + '</p>' : '') +
           '<div class="acts">' + (st === 'pronta' && e.asset && ct.downloads ? '<button type="button" class="btn primary" data-ct-dl="' + esc(e.asset) + '" data-ct-dlname="' + esc(slug(m.nota || 'video')) + '-editado.mp4">Baixar vídeo</button>' : '') +
           (st === 'pedida' || st === 'falhou' ? '<button type="button" class="btn" data-ct-unedit="' + esc(m.id) + '">Tirar da fila</button>' : '') +
           (st === 'falhou' ? '<button type="button" class="btn" data-ct-retry="' + esc(m.id) + '">Tentar de novo</button>' : '') +
-          '<button type="button" class="btn" data-ct-open="' + esc(m.id) + '">Ver original</button></div></div></article>';
+          '<button type="button" class="btn" data-ct-open="' + esc(m.id) + '">Ver original</button></div>' +
+          // feedback da edição: o Pedro escreve o que mudar e o Rafa refaz a partir do original
+          (st === 'pronta' || st === 'falhou' ? '<div class="ed-fb"><label>O que mudar na edição?<textarea rows="3" maxlength="1500" data-ct-fbtxt="' + esc(m.id) + '" placeholder="Ex.: o texto do gancho cobriu meu rosto; corta a parte em que eu gaguejo, perto dos 12 segundos"></textarea></label>' +
+            '<div class="acts"><button type="button" class="btn primary" data-ct-refazer="' + esc(m.id) + '">Pedir para o Rafa refazer</button>' +
+            (st === 'pronta' && e.asset ? (ct.confirmEd === m.id ? '<span class="hint bad">Apagar o vídeo editado? O original continua no banco.</span><button type="button" class="btn" data-ct-edelok="' + esc(m.id) + '">Sim, apagar</button><button type="button" class="btn" data-ct-edelno="1">Não</button>'
+              : '<button type="button" class="btn" data-ct-edel="' + esc(m.id) + '">Apagar vídeo editado</button>') : '') + '</div>' +
+            (e.historico && e.historico.length ? '<details><summary class="hint">Ajustes anteriores (' + e.historico.length + ')</summary>' + e.historico.map(function (h) { return '<p class="hint">' + esc(fmtDay((h.data || '').slice(0, 10))) + ': ' + esc(h.feedback) + '</p>'; }).join('') + '</details>' : '') +
+            '</div>' : '') + '</div></article>';
       }).join('') + '</div></section>';
     }).join('');
   }
@@ -1842,6 +1857,30 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     if ((a = t.closest('[data-ct-retry]'))) {
       var mr = (ct.midia || []).find(function (x) { return x.id === a.getAttribute('data-ct-retry'); }); if (!mr) return;
       state.db.doc('midia/' + mr.id).update({ edicao: Object.assign({}, mr.edicao, { status: 'pedida', notas: '', pedido_em: new Date().toISOString() }) }).catch(function () {});
+      return;
+    }
+    if ((a = t.closest('[data-ct-refazer]'))) {
+      var mf = (ct.midia || []).find(function (x) { return x.id === a.getAttribute('data-ct-refazer'); }); if (!mf || !mf.edicao) return;
+      var tf = main.querySelector('[data-ct-fbtxt="' + mf.id + '"]'), fbt = tf ? tf.value.trim() : '';
+      if (!fbt) { if (tf) { tf.focus(); tf.placeholder = 'Escreva o que mudar antes de pedir.'; } return; }
+      var e0 = mf.edicao, agora = new Date().toISOString();
+      var ne = { status: 'pedida', pedido: e0.pedido || '', texto_gancho: e0.texto_gancho || '', cortes: e0.cortes || [], pedido_em: agora,
+        feedback: fbt, rodada: (e0.rodada || 1) + 1, historico: (e0.historico || []).concat([{ data: agora, feedback: fbt }]) };
+      if (e0.asset) ne.anterior = e0.asset;   // o Rafa apaga a versão antiga quando subir a nova
+      a.disabled = true;
+      state.db.doc('midia/' + mf.id).update({ edicao: ne }).catch(function () { ct.msg = 'O pedido não foi. Tente de novo.'; render(); });
+      return;
+    }
+    if ((a = t.closest('[data-ct-edel]'))) { ct.confirmEd = a.getAttribute('data-ct-edel'); render(); return; }
+    if (t.closest('[data-ct-edelno]')) { ct.confirmEd = null; render(); return; }
+    if ((a = t.closest('[data-ct-edelok]'))) {
+      var md = (ct.midia || []).find(function (x) { return x.id === a.getAttribute('data-ct-edelok'); }); if (!md || !md.edicao) return;
+      var apagar = [md.edicao.asset, md.edicao.anterior].filter(Boolean);
+      var corpo = Object.assign({}, md); delete corpo.id; delete corpo.edicao;
+      Promise.all(apagar.map(function (id) { return ct.assets.delete(id).catch(function () {}); }))
+        .then(function () { return state.db.doc('midia/' + md.id).set(corpo); })
+        .then(function () { ct.confirmEd = null; ct.msg = 'Vídeo editado apagado. O original continua em Meus arquivos.'; ct.usage = null; }, function () { ct.msg = 'Não deu para apagar agora.'; })
+        .then(render);
       return;
     }
     if ((a = t.closest('[data-ct-unedit]'))) {
