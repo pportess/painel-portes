@@ -726,7 +726,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
   // ---------- Agentes: saúde dos setores, escritório 3D e tarefas de cada um (estrutura pedida pelo Pedro em 04/11/2026) ----------
   // Cada tarefa automática manda um "pulso" ao terminar (coleção agentes, via supa.ps1 pulso). Nada aqui é número inventado:
-  // a saúde sai dos pulsos e do que está aberto no banco (desafio, posts, edição, retornos). Setor sem tarefa automática fica "Parado", sem nota.
+  // a saúde sai dos pulsos e do que está aberto no banco (desafio, posts, edição). Esta página não lê nada de pacientes (pedido do Pedro, 04/11/2026). Setor sem tarefa automática fica "Parado", sem nota.
   var SALAS = {"atendimento":{"poly":[[31.11,21.29],[45.67,33.56],[29.35,47.87],[14.79,35.59]],"tag":[30.23,26.22]},"clinico":{"poly":[[14.79,35.59],[33.52,51.38],[21.28,62.11],[2.55,46.33]],"tag":[18.03,40.5]},"edicao":{"poly":[[70.64,54.6],[85.2,66.88],[68.88,81.19],[54.32,68.91]],"tag":[69.76,59.55]},"estudos":{"poly":[[59.99,24.57],[78.71,40.36],[66.48,51.1],[47.75,35.31]],"tag":[63.23,29.49]},"financeiro":{"poly":[[78.71,40.36],[97.44,56.15],[85.2,66.88],[66.48,51.1]],"tag":[81.96,45.27]},"gerencia":{"poly":[[43.35,10.55],[59.99,24.57],[47.75,35.31],[31.11,21.29]],"tag":[45.55,14.59]},"marketing":{"poly":[[45.67,33.56],[70.64,54.6],[54.32,68.91],[29.35,47.87]],"tag":[50,42.89]},"reuniao":{"poly":[[33.52,51.38],[54.32,68.91],[42.08,79.65],[21.28,62.11]],"tag":[37.8,57.16]},"treino":{"poly":[[54.32,68.91],[68.88,81.19],[56.65,91.92],[42.08,79.65]],"tag":[55.48,72.06]}};
   var IMG_ESCRITORIO = 'escritorio.jpg?v=3';
   var SETORES = [
@@ -737,7 +737,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     { id: 'edicao', nome: 'Edição de vídeo', tarefas: [
       { ag: 'rafa', nome: 'Edição dos vídeos', desc: 'Corte vertical, gancho na tela e assinatura; refaz pelo seu feedback.', quando: 'Todo dia, 8h', auto: 'agente-edicao-video', h: 30 }] },
     { id: 'atendimento', nome: 'Atendimento e retornos', tarefas: [
-      { ag: 'amanda', nome: 'Retornos', desc: 'Mostra quem chamar, com a mensagem pronta para o WhatsApp.', quando: 'Na aba Pacientes', sob: true },
+      { ag: 'amanda', nome: 'Retornos', desc: 'A lista de quem chamar fica só na aba Pacientes.', quando: 'Na aba Pacientes', sob: true },
       { ag: 'amanda', nome: 'Mensagens prontas', desc: 'Primeira resposta, confirmação e pós-consulta.', quando: 'Fase 2, com WhatsApp' }] },
     { id: 'gerencia', nome: 'Gerência', tarefas: [
       { ag: 'luzi', nome: 'Revisão da semana', desc: 'Atualiza o second brain com o que mudou e compara as semanas.', quando: 'Domingo, 9h', auto: 'revisao-semanal-second-brain', h: 192 },
@@ -795,12 +795,6 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       else if (e.status === 'editando') add('andando', 'Editando: ' + n, 'edicao');
       else if (e.status === 'falhou') add('atrasada', 'A edição falhou: ' + n, 'edicao');
       else if (e.status === 'pronta' && !midiaPostada(m.id)) add('voce', 'Conferir o vídeo editado: ' + n, 'edicao');
-    });
-    if (id === 'atendimento') pcAgenda().forEach(function (x) {
-      var n = diasAte(x.r.data);
-      if (n < 0) add('atrasada', 'Retorno atrasado: ' + x.p.nome, 'pacientes');
-      else if (n === 0) add('voce', 'Retorno hoje: ' + x.p.nome, 'pacientes');
-      else if (n <= PC_JANELA) add('fila', 'Retorno em ' + n + ' dias: ' + x.p.nome, 'pacientes');
     });
     return l;
   }
@@ -2357,7 +2351,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       // pacientes: só para o dono (o banco também recusa os outros)
       if (window.painelDono) db.collection('pacientes').limit(1000).onSnapshot(function (snap) {
         pc.lista = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
-        if (state.section === 'pacientes' || state.section === 'agentes' || (state.section === 'conteudo' && !ct.pasta && !ct.sel)) render(); else renderNav();   // o número de retornos aparece no menu
+        if (state.section === 'pacientes' || (state.section === 'conteudo' && !ct.pasta && !ct.sel)) render(); else renderNav();   // o número de retornos aparece no menu
       }, function () { pc.lista = pc.lista || []; render(); });
       var timer = setTimeout(function () { state.slow = true; render(); }, 10000);
       db.collection('marketing').orderBy('data', 'desc').limit(30).onSnapshot(function (snap) {
