@@ -13,7 +13,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Painel Portes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#0e1322">
 <style>
 #ponte-login { position: fixed; inset: 0; z-index: 1000; background: #ffffff; display: grid; place-items: center; padding: 16px; font-family: "Manrope", "Segoe UI", system-ui, sans-serif; color: #121214; }
 #ponte-login .pl-card { width: min(380px, 100%); display: grid; gap: 14px; }
@@ -59,10 +59,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-/* Layout: sempre branco, mesmo com o claude.ai no modo escuro; a seção escolhida fica verde (pedido do Pedro, 01/11/2026). */
+/* Layout: barra lateral escura com o item escolhido em branco, fundo claro (pedido do Pedro, 04/11/2026; antes era branco com seção verde). */
 :root, :root[data-theme="dark"] {
   color-scheme: light;
-  --bg: #ffffff;
+  --bg: #f5f7fb;
   --panel: #ffffff;
   --field: #f4f4f5;
   --fg: #121214;
@@ -80,9 +80,15 @@
   --font-ui: "Manrope", "Segoe UI", system-ui, sans-serif;
   --font-mono: "IBM Plex Mono", ui-monospace, Consolas, monospace;
   --radius: 14px;
+  --side: #0e1322;
+  --mapa: #eef1f6;
+  --vermelho: #d63031;
+  --laranja: #ee8a2c;
+  --verde: #29b36b;
+  --soft: 0 1px 2px rgba(23,37,60,.05), 0 4px 14px rgba(23,37,60,.05);
 }
-html, body { height: 100%; background: #ffffff; }
-body { background: var(--bg); color: var(--fg); font-family: var(--font-ui); font-size: 15px; line-height: 1.5; }
+html, body { height: 100%; background: var(--bg); }
+body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--font-ui); font-size: 15px; line-height: 1.5; }
 * { box-sizing: border-box; }
 button { font: inherit; color: inherit; cursor: pointer; }
 button:focus-visible, a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -91,7 +97,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .app { display: grid; grid-template-columns: 248px minmax(0, 1fr); min-height: 100%; }
 
 /* barra lateral */
-.side { background: var(--panel); color: var(--fg); border-right: 1px solid var(--line); display: flex; flex-direction: column; gap: 24px;
+.side { background: var(--side); color: #fff; border-right: 0; display: flex; flex-direction: column; gap: 24px;
   padding-block: 24px; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: 18px;
   position: sticky; top: 0; height: 100vh; }
 .brand { display: flex; flex-direction: column; gap: 2px; padding-inline: 8px; }
@@ -99,10 +105,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .brand span { font-size: 12px; opacity: .6; }
 .nav { display: flex; flex-direction: column; gap: 2px; list-style: none; margin: 0; padding: 0; }
 .nav button { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left;
-  border: 0; background: transparent; color: var(--fg); padding: 10px 10px; border-radius: 10px; opacity: .78;
+  border: 0; background: transparent; color: #fff; padding: 10px 12px; border-radius: 999px; opacity: .72;
   transition: background .15s ease, color .15s ease; }
-.nav button:hover { opacity: 1; background: var(--field); }
-.nav button[aria-current="page"] { opacity: 1; background: var(--accent); color: #fff; font-weight: 700; }
+.nav button:hover { opacity: 1; background: rgba(255,255,255,.08); }
+.nav button[aria-current="page"] { opacity: 1; background: #fff; color: #0e1322; font-weight: 700; }
 .nav .ic { width: 20px; height: 20px; flex: none; }
 .nav .soon { margin-left: auto; font-size: 10px; letter-spacing: .06em; text-transform: uppercase; opacity: .55; }
 .side-foot { margin-top: auto; font-size: 12px; opacity: .55; padding-inline: 8px; }
@@ -114,52 +120,103 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .page-head h1 { font-size: clamp(24px, 3vw, 32px); font-weight: 800; letter-spacing: -0.02em; }
 .page-head p { margin: 0; color: var(--muted); }
 
-/* aba Agentes: uma faixa por nível (chefes, contratados, estagiários) e os cartões de cada um embaixo */
-.tiers { display: flex; flex-direction: column; gap: 26px; }
-.tier-band { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 10px 14px; margin-bottom: 12px;
-  border-radius: 10px; background: var(--field); border-left: 4px solid var(--accent); }
-.tier-band.chefe { border-left-color: var(--ink); }
-.tier-band.estagiario { border-left-color: var(--mid); }
-.tier-band h2 { font-size: 13px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.tier-band .n { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
-.tier-band p { margin: 0; font-size: 13px; color: var(--muted); }
-.members { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
-.member { display: flex; gap: 14px; align-items: flex-start; text-align: left; min-width: 0; border: 1px solid var(--line); border-radius: var(--radius);
-  background: var(--panel); padding: 16px; transition: transform .15s ease, box-shadow .15s ease; }
-button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(17,17,19,.08); }
-.member > div { min-width: 0; }
-.member h3 { font-size: 16px; font-weight: 800; }
-.member .role-line { display: block; font-size: 13px; font-weight: 600; color: var(--muted); }
-.member ul { margin: 8px 0 0; padding-left: 16px; font-size: 13px; color: var(--muted); }
-.member .state { display: inline-block; margin-top: 10px; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; font-weight: 700;
-  padding: 4px 10px; border-radius: 999px; background: var(--field); color: var(--muted); }
-.member .state.on { background: var(--accent-soft); color: #3f6f60; }
-.member.off { border-style: dashed; }
-.member.off h3 { color: var(--muted); }
-.member.off p { margin: 4px 0 0; font-size: 13px; color: var(--muted); }
-
-/* rendimento da semana, embaixo do escritório */
-.perf { border: 1px solid var(--line); border-radius: var(--radius); background: var(--panel); padding: 18px 20px; display: flex; flex-direction: column; gap: 14px; }
-.perf-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; }
-.perf-head h2 { font-size: 15px; font-weight: 800; }
-.week-nav { display: flex; align-items: center; gap: 8px; font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
-.week-nav button { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--line); background: var(--panel); line-height: 1; }
-.week-nav button:disabled { opacity: .35; cursor: default; }
-.perf-row { display: grid; grid-template-columns: 220px minmax(0, 1fr); gap: 16px; align-items: center; padding-top: 14px; border-top: 1px solid var(--line); }
-.perf-who { display: flex; align-items: center; gap: 12px; min-width: 0; }
-.perf-who b { display: block; font-weight: 800; }
-.perf-who span { display: block; font-size: 12px; color: var(--muted); }
-.bars { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.bar-line { display: grid; grid-template-columns: 116px minmax(0, 1fr) 44px; gap: 10px; align-items: center; font-size: 13px; }
-.bar-line .lbl { color: var(--muted); font-weight: 600; }
-.bar { height: 10px; border-radius: 999px; background: var(--field); overflow: hidden; }
-.bar i { display: block; height: 100%; border-radius: 999px; background: var(--accent); }
-.bar-line .pct { font-family: var(--font-mono); font-size: 12px; text-align: right; }
-.perf-note { font-size: 12px; color: var(--muted); margin: 0; }
-.perf-faces { display: flex; padding-left: 6px; }
-.perf-faces .face { margin-left: -6px; }
-.face.xs { width: 32px; height: 32px; margin-top: 0; box-shadow: 0 0 0 2px #fff, 0 0 0 3px var(--line); }
-.face.xs b { font-size: 13px; }
+/* página Agentes: estrutura pedida pelo Pedro em 04/11/2026 */
+.ag-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
+.ag-head h1 { font-size: 30px; font-weight: 600; letter-spacing: -.02em; }
+.ag-head p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
+.ag-right { display: grid; justify-items: end; gap: 6px; }
+.ag-right small { color: var(--muted); font-size: 12px; }
+.ag-stats { display: flex; gap: 8px; }
+.ag-stats div { background: var(--panel); border-radius: 12px; padding: 8px 16px; min-width: 96px; box-shadow: var(--soft); }
+.ag-stats b { display: block; font-size: 20px; font-weight: 700; color: var(--vermelho); line-height: 1.2; }
+.ag-stats div:nth-child(2) b { color: var(--fg); }
+.ag-stats span { font-size: 11px; color: var(--muted); }
+.ag-h2 { font-size: 20px; font-weight: 600; letter-spacing: -.01em; }
+.ag-p { margin: 2px 0 14px; font-size: 13px; color: var(--muted); }
+.ag-setores { margin: 34px 0 14px; }
+.ag-grid { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(0, 1fr); gap: 16px; align-items: start; }
+.ag-mapa { position: relative; border-radius: 18px; overflow: hidden; background: var(--mapa); box-shadow: var(--soft); }
+.ag-mapa img { display: block; width: 100%; height: auto; }
+.ag-mapa svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.sala { fill: transparent; cursor: pointer; mix-blend-mode: multiply; transition: fill .15s ease; }
+.sala.n-foco { fill: rgba(214, 48, 49, .34); }
+.sala.n-atencao { fill: rgba(240, 140, 40, .24); }
+.sala:hover { fill: rgba(60, 90, 160, .22); }
+.sala-tag { position: absolute; transform: translate(-50%, -50%); display: inline-flex; align-items: center; gap: 6px; border: 0; white-space: nowrap;
+  font: 700 11px/1.2 var(--font-ui); padding: 4px 9px; border-radius: 999px; background: rgba(23, 37, 60, .9); color: #fff; box-shadow: 0 2px 6px rgba(0,0,0,.22); }
+.sala-tag b { font-weight: 800; opacity: .9; }
+.sala-tag.n-foco { background: var(--vermelho); }
+.sala-tag.n-atencao { background: var(--laranja); }
+.sala-tag.n-parado { background: rgba(90, 98, 112, .85); }
+.sg-cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.sg-card { display: grid; gap: 6px; text-align: left; border: 0; border-left: 3px solid var(--verde); border-radius: 14px; padding: 12px 14px; background: var(--panel); box-shadow: var(--soft); min-width: 0; align-content: start; }
+.sg-card:hover { box-shadow: 0 6px 20px rgba(23, 37, 60, .12); }
+.sg-card.n-foco { border-left-color: var(--vermelho); }
+.sg-card.n-atencao { border-left-color: var(--laranja); }
+.sg-card.n-parado { border-left-color: #c4c9d2; }
+.sg-foco { justify-self: start; background: var(--vermelho); color: #fff; font-size: 10px; font-weight: 800; padding: 2px 9px; border-radius: 999px; }
+.sg-top { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.sg-top b { font-size: 14px; font-weight: 600; min-width: 0; }
+.sg-top em { font-style: normal; font-size: 22px; font-weight: 500; line-height: 1; color: var(--verde); }
+.n-foco .sg-top em { color: var(--vermelho); }
+.n-atencao .sg-top em { color: var(--laranja); }
+.n-parado .sg-top em { color: #aab0ba; }
+.sg-linha { display: block; height: 3px; border-radius: 9px; background: var(--field); overflow: hidden; }
+.sg-linha i { display: block; height: 100%; background: var(--verde); }
+.n-foco .sg-linha i { background: var(--vermelho); }
+.n-atencao .sg-linha i { background: var(--laranja); }
+.sg-sub { font-size: 11.5px; color: var(--muted); }
+.sg-bar { display: flex; gap: 2px; height: 6px; border-radius: 9px; overflow: hidden; }
+.sg-bar i { display: block; min-width: 6px; }
+.sg-bar .late { background: var(--vermelho); }
+.sg-bar .voce { background: #1d3f8f; }
+.sg-bar .andando { background: #6f8fd8; }
+.sg-bar .fila { background: #c3c8ee; }
+.sg-bar .feita { background: var(--verde); }
+.sg-bar .vazio { background: var(--field); }
+.sg-pe { display: flex; justify-content: space-between; gap: 8px; align-items: center; font-size: 11px; color: var(--muted); }
+.sg-dots { display: flex; gap: 3px; }
+.sg-dots i, .tf-av i { width: 8px; height: 8px; border-radius: 50%; display: block; background: #c4c9d2; }
+.sg-dots i.d-ok, .tf-av i.d-ok { background: var(--verde); }
+.sg-dots i.d-late, .tf-av i.d-late { background: var(--vermelho); }
+.sg-dots i.d-sem, .tf-av i.d-sem { background: var(--laranja); }
+.st-grid { columns: 3 300px; column-gap: 14px; }
+.st-col { break-inside: avoid; margin-bottom: 14px; background: var(--panel); border-radius: 16px; padding: 16px 18px; box-shadow: var(--soft); scroll-margin-top: 90px; }
+.st-col.marcado { outline: 2px solid #1d3f8f; }
+.st-col header { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+.st-col h3 { font-size: 17px; font-weight: 600; }
+.st-status { font-size: 12px; font-weight: 700; color: var(--verde); white-space: nowrap; }
+.st-status.n-foco { color: var(--vermelho); }
+.st-status.n-atencao { color: #d9761a; }
+.st-status.n-parado { color: #8a909b; }
+.st-sub { margin: 0 0 6px; font-size: 12px; color: var(--muted); }
+.tf { display: flex; gap: 12px; width: 100%; text-align: left; border: 0; border-top: 1px solid var(--line); background: transparent; padding: 12px 0; font: inherit; }
+.st-sub + .tf { border-top: 0; }
+.tf:hover b { text-decoration: underline; }
+.tf-av { position: relative; flex: none; width: 42px; height: 42px; }
+.tf-av svg { width: 42px; height: 42px; display: block; }
+.tf-av i { position: absolute; right: 1px; top: 1px; box-shadow: 0 0 0 2px var(--panel); }
+.tf-tx { display: grid; gap: 2px; min-width: 0; font-size: 13px; color: #4f545e; }
+.tf-tx b { font-size: 14.5px; font-weight: 600; color: var(--fg); }
+.tf-tx small { font-size: 11.5px; color: #8a909b; overflow-wrap: anywhere; }
+.st-vaga { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+.st-mais { border: 0; background: transparent; padding: 8px 0 0; font: inherit; font-size: 13px; font-weight: 600; color: var(--fg); }
+.st-ab { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
+.st-ab button { width: 100%; text-align: left; border: 0; border-left: 3px solid #c3c8ee; border-radius: 6px; background: var(--field); padding: 6px 10px; font: inherit; font-size: 13px; }
+.st-ab .t-voce button { border-left-color: #1d3f8f; }
+.st-ab .t-atrasada button { border-left-color: var(--vermelho); }
+.st-ab .t-andando button { border-left-color: #6f8fd8; }
+.ag-nota { margin: 18px 0 0; font-size: 12px; color: #8a909b; max-width: 80ch; }
+.face svg { width: 100%; height: 100%; display: block; }
+@media (max-width: 1080px) { .ag-grid { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 720px) {
+  .sg-cards { grid-template-columns: minmax(0, 1fr); }
+  .ag-right { justify-items: start; width: 100%; }
+  .ag-stats { width: 100%; }
+  .ag-stats div { flex: 1; min-width: 0; padding: 8px 10px; }
+  .sala-tag { font-size: 9px; padding: 2px 6px; gap: 3px; }
+  .sala-tag span { max-width: 74px; overflow: hidden; text-overflow: ellipsis; }
+}
 
 .face { width: 108px; height: 108px; border-radius: 50%; background: #fff; display: grid; place-items: center; overflow: hidden; flex: none;
   box-shadow: 0 0 0 10px #f4f4f2, 0 0 0 11px var(--line); margin-top: 10px; }
@@ -172,69 +229,6 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
 .face.sm.empty-face { box-shadow: 0 0 0 4px #f8f8f6; }
 .agent-hero { margin: 4px 0 18px 10px; }
 
-/* escritório isométrico: as faces de frente e do lado escurecem a cor do topo */
-:root { --o-floor: #ece7df; --o-floor-accent: #d7efe6; --o-floor-warm: #f4e6d2; --o-wall: #dcd6cc; --o-desk: #c9a27c;
-  --o-chair: #3b3f46; --o-monitor: #2a2d33; --o-window: #bfe0f0; --o-frame: #f1dcc4; --o-paper: #fbfbf8;
-  --o-pot: #b8775a; --o-leaf: #6fa36b; --o-board: #fbfbf8; --o-cabinet: #a6abb3; --o-tag: #111113; --o-tag-fg: #fff; --o-bg: #f6f5f2; }
-.office-wrap { background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); padding: 8px; overflow-x: auto; margin-bottom: 28px; }
-/* versão 3D: fundo bege de pôster, etiquetas em HTML por cima do canvas */
-.office-wrap.is-3d { padding: 0; overflow: hidden; background: var(--o-bg); }
-.o3d { position: relative; width: 100%; aspect-ratio: 16 / 11; }
-@media (max-width: 720px) {
-  .o3d-tag.room, .o3d-hint { display: none; }
-  .o3d-tag.who { padding: 4px 8px; }
-  .o3d-tag.who b { font-size: 10.5px; }
-  .o3d-tag.who span { font-size: 9.5px; }
-  .o3d-ctrl button { width: 30px; height: 30px; }
-}
-.o3d canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; touch-action: pan-y; cursor: grab; }
-.o3d-layer { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.o3d-tag { position: absolute; left: 0; top: 0; margin-top: -6px; white-space: nowrap; font: 700 11px/1.25 var(--font-ui);
-  padding: 4px 9px; border-radius: 8px; border: 0; background: rgba(255,255,255,.88); color: #2a2a2c; box-shadow: 0 1px 4px rgba(0,0,0,.14); text-align: center; }
-.o3d-tag.who { background: #111113; color: #fff; padding: 5px 12px 5px 5px;
-  display: flex; align-items: center; gap: 8px; text-align: left; border-radius: 999px; }
-.o3d-tag.who img { width: 30px; height: 30px; border-radius: 50%; background: #fff; flex: none; }
-.o3d-tag.who b { display: block; font-weight: 800; font-size: 12px; }
-.o3d-tag.who span { display: block; font-size: 10.5px; font-weight: 600; opacity: .78; }
-.o3d-tag.who.live span { color: #b8e8d6; opacity: 1; }
-.o3d-tag.who::after { content: ""; position: absolute; left: 50%; bottom: -5px; margin-left: -5px; border: 5px solid transparent; border-bottom: 0; border-top-color: #111113; }
-.o3d-ctrl { position: absolute; right: 10px; bottom: 10px; display: flex; gap: 6px; }
-.o3d-ctrl button { width: 34px; height: 34px; border-radius: 50%; border: 1px solid rgba(0,0,0,.1); background: rgba(255,255,255,.92); color: #222; font-size: 16px; line-height: 1; }
-.o3d-hint { position: absolute; left: 12px; bottom: 14px; font-size: 11px; color: #6d655b; pointer-events: none; }
-.office { display: block; width: 100%; min-width: 560px; height: auto; }
-.office .f { filter: brightness(.88); }
-.office .r { filter: brightness(.74); }
-.floor .t, .floor .f, .floor .r { fill: var(--o-floor); }
-.floor.accent polygon { fill: var(--o-floor-accent); }
-.floor.warm polygon { fill: var(--o-floor-warm); }
-.wall polygon { fill: var(--o-wall); }
-.desk polygon { fill: var(--o-desk); }
-.chair polygon { fill: var(--o-chair); }
-.monitor polygon { fill: var(--o-monitor); }
-.keyboard polygon { fill: var(--o-chair); }
-.window polygon { fill: var(--o-window); }
-.frame polygon { fill: var(--o-frame); }
-.paper polygon { fill: var(--o-paper); }
-.pot polygon { fill: var(--o-pot); }
-.cabinet polygon { fill: var(--o-cabinet); }
-.board polygon { fill: var(--o-board); }
-.leaf { fill: var(--o-leaf); }
-.room-label { font-size: 11px; font-weight: 700; fill: var(--fg); opacity: .75; letter-spacing: .02em;
-  paint-order: stroke; stroke: var(--o-floor); stroke-width: 4px; stroke-linejoin: round; }
-.room.has-agent { cursor: pointer; }
-.room.has-agent:hover .floor polygon, .room.has-agent:focus-visible .floor polygon { filter: brightness(.94); }
-.room:focus { outline: none; }
-.room:focus-visible .room-label { fill: var(--fg); text-decoration: underline; }
-.tag rect, .tag path { fill: var(--o-tag); }
-.tag text { text-anchor: middle; fill: var(--o-tag-fg); }
-.tag-name { font-size: 11px; font-weight: 800; }
-.tag-sub { font-size: 9.5px; opacity: .75; }
-.tag.live .tag-sub { opacity: 1; fill: var(--accent); }
-.typing { animation: typing .9s ease-in-out infinite; }
-@keyframes typing { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
-.tag.live { animation: float 3s ease-in-out infinite; }
-@keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-.team-title { font-size: 15px; font-weight: 800; margin-bottom: 12px; }
 
 /* detalhe do agente */
 .back { border: 0; background: transparent; color: var(--muted); padding: 0; margin-bottom: 12px; font-weight: 600; }
@@ -604,24 +598,19 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
   .app { grid-template-columns: minmax(0, 1fr); }
   .side { position: sticky; top: env(safe-area-inset-top, 0px); height: auto; z-index: 5; flex-direction: column; gap: 10px;
     padding-block: 12px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--panel); }
-  .side { border-right: 0; border-bottom: 1px solid var(--line); }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--side); }
+  .side { border-right: 0; }
   .brand { flex-direction: row; align-items: baseline; gap: 8px; padding: 0; }
   .nav { flex-direction: row; overflow-x: auto; gap: 4px; scrollbar-width: none; }
   .nav button { white-space: nowrap; padding: 8px 12px; }
   .nav .soon, .side-foot { display: none; }
   .main { padding-block: 20px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-  .members { grid-template-columns: minmax(0, 1fr); }
-  .perf { padding: 16px; }
-  .perf-row { grid-template-columns: minmax(0, 1fr); gap: 10px; }
-  .bar-line { grid-template-columns: 100px minmax(0, 1fr) 40px; }
 }
-@media (prefers-reduced-motion: reduce) { .member { transition: none; } button.member:hover { transform: none; } .typing, .tag.live { animation: none; } }
 </style>
 
 <div class="app">
   <aside class="side">
-    <div class="brand"><b>Consultório</b><span>Dr. Pedro Portes</span></div>
+    <div class="brand"><b>Painel Portes</b><span>Dr. Pedro Portes</span></div>
     <ul class="nav" id="nav"></ul>
     <div class="side-foot">Organização do consultório</div>
   </aside>
@@ -644,7 +633,6 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
   };
 
   var SECTIONS = [
-    { id: 'escritorio', label: 'Escritório' },
     { id: 'agentes', label: 'Agentes' },
     { id: 'agenda', label: 'Agenda' },
     { id: 'conteudo', label: 'Conteúdo' },
@@ -685,16 +673,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
       funcs: ['Busca artigos (PubMed) sobre o tema pedido', 'Dá base científica aos conteúdos e aos planos de tratamento', 'Entrega referências curtas, com link'] }
   ];
 
-  // Níveis da aba Agentes. A ideia é um agente principal (chefe) comandar os outros no futuro.
-  var TIERS = [
-    { id: 'chefe', label: 'Chefes', desc: 'Coordenam a equipe e distribuem o trabalho.',
-      vaga: { room: 'Agente principal', desc: 'Vai comandar os outros agentes e distribuir as tarefas.' } },
-    { id: 'contratado', label: 'Contratados', desc: 'Cuidam de uma área fixa e trabalham sozinhos.' },
-    { id: 'estagiario', label: 'Estagiários', desc: 'Tarefas pequenas e pontuais, a mando de um chefe ou contratado.',
-      vaga: { room: 'Sem estagiários', desc: 'Entram quando um agente precisar de ajuda numa tarefa curta.' } }
-  ];
-
-  var state = { section: 'escritorio', agent: null, week: 0, days: [], selected: null, loading: true, slow: false, error: null, db: null, saving: {} };
+  var state = { section: 'agentes', agent: null, abertas: {}, days: [], selected: null, loading: true, slow: false, error: null, db: null, saving: {} };
 
   // abre na última aba usada neste aparelho (no celular, normalmente o Conteúdo)
   try { var aba = localStorage.getItem('painel:aba'); if (aba === 'agenda' || aba === 'conteudo' || aba === 'edicao' || aba === 'agentes' || aba === 'pacientes') state.section = aba; } catch (err) {}
@@ -721,110 +700,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     }).join('');
   }
 
-  // ---------- escritório isométrico ----------
-  var S = 30, CX = Math.cos(Math.PI / 6) * S, SY = Math.sin(Math.PI / 6) * S;
-  var RW = 5, RD = 4.4, WALL = 2.1, PART = 0.75;
-  function P(x, y, z) { return [((x - y) * CX).toFixed(1), (((x + y) * SY) - z * S).toFixed(1)]; }
-  function pts(a) { return a.map(function (p) { return p.join(','); }).join(' '); }
-  function shade(hex, f) {
-    var n = parseInt(hex.slice(1), 16), r = n >> 16, g = (n >> 8) & 255, b = n & 255;
-    function c(v) { return Math.max(0, Math.min(255, Math.round(v * f))); }
-    return 'rgb(' + c(r) + ',' + c(g) + ',' + c(b) + ')';
-  }
-  // caixa com as 3 faces visíveis: topo, frente (y+d) e lado direito (x+w)
-  function box(x, y, z, w, d, h, cls, color) {
-    var t = [P(x, y, z + h), P(x + w, y, z + h), P(x + w, y + d, z + h), P(x, y + d, z + h)];
-    var f = [P(x, y + d, z), P(x + w, y + d, z), P(x + w, y + d, z + h), P(x, y + d, z + h)];
-    var r = [P(x + w, y, z), P(x + w, y + d, z), P(x + w, y + d, z + h), P(x + w, y, z + h)];
-    if (color) return '<g><polygon points="' + pts(t) + '" fill="' + shade(color, 1.08) + '"/><polygon points="' + pts(f) + '" fill="' + shade(color, 0.86) + '"/><polygon points="' + pts(r) + '" fill="' + shade(color, 0.72) + '"/></g>';
-    return '<g class="' + cls + '"><polygon class="t" points="' + pts(t) + '"/><polygon class="f" points="' + pts(f) + '"/><polygon class="r" points="' + pts(r) + '"/></g>';
-  }
-
-  function person(x, y, a, typing) {
-    var L = a.look, s = '';
-    s += box(x - 0.1, y - 0.25, 0.42, 0.75, 0.12, 0.85, 'chair');          // encosto
-    s += box(x - 0.1, y - 0.15, 0.4, 0.75, 0.6, 0.08, 'chair');            // assento
-    s += '<g class="' + (typing ? 'typing' : 'idle') + '">';
-    s += box(x, y - 0.1, 0.48, 0.55, 0.38, 0.62, null, L.shirt);           // tronco
-    var h = P(x + 0.27, y + 0.09, 1.32), r = 0.21 * S;
-    s += '<circle cx="' + h[0] + '" cy="' + h[1] + '" r="' + r.toFixed(1) + '" fill="' + L.hair + '"/>';
-    s += '<circle cx="' + h[0] + '" cy="' + (+h[1] + r * 0.22).toFixed(1) + '" r="' + (r * 0.8).toFixed(1) + '" fill="' + L.skin + '"/>';
-    s += box(x + 0.6, y + 0.15, 0.85, 0.12, 0.42, 0.12, null, L.shirt);    // braço até o teclado
-    s += '</g>';
-    return s;
-  }
-
-  function nameTag(x, y, z, text, sub, live) {
-    var p = P(x, y, z), w = Math.max(text.length, sub.length) * 6.4 + 22;
-    // grupo de fora posiciona; o de dentro anima (transform do CSS sobrescreveria o atributo)
-    return '<g transform="translate(' + p[0] + ',' + p[1] + ')"><g class="tag' + (live ? ' live' : '') + '">' +
-      '<rect x="' + (-w / 2).toFixed(1) + '" y="-34" width="' + w.toFixed(1) + '" height="30" rx="8"/>' +
-      '<path d="M-5 -4 L0 3 L5 -4 Z"/>' +
-      '<text x="0" y="-21" class="tag-name">' + esc(text) + '</text>' +
-      '<text x="0" y="-9" class="tag-sub">' + esc(sub) + '</text></g></g>';
-  }
-
-  // nomes das salas e balões vão por cima de tudo, senão as paredes da sala da frente cobrem
-  function room(a, top) {
-    var rx = a.pos[0] * RW, ry = a.pos[1] * RD, s = '';
-    var backH = a.pos[1] === 0 ? WALL : PART, leftH = a.pos[0] === 0 ? WALL : PART;
-    s += '<g class="room' + (a.live ? ' live' : '') + '">';
-    s += box(rx + 0.06, ry + 0.06, 0, RW - 0.12, RD - 0.12, 0.06, a.live ? 'floor accent' : (a.name ? 'floor warm' : 'floor'));
-    s += box(rx, ry, 0, RW, 0.12, backH, 'wall');
-    s += box(rx, ry, 0, 0.12, RD, leftH, 'wall');
-    if (a.pos[1] === 0) {                                                   // quadro e janela na parede do fundo
-      s += box(rx + 0.6, ry + 0.12, 1.0, 1.3, 0.02, 0.8, 'window');
-      s += box(rx + 3.1, ry + 0.12, 1.05, 0.9, 0.02, 0.6, 'frame');
-    }
-    if (a.meeting) {
-      s += box(rx + 1.1, ry + 1.2, 0, 2.8, 1.5, 0.72, 'desk');
-      [[1.3, 0.8], [2.2, 0.8], [3.1, 0.8], [1.3, 2.75], [2.2, 2.75], [3.1, 2.75]].forEach(function (c) { s += box(rx + c[0], ry + c[1], 0, 0.55, 0.45, 0.42, 'chair'); });
-      s += box(rx + 4.3, ry + 0.4, 0.6, 0.05, 1.6, 1.0, 'board');
-    } else {
-      var px = rx + 1.9, py = ry + 1.25;
-      if (a.name) s += person(px, py, a, a.live);
-      else s += box(px - 0.1, py - 0.15, 0, 0.75, 0.6, 0.48, 'chair');
-      s += box(rx + 1.2, ry + 1.95, 0, 2.1, 0.85, 0.74, 'desk');
-      if (a.name) s += box(rx + 1.85, ry + 2.0, 0.74, 0.7, 0.35, 0.03, 'keyboard');
-      s += box(rx + 1.75, ry + 2.45, 0.74, 0.95, 0.08, 0.58, 'monitor');
-      s += box(rx + 2.9, ry + 2.1, 0.74, 0.3, 0.4, 0.12, 'paper');
-      s += box(rx + 4.1, ry + 0.4, 0, 0.45, 0.45, 0.4, 'pot');
-      var lp = P(rx + 4.32, ry + 0.62, 0.85);
-      s += '<circle class="leaf" cx="' + lp[0] + '" cy="' + lp[1] + '" r="' + (0.38 * S).toFixed(1) + '"/>';
-      if (a.id === 'kim') s += box(rx + 0.4, ry + 2.9, 0, 0.6, 0.8, 1.2, 'cabinet');
-    }
-    var lab = P(rx + 0.5, ry + RD - 0.35, 0.07);
-    var t = '<text class="room-label" x="' + lab[0] + '" y="' + lab[1] + '">' + esc(a.room) + (a.name || a.meeting ? '' : ' · vaga') + '</text>';
-    if (a.name) {
-      var sub = a.live ? statusLine() : 'chegando';
-      t += nameTag(rx + 2.17, ry + 1.34, 1.85, a.name + ' · ' + a.role, sub, a.live);
-    }
-    top.push(t);
-    return s + '</g>';
-  }
-
-  function statusLine() {
-    if (state.loading) return 'conectando…';
-    var last = state.days[0];
-    if (last && last.data === todayIso()) return 'entregou ' + (last.opcoes || []).length + ' opções hoje';
-    return 'trabalhando nas opções de amanhã';
-  }
-
-  function office() {
-    var order = AGENTS.filter(function (a) { return a.pos; }).sort(function (a, b) { return (a.pos[0] + a.pos[1]) - (b.pos[0] + b.pos[1]) || a.pos[1] - b.pos[1]; });
-    var minX = -(2 * RD) * CX - 30, maxX = 3 * RW * CX + 30, minY = -WALL * S - 60, maxY = (3 * RW + 2 * RD) * SY + 20;
-    return '<svg class="office" viewBox="' + [minX, minY, maxX - minX, maxY - minY].map(function (n) { return n.toFixed(0); }).join(' ') + '" role="img" aria-label="Escritório do consultório com as salas dos agentes">' +
-      (function () { var top = []; return order.map(function (a) { return room(a, top); }).join('') + top.join(''); })() + '</svg>';
-  }
-
-  // página inicial: o escritório só para ver; abrir cada agente fica na aba Agentes
-  function renderOffice() {
-    return '<header class="page-head"><span class="eyebrow">Escritório</span><h1>O escritório</h1>' +
-      '<p>Cada agente tem a sua sala. As funções e o trabalho de cada um ficam na aba Agentes.</p></header>' +
-      '<div class="office-wrap" id="office-slot">' + office() + '</div>' + renderPerf();
-  }
-
-  // ---------- rendimento da semana (segunda a domingo) ----------
+  // ---------- datas da semana (segunda a domingo) ----------
   function isoOf(d) { return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); }
   function weekRange(offset) {
     var d = new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - (d.getDay() + 6) % 7 - 7 * offset);
@@ -834,99 +710,208 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
   function shortDay(d) { return d.getDate() + ' ' + MESES[d.getMonth()]; }
   var DAY_MS = 86400000;
 
-  // Duda: entrega = dias com opções / dias que ela já devia ter trabalhado; aproveitamento = opções feitas / opções entregues
-  function dudaWeek(offset) {
-    var w = weekRange(offset), s = isoOf(w.start), e = isoOf(w.end), today = todayIso();
-    var all = state.days.map(function (d) { return d.data; }).sort();
-    if (!all.length || all[0] > e) return null;
-    var from = all[0] > s ? all[0] : s, to = today < e ? today : e;
-    var p1 = from.split('-'), p2 = to.split('-');
-    var due = Math.max(1, Math.round((new Date(+p2[0], +p2[1] - 1, +p2[2]) - new Date(+p1[0], +p1[1] - 1, +p1[2])) / DAY_MS) + 1);
-    var days = state.days.filter(function (d) { return d.data >= s && d.data <= e; });
-    var total = 0, feitas = 0, desc = 0;
-    days.forEach(function (d) {
-      total += (d.opcoes || []).length;
-      Object.keys(d.estado || {}).forEach(function (k) { if (d.estado[k] === 'feito') feitas++; else if (d.estado[k] === 'descartado') desc++; });
-    });
-    return { delivered: days.length, due: due, total: total, feitas: feitas, desc: desc };
+  // retrato em traço de cada agente
+  var AV = { luzi: 'coque', marketing: 'longo', rafa: 'bone', kim: 'curto', nina: 'longo', anapaula: 'coque', amanda: 'longo', bruno: 'oculos', caio: 'oculos' };
+  function avatar(id) {
+    var v = AV[id] || 'curto', topo = 'M15 20c-1-10 6-13 9-13s10 3 9 13c-2-5-5-7-9-7s-7 2-9 7z', x = '';
+    if (v === 'longo') x = '<path d="M14.5 17c-3 8-2 15 0 18M33.5 17c3 8 2 15 0 18" stroke-width="3"/>';
+    if (v === 'coque') x = '<circle cx="24" cy="6" r="3.4" fill="#1a1a1f"/>';
+    if (v === 'bone') { topo = 'M14.5 17c0-7 5-10 9.5-10s9.5 3 9.5 10z'; x = '<path d="M33 16.5h7" stroke-width="2.4"/>'; }
+    if (v === 'oculos') x = '<circle cx="20" cy="20.5" r="3.1"/><circle cx="28" cy="20.5" r="3.1"/><path d="M23.1 20.5h1.8"/>';
+    return '<svg viewBox="0 0 48 48" fill="none" stroke="#1a1a1f" stroke-width="1.6" stroke-linecap="round" aria-hidden="true"><path d="M9 47c1-10 7-14 15-14s14 4 15 14" fill="#fff"/><path d="M20 29v5c2 2 6 2 8 0v-5" fill="#fff"/>' +
+      '<circle cx="24" cy="20" r="10" fill="#fff"/><path d="' + topo + '" fill="#1a1a1f"/>' + x +
+      '<circle cx="20" cy="20.5" r=".9" fill="#1a1a1f" stroke="none"/><circle cx="28" cy="20.5" r=".9" fill="#1a1a1f" stroke="none"/><path d="M21 25.5c1.6 1.2 4.4 1.2 6 0"/></svg>';
+  }
+  function face(a, cls) { return '<span class="face ' + (cls || '') + '">' + avatar(a.id) + '</span>'; }
+
+  // ---------- Agentes: saúde dos setores, escritório 3D e tarefas de cada um (estrutura pedida pelo Pedro em 04/11/2026) ----------
+  // Cada tarefa automática manda um "pulso" ao terminar (coleção agentes, via supa.ps1 pulso). Nada aqui é número inventado:
+  // a saúde sai dos pulsos e do que está aberto no banco (desafio, posts, edição, retornos). Setor sem tarefa automática fica "Parado", sem nota.
+  var SALAS = {"atendimento":{"poly":[[31.11,21.29],[45.67,33.56],[29.35,47.87],[14.79,35.59]],"tag":[30.23,26.22]},"clinico":{"poly":[[14.79,35.59],[33.52,51.38],[21.28,62.11],[2.55,46.33]],"tag":[18.03,40.5]},"edicao":{"poly":[[70.64,54.6],[85.2,66.88],[68.88,81.19],[54.32,68.91]],"tag":[69.76,59.55]},"estudos":{"poly":[[59.99,24.57],[78.71,40.36],[66.48,51.1],[47.75,35.31]],"tag":[63.23,29.49]},"financeiro":{"poly":[[78.71,40.36],[97.44,56.15],[85.2,66.88],[66.48,51.1]],"tag":[81.96,45.27]},"gerencia":{"poly":[[43.35,10.55],[59.99,24.57],[47.75,35.31],[31.11,21.29]],"tag":[45.55,14.59]},"marketing":{"poly":[[45.67,33.56],[70.64,54.6],[54.32,68.91],[29.35,47.87]],"tag":[50,42.89]},"reuniao":{"poly":[[33.52,51.38],[54.32,68.91],[42.08,79.65],[21.28,62.11]],"tag":[37.8,57.16]},"treino":{"poly":[[54.32,68.91],[68.88,81.19],[56.65,91.92],[42.08,79.65]],"tag":[55.48,72.06]}};
+  var IMG_ESCRITORIO = 'escritorio.jpg?v=3';
+  var SETORES = [
+    { id: 'marketing', nome: 'Marketing e Instagram', tarefas: [
+      { ag: 'marketing', nome: 'Opções de captação', desc: 'Lê o second brain e traz de 3 a 5 opções para encher a agenda.', quando: 'Todo dia, 7h', auto: 'agente-marketing-diario', h: 30 },
+      { ag: 'marketing', nome: 'Análise e cronograma', desc: 'Analisa o que você subiu e monta os posts com legenda.', quando: 'Todo dia, 7h', auto: 'agente-marketing-diario', h: 30 },
+      { ag: 'bruno', nome: 'Revisão CFO', desc: 'Confere os conteúdos pelas regras de publicidade do CFO.', quando: 'Antes de cada post' }] },
+    { id: 'edicao', nome: 'Edição de vídeo', tarefas: [
+      { ag: 'rafa', nome: 'Edição dos vídeos', desc: 'Corte vertical, gancho na tela e assinatura; refaz pelo seu feedback.', quando: 'Todo dia, 8h', auto: 'agente-edicao-video', h: 30 }] },
+    { id: 'atendimento', nome: 'Atendimento e retornos', tarefas: [
+      { ag: 'amanda', nome: 'Retornos', desc: 'Mostra quem chamar, com a mensagem pronta para o WhatsApp.', quando: 'Na aba Pacientes', sob: true },
+      { ag: 'amanda', nome: 'Mensagens prontas', desc: 'Primeira resposta, confirmação e pós-consulta.', quando: 'Fase 2, com WhatsApp' }] },
+    { id: 'gerencia', nome: 'Gerência', tarefas: [
+      { ag: 'luzi', nome: 'Revisão da semana', desc: 'Atualiza o second brain com o que mudou e compara as semanas.', quando: 'Domingo, 9h', auto: 'revisao-semanal-second-brain', h: 192 },
+      { ag: 'luzi', nome: 'Plano da semana', desc: 'Dias de paciente, metas e o que cada agente entrega.', quando: 'Toda segunda, 7h30' }] },
+    { id: 'estudos', nome: 'Estudos', tarefas: [
+      { ag: 'caio', nome: 'Resumo do PubMed', desc: 'Lê os alertas do PubMed, traduz, resume e manda por e-mail.', quando: 'Todo dia, 21h', auto: 'resumo-pubmed-diario', h: 30 },
+      { ag: 'nina', nome: 'Menu de temas', desc: 'Monta o menu semanal de estudo e registra na fila de temas.', quando: 'Domingo, 10h', auto: 'menu-de-temas-second-brain', h: 192 },
+      { ag: 'nina', nome: 'Resumo de aulas', desc: 'Resume as aulas da especialização que você mandar.', quando: 'Quando você mandar', sob: true }] },
+    { id: 'financeiro', nome: 'Financeiro', tarefas: [
+      { ag: 'kim', nome: 'Fechamento do mês', desc: 'Entradas por clínica contra a meta, sem nome de paciente.', quando: 'Todo domingo e no fim do mês' }] },
+    { id: 'clinico', nome: 'Planejamento clínico', tarefas: [
+      { ag: 'anapaula', nome: 'Plano de tratamento', desc: 'Plano faseado a partir dos achados anonimizados.', quando: 'Quando você mandar um caso', sob: true }] },
+    { id: 'treino', nome: 'Treino e dieta', tarefas: [] }
+  ];
+
+  function pulso(id) { return (ct.agentes || []).find(function (x) { return x.id === id; }); }
+  function dataHora(iso) { var d = new Date(iso); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function plural(n, um, varios) { return n + ' ' + (n === 1 ? um : varios); }
+
+  function tarefaEstado(t) {
+    if (!t.auto) return t.sob ? { k: 'sob', txt: 'Sob demanda' } : { k: 'parada', txt: 'Ainda não roda sozinho' };
+    var p = pulso(t.auto);
+    if (!p || !p.ultima) return { k: 'sem', txt: 'Sem registro ainda' };
+    return (Date.now() - new Date(p.ultima).getTime()) / 36e5 <= t.h ? { k: 'ok', txt: 'Rodando', p: p } : { k: 'late', txt: 'Atrasada', p: p };
   }
 
-  function bar(label, pct) {
-    var shown = pct == null ? '—' : pct + '%';
-    return '<div class="bar-line"><span class="lbl">' + label + '</span>' +
-      '<span class="bar" role="img" aria-label="' + label + ': ' + shown + '"><i style="width:' + (pct || 0) + '%"></i></span>' +
-      '<span class="pct">' + shown + '</span></div>';
-  }
+  // vídeo pronto cujo post já saiu não pede mais nada do Pedro
+  function midiaPostada(id) { return (ct.posts || []).some(function (p) { return p.estado === 'postado' && (p.midia || []).indexOf(id) >= 0; }); }
 
-  function renderPerf() {
-    var w = weekRange(state.week);
-    var title = state.week === 0 ? 'Esta semana' : state.week === 1 ? 'Semana passada' : 'Há ' + state.week + ' semanas';
-    // só quem já trabalha sozinho ganha barra; quem está chegando fica numa linha no fim
-    var rows = AGENTS.filter(function (a) { return a.live; }).map(function (a) {
-      var bars, note;
-      var r = state.db && !state.loading ? dudaWeek(state.week) : null;
-      if (state.loading) { bars = bar('Entrega', null) + bar('Aproveitamento', null); note = 'Carregando…'; }
-      else if (!state.db) { bars = bar('Entrega', null) + bar('Aproveitamento', null); note = 'Os dados só aparecem abrindo o painel pelo claude.ai.'; }
-      else if (!r) { bars = bar('Entrega', null) + bar('Aproveitamento', null); note = 'Ela ainda não trabalhava nesta semana.'; }
-      else {
-        bars = bar('Entrega', Math.min(100, Math.round(r.delivered / r.due * 100))) + bar('Aproveitamento', r.total ? Math.round(r.feitas / r.total * 100) : null);
-        note = r.delivered + ' de ' + r.due + (r.due === 1 ? ' dia' : ' dias') + ' com opções · ' + r.feitas + ' de ' + r.total + ' opções feitas' + (r.desc ? ', ' + r.desc + ' descartadas' : '');
+  // o que está aberto em cada setor, lido do banco. tipo: voce | atrasada | andando | fila
+  function abertas(id) {
+    var l = [], hoje = todayIso();
+    function add(tipo, txt, ir) { l.push({ tipo: tipo, txt: txt, ir: ir }); }
+    if (id === 'marketing') {
+      var d = ct.desafios && dsAtual();
+      if (d && !dsFeitoHoje().length) add('voce', 'Desafio de hoje: ' + d.titulo, 'conteudo');
+      var dia = state.days[0];
+      if (dia && dia.data === hoje) {
+        var nOp = (dia.opcoes || []).filter(function (o) { return !(dia.estado || {})[o.id]; }).length;
+        if (nOp) add('voce', plural(nOp, 'opção de captação para decidir', 'opções de captação para decidir'), 'duda');
       }
-      return '<div class="perf-row"><div class="perf-who">' + face(a, 'sm') + '<div><b>' + esc(a.name) + '</b><span>' + esc(a.role) + '</span></div></div>' +
-        '<div class="bars">' + bars + '<p class="perf-note">' + esc(note) + '</p></div></div>';
-    }).join('');
-    var arriving = AGENTS.filter(function (a) { return a.name && !a.live; });
-    if (arriving.length) rows += '<div class="perf-row arriving"><div class="perf-faces">' + arriving.map(function (a) { return face(a, 'xs'); }).join('') + '</div>' +
-      '<p class="perf-note">Chegando, ainda sem rendimento: ' + esc(arriving.map(function (a) { return a.name; }).join(', ')) + '. A barra aparece quando cada um começar a trabalhar sozinho.</p></div>';
-    return '<section class="perf" aria-label="Rendimento da semana"><div class="perf-head"><h2>Rendimento · ' + title + '</h2>' +
-      '<div class="week-nav"><button type="button" data-week="1" aria-label="Semana anterior"' + (state.week >= 3 ? ' disabled' : '') + '>‹</button>' +
-      '<span>' + shortDay(w.start) + ' – ' + shortDay(w.end) + '</span>' +
-      '<button type="button" data-week="-1" aria-label="Semana seguinte"' + (state.week === 0 ? ' disabled' : '') + '>›</button></div></div>' + rows + '</section>';
-  }
-
-  // aba Agentes: uma faixa por nível, com os cartões e as funções de cada agente
-  function renderTeam() {
-    var tiers = TIERS.map(function (t) {
-      var list = AGENTS.filter(function (a) { return a.tier === t.id; });
-      var n = list.filter(function (a) { return a.name; }).length;
-      var cards = list.map(function (a) {
-        if (!a.name) return vacancy(a);
-        var st = a.live ? '<span class="state on">● ' + esc(statusLine()) + '</span>' : a.active ? '<span class="state on">● trabalhando · ' + esc(a.when) + '</span>' : '<span class="state">chegando · ' + esc(a.when) + '</span>';
-        return '<button type="button" class="member" data-agent="' + a.id + '">' + face(a, 'sm') + '<div><h3>' + esc(a.name) + '</h3>' +
-          '<span class="role-line">' + esc(a.role) + '</span><ul>' + a.funcs.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' + st + '</div></button>';
+      (ct.posts || []).forEach(function (p) {
+        var st = p.estado || 'proposto';
+        if (st === 'descartado' || st === 'postado') return;
+        if (p.data < hoje) add('atrasada', 'Post de ' + fmtDay(p.data) + ' não foi postado', 'conteudo');
+        else if (st === 'aprovado') add('fila', 'Postar em ' + fmtDay(p.data), 'conteudo');
+        else add('voce', 'Aprovar o post de ' + fmtDay(p.data), 'conteudo');
       });
-      if (!list.length && t.vaga) cards.push(vacancy(t.vaga));
-      return '<section><div class="tier-band ' + t.id + '"><h2>' + esc(t.label) + '</h2><span class="n">' + n + (n === 1 ? ' agente' : ' agentes') + '</span><p>' + esc(t.desc) + '</p></div>' +
-        '<div class="members">' + cards.join('') + '</div></section>';
-    }).join('');
-    return '<header class="page-head"><span class="eyebrow">Agentes</span><h1>A equipe</h1>' +
-      '<p>Todos os agentes, o nível de cada um e o que eles fazem. Clique num agente para ver o trabalho dele.</p></header>' +
-      '<div class="tiers">' + tiers + '</div>';
+      var novos = (ct.midia || []).filter(function (m) { return m.status === 'novo'; }).length;
+      if (novos) add('fila', plural(novos, 'arquivo esperando', 'arquivos esperando') + ' a análise da Duda', 'conteudo');
+    }
+    if (id === 'edicao') (ct.midia || []).forEach(function (m) {
+      var e = m.edicao; if (!e) return; var n = m.nota || 'Vídeo';
+      if (e.status === 'pedida') add('fila', 'Na fila: ' + n, 'edicao');
+      else if (e.status === 'editando') add('andando', 'Editando: ' + n, 'edicao');
+      else if (e.status === 'falhou') add('atrasada', 'A edição falhou: ' + n, 'edicao');
+      else if (e.status === 'pronta' && !midiaPostada(m.id)) add('voce', 'Conferir o vídeo editado: ' + n, 'edicao');
+    });
+    if (id === 'atendimento') pcAgenda().forEach(function (x) {
+      var n = diasAte(x.r.data);
+      if (n < 0) add('atrasada', 'Retorno atrasado: ' + x.p.nome, 'pacientes');
+      else if (n === 0) add('voce', 'Retorno hoje: ' + x.p.nome, 'pacientes');
+      else if (n <= PC_JANELA) add('fila', 'Retorno em ' + n + ' dias: ' + x.p.nome, 'pacientes');
+    });
+    return l;
   }
 
-  function vacancy(v) {
-    return '<div class="member off"><span class="face sm empty-face">' + ICONS.dot + '</span><div><h3>' + esc(v.room) + '</h3>' +
-      '<span class="role-line">vaga</span><p>' + esc(v.desc) + '</p></div></div>';
+  function setorInfo(s) {
+    var tar = s.tarefas.map(function (t) { return Object.assign({ est: tarefaEstado(t) }, t); });
+    var ab = abertas(s.id), conta = function (k) { return ab.filter(function (a) { return a.tipo === k; }).length; };
+    var autos = tar.filter(function (t) { return t.auto; });
+    var ok = autos.filter(function (t) { return t.est.k === 'ok'; }).length, late = autos.filter(function (t) { return t.est.k === 'late'; }).length;
+    var i = { s: s, tar: tar, ab: ab, voce: conta('voce'), atrasada: conta('atrasada') + late, andando: conta('andando'), fila: conta('fila'), feitas: ok, ok: ok };
+    if (s.id === 'marketing') i.feitas += dsSemana().filter(function (x) { return x.feito; }).length;
+    // nota: parte da fração de tarefas automáticas em dia e perde pontos pelo que está atrasado ou esperando o Pedro
+    var ativo = autos.length > 0 || ab.length > 0;
+    i.saude = !ativo ? null : Math.max(0, Math.min(100, Math.round((autos.length ? 100 * ok / autos.length : 100) - 15 * i.atrasada - Math.min(36, 6 * i.voce))));
+    i.nivel = i.saude == null ? 'parado' : i.saude < 50 ? 'foco' : i.saude < 80 ? 'atencao' : 'ok';
+    i.status = i.saude == null ? 'Parado' : i.voce ? 'Espera você' : i.atrasada ? 'Atenção' : 'Em dia';
+    return i;
+  }
+  function setoresInfo() {
+    return SETORES.map(setorInfo).sort(function (a, b) { return (a.saude == null ? 999 : a.saude) - (b.saude == null ? 999 : b.saude); });
+  }
+  function resumoSetor(i) {
+    var p = [];
+    if (i.atrasada) p.push(plural(i.atrasada, 'atrasada', 'atrasadas'));
+    if (i.voce) p.push(i.voce + ' com você');
+    if (i.andando) p.push(i.andando + ' andando');
+    if (i.fila) p.push(i.fila + ' na fila');
+    return p.join(' · ') || (i.saude == null ? 'Sem tarefa automática' : 'Nada pendente');
+  }
+  function barraSetor(i) {
+    var parts = [['late', i.atrasada], ['voce', i.voce], ['andando', i.andando], ['fila', i.fila], ['feita', i.feitas]].filter(function (x) { return x[1]; });
+    return '<span class="sg-bar">' + (parts.length ? parts.map(function (x) { return '<i class="' + x[0] + '" style="flex:' + x[1] + '"></i>'; }).join('') : '<i class="vazio" style="flex:1"></i>') + '</span>';
+  }
+  function cartaoSetor(i, primeiro) {
+    return '<button type="button" class="sg-card n-' + i.nivel + '" data-setor="' + i.s.id + '">' +
+      (primeiro && i.nivel !== 'ok' && i.nivel !== 'parado' ? '<span class="sg-foco">Foco agora</span>' : '') +
+      '<span class="sg-top"><b>' + esc(i.s.nome) + '</b><em>' + (i.saude == null ? '–' : i.saude) + '</em></span>' +
+      '<span class="sg-linha"><i style="width:' + (i.saude || 0) + '%"></i></span>' +
+      '<span class="sg-sub">' + esc(resumoSetor(i)) + '</span>' + barraSetor(i) +
+      '<span class="sg-pe"><span class="sg-dots">' + i.tar.map(function (t) { return '<i class="d-' + t.est.k + '"></i>'; }).join('') + '</span>' +
+      '<span>' + i.ok + '/' + i.tar.length + ' rodando · ' + plural(i.ab.length, 'aberta', 'abertas') + '</span></span></button>';
+  }
+  function mapaEscritorio(infos) {
+    var byId = {}; infos.forEach(function (i) { byId[i.s.id] = i; });
+    var polys = '', tags = '';
+    Object.keys(SALAS).forEach(function (k) {
+      var g = SALAS[k], i = byId[k], pos = 'left:' + g.tag[0] + '%;top:' + g.tag[1] + '%';
+      if (i) {
+        polys += '<polygon class="sala n-' + i.nivel + '" data-setor="' + k + '" points="' + g.poly.map(function (p) { return p.join(','); }).join(' ') + '"><title>' + esc(i.s.nome) + '</title></polygon>';
+        tags += '<button type="button" class="sala-tag n-' + i.nivel + '" data-setor="' + k + '" style="' + pos + '"><span>' + esc(i.s.nome) + '</span><b>' + (i.saude == null ? '–' : i.saude) + '</b></button>';
+      } else tags += '<span class="sala-tag n-parado" style="' + pos + '"><span>Sala de reunião</span></span>';
+    });
+    return '<div class="ag-mapa"><img src="' + IMG_ESCRITORIO + '" alt="Escritório do consultório em 3D, com uma sala para cada setor">' +
+      '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' + polys + '</svg>' + tags + '</div>';
+  }
+  function linhaTarefa(t) {
+    var a = AGENTS.find(function (x) { return x.id === t.ag; }), e = t.est, p = e.p;
+    return '<button type="button" class="tf" data-agent="' + a.id + '"><span class="tf-av">' + avatar(a.id) + '<i class="d-' + e.k + '" title="' + esc(e.txt) + '"></i></span>' +
+      '<span class="tf-tx"><b>' + esc(a.name + ' · ' + t.nome) + '</b><span>' + esc(t.desc) + '</span>' +
+      (p && p.resultado ? '<span>Último resultado: ' + esc(p.resultado) + '</span>' : '') +
+      '<small>' + esc(t.quando) + (p ? ' · Última: ' + dataHora(p.ultima) : ' · ' + esc(e.txt)) + (t.auto ? ' · skill ' + esc(t.auto) : '') + '</small></span></button>';
+  }
+  function colunaSetor(i) {
+    var aberto = state.abertas[i.s.id];
+    return '<section class="st-col" id="setor-' + i.s.id + '"><header><h3>' + esc(i.s.nome) + '</h3><span class="st-status n-' + (i.status === 'Em dia' ? 'ok' : i.status === 'Parado' ? 'parado' : i.nivel === 'foco' ? 'foco' : 'atencao') + '">' + esc(i.status) + '</span></header>' +
+      '<p class="st-sub">' + esc(resumoSetor(i)) + '</p>' +
+      (i.tar.length ? i.tar.map(linhaTarefa).join('') : '<p class="st-vaga">Vaga. Ninguém contratado neste setor ainda.</p>') +
+      (i.ab.length ? '<button type="button" class="st-mais" data-abertas="' + i.s.id + '">' + (aberto ? 'Esconder ' : 'Ver ') + plural(i.ab.length, 'tarefa aberta', 'tarefas abertas') + ' ›</button>' +
+        (aberto ? '<ul class="st-ab">' + i.ab.map(function (a) { return '<li class="t-' + a.tipo + '"><button type="button" data-ir="' + a.ir + '">' + esc(a.txt) + '</button></li>'; }).join('') + '</ul>' : '') : '') + '</section>';
+  }
+  function renderAgentes() {
+    var head = '<header class="ag-head"><div><h1>Agentes</h1><p>O que roda sozinho, setor por setor, e o que espera a sua decisão.</p></div>';
+    if (!state.db) return head + '</header><div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
+    var infos = setoresInfo(), ativos = infos.filter(function (i) { return i.saude != null; });
+    var geral = ativos.length ? Math.round(ativos.reduce(function (s, i) { return s + i.saude; }, 0) / ativos.length) : 0;
+    var total = 0, rod = 0; infos.forEach(function (i) { i.tar.forEach(function (t) { total++; if (t.est.k === 'ok') rod++; }); });
+    var foco = ativos.filter(function (i) { return i.saude < 70; }).length;
+    var ult = (ct.agentes || []).map(function (x) { return x.ultima; }).filter(Boolean).sort().pop();
+    return head + '<div class="ag-right">' + (ult ? '<small>Atualizado ' + dataHora(ult) + '</small>' : '') +
+      '<div class="ag-stats"><div><b>' + geral + '</b><span>Saúde geral</span></div><div><b>' + (total ? Math.round(rod / total * 100) : 0) + '%</b><span>Autonomia</span></div>' +
+      '<div><b>' + foco + '</b><span>Setores pedindo foco</span></div></div></div></header>' +
+      '<h2 class="ag-h2">Saúde dos setores</h2><p class="ag-p">Ordenado do que mais precisa de foco para o que está rodando bem. Toque num setor para ver as tarefas.</p>' +
+      '<div class="ag-grid">' + mapaEscritorio(infos) + '<div class="sg-cards">' + infos.map(function (i, n) { return cartaoSetor(i, n === 0); }).join('') + '</div></div>' +
+      '<h2 class="ag-h2 ag-setores">Setores</h2><div class="st-grid">' + infos.map(colunaSetor).join('') + '</div>' +
+      '<p class="ag-nota">A saúde parte das tarefas automáticas em dia e perde 15 pontos por item atrasado e 6 por item esperando você (até 36). Setor sem tarefa automática e sem pendência fica "Parado", sem nota.</p>';
   }
 
-  // rosto 3D do agente: desenhado pelo módulo do escritório; até ele chegar, fica a inicial
-  function face(a, cls) {
-    var src = window.Office3D && window.Office3D.faces && window.Office3D.faces[a.id];
-    return '<span class="face ' + (cls || '') + '" data-face="' + a.id + '">' +
-      (src ? '<img src="' + src + '" alt="">' : '<b>' + esc(a.name.charAt(0)) + '</b>') + '</span>';
+  function irPara(s) {
+    if (s === 'duda') { state.section = 'agentes'; state.agent = 'marketing'; }
+    else { state.section = s; state.agent = null; try { localStorage.setItem('painel:aba', s); } catch (err) {} }
+    if (s === 'conteudo') { ct.view = 'hoje'; ctEnter(); }
+    render(); window.scrollTo(0, 0);
+  }
+
+  function autoDe(a) {
+    var l = [];
+    SETORES.forEach(function (s) { s.tarefas.forEach(function (t) { if (t.ag === a.id && t.auto) l.push(t.nome); }); });
+    return l.join(', ');
   }
 
   // página de quem ainda não trabalha sozinho: as funções propostas e quando vai rodar
   function renderArriving(a) {
-    var tier = TIERS.find(function (t) { return t.id === a.tier; });
     return '<button type="button" class="back" data-back="1">← Agentes</button>' +
       '<div class="agent-hero">' + face(a, 'big') + '</div>' +
-      '<header class="page-head"><span class="eyebrow">' + esc(a.name + ' · ' + a.role) + '</span><h1>' + esc(a.name) + (a.active ? '' : ' está chegando') + '</h1>' +
+      '<header class="page-head"><span class="eyebrow">' + esc(a.name + ' · ' + a.role) + '</span><h1>' + esc(a.name) + (a.active || autoDe(a) ? '' : ' está chegando') + '</h1>' +
       '<p>' + esc(a.desc) + '</p></header>' +
-      '<div class="detail">' + (a.active ? '<div class="empty"><b>Já trabalha sozinho.</b> As edições aparecem na aba Conteúdo, dentro do cronograma, em cada post de vídeo.</div>'
+      '<div class="detail">' + (a.active ? '<div class="empty"><b>Já trabalha sozinho.</b> As edições aparecem na aba Edição.</div>'
+        : autoDe(a) ? '<div class="empty"><b>Já roda sozinho:</b> ' + esc(autoDe(a)) + '. O resto das funções abaixo ainda é proposta.</div>'
         : '<div class="empty"><b>Ainda não trabalha sozinho.</b> As funções são uma proposta da IA. Quando você aprovar, ' + esc(a.name) + ' ganha a tarefa agendada e passa a entregar como a Duda.</div>') +
       '<section class="panel role"><h2>Funções</h2><ul>' + a.funcs.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' +
-      '<div class="meta"><span class="chip">' + esc(a.when) + '</span>' + (tier ? '<span class="chip">' + esc(tier.label.replace(/s$/, '')) + '</span>' : '') + '</div></section></div>';
+      '<div class="meta"><span class="chip">' + esc(a.when) + '</span>' + '</div></section></div>';
   }
 
   function renderOption(o, day) {
@@ -952,7 +937,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
 
   function renderMarketing() {
     var html = '<button type="button" class="back" data-back="1">← Agentes</button>' +
-      '<div class="agent-hero">' + face(AGENTS[0], 'big') + '</div>' +
+      '<div class="agent-hero">' + face(AGENTS[1], 'big') + '</div>' +
       '<header class="page-head"><span class="eyebrow">Duda · Agência de marketing</span><h1>Opções para captar pacientes</h1>' +
       '<p>Todo dia de manhã a Duda lê o second brain e traz o que fazer para encher a agenda.</p></header>';
 
@@ -2253,12 +2238,11 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
 
   function render() {
     renderNav();
-    if (state.section === 'escritorio') main.innerHTML = renderOffice();
-    else if (state.section === 'agenda') main.innerHTML = renderAgenda();
+    if (state.section === 'agenda') main.innerHTML = renderAgenda();
     else if (state.section === 'conteudo') main.innerHTML = renderConteudo();
     else if (state.section === 'edicao') main.innerHTML = renderEdicao();
     else if (state.section === 'pacientes') main.innerHTML = renderPacientes();
-    else if (state.section === 'agentes') main.innerHTML = state.agent === 'marketing' ? renderMarketing() : state.agent ? renderArriving(AGENTS.find(function (a) { return a.id === state.agent; })) : renderTeam();
+    else if (state.section === 'agentes') main.innerHTML = state.agent === 'marketing' ? renderMarketing() : state.agent ? renderArriving(AGENTS.find(function (a) { return a.id === state.agent; })) : renderAgentes();
     else main.innerHTML = renderSoon(SECTIONS.find(function (s) { return s.id === state.section; }));
   }
 
@@ -2276,9 +2260,15 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     if (state.section === 'agenda') { agClick(e.target); return; }
     if (state.section === 'conteudo' || state.section === 'edicao') { ctClick(e.target); return; }
     if (state.section === 'pacientes') { pcClick(e.target); return; }
+    if ((t = e.target.closest('[data-abertas]'))) { var ab = t.getAttribute('data-abertas'); state.abertas[ab] = !state.abertas[ab]; render(); return; }
+    if ((t = e.target.closest('[data-ir]'))) { irPara(t.getAttribute('data-ir')); return; }
+    if ((t = e.target.closest('[data-setor]'))) {
+      var col = document.getElementById('setor-' + t.getAttribute('data-setor'));
+      if (col) { document.querySelectorAll('.st-col.marcado').forEach(function (x) { x.classList.remove('marcado'); }); col.classList.add('marcado'); col.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      return;
+    }
     if ((t = e.target.closest('[data-agent]'))) { state.agent = t.getAttribute('data-agent'); render(); window.scrollTo(0, 0); return; }
     if ((t = e.target.closest('[data-back]'))) { state.agent = null; render(); return; }
-    if ((t = e.target.closest('[data-week]'))) { state.week = Math.max(0, Math.min(3, state.week + +t.getAttribute('data-week'))); render(); return; }
     if ((t = e.target.closest('[data-day-pick]'))) { state.selected = t.getAttribute('data-day-pick'); render(); return; }
     if ((t = e.target.closest('[data-mark]'))) { mark(t.getAttribute('data-day'), t.getAttribute('data-opt'), t.getAttribute('data-mark')); }
   });
@@ -2350,7 +2340,7 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
       function ctSub(q, key) {
         q.onSnapshot(function (snap) {
           ct[key] = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
-          if (state.section === 'conteudo' || state.section === 'edicao') render();
+          if (state.section === 'conteudo' || state.section === 'edicao' || state.section === 'agentes') render();
         }, function () { ct[key] = ct[key] || []; });
       }
       db.doc('config/conteudo').onSnapshot(function (snap) {
@@ -2359,14 +2349,15 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
       }, function () { ct.pastas = []; });
       db.doc('config/desafios').onSnapshot(function (snap) {
         ct.desafios = (snap.exists ? snap.data() : null) || {};
-        if (state.section === 'conteudo') render();
+        if (state.section === 'conteudo' || state.section === 'agentes') render();
       }, function () { ct.desafios = ct.desafios || {}; });
       ctSub(db.collection('midia').orderBy('criado', 'desc').limit(500), 'midia');
       ctSub(db.collection('cronograma').orderBy('data', 'desc').limit(200), 'posts');
+      ctSub(db.collection('agentes').limit(50), 'agentes');
       // pacientes: só para o dono (o banco também recusa os outros)
       if (window.painelDono) db.collection('pacientes').limit(1000).onSnapshot(function (snap) {
         pc.lista = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
-        if (state.section === 'pacientes' || (state.section === 'conteudo' && !ct.pasta && !ct.sel)) render(); else renderNav();   // o número de retornos aparece no menu
+        if (state.section === 'pacientes' || state.section === 'agentes' || (state.section === 'conteudo' && !ct.pasta && !ct.sel)) render(); else renderNav();   // o número de retornos aparece no menu
       }, function () { pc.lista = pc.lista || []; render(); });
       var timer = setTimeout(function () { state.slow = true; render(); }, 10000);
       db.collection('marketing').orderBy('data', 'desc').limit(30).onSnapshot(function (snap) {
@@ -2398,446 +2389,9 @@ button.member:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(1
     }, function () { ct.ready = true; render(); });
   } else ct.ready = true;
 
-  // escritório 3D (script do módulo abaixo): monta no lugar do desenho em SVG
-  function mount3d() {
-    var faces = window.Office3D && window.Office3D.faces;
-    if (faces) document.querySelectorAll('[data-face]').forEach(function (el) {
-      var src = faces[el.getAttribute('data-face')];
-      if (src && !el.querySelector('img')) el.innerHTML = '<img src="' + src + '" alt="">';
-    });
-    var slot = document.getElementById('office-slot');
-    if (slot && window.Office3D) { window.Office3D.mount(slot); window.Office3D.update({ marketing: statusLine() }); }
-  }
-  window.addEventListener('office3d-ready', mount3d);
-  var baseRender = render;
-  render = function () { baseRender(); mount3d(); };
-  mount3d();
 })();
 </script>
 
-<script type="importmap">{ "imports": { "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js" } }</script>
-<script type="module">
-import * as THREE from 'three';
-
-// Escritório em 3D (three.js), em corte, visto de cima. Se o WebGL falhar, fica o desenho em SVG.
-(function () {
-  let renderer;
-  try { renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true }); } catch (e) { return; }
-  if (!renderer.getContext()) return;
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const H = 2.4, T = 0.14;
-  const C = { wall: '#ece8e1', plinth: '#4b3a2c', carpet: '#a59c8f', wood: '#b5875a', woodDark: '#7c5536', part: '#aaa59c',
-    trim: '#6e6961', post: '#3b3733', chair: '#3e4247', beige: '#ddd5c4', off: '#2b3236', metal: '#9ea3a8', white: '#f4f2ee',
-    leaf: '#5f8f58', pot: '#b9785b', box: '#c39463' };
-  const BOOKS = ['#8b3a3a', '#2f5d7c', '#d0a34a', '#4f7a4a', '#6b4f8a', '#c9c2b4', '#a8553a'];
-
-  const mats = new Map();
-  function mat(c) {
-    if (typeof c !== 'string') return c;
-    if (!mats.has(c)) mats.set(c, new THREE.MeshStandardMaterial({ color: c, roughness: 0.88, metalness: 0 }));
-    return mats.get(c);
-  }
-  function stripes(bg, line, n) {
-    const cv = document.createElement('canvas'); cv.width = 8; cv.height = 64;
-    const g = cv.getContext('2d'); g.fillStyle = bg; g.fillRect(0, 0, 8, 64); g.fillStyle = line;
-    for (let i = 0; i < n; i++) g.fillRect(0, i * 64 / n, 8, 1.6);
-    const t = new THREE.CanvasTexture(cv); t.colorSpace = THREE.SRGBColorSpace; t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(1, 3);
-    return t;
-  }
-  const blinds = new THREE.MeshStandardMaterial({ map: stripes('#ebe7df', '#b0a99b', 8), roughness: 0.9 });
-  const glow = new THREE.MeshStandardMaterial({ color: '#a8f0d8', emissive: '#7fdcbc', emissiveIntensity: 0.9 });
-  const vend = new THREE.MeshStandardMaterial({ color: '#cfe8ff', emissive: '#8fc4f0', emissiveIntensity: 0.7 });
-  const vend2 = new THREE.MeshStandardMaterial({ color: '#ffe0c2', emissive: '#f0b07a', emissiveIntensity: 0.6 });
-
-  const scene = new THREE.Scene();
-  const boxGeo = new THREE.BoxGeometry(1, 1, 1);
-  const sph = new Map();
-  function sphereGeo(r) { if (!sph.has(r)) sph.set(r, new THREE.SphereGeometry(r, 18, 12)); return sph.get(r); }
-  function add(m, parent) { m.castShadow = true; m.receiveShadow = true; (parent || scene).add(m); return m; }
-  // caixa com a base em y (não o centro)
-  function B(w, h, d, c, x, y, z, parent) { const m = new THREE.Mesh(boxGeo, mat(c)); m.scale.set(w, h, d); m.position.set(x, y + h / 2, z); return add(m, parent); }
-  function Cy(rt, rb, h, c, x, y, z, parent) { const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, 20), mat(c)); m.position.set(x, y + h / 2, z); return add(m, parent); }
-  function S(r, c, x, y, z, parent) { const m = new THREE.Mesh(sphereGeo(r), mat(c)); m.position.set(x, y, z); return add(m, parent); }
-  function grp(x, z, rot) { const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = rot || 0; scene.add(g); return g; }
-  let seed = 7; function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
-
-  // ---------- paredes ----------
-  function segs(a, b, gaps) {
-    const out = []; let s = a;
-    (gaps || []).slice().sort((p, q) => p[0] - q[0]).forEach(g => { if (g[0] > s) out.push([s, g[0]]); s = Math.max(s, g[1]); });
-    if (b > s) out.push([s, b]);
-    return out;
-  }
-  function piece(along, x, z, L, h, d, c, y) { return along ? B(L, h, d, c, x, y || 0, z) : B(d, h, L, c, x, y || 0, z); }
-  function doors(along, x1, z1, gaps) {
-    (gaps || []).forEach(([s, e]) => {
-      const m = (s + e) / 2, L = e - s, x = along ? m : x1, z = along ? z1 : m;
-      piece(along, x, z, L, H - 2.1, T, C.wall, 2.1);
-      piece(along, x, z, L - 0.08, 2.08, 0.05, C.woodDark);
-      along ? S(0.035, '#d8c27a', x + L / 2 - 0.18, 1.0, z + 0.05) : S(0.035, '#d8c27a', x + 0.05, 1.0, z - L / 2 + 0.18);
-    });
-  }
-  function wall(x1, z1, x2, z2, o) {
-    o = o || {}; const along = z1 === z2, a = along ? x1 : z1, b = along ? x2 : z2;
-    segs(a, b, o.gaps).forEach(([s, e]) => { const m = (s + e) / 2; piece(along, along ? m : x1, along ? z1 : m, e - s, H, T, o.c || C.wall); });
-    doors(along, x1, z1, o.gaps);
-  }
-  function glass(x1, z1, x2, z2, o) {
-    o = o || {}; const along = z1 === z2, a = along ? x1 : z1, b = along ? x2 : z2;
-    segs(a, b, o.gaps).forEach(([s, e]) => {
-      const L = e - s, n = Math.max(1, Math.round(L / 1.3)), step = L / n, m = (s + e) / 2;
-      for (let i = 0; i <= n; i++) { const p = s + i * step; piece(along, along ? p : x1, along ? z1 : p, 0.08, 2.1, 0.1, C.post); }
-      for (let i = 0; i < n; i++) { const p = s + (i + 0.5) * step; piece(along, along ? p : x1, along ? z1 : p, step - 0.1, 1.95, 0.04, blinds, 0.08); }
-      piece(along, along ? m : x1, along ? z1 : m, L, H - 2.1, T, C.wall, 2.1);
-      piece(along, along ? m : x1, along ? z1 : m, L, 0.08, 0.12, C.post);
-    });
-    doors(along, x1, z1, o.gaps);
-  }
-  // janela e quadro na face de dentro das paredes do fundo (x = 0 ou z = 0)
-  function win(onX, a, b) {
-    const m = (a + b) / 2, L = b - a;
-    if (onX) { B(0.03, 1.37, L + 0.12, C.post, 0.1, 0.79, m); B(0.03, 1.25, L, blinds, 0.12, 0.85, m); }
-    else { B(L + 0.12, 1.37, 0.03, C.post, m, 0.79, 0.1); B(L, 1.25, 0.03, blinds, m, 0.85, 0.12); }
-  }
-  function pic(onX, p, y, w, h, c, at) {
-    const d = at || 0;
-    if (onX) { B(0.03, h + 0.08, w + 0.08, '#2c2824', d + 0.1, y - 0.04, p); B(0.02, h, w, c, d + 0.12, y, p); }
-    else { B(w + 0.08, h + 0.08, 0.03, '#2c2824', p, y - 0.04, d + 0.1); B(w, h, 0.02, c, p, y, d + 0.12); }
-  }
-
-  // ---------- móveis ----------
-  function crt(g, x, z, on) {
-    B(0.46, 0.4, 0.36, C.beige, x, 0.77, z, g); B(0.3, 0.28, 0.22, C.beige, x, 0.8, z + 0.27, g);
-    B(0.36, 0.28, 0.02, on ? glow : C.off, x, 0.83, z - 0.185, g);
-  }
-  function chair(g, x, z, rot) {
-    const c = new THREE.Group(); c.position.set(x, 0, z); c.rotation.y = rot || 0; g.add(c);
-    B(0.5, 0.08, 0.48, C.chair, 0, 0.44, 0, c); B(0.48, 0.55, 0.07, C.chair, 0, 0.55, -0.27, c);
-    Cy(0.03, 0.03, 0.38, C.metal, 0, 0.06, 0, c);
-    const b1 = B(0.52, 0.04, 0.06, C.chair, 0, 0.04, 0, c), b2 = B(0.52, 0.04, 0.06, C.chair, 0, 0.04, 0, c); b1.rotation.y = 0.6; b2.rotation.y = -0.6;
-    return c;
-  }
-  function station(x, z, rot, on) {
-    const g = grp(x, z, rot);
-    B(1.4, 0.05, 0.8, C.wood, 0, 0.72, 0.72, g); B(0.05, 0.72, 0.74, C.woodDark, -0.66, 0, 0.72, g); B(0.05, 0.72, 0.74, C.woodDark, 0.66, 0, 0.72, g);
-    B(1.3, 0.42, 0.03, C.woodDark, 0, 0.28, 1.08, g);
-    crt(g, 0.1, 0.78, on);
-    B(0.42, 0.03, 0.15, '#d6cfbf', 0.05, 0.77, 0.43, g); B(0.07, 0.03, 0.1, '#d6cfbf', 0.42, 0.77, 0.45, g);
-    B(0.25, 0.012, 0.32, '#fbfaf6', -0.45, 0.77, 0.62, g); Cy(0.045, 0.04, 0.1, rnd() > 0.5 ? '#c25d41' : '#f4f2ee', 0.55, 0.77, 0.85, g);
-    chair(g, 0, -0.05, 0);
-    return g;
-  }
-  function partition(x1, z1, x2, z2) {
-    const along = z1 === z2, L = along ? x2 - x1 : z2 - z1, mx = along ? (x1 + x2) / 2 : x1, mz = along ? z1 : (z1 + z2) / 2;
-    piece(along, mx, mz, L, 1.2, 0.06, C.part); piece(along, mx, mz, L, 0.04, 0.08, C.trim, 1.2);
-  }
-  function plant(x, z, s) {
-    s = s || 1; Cy(0.18 * s, 0.14 * s, 0.35 * s, C.pot, x, 0, z);
-    const f = new THREE.Mesh(new THREE.IcosahedronGeometry(0.34 * s, 0), new THREE.MeshStandardMaterial({ color: C.leaf, flatShading: true, roughness: 0.9 }));
-    f.position.set(x, 0.62 * s, z); add(f);
-    if (s > 1) { const f2 = f.clone(); f2.scale.setScalar(0.7); f2.position.set(x + 0.08, 1.05 * s, z - 0.05); add(f2); }
-  }
-  function shelf(x, z, rot, w) {
-    const g = grp(x, z, rot); B(w, 1.9, 0.36, C.woodDark, 0, 0, 0, g);
-    for (let r = 0; r < 4; r++) {
-      let px = -w / 2 + 0.08; const y = 0.08 + r * 0.46;
-      while (px < w / 2 - 0.12) { const bw = 0.05 + rnd() * 0.05, bh = 0.26 + rnd() * 0.12; if (rnd() > 0.15) B(bw, bh, 0.26, BOOKS[Math.floor(rnd() * BOOKS.length)], px + bw / 2, y, 0.07, g); px += bw + 0.01; }
-      B(w - 0.06, 0.03, 0.3, C.wood, 0, y - 0.03, 0.04, g);
-    }
-    return g;
-  }
-  function arcDesk(cx, cz) {
-    const s = new THREE.Shape(); s.absarc(0, 0, 1.45, -0.95, 0.95, false); s.absarc(0, 0, 1.0, 0.95, -0.95, true);
-    const body = new THREE.ExtrudeGeometry(s, { depth: 1.0, bevelEnabled: false, curveSegments: 28 }); body.rotateX(-Math.PI / 2);
-    const m = new THREE.Mesh(body, mat(C.wood)); m.position.set(cx, 0, cz); add(m);
-    const s2 = new THREE.Shape(); s2.absarc(0, 0, 1.52, -1.0, 1.0, false); s2.absarc(0, 0, 0.95, 1.0, -1.0, true);
-    const top = new THREE.ExtrudeGeometry(s2, { depth: 0.05, bevelEnabled: false, curveSegments: 28 }); top.rotateX(-Math.PI / 2);
-    const t = new THREE.Mesh(top, mat('#d9c7a8')); t.position.set(cx, 1.0, cz); add(t);
-  }
-
-  // ---------- personagens ----------
-  function person(look, pose) {
-    const root = new THREE.Group();
-    const skin = mat(look.skin), shirt = mat(look.shirt), pants = mat(look.pants), hair = mat(look.hair), shoe = mat('#2a2522');
-    const cap = (r, l, m, x, y, z, p) => { const o = new THREE.Mesh(new THREE.CapsuleGeometry(r, l, 4, 12), m); o.position.set(x, y, z); return add(o, p || root); };
-    const sit = pose === 'sit', hip = sit ? 0.52 : 0.9;
-    [-0.1, 0.1].forEach(sx => {
-      if (sit) { cap(0.08, 0.3, pants, sx, hip, 0.17).rotation.x = Math.PI / 2; cap(0.068, 0.3, pants, sx, 0.3, 0.36); B(0.13, 0.07, 0.24, shoe, sx, 0, 0.42, root); }
-      else { cap(0.08, 0.66, pants, sx, 0.47, 0); B(0.13, 0.07, 0.24, shoe, sx, 0, 0.04, root); }
-    });
-    cap(0.17, 0.32, shirt, 0, hip + 0.33, 0).scale.set(1.3, 1, 0.85);
-    if (look.tie) B(0.06, 0.26, 0.02, look.tie, 0, hip + 0.3, 0.15, root);
-    const sh = hip + 0.55;
-    const arm = (sx, a1, a2) => {
-      const up = new THREE.Group(); up.position.set(sx, sh, 0); up.rotation.x = a1; root.add(up);
-      cap(0.058, 0.2, shirt, 0, -0.15, 0, up);
-      const fo = new THREE.Group(); fo.position.set(0, -0.3, 0); fo.rotation.x = a2; up.add(fo);
-      cap(0.05, 0.18, look.sleeve ? shirt : skin, 0, -0.13, 0, fo); S(0.055, look.skin, 0, -0.27, 0, fo);
-      return fo;
-    };
-    const fl = arm(-0.27, sit ? -0.35 : -0.5, sit ? -1.15 : -1.0), fr = arm(0.27, sit ? -0.35 : -0.5, sit ? -1.15 : -1.0);
-    cap(0.05, 0.05, skin, 0, hip + 0.7, 0);
-    // a mesma cabeça dos rostos da equipe, em miniatura
-    const head = new THREE.Group(); head.position.set(0, hip + 0.9, 0); root.add(head);
-    const hm = headModel(look, 0.5); hm.scale.setScalar(0.17); head.add(hm);
-    return { root, head, fl, fr };
-  }
-
-  // ---------- rostos no estilo boneco de massinha: cabeça grande, nariz redondo, bochecha rosada ----------
-  // q: qualidade (1 nos retratos, menos no escritório, onde a cabeça é pequena)
-  function headModel(look, q) {
-    q = q || 1;
-    const g = new THREE.Group(), seg = n => Math.max(8, Math.round(n * q));
-    const clay = c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.72, metalness: 0 });
-    const skin = clay(look.skin), hair = clay(look.hair), dark = clay('#2a1d18');
-    hair.side = THREE.DoubleSide;
-    const m = (geo, mt, x, y, z) => { const o = new THREE.Mesh(geo, mt); o.position.set(x, y, z); o.castShadow = true; g.add(o); return o; };
-    m(new THREE.SphereGeometry(1, seg(48), seg(32)), skin, 0, 0, 0).scale.set(1, 1.04, 0.95);
-    [-1, 1].forEach(s => {
-      m(new THREE.SphereGeometry(0.26, seg(24), seg(16)), skin, s * 0.98, -0.08, -0.02).scale.set(0.55, 1, 0.8);
-      m(new THREE.SphereGeometry(0.085, seg(20), seg(14)), dark, s * 0.34, 0.04, 0.86);
-      m(new THREE.SphereGeometry(0.026, 10, 8), clay('#ffffff'), s * 0.34 + 0.03, 0.08, 0.925);
-      m(new THREE.CapsuleGeometry(0.032, 0.16, 4, 8), hair, s * 0.35, 0.3, 0.86).rotation.z = Math.PI / 2 + s * 0.12;
-      const ck = m(new THREE.CircleGeometry(0.15, 24), new THREE.MeshBasicMaterial({ color: '#f29a8f', transparent: true, opacity: 0.35 }), s * 0.55, -0.28, 0.79);
-      ck.rotation.y = s * 0.6; ck.castShadow = false;
-    });
-    m(new THREE.SphereGeometry(0.16, seg(24), seg(16)), clay(look.nose || look.skin), 0, -0.2, 0.95);
-    m(new THREE.TorusGeometry(0.16, 0.024, 8, 24, Math.PI), clay('#8a3f30'), 0, -0.42, 0.86).rotation.set(-0.2, 0, Math.PI);
-    if (look.style === 'long') {
-      // cabelo liso comprido com franja até a sobrancelha
-      m(new THREE.SphereGeometry(1.07, seg(48), seg(24), 0, Math.PI * 2, 0, Math.PI * 0.5), hair, 0, 0.02, -0.02).rotation.x = -0.18;
-      m(new THREE.SphereGeometry(1.09, seg(40), seg(16), Math.PI / 2 - 0.95, 1.9, 0.28, 0.95), hair, 0, 0.02, 0);
-      [-1, 1].forEach(s => m(new THREE.CapsuleGeometry(0.42, 1.5, 6, seg(16)), hair, s * 0.88, -0.75, -0.5).scale.set(0.62, 1, 1.05));
-      m(new THREE.CapsuleGeometry(0.8, 1.2, 6, seg(20)), hair, 0, -0.55, -0.5).scale.set(1.12, 1, 0.55);
-    } else {
-      // cabelo curto cacheado: bolinhas espalhadas pelo alto e pela nuca
-      m(new THREE.SphereGeometry(1.04, seg(48), seg(24), 0, Math.PI * 2, 0, Math.PI * 0.42), hair, 0, 0.02, 0).rotation.x = -0.3;
-      // "short": só a touca de cabelo, sem os cachos
-      const curl = new THREE.SphereGeometry(1, seg(16), seg(12));
-      for (let i = 0; look.style !== 'short' && i < 150; i++) {
-        const y = 1 - (i + 0.5) / 150 * 2, r = Math.sqrt(1 - y * y), a = i * 2.39996, x = Math.cos(a) * r, z = Math.sin(a) * r;
-        if (y > 0.45 || (y > 0.05 && z < 0.1)) m(curl, hair, x * 1.04, y * 1.06 + 0.02, z).scale.setScalar(0.19 + (i % 3) * 0.025);
-      }
-    }
-    return g;
-  }
-
-  // busto para o retrato: cabeça, pescoço e ombros
-  function bust(look) {
-    const g = new THREE.Group(), clay = c => new THREE.MeshStandardMaterial({ color: c, roughness: 0.75, metalness: 0 });
-    g.add(headModel(look, 1));
-    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.3, 0.32, 0.6, 32), clay(look.skin)); neck.position.y = -1.15; g.add(neck);
-    const body = new THREE.Mesh(new THREE.SphereGeometry(1, 48, 24), clay(look.shirt)); body.scale.set(1.6, 0.95, 0.95); body.position.y = -2.15; g.add(body);
-    const collar = new THREE.Mesh(new THREE.TorusGeometry(0.38, 0.1, 12, 32), clay(look.collar || look.shirt)); collar.rotation.x = Math.PI / 2; collar.position.y = -1.38; g.add(collar);
-    if (look.tie) { const t = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.5, 0.05), clay(look.tie)); t.position.set(0, -1.72, 0.84); t.rotation.x = -0.45; g.add(t); }
-    return g;
-  }
-
-  const LOOKS = {
-    marketing: { skin: '#f2c3a0', nose: '#eba98a', hair: '#1f1814', shirt: '#4f8a78', collar: '#f4f1ea', pants: '#2f3a44', style: 'long' },
-    kim: { skin: '#dfa37c', nose: '#d68f6a', hair: '#6b3a22', shirt: '#7a7a45', collar: '#efe6d2', pants: '#3a3a40', style: 'curly', sleeve: true },
-    // contratados em 01/11/2026 (por enquanto só o retrato; no escritório ainda não têm boneco)
-    luzi: { skin: '#eab995', nose: '#e0a17e', hair: '#3b2418', shirt: '#2f3e57', collar: '#f4f1ea', style: 'long' },
-    nina: { skin: '#f0c6a6', nose: '#e8ab8a', hair: '#6a3f22', shirt: '#c98b6b', collar: '#f4f1ea', style: 'long' },
-    anapaula: { skin: '#d9a07a', nose: '#cc8c66', hair: '#241a16', shirt: '#eef1f3', collar: '#d6e6ee', style: 'long' },
-    amanda: { skin: '#f4cdb0', nose: '#ecb193', hair: '#e0bd6e', shirt: '#7fa8c9', collar: '#f4f1ea', style: 'long' },
-    bruno: { skin: '#f2c3a0', nose: '#eba98a', hair: '#8e8a86', shirt: '#6b7f99', collar: '#f4f1ea', style: 'short' },
-    caio: { skin: '#e3b48e', nose: '#d99f78', hair: '#b88a4a', shirt: '#8a6fae', collar: '#f4f1ea', style: 'curly' },
-    rafa: { skin: '#b8835e', nose: '#a8724f', hair: '#1c1714', shirt: '#2b2b30', collar: '#3d3d44', style: 'short' }
-  };
-
-  // os retratos saem como imagem, desenhados uma vez num canvas separado
-  const faces = {};
-  try {
-    const fr = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
-    fr.setPixelRatio(1); fr.setSize(360, 360, false);
-    const fs = new THREE.Scene(); fs.background = new THREE.Color('#ffffff');
-    fs.add(new THREE.HemisphereLight('#ffffff', '#d9c8b8', 1.7));
-    const key = new THREE.DirectionalLight('#fff4e8', 1.9); key.position.set(-3, 4, 6); fs.add(key);
-    const rim = new THREE.DirectionalLight('#ffffff', 0.6); rim.position.set(4, 2, -3); fs.add(rim);
-    const cam = new THREE.PerspectiveCamera(20, 1, 0.1, 50); cam.position.set(0, -0.45, 11); cam.lookAt(0, -0.5, 0);
-    Object.keys(LOOKS).forEach(id => { const b = bust(LOOKS[id]); fs.add(b); fr.render(fs, cam); faces[id] = fr.domElement.toDataURL('image/png'); fs.remove(b); });
-    fr.dispose(); fr.forceContextLoss();
-  } catch (e) {}
-
-  // ---------- planta do escritório (x: 0 a 22, z: 0 a 18; fundo em x = 0 e z = 0) ----------
-  B(22.6, 0.5, 18.6, C.plinth, 11, -0.5, 9);
-  B(22, 0.02, 18, C.carpet, 11, 0, 9);
-  const floor = (x1, z1, x2, z2, c) => B(x2 - x1, 0.025, z2 - z1, c, (x1 + x2) / 2, 0, (z1 + z2) / 2);
-  floor(0, 0, 8, 6, '#b59572'); floor(0, 6, 5, 12, '#b08a64'); floor(14, 0, 22, 6, '#d6d0c4');
-  floor(17, 6, 22, 12, '#5f6468'); floor(12, 12, 22, 18, '#8d8378');
-  const sh = new THREE.Mesh(new THREE.PlaneGeometry(90, 90), new THREE.ShadowMaterial({ opacity: 0.16 }));
-  sh.rotation.x = -Math.PI / 2; sh.position.set(11, -0.5, 9); sh.receiveShadow = true; scene.add(sh);
-
-  wall(0, 0, 0, 18); wall(0, 0, 22, 0);
-  B(7.8, H, 0.02, '#a9b8a4', 4, 0, 0.08);                       // parede verde da sala do Kim
-  B(0.02, H, 5.8, '#8a6fae', 0.08, 0, 15.05);                   // parede roxa da recepção
-  win(false, 2.6, 5.4); win(false, 9.4, 12.2); win(false, 17.6, 20.6); win(true, 6.6, 8.6);
-  wall(0, 6, 5, 6); glass(5, 6, 8, 6); glass(8, 0, 8, 6, { gaps: [[4.4, 5.4]] });
-  wall(5, 6, 5, 12, { gaps: [[10.4, 11.4]] }); wall(0, 12, 5, 12);
-  wall(14, 0, 14, 6, { gaps: [[4.4, 5.4]] }); wall(14, 6, 22, 6, { gaps: [[15, 16]] });
-  wall(17, 6, 17, 12, { gaps: [[10.2, 11.2]] });
-  glass(12, 12, 22, 12); wall(12, 12, 12, 18, { gaps: [[12.5, 13.5]] });
-
-  // sala do Kim (Financeiro)
-  shelf(0.25, 2.2, Math.PI / 2, 2.0); pic(true, 4.3, 1.3, 0.7, 0.5, '#6f8fa8'); pic(false, 6.8, 1.25, 0.6, 0.8, '#c9a46a');
-  station(3.4, 1.7, 0, false); plant(7.3, 0.6, 1.3); B(0.5, 1.3, 0.6, C.metal, 6.4, 0, 0.45);
-  Cy(0.02, 0.02, 1.6, C.post, 1.2, 0, 4.9); Cy(0.12, 0.2, 0.25, '#efe6cf', 1.2, 1.6, 4.9);
-  B(0.5, 0.4, 0.45, C.box, 6.6, 0, 3.2); B(0.45, 0.35, 0.4, C.box, 6.62, 0.4, 3.2); B(0.55, 0.38, 0.45, C.box, 7.2, 0, 2.5);
-
-  // estudos (vaga)
-  shelf(1.4, 6.3, 0, 2.2); shelf(3.7, 6.3, 0, 1.8); station(2.7, 9.2, -Math.PI / 2, false);
-  pic(true, 10.4, 1.35, 0.8, 0.55, '#8a6f52'); plant(4.4, 11.4); Cy(0.02, 0.02, 1.5, C.post, 0.6, 0, 11.3); Cy(0.1, 0.18, 0.22, '#efe6cf', 0.6, 1.5, 11.3);
-
-  // recepção / atendimento (vaga)
-  arcDesk(2.0, 15.0); chair(scene, 1.6, 15.0, Math.PI / 2);
-  const rc = grp(3.05, 14.55, Math.PI / 2); crt(rc, 0, 0, false); rc.position.y = 0.25;
-  B(0.5, 0.75, 1.8, C.wood, 0.4, 0, 13.4); shelf(0.25, 17.0, Math.PI / 2, 1.4); pic(true, 15.2, 1.4, 1.0, 0.65, '#d7c3a1');
-  plant(5.4, 17.3, 1.3); Cy(0.25, 0.25, 0.45, '#5b5f63', 4.6, 0, 12.8);
-
-  // corredor do fundo
-  B(0.8, 0.9, 0.6, '#d9d6cf', 9.3, 0, 0.5); B(0.8, 0.06, 0.6, '#bdb8ae', 9.3, 0.9, 0.5);
-  B(0.5, 1.3, 0.6, C.metal, 10.5, 0, 0.45); B(0.5, 1.3, 0.6, C.metal, 11.05, 0, 0.45);
-  B(0.32, 0.9, 0.32, '#e6e3dc', 12.4, 0, 0.4); Cy(0.13, 0.13, 0.36, '#7fb6d9', 12.4, 0.9, 0.4);
-  plant(13.4, 0.6, 1.3);
-
-  // agência de marketing: 6 baias, a Duda numa delas
-  partition(8.2, 9.6, 14.8, 9.6);
-  [8.2, 10.4, 12.6, 14.8].forEach(x => partition(x, 7.6, x, 11.6));
-  const desks = [];
-  [9.3, 11.5, 13.7].forEach(x => { desks.push([x, 8.15, 0]); desks.push([x, 11.05, Math.PI]); });
-  let dudaStation;
-  desks.forEach(([x, z, r]) => { const g = station(x, z, r, x === 9.3 && r === Math.PI); if (x === 9.3 && r === Math.PI) dudaStation = g; });
-  plant(6.4, 6.9, 1.3); plant(15.7, 6.9); plant(6.4, 12.4); Cy(0.16, 0.13, 0.35, '#5b5f63', 15.4, 0, 11.8);
-  B(0.7, 0.95, 0.55, '#dcd8d0', 11.0, 0, 14.6); B(0.7, 0.05, 0.55, '#bdb8ae', 11.0, 0.95, 14.6);
-
-  // copa
-  B(0.75, 1.9, 0.9, '#2b2d31', 14.5, 0, 1.2); B(0.02, 1.25, 0.6, vend, 14.885, 0.5, 1.2);
-  B(0.75, 1.9, 0.9, '#7a1f24', 14.5, 0, 2.25); B(0.02, 1.25, 0.6, vend2, 14.885, 0.5, 2.25);
-  B(3.4, 0.88, 0.62, C.white, 18.2, 0, 0.4); B(3.5, 0.05, 0.68, '#8f8a82', 18.2, 0.88, 0.42); B(0.55, 0.32, 0.4, '#3a3a3a', 17.2, 0.93, 0.38);
-  B(0.8, 1.95, 0.72, '#eeeeea', 21.3, 0, 0.45); Cy(0.04, 0.04, 0.12, '#f4f2ee', 18.9, 0.93, 0.35);
-  Cy(0.7, 0.7, 0.05, C.wood, 18.4, 0.72, 3.6); Cy(0.06, 0.06, 0.72, C.metal, 18.4, 0, 3.6);
-  chair(scene, 18.4, 2.6, 0); chair(scene, 19.4, 4.0, -2.2); chair(scene, 17.4, 4.0, 2.2);
-
-  // treino e dieta (vaga)
-  B(0.8, 0.22, 1.9, '#33363a', 18.4, 0, 8.6); B(0.06, 1.1, 0.06, '#33363a', 18.05, 0, 7.75); B(0.06, 1.1, 0.06, '#33363a', 18.75, 0, 7.75);
-  B(0.8, 0.12, 0.3, '#33363a', 18.4, 1.0, 7.75); B(0.7, 0.04, 1.7, '#4a4e53', 18.4, 0.22, 8.65);
-  B(1.3, 0.6, 0.4, '#4a4e53', 19.9, 0, 6.4); [19.4, 19.75, 20.1, 20.45].forEach((x, i) => { Cy(0.07, 0.07, 0.2, '#22252a', x, 0.62, 6.4).rotation.z = Math.PI / 2; });
-  B(0.7, 0.02, 1.8, '#6aa58f', 20.9, 0, 9.4); Cy(0.3, 0.3, 0.7, C.wood, 21.2, 0, 11.3);
-  S(0.08, '#e3913a', 21.15, 0.78, 11.25); S(0.08, '#8fbf4a', 21.3, 0.78, 11.35); S(0.08, '#d84b3a', 21.2, 0.82, 11.4);
-  pic(false, 19.6, 1.5, 0.9, 0.6, '#6aa58f', 6);
-
-  // sala de reunião
-  B(6, 0.06, 1.7, C.wood, 17.2, 0.72, 15.1); B(0.1, 0.72, 1.2, C.woodDark, 14.8, 0, 15.1); B(0.1, 0.72, 1.2, C.woodDark, 19.6, 0, 15.1);
-  [14.9, 16.1, 17.3, 18.5, 19.7].forEach(x => { chair(scene, x, 14.0, 0); chair(scene, x, 16.25, Math.PI); });
-  chair(scene, 13.75, 15.1, Math.PI / 2); chair(scene, 20.65, 15.1, -Math.PI / 2);
-  B(0.04, 1.08, 2.5, '#cfcac0', 12.09, 0.96, 15.6); B(0.03, 1.0, 2.4, '#fbfbf8', 12.11, 1.0, 15.6);
-  plant(21.5, 17.4, 1.3); [15.5, 17.2, 18.9].forEach(x => B(0.3, 0.01, 0.4, '#fbfaf6', x, 0.78, 14.8));
-
-  // ---------- a equipe ----------
-  const duda = person(LOOKS.marketing, 'sit');
-  dudaStation.add(duda.root); duda.root.userData.agent = 'marketing'; dudaStation.userData.agent = 'marketing';
-  const kim = person(LOOKS.kim, 'stand');
-  kim.root.position.set(5.0, 0, 3.7); kim.root.rotation.y = 0.5; scene.add(kim.root); kim.root.userData.agent = 'kim';
-  B(0.55, 0.38, 0.42, C.box, 0, 0.98, 0.42, kim.root); B(0.56, 0.012, 0.07, '#e4cf9e', 0, 1.36, 0.42, kim.root);
-
-  // ---------- luz e câmera ----------
-  scene.add(new THREE.HemisphereLight('#ffffff', '#b8a68f', 1.9));
-  const sun = new THREE.DirectionalLight('#fff6ea', 2.3);
-  sun.position.set(-4, 26, 16); sun.target.position.set(11, 0, 9); scene.add(sun, sun.target);
-  sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048);
-  Object.assign(sun.shadow.camera, { left: -20, right: 20, top: 20, bottom: -20, near: 1, far: 70 });
-  sun.shadow.bias = -0.0004; sun.shadow.normalBias = 0.02;
-
-  const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 200);
-  const center = new THREE.Vector3(11, 0.4, 9), EL = 0.66, R = 60, AZ0 = Math.PI / 4;
-  let az = AZ0, azT = AZ0;
-  function placeCam() {
-    camera.position.set(center.x + R * Math.cos(EL) * Math.sin(az), center.y + R * Math.sin(EL), center.z + R * Math.cos(EL) * Math.cos(az));
-    camera.lookAt(center);
-  }
-  placeCam();
-
-  // ---------- página ----------
-  const wrap = document.createElement('div'); wrap.className = 'o3d';
-  renderer.domElement.setAttribute('aria-label', 'Escritório em 3D com as salas dos agentes'); renderer.domElement.setAttribute('role', 'img');
-  wrap.appendChild(renderer.domElement);
-  const layer = document.createElement('div'); layer.className = 'o3d-layer'; wrap.appendChild(layer);
-  const tags = [];
-  function tag(pos, html, cls) {
-    const el = document.createElement('div'); el.className = 'o3d-tag ' + (cls || '');
-    el.innerHTML = html; layer.appendChild(el); tags.push({ el, pos: new THREE.Vector3(pos[0], pos[1], pos[2]) }); return el;
-  }
-  const faceImg = id => faces[id] ? '<img src="' + faces[id] + '" alt="">' : '';
-  const dudaTag = tag([9.3, 2.0, 11.05], faceImg('marketing') + '<div><b>Duda · Marketing e captação</b><span class="sub">trabalhando</span></div>', 'who live');
-  tag([5.0, 2.2, 3.7], faceImg('kim') + '<div><b>Kim · Financeiro</b><span class="sub">chegando</span></div>', 'who');
-  tag([11.5, 1.45, 7.3], 'Agência de marketing', 'room');
-  tag([2.6, 2.5, 9.0], 'Estudos · Nina (chegando)', 'room'); tag([2.4, 1.8, 15.2], 'Atendimento · Amanda (chegando)', 'room');
-  tag([19.5, 2.5, 9.2], 'Treino e dieta · vaga', 'room'); tag([18.3, 2.5, 3.0], 'Copa', 'room'); tag([17.2, 2.0, 15.1], 'Sala de reunião · Luzi (chegando)', 'room');
-  const ctrl = document.createElement('div'); ctrl.className = 'o3d-ctrl';
-  ctrl.innerHTML = '<button type="button" data-rot="1" aria-label="Girar para a esquerda">↺</button><button type="button" data-rot="-1" aria-label="Girar para a direita">↻</button>';
-  wrap.appendChild(ctrl);
-  const hint = document.createElement('div'); hint.className = 'o3d-hint'; hint.textContent = 'Arraste para girar'; wrap.appendChild(hint);
-  const clampAz = a => Math.max(AZ0 - 0.85, Math.min(AZ0 + 0.85, a));
-  ctrl.addEventListener('click', e => { const b = e.target.closest('[data-rot]'); if (b) azT = clampAz(azT + 0.42 * +b.getAttribute('data-rot')); });
-
-  // o escritório só gira; abrir os agentes fica na aba Agentes (pedido do Pedro, 01/11/2026)
-  const cv = renderer.domElement;
-  let down = null;
-  cv.addEventListener('pointerdown', e => { down = { x: e.clientX, az: azT }; });
-  cv.addEventListener('pointermove', e => {
-    if (down) { const dx = e.clientX - down.x; if (Math.abs(dx) > 4) azT = clampAz(down.az - dx * 0.006); cv.style.cursor = 'grabbing'; }
-  });
-  const up = () => { down = null; cv.style.cursor = 'grab'; };
-  cv.addEventListener('pointerup', up); cv.addEventListener('pointercancel', up); cv.addEventListener('pointerleave', () => { down = null; });
-
-  function fit() {
-    const w = wrap.clientWidth || 600, h = wrap.clientHeight || 420; renderer.setSize(w, h, false);
-    const a = w / h; let hh = 10.6, hw = hh * a; if (hw < 15.4) { hw = 15.4; hh = hw / a; }
-    Object.assign(camera, { left: -hw, right: hw, top: hh, bottom: -hh }); camera.updateProjectionMatrix();
-  }
-  new ResizeObserver(fit).observe(wrap);
-  let visible = true;
-  new IntersectionObserver(es => { visible = es[0].isIntersecting; }).observe(wrap);
-
-  const v = new THREE.Vector3();
-  function labels() {
-    const w = wrap.clientWidth, h = wrap.clientHeight;
-    tags.forEach(t => { v.copy(t.pos).project(camera); t.el.style.transform = 'translate(' + ((v.x * 0.5 + 0.5) * w).toFixed(1) + 'px,' + ((-v.y * 0.5 + 0.5) * h).toFixed(1) + 'px) translate(-50%,-100%)'; });
-  }
-  function animate(t) {
-    if (!reduce) {
-      duda.fl.rotation.x = -1.15 + Math.sin(t * 14) * 0.1; duda.fr.rotation.x = -1.15 + Math.sin(t * 14 + 1.7) * 0.1;
-      duda.head.rotation.y = Math.sin(t * 0.6) * 0.12; duda.head.rotation.x = 0.12 + Math.sin(t * 0.9) * 0.03;
-      kim.root.position.y = Math.abs(Math.sin(t * 2.4)) * 0.025; kim.head.rotation.y = Math.sin(t * 0.7) * 0.45;
-      glow.emissiveIntensity = 0.85 + Math.sin(t * 3) * 0.1;
-    }
-    az += (azT - az) * 0.12; placeCam();
-  }
-  let running = false;
-  function loop(ms) {
-    if (!wrap.isConnected) { running = false; return; }
-    requestAnimationFrame(loop);
-    if (!visible || document.hidden) return;
-    animate(ms / 1000); labels(); renderer.render(scene, camera);
-  }
-
-  window.Office3D = {
-    mount(slot) {
-      if (wrap.parentNode !== slot) { slot.innerHTML = ''; slot.appendChild(wrap); }
-      slot.classList.add('is-3d'); fit();
-      if (!running) { running = true; requestAnimationFrame(loop); }
-    },
-    faces,
-    update(s) { if (s && s.marketing != null) dudaTag.querySelector('.sub').textContent = s.marketing; }
-  };
-  window.dispatchEvent(new Event('office3d-ready'));
-})();
-</script>
 
 </body>
 </html>

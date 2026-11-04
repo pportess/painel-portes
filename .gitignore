@@ -8,6 +8,7 @@
 *.png
 # exceção: os ícones do site
 !icones/*.png
+!escritorio.jpg
 # segredos
 .env
 *.local
