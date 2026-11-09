@@ -966,8 +966,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var a = AGENTS.find(function (x) { return x.id === 'lisa'; });
     var html = '<button type="button" class="back" data-back="1">← Agentes</button>' +
       '<div class="agent-hero">' + face(a, 'big') + '</div>' +
-      '<header class="page-head"><span class="eyebrow">Lisa · Estatísticas e interações</span><h1>O Instagram em números</h1>' +
-      '<p>A Lisa lê o Instagram pelo Metricool às 9h e às 18h, diz o que funcionou e escreve as respostas das mensagens que você colar aqui. Ela trabalha com a Duda: a Duda cria, a Lisa mede e conversa.</p></header>';
+      '<header class="page-head"><span class="eyebrow">Lisa · Estatísticas e interações</span><h1>Instagram e TikTok em números</h1>' +
+      '<p>A Lisa lê o Instagram e o TikTok pelo Metricool às 9h e às 18h, diz o que funcionou e escreve as respostas das mensagens que você colar aqui. Ela trabalha com a Duda: a Duda cria, a Lisa mede e conversa.</p></header>';
     if (!state.db) return html + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
     var rel = (ct.insta || [])[0];
     if (!rel) html += '<div class="empty"><b>Ainda não há números.</b> A Lisa precisa do Metricool conectado ao Claude e ao seu Instagram. Depois disso, o primeiro relatório sai na próxima rodada (9h ou 18h), com o app do Claude aberto no computador.</div>';
@@ -978,6 +978,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         '<div class="li-nums">' + itens.filter(function (i) { return n[i[0]] != null; }).map(function (i) {
           var v = (rel.variacao || {})[i[0]];
           return '<div><b>' + esc(fmtNum(n[i[0]])) + '</b><span>' + esc(i[1]) + '</span>' + (v ? '<small>' + esc(v) + '</small>' : '') + '</div>'; }).join('') + '</div>' +
+        (rel.tiktok ? '<h3>TikTok</h3>' + (function (tk) {
+          var ti = [['seguidores', 'Seguidores'], ['visualizacoes', 'Visualizações'], ['alcance', 'Alcance'], ['interacoes', 'Interações'], ['visitas_perfil', 'Visitas ao perfil'], ['videos', 'Vídeos']].filter(function (i) { return tk[i[0]] != null; });
+          return (ti.length ? '<div class="li-nums">' + ti.map(function (i) { return '<div><b>' + esc(fmtNum(tk[i[0]])) + '</b><span>' + esc(i[1]) + '</span></div>'; }).join('') + '</div>' : '') +
+            (tk.leitura ? '<p>' + esc(tk.leitura) + '</p>' : '');
+        })(rel.tiktok) : '') +
         ((rel.melhores || []).length ? '<h3>O que funcionou</h3><ul class="li-list">' + rel.melhores.map(function (m) {
           return '<li><b>' + esc(m.titulo || '') + '</b>' + (m.formato ? ' · ' + esc(m.formato) : '') + (m.numeros ? '<br><small>' + esc(m.numeros) + '</small>' : '') + (m.porque ? '<br>' + esc(m.porque) : '') + '</li>'; }).join('') + '</ul>' : '') +
         (rel.horario ? '<h3>Melhor horário para postar</h3><p>' + esc(rel.horario) + '</p>' : '') +
