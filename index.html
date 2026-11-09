@@ -199,6 +199,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .tf-tx { display: grid; gap: 2px; min-width: 0; font-size: 13px; color: #4f545e; }
 .tf-tx b { font-size: 14.5px; font-weight: 600; color: var(--fg); }
 .tf-tx small { font-size: 11.5px; color: #8a909b; overflow-wrap: anywhere; }
+.tf-tp { margin: 2px 0 2px; padding-left: 16px; display: grid; gap: 4px; }
+.tf-tp li { display: grid; gap: 0; }
+.tf-tp li span { color: var(--fg); font-weight: 500; }
+.tf-tp li small { font-size: 11.5px; color: #8a909b; }
 .st-vaga { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
 .st-mais { border: 0; background: transparent; padding: 8px 0 0; font: inherit; font-size: 13px; font-weight: 600; color: var(--fg); }
 .st-ab { list-style: none; margin: 8px 0 0; padding: 0; display: grid; gap: 4px; }
@@ -883,11 +887,29 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       (p && p.resultado ? '<span>Último resultado: ' + esc(p.resultado) + '</span>' : '') +
       '<small>' + esc(t.quando) + (p ? ' · Última: ' + dataHora(p.ultima) : ' · ' + esc(e.txt)) + (t.auto ? ' · skill ' + esc(t.auto) : '') + '</small></span></button>';
   }
+  // uma linha por agente, com as tarefas dele em tópicos (pedido do Pedro, 09/11/2026: sem Duda e Lisa repetidas)
+  var EST_PESO = { late: 4, sem: 3, ok: 2, sob: 1, parada: 0 };
+  function linhaAgente(ts) {
+    var a = AGENTS.find(function (x) { return x.id === ts[0].ag; });
+    var pior = ts.reduce(function (m, t) { return EST_PESO[t.est.k] > EST_PESO[m.est.k] ? t : m; }, ts[0]).est;
+    var visto = {}, ult = null;
+    ts.forEach(function (t) { var p = t.est.p; if (p && (!ult || p.ultima > ult.ultima)) ult = p; });
+    return '<button type="button" class="tf" data-agent="' + a.id + '"><span class="tf-av">' + avatar(a.id) + '<i class="d-' + pior.k + '" title="' + esc(pior.txt) + '"></i></span>' +
+      '<span class="tf-tx"><b>' + esc(a.name) + '</b><ul class="tf-tp">' + ts.map(function (t) {
+        return '<li><span>' + esc(t.nome) + '</span><small>' + esc(t.quando) + ' · ' + esc(t.est.txt) + '</small></li>'; }).join('') + '</ul>' +
+      (ult && ult.resultado ? '<span>Último resultado: ' + esc(ult.resultado) + '</span>' : '') +
+      '<small>' + (ult ? 'Última rodada: ' + dataHora(ult.ultima) : '') + ts.filter(function (t) { if (!t.auto || visto[t.auto]) return false; visto[t.auto] = 1; return true; }).map(function (t) { return (ult ? ' · ' : '') + 'skill ' + esc(t.auto); }).join('') + '</small></span></button>';
+  }
+  function linhasAgentes(tar) {
+    var ordem = [], grupos = {};
+    tar.forEach(function (t) { if (!grupos[t.ag]) { grupos[t.ag] = []; ordem.push(t.ag); } grupos[t.ag].push(t); });
+    return ordem.map(function (ag) { return linhaAgente(grupos[ag]); }).join('');
+  }
   function colunaSetor(i) {
     var aberto = state.abertas[i.s.id];
     return '<section class="st-col" id="setor-' + i.s.id + '"><header><h3>' + esc(i.s.nome) + '</h3><span class="st-status n-' + (i.status === 'Em dia' ? 'ok' : i.status === 'Parado' ? 'parado' : i.nivel === 'foco' ? 'foco' : 'atencao') + '">' + esc(i.status) + '</span></header>' +
       '<p class="st-sub">' + esc(resumoSetor(i)) + '</p>' +
-      (i.tar.length ? i.tar.map(linhaTarefa).join('') : '<p class="st-vaga">Vaga. Ninguém contratado neste setor ainda.</p>') +
+      (i.tar.length ? linhasAgentes(i.tar) : '<p class="st-vaga">Vaga. Ninguém contratado neste setor ainda.</p>') +
       (i.ab.length ? '<button type="button" class="st-mais" data-abertas="' + i.s.id + '">' + (aberto ? 'Esconder ' : 'Ver ') + plural(i.ab.length, 'tarefa aberta', 'tarefas abertas') + ' ›</button>' +
         (aberto ? '<ul class="st-ab">' + i.ab.map(function (a) { return '<li class="t-' + a.tipo + '"><button type="button" data-ir="' + a.ir + '">' + esc(a.txt) + '</button></li>'; }).join('') + '</ul>' : '') : '') + '</section>';
   }
