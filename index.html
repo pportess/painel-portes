@@ -385,6 +385,14 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .post-media .pm { width: 84px; height: 105px; object-fit: cover; border-radius: 8px; flex: none; background: #e9e8e4; }
 .legenda { background: var(--field); border-radius: 10px; padding: 10px 12px; font-size: 13.5px; }
 .legenda p { margin: 4px 0 8px; white-space: pre-wrap; }
+.tk-av { margin: 0; font-size: 12.5px; color: var(--muted); }
+.tk-av.ok { color: #3f6f60; font-weight: 600; }
+.tk-av.bad { color: var(--bad); font-weight: 600; }
+.pe-form { display: flex; flex-direction: column; gap: 10px; }
+.pe-form label { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; font-weight: 700; color: var(--muted); min-width: 0; }
+.pe-form input, .pe-form select, .pe-form textarea { font: inherit; font-size: 14px; font-weight: 400; color: var(--fg); padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); width: 100%; box-sizing: border-box; }
+.pe-form textarea { resize: vertical; line-height: 1.45; }
+.pe-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .ct-ed { margin: 0; font-size: 13px; font-weight: 600; color: #3f6f60; display: flex; flex-direction: column; gap: 6px; }
 .ct-ed.bad { color: var(--bad); }
 .ct-ed video { width: 100%; max-height: 420px; border-radius: 10px; background: #111; }
@@ -1610,15 +1618,72 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         (ed.notas ? '<p class="hint">' + esc(ed.notas) + '</p>' : '') + (ct.downloads ? '<button type="button" class="btn" data-ct-dl="' + esc(ed.asset) + '" data-ct-dlname="post-' + esc(p.data || '') + '.mp4">Baixar vídeo</button>' : '') + '</div>'
       : ed.status === 'falhou' ? '<p class="ct-ed bad">A edição não deu certo: ' + esc(ed.notas || '') + '</p>' : '';
     // onde postar: vídeo (Reels) vai também para o TikTok; foto, carrossel e story ficam só no Instagram (09/11/2026)
-    var redes = (p.redes && p.redes.length) ? p.redes.join(' + ') : (/reels|v[ií]deo/i.test(p.formato || '') ? 'Instagram + TikTok' : 'Instagram');
+    var redes = postRedes(p).join(' + ');
+    var editando = ct.pe && ct.pe.id === p.id;
     return '<article class="post st-' + esc(st) + '"><div class="opt-top"><span class="kind">' + esc(p.formato || 'Post') + '</span><span class="kind">' + esc(redes) + '</span><span class="time">' + esc(fmtDay(p.data) + (p.hora ? ' · ' + p.hora : '')) + '</span>' +
       '<span class="post-st">' + esc(POST_ST[st] || st) + '</span></div>' +
       (p.titulo ? '<h3>' + esc(p.titulo) + '</h3>' : '') + (p.gancho ? '<p class="hook">' + esc(p.gancho) + '</p>' : '') +
       (midias.length ? '<div class="post-media">' + midias.map(function (m) { return thumb(m, 'pm'); }).join('') + '</div>' : '') +
+      (editando ? ctPostForm(p, ed.status === 'pronta' && ed.asset) :
       (p.legenda ? '<div class="legenda"><b>Legenda</b><p>' + esc(p.legenda) + '</p><button type="button" class="btn" data-ct-copy="' + esc(p.id) + '">Copiar legenda</button></div>' : '') +
-      (p.cfo ? '<p class="hint">CFO: ' + esc(p.cfo) + '</p>' : '') + edicao +
-      '<div class="acts">' + [['aprovado', 'Aprovar'], ['postado', 'Postei'], ['descartado', 'Descartar']].map(function (x) {
-        return '<button type="button" class="btn' + (st === x[0] ? ' primary' : '') + '" data-ct-post="' + esc(p.id) + '" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div></article>';
+      (p.cfo ? '<p class="hint">CFO: ' + esc(p.cfo) + '</p>' : '') + edicao + tiktokAviso(p, st) +
+      '<div class="acts">' + [['aprovado', 'Aprovar'], ['editar', 'Editar'], ['descartado', 'Descartar'], ['postado', 'Postei']].map(function (x) {
+        if (x[0] === 'editar') return '<button type="button" class="btn" data-pe-open="' + esc(p.id) + '">Editar</button>';
+        return '<button type="button" class="btn' + (st === x[0] ? ' primary' : '') + '" data-ct-post="' + esc(p.id) + '" data-v="' + x[0] + '">' + x[1] + '</button>'; }).join('') + '</div>') + '</article>';
+  }
+
+  // onde postar: vídeo (Reels) vai também para o TikTok; foto, carrossel e story ficam só no Instagram (09/11/2026)
+  function postRedes(p) {
+    return (p.redes && p.redes.length) ? p.redes : (/reels|v[ií]deo/i.test(p.formato || '') ? ['Instagram', 'TikTok'] : ['Instagram']);
+  }
+
+  // TikTok automático (09/11/2026): o Pedro aprova, edita ou descarta; a tarefa agente-publicador-tiktok agenda os
+  // aprovados no TikTok pelo Metricool. O Instagram NUNCA é postado pela IA: ele posta à mão.
+  function tiktokAviso(p, st) {
+    var tk = p.tiktok_auto || {}, temTk = postRedes(p).indexOf('TikTok') >= 0;
+    if (!temTk) return '<p class="tk-av">Instagram: você posta. A IA não posta nada no Instagram.</p>';
+    var ig = postRedes(p).indexOf('Instagram') >= 0 ? ' O Instagram você posta.' : '';
+    if (tk.status === 'publicado') return '<p class="tk-av ok">✓ Publicado no TikTok' + (tk.em ? ' (' + esc(fmtDay(tk.em.slice(0, 10))) + ')' : '') + '.' + ig + '</p>';
+    if (tk.status === 'agendado') return '<p class="tk-av ok">✓ Agendado no TikTok para ' + esc(fmtDay(p.data) + (p.hora ? ' · ' + p.hora : '')) + '. Posta sozinho.' + ig + (st === 'descartado' ? ' Você descartou: a IA tira do TikTok na próxima rodada.' : '') + '</p>';
+    if (tk.status === 'reagendar') return '<p class="tk-av">Você editou: a IA atualiza o TikTok na próxima rodada.' + ig + '</p>';
+    if (tk.status === 'cancelado') return '<p class="tk-av">Tirado do TikTok.</p>';
+    if (tk.status === 'erro') return '<p class="tk-av bad">Não deu para agendar no TikTok: ' + esc(tk.motivo || '') + '</p>';
+    if (st === 'aprovado') return '<p class="tk-av">Aprovado: a IA agenda no TikTok na próxima rodada (de hora em hora).' + ig + '</p>';
+    if (st === 'proposto') return '<p class="tk-av">Se aprovar, a IA agenda no TikTok no dia e na hora do post.' + ig + '</p>';
+    return '';
+  }
+
+  function ctPostForm(p, temEd) {
+    var f = ct.pe;
+    return '<div class="pe-form"><label>Título<input data-pe-f="titulo" value="' + esc(f.titulo) + '"></label>' +
+      '<div class="pe-row"><label>Dia<input type="date" data-pe-f="data" value="' + esc(f.data) + '"></label><label>Hora<input type="time" data-pe-f="hora" value="' + esc(f.hora) + '"></label></div>' +
+      (temEd ? '<label>Vídeo<select data-pe-f="video"><option value="editado"' + (f.video !== 'original' ? ' selected' : '') + '>Editado pelo Rafa</option><option value="original"' + (f.video === 'original' ? ' selected' : '') + '>Original, sem edição</option></select></label>' : '') +
+      '<label>Legenda<textarea rows="10" data-pe-f="legenda">' + esc(f.legenda) + '</textarea></label>' +
+      '<p class="hint">Mantenha o CRO na legenda (regra do CFO). Sem preço, sem "grátis" e sem promessa de resultado.</p>' +
+      (f.msg ? '<p class="tk-av bad">' + esc(f.msg) + '</p>' : '') +
+      '<div class="acts"><button type="button" class="btn primary" data-pe-save="1">Salvar</button><button type="button" class="btn" data-pe-cancel="1">Cancelar</button></div></div>';
+  }
+
+  function peClick(t) {
+    var a;
+    if ((a = t.closest('[data-pe-open]'))) {
+      var p = (ct.posts || []).find(function (x) { return x.id === a.getAttribute('data-pe-open'); }); if (!p) return true;
+      ct.pe = { id: p.id, titulo: p.titulo || '', data: p.data || '', hora: p.hora || '', legenda: p.legenda || '', video: p.video || 'editado' };
+      render(); return true;
+    }
+    if (t.closest('[data-pe-cancel]')) { ct.pe = null; render(); return true; }
+    if (t.closest('[data-pe-save]') && ct.pe) {
+      var f = ct.pe, p2 = (ct.posts || []).find(function (x) { return x.id === f.id; });
+      if (!/CRO/i.test(f.legenda)) { f.msg = 'Falta o CRO na legenda (CFO). Ex.: Dr. Pedro Portes · Cirurgião-dentista · CRO/PR 39911'; render(); return true; }
+      if (/grátis|gratis|R\$\s*\d|desconto|promoç/i.test(f.legenda)) { f.msg = 'A legenda tem preço, desconto ou "grátis": o CFO não deixa. Tire antes de salvar.'; render(); return true; }
+      if (!f.data || !f.hora) { f.msg = 'Coloque o dia e a hora.'; render(); return true; }
+      var upd = { titulo: f.titulo, data: f.data, hora: f.hora, legenda: f.legenda, video: f.video, editado_em: new Date().toISOString(), editado_por: 'pedro' };
+      var tk = (p2 && p2.tiktok_auto) || {};
+      if (tk.status === 'agendado') upd.tiktok_auto = Object.assign({}, tk, { status: 'reagendar' });
+      state.db.doc('cronograma/' + f.id).update(upd).then(function () { ct.pe = null; render(); }, function () { f.msg = 'Não salvou. Tente de novo.'; render(); });
+      return true;
+    }
+    return false;
   }
 
   function ctCrono() {
@@ -2012,6 +2077,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       state.db.doc('config/conteudo').set({ pastas: list }).then(function () { ct.newFolder = null; ct.pasta = id; }, function () { ct.msg = 'A pasta não foi criada.'; }).then(render);
       return;
     }
+    if (peClick(t)) return;
     if ((a = t.closest('[data-ct-post]'))) {
       var id2 = a.getAttribute('data-ct-post'), v = a.getAttribute('data-v'), p = (ct.posts || []).find(function (x) { return x.id === id2; });
       var nv = p && p.estado === v ? 'proposto' : v;
@@ -2401,6 +2467,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var dmf = e.target.getAttribute && e.target.getAttribute('data-dm-f');
     if (dmf === 'txt') ct.dmTxt = e.target.value;
     if (dmf === 'tipo') ct.dmTipo = e.target.value;
+    var pef = e.target.getAttribute && e.target.getAttribute('data-pe-f');
+    if (pef && ct.pe) ct.pe[pef] = e.target.value;
     var cf = e.target.getAttribute && e.target.getAttribute('data-ct-f');
     if (cf === 'newFolder') ct.newFolder = e.target.value;
     else if (cf && ct.up) ct.up[cf] = e.target.value;
