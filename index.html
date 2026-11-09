@@ -677,8 +677,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     { id: 'rafa', name: 'Rafa', role: 'Edição de vídeo', desc: 'Trabalha com a Duda: edita os vídeos do cronograma de posts.', tier: 'contratado', active: true, when: 'Todo dia às 8h, depois da Duda',
       funcs: ['Edita os vídeos que a Duda pede no cronograma: cortes, formato vertical 9:16, texto do gancho e assinatura', 'Deixa cada vídeo pronto para postar, com até 20 MB', 'Não ouve o áudio: corta pelo que vê e pelo pedido da Duda'] },
     // contratada em 09/11/2026, a pedido do Pedro: trabalha com a Duda, cuida dos números e das conversas do Instagram
-    { id: 'lisa', name: 'Lisa', role: 'Estatísticas e interações do Instagram', desc: 'Trabalha com a Duda: lê os números do Instagram pelo Metricool e escreve as respostas de DM e comentários.', tier: 'contratado', when: 'Todo dia às 9h e às 18h',
-      funcs: ['Lê os números do Instagram pelo Metricool: alcance, visualizações, seguidores, interações e o melhor horário', 'Diz o que funcionou e o que não funcionou, e passa para a Duda', 'Escreve a resposta das DMs e dos comentários que você cola aqui, dentro das regras do CFO e da LGPD', 'Nunca envia nada sozinha: você copia e manda'] },
+    { id: 'lisa', name: 'Lisa', role: 'Estatísticas e interações (Instagram e TikTok)', desc: 'Trabalha com a Duda: lê os números do Instagram e do TikTok pelo Metricool e escreve as respostas de DM e comentários.', tier: 'contratado', when: 'Todo dia às 9h e às 18h',
+      funcs: ['Lê os números do Instagram e do TikTok pelo Metricool: alcance, visualizações, seguidores, interações e o melhor horário de cada rede', 'Compara as duas redes: em qual o mesmo vídeo foi melhor', 'Diz o que funcionou e o que não funcionou, e passa para a Duda', 'Escreve a resposta das DMs e dos comentários que você cola aqui, dentro das regras do CFO e da LGPD', 'Nunca envia nada sozinha: você copia e manda'] },
     { id: 'kim', name: 'Kim', role: 'Financeiro', room: 'Financeiro', desc: 'Entradas, metas, custos de laboratório e o caminho até o consultório próprio.', tier: 'contratado', when: 'Todo domingo e no fim do mês',
       funcs: ['Registra entradas por clínica e procedimento (só valores, nunca nomes)', 'Fecha o mês contra a meta e mostra quanto sobra depois do laboratório', 'Alerta de impostos (carnê-leão, PF ou PJ) e reserva do consultório', 'Faz as contas das propostas de trabalho (ex.: 70/30 com o tio Zé)'],
       look: { skin: '#c99a72', hair: '#1c1c1f', shirt: '#d9a441', pants: '#3a3a40' }, pos: [1, 0] },
@@ -755,10 +755,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var SALAS = {"atendimento":{"poly":[[31.11,21.29],[45.67,33.56],[29.35,47.87],[14.79,35.59]],"tag":[30.23,26.22]},"clinico":{"poly":[[14.79,35.59],[33.52,51.38],[21.28,62.11],[2.55,46.33]],"tag":[18.03,40.5]},"edicao":{"poly":[[70.64,54.6],[85.2,66.88],[68.88,81.19],[54.32,68.91]],"tag":[69.76,59.55]},"estudos":{"poly":[[59.99,24.57],[78.71,40.36],[66.48,51.1],[47.75,35.31]],"tag":[63.23,29.49]},"financeiro":{"poly":[[78.71,40.36],[97.44,56.15],[85.2,66.88],[66.48,51.1]],"tag":[81.96,45.27]},"gerencia":{"poly":[[43.35,10.55],[59.99,24.57],[47.75,35.31],[31.11,21.29]],"tag":[45.55,14.59]},"marketing":{"poly":[[45.67,33.56],[70.64,54.6],[54.32,68.91],[29.35,47.87]],"tag":[50,42.89]},"reuniao":{"poly":[[33.52,51.38],[54.32,68.91],[42.08,79.65],[21.28,62.11]],"tag":[37.8,57.16]},"treino":{"poly":[[54.32,68.91],[68.88,81.19],[56.65,91.92],[42.08,79.65]],"tag":[55.48,72.06]}};
   var IMG_ESCRITORIO = 'escritorio.jpg?v=3';
   var SETORES = [
-    { id: 'marketing', nome: 'Marketing e Instagram', tarefas: [
+    { id: 'marketing', nome: 'Marketing, Instagram e TikTok', tarefas: [
       { ag: 'marketing', nome: 'Opções de captação', desc: 'Lê o second brain e traz de 3 a 5 opções para encher a agenda.', quando: 'Todo dia, 7h', auto: 'agente-marketing-diario', h: 30 },
       { ag: 'marketing', nome: 'Análise e cronograma', desc: 'Analisa o que você subiu e monta os posts com legenda, já conferidos pelo CFO.', quando: 'Todo dia, 7h', auto: 'agente-marketing-diario', h: 30 },
-      { ag: 'lisa', nome: 'Números do Instagram', desc: 'Lê o Metricool e diz o que funcionou, para você e para a Duda.', quando: 'Todo dia, 9h e 18h', auto: 'agente-instagram-lisa', h: 30 },
+      { ag: 'lisa', nome: 'Números do Instagram e TikTok', desc: 'Lê o Metricool nas duas redes e diz o que funcionou, para você e para a Duda.', quando: 'Todo dia, 9h e 18h', auto: 'agente-instagram-lisa', h: 30 },
       { ag: 'lisa', nome: 'Respostas de DM', desc: 'Você cola a mensagem, ela escreve a resposta e você envia.', quando: 'Na rodada seguinte', sob: true }] },
     { id: 'edicao', nome: 'Edição de vídeo', tarefas: [
       { ag: 'rafa', nome: 'Edição dos vídeos', desc: 'Corte vertical, gancho na tela e assinatura; refaz pelo seu feedback.', quando: 'Todo dia, 8h', auto: 'agente-edicao-video', h: 30 }] },
@@ -970,7 +970,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<p>A Lisa lê o Instagram e o TikTok pelo Metricool às 9h e às 18h, diz o que funcionou e escreve as respostas das mensagens que você colar aqui. Ela trabalha com a Duda: a Duda cria, a Lisa mede e conversa.</p></header>';
     if (!state.db) return html + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
     var rel = (ct.insta || [])[0];
-    if (!rel) html += '<div class="empty"><b>Ainda não há números.</b> A Lisa precisa do Metricool conectado ao Claude e ao seu Instagram. Depois disso, o primeiro relatório sai na próxima rodada (9h ou 18h), com o app do Claude aberto no computador.</div>';
+    if (!rel) html += '<div class="empty"><b>Ainda não há números.</b> A Lisa precisa do Metricool conectado ao Claude, ao seu Instagram e ao seu TikTok. Depois disso, o primeiro relatório sai na próxima rodada (9h ou 18h), com o app do Claude aberto no computador.</div>';
     else {
       var n = rel.numeros || {}, itens = [['seguidores', 'Seguidores'], ['alcance', 'Alcance (30 dias)'], ['visualizacoes', 'Visualizações (30 dias)'], ['interacoes', 'Interações (30 dias)'], ['visitas_perfil', 'Visitas ao perfil'], ['cliques_link', 'Cliques no link']];
       html += '<section class="panel li-rel"><div class="li-top"><h2>Relatório de ' + esc(fmtDay(rel.data || rel.id)) + '</h2>' + (rel.fonte === 'metricool' ? '' : '<span class="chip">sem Metricool</span>') + '</div>' +
@@ -1609,7 +1609,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       : ed.status === 'pronta' && ed.asset ? '<div class="ct-ed"><b>Vídeo editado pelo Rafa</b><video src="' + blobUrl(ed.asset) + '" controls playsinline preload="metadata"></video>' +
         (ed.notas ? '<p class="hint">' + esc(ed.notas) + '</p>' : '') + (ct.downloads ? '<button type="button" class="btn" data-ct-dl="' + esc(ed.asset) + '" data-ct-dlname="post-' + esc(p.data || '') + '.mp4">Baixar vídeo</button>' : '') + '</div>'
       : ed.status === 'falhou' ? '<p class="ct-ed bad">A edição não deu certo: ' + esc(ed.notas || '') + '</p>' : '';
-    return '<article class="post st-' + esc(st) + '"><div class="opt-top"><span class="kind">' + esc(p.formato || 'Post') + '</span><span class="time">' + esc(fmtDay(p.data) + (p.hora ? ' · ' + p.hora : '')) + '</span>' +
+    // onde postar: vídeo (Reels) vai também para o TikTok; foto, carrossel e story ficam só no Instagram (09/11/2026)
+    var redes = (p.redes && p.redes.length) ? p.redes.join(' + ') : (/reels|v[ií]deo/i.test(p.formato || '') ? 'Instagram + TikTok' : 'Instagram');
+    return '<article class="post st-' + esc(st) + '"><div class="opt-top"><span class="kind">' + esc(p.formato || 'Post') + '</span><span class="kind">' + esc(redes) + '</span><span class="time">' + esc(fmtDay(p.data) + (p.hora ? ' · ' + p.hora : '')) + '</span>' +
       '<span class="post-st">' + esc(POST_ST[st] || st) + '</span></div>' +
       (p.titulo ? '<h3>' + esc(p.titulo) + '</h3>' : '') + (p.gancho ? '<p class="hook">' + esc(p.gancho) + '</p>' : '') +
       (midias.length ? '<div class="post-media">' + midias.map(function (m) { return thumb(m, 'pm'); }).join('') + '</div>' : '') +
