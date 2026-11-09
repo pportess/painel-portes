@@ -587,6 +587,23 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 @media (max-width: 720px) { .week { grid-template-columns: minmax(0, 1fr); } .day { min-height: 0; } }
 
 .note { color: var(--muted); font-size: 14px; }
+/* Lisa: números do Instagram e respostas de DM */
+.li-rel, .li-dm { margin-top: 16px; }
+.li-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.li-resumo { font-size: 15px; }
+.li-nums { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin: 12px 0; }
+.li-nums div { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; display: grid; gap: 2px; }
+.li-nums b { font-size: 22px; }
+.li-nums span, .li-nums small { color: var(--muted); font-size: 12px; }
+.li-list { padding-left: 18px; display: grid; gap: 6px; }
+.li-f { display: grid; gap: 4px; font-size: 13px; font-weight: 600; margin: 10px 0; }
+.li-f textarea, .li-f select { font: inherit; font-weight: 400; width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); }
+.li-msgs { list-style: none; padding: 0; margin: 16px 0 0; display: grid; gap: 10px; }
+.li-msgs li { border: 1px solid var(--line); border-radius: 12px; padding: 12px; display: grid; gap: 8px; }
+.li-msgs li.ok { border-color: #8cc5a0; }
+.li-a p { white-space: pre-wrap; margin: 4px 0; }
+.li-a small { color: var(--muted); }
+.li-a .acts { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 .empty { border: 1.5px dashed var(--line); border-radius: var(--radius); padding: 24px; color: var(--muted); }
 .empty b { color: var(--fg); }
 .soon-page { max-width: 60ch; }
@@ -649,11 +666,15 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     { id: 'luzi', name: 'Luzi', role: 'Gerente do consultório', desc: 'Monta a semana do consultório e coordena os outros agentes.', tier: 'chefe', when: 'Toda segunda às 7h30',
       funcs: ['Toda segunda: plano da semana (dias de paciente, metas e o que cada agente entrega)', 'Mede a semana contra a meta de pacientes novos do mês', 'Aponta o que travou e quem precisa agir'] },
     { id: 'marketing', name: 'Duda', role: 'Marketing e captação', room: 'Agência de marketing', desc: 'Lê o second brain e traz opções de captação todo dia às 7h.', live: true, tier: 'contratado', when: 'Todo dia às 7h',
-      funcs: ['Lê o second brain e entrega de 3 a 5 opções de captação por dia, às 7h', 'Analisa as fotos e os vídeos do banco de mídia e monta o cronograma de posts com legenda', 'Pede ao Rafa a edição dos vídeos', 'Todo conteúdo passa pelo Bruno (CFO) antes de postar'],
+      // 09/11/2026: a Duda fica com a criação de conteúdo e a checagem do CFO; números, interações e DM passam para a Lisa
+      funcs: ['Cria o conteúdo: de 3 a 5 opções de captação por dia, às 7h, e o cronograma de posts com legenda', 'Confere as regras do CFO em cada conteúdo que cria', 'Analisa as fotos e os vídeos que você sobe no painel', 'Usa os números da Lisa para saber o que funciona', 'Deixa a edição pronta para o Rafa'],
       look: { skin: '#e3b48e', hair: '#3a261b', shirt: '#5f9483', pants: '#2f3a44' }, pos: [0, 0] },
     // contratado pela Duda em 02/11/2026, a pedido do Pedro
     { id: 'rafa', name: 'Rafa', role: 'Edição de vídeo', desc: 'Trabalha com a Duda: edita os vídeos do cronograma de posts.', tier: 'contratado', active: true, when: 'Todo dia às 8h, depois da Duda',
       funcs: ['Edita os vídeos que a Duda pede no cronograma: cortes, formato vertical 9:16, texto do gancho e assinatura', 'Deixa cada vídeo pronto para postar, com até 20 MB', 'Não ouve o áudio: corta pelo que vê e pelo pedido da Duda'] },
+    // contratada em 09/11/2026, a pedido do Pedro: trabalha com a Duda, cuida dos números e das conversas do Instagram
+    { id: 'lisa', name: 'Lisa', role: 'Estatísticas e interações do Instagram', desc: 'Trabalha com a Duda: lê os números do Instagram pelo Metricool e escreve as respostas de DM e comentários.', tier: 'contratado', when: 'Todo dia às 9h e às 18h',
+      funcs: ['Lê os números do Instagram pelo Metricool: alcance, visualizações, seguidores, interações e o melhor horário', 'Diz o que funcionou e o que não funcionou, e passa para a Duda', 'Escreve a resposta das DMs e dos comentários que você cola aqui, dentro das regras do CFO e da LGPD', 'Nunca envia nada sozinha: você copia e manda'] },
     { id: 'kim', name: 'Kim', role: 'Financeiro', room: 'Financeiro', desc: 'Entradas, metas, custos de laboratório e o caminho até o consultório próprio.', tier: 'contratado', when: 'Todo domingo e no fim do mês',
       funcs: ['Registra entradas por clínica e procedimento (só valores, nunca nomes)', 'Fecha o mês contra a meta e mostra quanto sobra depois do laboratório', 'Alerta de impostos (carnê-leão, PF ou PJ) e reserva do consultório', 'Faz as contas das propostas de trabalho (ex.: 70/30 com o tio Zé)'],
       look: { skin: '#c99a72', hair: '#1c1c1f', shirt: '#d9a441', pants: '#3a3a40' }, pos: [1, 0] },
@@ -711,7 +732,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var DAY_MS = 86400000;
 
   // retrato em traço de cada agente
-  var AV = { luzi: 'coque', marketing: 'longo', rafa: 'bone', kim: 'curto', nina: 'longo', anapaula: 'coque', amanda: 'longo', bruno: 'oculos', caio: 'oculos' };
+  var AV = { luzi: 'coque', marketing: 'longo', rafa: 'bone', lisa: 'coque', kim: 'curto', nina: 'longo', anapaula: 'coque', amanda: 'longo', bruno: 'oculos', caio: 'oculos' };
   function avatar(id) {
     var v = AV[id] || 'curto', topo = 'M15 20c-1-10 6-13 9-13s10 3 9 13c-2-5-5-7-9-7s-7 2-9 7z', x = '';
     if (v === 'longo') x = '<path d="M14.5 17c-3 8-2 15 0 18M33.5 17c3 8 2 15 0 18" stroke-width="3"/>';
@@ -732,8 +753,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var SETORES = [
     { id: 'marketing', nome: 'Marketing e Instagram', tarefas: [
       { ag: 'marketing', nome: 'Opções de captação', desc: 'Lê o second brain e traz de 3 a 5 opções para encher a agenda.', quando: 'Todo dia, 7h', auto: 'agente-marketing-diario', h: 30 },
-      { ag: 'marketing', nome: 'Análise e cronograma', desc: 'Analisa o que você subiu e monta os posts com legenda.', quando: 'Todo dia, 7h', auto: 'agente-marketing-diario', h: 30 },
-      { ag: 'bruno', nome: 'Revisão CFO', desc: 'Confere os conteúdos pelas regras de publicidade do CFO.', quando: 'Antes de cada post' }] },
+      { ag: 'marketing', nome: 'Análise e cronograma', desc: 'Analisa o que você subiu e monta os posts com legenda, já conferidos pelo CFO.', quando: 'Todo dia, 7h', auto: 'agente-marketing-diario', h: 30 },
+      { ag: 'lisa', nome: 'Números do Instagram', desc: 'Lê o Metricool e diz o que funcionou, para você e para a Duda.', quando: 'Todo dia, 9h e 18h', auto: 'agente-instagram-lisa', h: 30 },
+      { ag: 'lisa', nome: 'Respostas de DM', desc: 'Você cola a mensagem, ela escreve a resposta e você envia.', quando: 'Na rodada seguinte', sob: true }] },
     { id: 'edicao', nome: 'Edição de vídeo', tarefas: [
       { ag: 'rafa', nome: 'Edição dos vídeos', desc: 'Corte vertical, gancho na tela e assinatura; refaz pelo seu feedback.', quando: 'Todo dia, 8h', auto: 'agente-edicao-video', h: 30 }] },
     { id: 'atendimento', nome: 'Atendimento e retornos', tarefas: [
@@ -788,6 +810,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       });
       var novos = (ct.midia || []).filter(function (m) { return m.status === 'novo'; }).length;
       if (novos) add('fila', plural(novos, 'arquivo esperando', 'arquivos esperando') + ' a análise da Duda', 'conteudo');
+      var dmPend = (ct.dm || []).filter(function (x) { return x.estado === 'pendente'; }).length;
+      if (dmPend) add('fila', plural(dmPend, 'mensagem esperando', 'mensagens esperando') + ' a resposta da Lisa', 'lisa');
+      var dmProntas = (ct.dm || []).filter(function (x) { return x.estado === 'respondida'; }).length;
+      if (dmProntas) add('voce', plural(dmProntas, 'resposta da Lisa pronta', 'respostas da Lisa prontas') + ' para enviar', 'lisa');
     }
     if (id === 'edicao') (ct.midia || []).forEach(function (m) {
       var e = m.edicao; if (!e) return; var n = m.nota || 'Vídeo';
@@ -884,6 +910,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
   function irPara(s) {
     if (s === 'duda') { state.section = 'agentes'; state.agent = 'marketing'; }
+    else if (s === 'lisa') { state.section = 'agentes'; state.agent = 'lisa'; }
     else { state.section = s; state.agent = null; try { localStorage.setItem('painel:aba', s); } catch (err) {} }
     if (s === 'conteudo') { ct.view = 'hoje'; ctEnter(); }
     render(); window.scrollTo(0, 0);
@@ -906,6 +933,71 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         : '<div class="empty"><b>Ainda não trabalha sozinho.</b> As funções são uma proposta da IA. Quando você aprovar, ' + esc(a.name) + ' ganha a tarefa agendada e passa a entregar como a Duda.</div>') +
       '<section class="panel role"><h2>Funções</h2><ul>' + a.funcs.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' +
       '<div class="meta"><span class="chip">' + esc(a.when) + '</span>' + '</div></section></div>';
+  }
+
+  // ---------- Lisa: números do Instagram (coleção instagram, um documento por dia) e respostas de DM (coleção dm) ----------
+  // A Lisa grava pelos números do Metricool; o painel só mostra. Nas DMs o Pedro cola a mensagem SEM nome ou @ (LGPD),
+  // a Lisa escreve a resposta na rodada seguinte e o Pedro copia e envia. Nada é enviado sozinho.
+  var DM_TIPO = { dm: 'Direct', comentario: 'Comentário', whatsapp: 'WhatsApp' };
+  function fmtNum(n) { return n == null || n === '' ? '–' : typeof n === 'number' ? n.toLocaleString('pt-BR') : String(n); }
+  function renderLisa() {
+    var a = AGENTS.find(function (x) { return x.id === 'lisa'; });
+    var html = '<button type="button" class="back" data-back="1">← Agentes</button>' +
+      '<div class="agent-hero">' + face(a, 'big') + '</div>' +
+      '<header class="page-head"><span class="eyebrow">Lisa · Estatísticas e interações</span><h1>O Instagram em números</h1>' +
+      '<p>A Lisa lê o Instagram pelo Metricool às 9h e às 18h, diz o que funcionou e escreve as respostas das mensagens que você colar aqui. Ela trabalha com a Duda: a Duda cria, a Lisa mede e conversa.</p></header>';
+    if (!state.db) return html + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
+    var rel = (ct.insta || [])[0];
+    if (!rel) html += '<div class="empty"><b>Ainda não há números.</b> A Lisa precisa do Metricool conectado ao Claude e ao seu Instagram. Depois disso, o primeiro relatório sai na próxima rodada (9h ou 18h), com o app do Claude aberto no computador.</div>';
+    else {
+      var n = rel.numeros || {}, itens = [['seguidores', 'Seguidores'], ['alcance', 'Alcance (30 dias)'], ['visualizacoes', 'Visualizações (30 dias)'], ['interacoes', 'Interações (30 dias)'], ['visitas_perfil', 'Visitas ao perfil'], ['cliques_link', 'Cliques no link']];
+      html += '<section class="panel li-rel"><div class="li-top"><h2>Relatório de ' + esc(fmtDay(rel.data || rel.id)) + '</h2>' + (rel.fonte === 'metricool' ? '' : '<span class="chip">sem Metricool</span>') + '</div>' +
+        (rel.resumo ? '<p class="li-resumo">' + esc(rel.resumo) + '</p>' : '') +
+        '<div class="li-nums">' + itens.filter(function (i) { return n[i[0]] != null; }).map(function (i) {
+          var v = (rel.variacao || {})[i[0]];
+          return '<div><b>' + esc(fmtNum(n[i[0]])) + '</b><span>' + esc(i[1]) + '</span>' + (v ? '<small>' + esc(v) + '</small>' : '') + '</div>'; }).join('') + '</div>' +
+        ((rel.melhores || []).length ? '<h3>O que funcionou</h3><ul class="li-list">' + rel.melhores.map(function (m) {
+          return '<li><b>' + esc(m.titulo || '') + '</b>' + (m.formato ? ' · ' + esc(m.formato) : '') + (m.numeros ? '<br><small>' + esc(m.numeros) + '</small>' : '') + (m.porque ? '<br>' + esc(m.porque) : '') + '</li>'; }).join('') + '</ul>' : '') +
+        (rel.horario ? '<h3>Melhor horário para postar</h3><p>' + esc(rel.horario) + '</p>' : '') +
+        ((rel.leitura || []).length ? '<h3>Leitura da Lisa</h3><ul class="li-list">' + rel.leitura.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
+        ((rel.para_duda || []).length ? '<h3>Recado para a Duda</h3><ul class="li-list">' + rel.para_duda.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
+        '</section>';
+    }
+    // respostas de DM e comentários
+    var lista = ct.dm || [];
+    html += '<section class="panel li-dm"><h2>Responder mensagens</h2>' +
+      '<p class="note">Cole só o texto da mensagem, <b>sem o nome ou o @ da pessoa</b>. A Lisa responde na próxima rodada (9h ou 18h). Ela não dá diagnóstico nem preço pela mensagem: leva a pessoa para a avaliação.</p>' +
+      '<label class="li-f">De onde veio<select data-dm-f="tipo">' + Object.keys(DM_TIPO).map(function (k) { return '<option value="' + k + '"' + ((ct.dmTipo || 'dm') === k ? ' selected' : '') + '>' + DM_TIPO[k] + '</option>'; }).join('') + '</select></label>' +
+      '<label class="li-f">Mensagem<textarea rows="3" maxlength="2000" data-dm-f="txt" placeholder="Ex.: Oi, meu dente está sensível quando tomo coisa gelada, vocês atendem sexta?">' + esc(ct.dmTxt || '') + '</textarea></label>' +
+      (ct.dmMsg ? '<p class="note">' + esc(ct.dmMsg) + '</p>' : '') +
+      '<button type="button" class="btn primary" data-dm-add="1">Pedir resposta à Lisa</button>';
+    var ativas = lista.filter(function (x) { return x.estado !== 'usada'; }), usadas = lista.filter(function (x) { return x.estado === 'usada'; });
+    html += ativas.length ? '<ul class="li-msgs">' + ativas.map(function (x) {
+      return '<li class="' + (x.estado === 'respondida' ? 'ok' : 'wait') + '"><div class="li-q"><span class="chip">' + esc(DM_TIPO[x.tipo] || 'Direct') + '</span> ' + esc(x.mensagem) + '</div>' +
+        (x.estado === 'respondida' ? '<div class="li-a"><b>Resposta da Lisa</b><p>' + esc(x.resposta || '') + '</p>' + (x.cuidado ? '<small>' + esc(x.cuidado) + '</small>' : '') +
+          '<div class="acts"><button type="button" class="btn primary" data-dm-copy="' + esc(x.id) + '">Copiar resposta</button><button type="button" class="btn" data-dm-usei="' + esc(x.id) + '">Já enviei</button><button type="button" class="btn" data-dm-del="' + esc(x.id) + '">Apagar</button></div></div>'
+          : '<div class="li-a"><small>Esperando a Lisa (próxima rodada, 9h ou 18h).</small> <button type="button" class="btn" data-dm-del="' + esc(x.id) + '">Apagar</button></div>') + '</li>'; }).join('') + '</ul>' : '';
+    if (usadas.length) html += '<p class="note">' + plural(usadas.length, 'resposta já enviada', 'respostas já enviadas') + '. A Lisa usa elas para montar respostas-modelo.</p>';
+    return html + '</section>';
+  }
+  function dmClick(t) {
+    var a;
+    if (t.closest('[data-dm-add]')) {
+      var txt = (ct.dmTxt || '').trim(); if (!txt) { ct.dmMsg = 'Cole a mensagem primeiro.'; render(); return true; }
+      if (/@\w/.test(txt)) { ct.dmMsg = 'Tire o @ da pessoa antes de enviar (LGPD).'; render(); return true; }
+      var id = 'dm-' + Date.now();
+      state.db.doc('dm/' + id).set({ tipo: ct.dmTipo || 'dm', mensagem: txt, estado: 'pendente', criado: new Date().toISOString() })
+        .then(function () { ct.dmTxt = ''; ct.dmMsg = 'Enviado para a Lisa. A resposta aparece aqui na próxima rodada.'; render(); }, function () { ct.dmMsg = 'Não salvou. Tente de novo.'; render(); });
+      return true;
+    }
+    if ((a = t.closest('[data-dm-copy]'))) {
+      var x = (ct.dm || []).find(function (d) { return d.id === a.getAttribute('data-dm-copy'); });
+      if (x && navigator.clipboard) navigator.clipboard.writeText(x.resposta || '').then(function () { a.textContent = 'Copiada ✓'; }, function () { a.textContent = 'Selecione e copie à mão'; });
+      return true;
+    }
+    if ((a = t.closest('[data-dm-usei]'))) { state.db.doc('dm/' + a.getAttribute('data-dm-usei')).update({ estado: 'usada', usada_em: new Date().toISOString() }).catch(function () { ct.dmMsg = 'Não salvou.'; render(); }); return true; }
+    if ((a = t.closest('[data-dm-del]'))) { state.db.doc('dm/' + a.getAttribute('data-dm-del')).delete().catch(function () { ct.dmMsg = 'Não deu para apagar.'; render(); }); return true; }
+    return false;
   }
 
   function renderOption(o, day) {
@@ -2236,7 +2328,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     else if (state.section === 'conteudo') main.innerHTML = renderConteudo();
     else if (state.section === 'edicao') main.innerHTML = renderEdicao();
     else if (state.section === 'pacientes') main.innerHTML = renderPacientes();
-    else if (state.section === 'agentes') main.innerHTML = state.agent === 'marketing' ? renderMarketing() : state.agent ? renderArriving(AGENTS.find(function (a) { return a.id === state.agent; })) : renderAgentes();
+    else if (state.section === 'agentes') main.innerHTML = state.agent === 'marketing' ? renderMarketing() : state.agent === 'lisa' ? renderLisa() : state.agent ? renderArriving(AGENTS.find(function (a) { return a.id === state.agent; })) : renderAgentes();
     else main.innerHTML = renderSoon(SECTIONS.find(function (s) { return s.id === state.section; }));
   }
 
@@ -2254,6 +2346,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (state.section === 'agenda') { agClick(e.target); return; }
     if (state.section === 'conteudo' || state.section === 'edicao') { ctClick(e.target); return; }
     if (state.section === 'pacientes') { pcClick(e.target); return; }
+    if (state.agent === 'lisa' && state.db && dmClick(e.target)) return;
     if ((t = e.target.closest('[data-abertas]'))) { var ab = t.getAttribute('data-abertas'); state.abertas[ab] = !state.abertas[ab]; render(); return; }
     if ((t = e.target.closest('[data-ir]'))) { irPara(t.getAttribute('data-ir')); return; }
     if ((t = e.target.closest('[data-setor]'))) {
@@ -2276,6 +2369,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     // feedback da edição: guarda o texto, senão um redesenho (banco atualizando) apaga o que foi digitado
     var fb = e.target.getAttribute && e.target.getAttribute('data-ct-fbtxt');
     if (fb) ct.fbTxt[fb] = e.target.value;
+    var dmf = e.target.getAttribute && e.target.getAttribute('data-dm-f');
+    if (dmf === 'txt') ct.dmTxt = e.target.value;
+    if (dmf === 'tipo') ct.dmTipo = e.target.value;
     var cf = e.target.getAttribute && e.target.getAttribute('data-ct-f');
     if (cf === 'newFolder') ct.newFolder = e.target.value;
     else if (cf && ct.up) ct.up[cf] = e.target.value;
@@ -2348,6 +2444,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       ctSub(db.collection('midia').orderBy('criado', 'desc').limit(500), 'midia');
       ctSub(db.collection('cronograma').orderBy('data', 'desc').limit(200), 'posts');
       ctSub(db.collection('agentes').limit(50), 'agentes');
+      // Lisa (09/11/2026): relatórios do Instagram e respostas de DM
+      ctSub(db.collection('instagram').orderBy('data', 'desc').limit(30), 'insta');
+      ctSub(db.collection('dm').orderBy('criado', 'desc').limit(100), 'dm');
       // pacientes: só para o dono (o banco também recusa os outros)
       if (window.painelDono) db.collection('pacientes').limit(1000).onSnapshot(function (snap) {
         pc.lista = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
