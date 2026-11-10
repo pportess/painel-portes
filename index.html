@@ -635,6 +635,116 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   .nav .soon, .side-foot { display: none; }
   .main { padding-block: 20px 40px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 }
+
+/* 10/11/2026 (pedido do Pedro): uma cor por área e por setor, páginas dos agentes com objetivo e "como funciona" */
+.main { --area: #4c5fd5; --area-soft: color-mix(in srgb, var(--area) 13%, #fff); }
+.nav .ic-t { width: 30px; height: 30px; border-radius: 9px; display: grid; place-items: center; background: var(--c); color: #fff; flex: none; }
+.nav .ic-t .ic { width: 18px; height: 18px; }
+.nav button { padding: 7px 12px 7px 8px; }
+.page-head, .ag-head, .ah { background: linear-gradient(120deg, var(--area-soft), #fff 92%); border-left: 6px solid var(--area); border-radius: 18px; padding: 18px 22px; box-shadow: var(--soft); max-width: none; }
+.page-head { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 14px; row-gap: 2px; align-items: center; }
+.page-head > * { grid-column: 2; }
+.page-head .ph-ic { grid-column: 1; grid-row: 1 / span 3; width: 48px; height: 48px; border-radius: 14px; background: var(--area); color: #fff; display: grid; place-items: center; }
+.ph-ic .ic { width: 26px; height: 26px; }
+.page-head p { max-width: 90ch; color: #4f545e; }
+.eyebrow { color: var(--area); }
+.btn.primary { background: var(--area); color: #fff; }
+.seg button[aria-pressed="true"] { background: var(--area); color: #fff; }
+.btn[aria-pressed="true"] { background: var(--area-soft); border-color: var(--area); }
+.back { color: var(--area); }
+.panel { border: 0; box-shadow: var(--soft); }
+.chip.c-area { background: var(--area); color: #fff; }
+.chip.c-ok { background: #dff5e8; color: #157a45; }
+.chip.c-warn { background: #fdeed8; color: #a85d08; }
+.chip.c-bad { background: #fde3e3; color: #b3261e; }
+.chip.c-off { background: #eceef2; color: #5a6270; }
+
+/* setores */
+.st-ic { width: 30px; height: 30px; border-radius: 9px; background: var(--sc); color: #fff; display: grid; place-items: center; flex: none; }
+.st-ic svg { width: 18px; height: 18px; }
+.st-ic.sm { width: 24px; height: 24px; border-radius: 7px; align-self: center; }
+.st-ic.sm svg { width: 14px; height: 14px; }
+.sg-top { align-items: center; }
+.sg-top b { flex: 1; }
+.st-col { border-top: 4px solid var(--sc); }
+.st-col header { align-items: center; gap: 10px; }
+.st-col h3 { flex: 1; min-width: 0; }
+.st-status { padding: 3px 10px; border-radius: 999px; background: #dff5e8; color: #157a45; }
+.st-status.n-foco { background: #fde3e3; color: #b3261e; }
+.st-status.n-atencao { background: #fdeed8; color: #a85d08; }
+.st-status.n-parado { background: #eceef2; color: #5a6270; }
+.st-sub { margin-top: 6px; }
+.tf-av { border-radius: 50%; background: color-mix(in srgb, var(--sc) 16%, #fff); box-shadow: 0 0 0 2px var(--sc); }
+.tf-av i { right: -2px; top: -2px; }
+.tf { border-radius: 10px; padding: 12px 8px; margin-inline: -8px; width: calc(100% + 16px); }
+.tf:hover { background: color-mix(in srgb, var(--sc) 7%, #fff); }
+.ag-filtros { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 14px; }
+.ag-filtros button { border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 6px 14px; font-size: 13px; font-weight: 700; color: #4f545e; }
+.ag-filtros button[aria-pressed="true"] { background: var(--area); border-color: var(--area); color: #fff; }
+.ag-leg { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11.5px; color: var(--muted); margin-top: 10px; }
+.ag-leg i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 5px; vertical-align: -1px; }
+
+/* página de cada agente */
+.ah { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; margin-bottom: 16px; }
+.ah .face { width: 84px; height: 84px; margin: 0; box-shadow: 0 0 0 3px var(--area); background: #fff; }
+.ah-tx { flex: 1; min-width: 220px; }
+.ah h1 { font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+.ah p { margin: 2px 0 10px; color: #4f545e; max-width: 75ch; }
+.ah-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.ag-tabs { margin-bottom: 16px; max-width: 100%; overflow-x: auto; }
+.ag-tabs button { padding: 8px 18px; font-size: 14px; white-space: nowrap; }
+.ag-tabs .n { display: inline-block; margin-left: 6px; min-width: 18px; padding: 0 5px; border-radius: 999px; background: var(--vermelho); color: #fff; font-size: 11px; line-height: 18px; text-align: center; }
+.cf { display: grid; gap: 14px; }
+.cf-obj { background: var(--area); color: #fff; border-radius: 16px; padding: 18px 22px; }
+.cf-obj small { opacity: .85; text-transform: uppercase; letter-spacing: .08em; font-weight: 700; font-size: 11px; }
+.cf-obj p { margin: 4px 0 0; font-size: 19px; font-weight: 700; line-height: 1.35; text-wrap: balance; }
+.cf-h { font-size: 15px; font-weight: 800; margin: 6px 0 -4px; }
+.cf-steps { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr) minmax(0, 1fr) minmax(0, 1fr); gap: 10px; }
+.cf-step { background: var(--panel); border-radius: 14px; padding: 14px 16px; box-shadow: var(--soft); border-top: 4px solid var(--k); }
+.cf-step b { display: flex; gap: 8px; align-items: center; font-size: 13px; color: var(--k); }
+.cf-step b i { font-style: normal; width: 22px; height: 22px; border-radius: 50%; background: var(--k); color: #fff; display: grid; place-items: center; font-size: 12px; flex: none; }
+.cf-step p, .cf-step ul { margin: 8px 0 0; font-size: 13.5px; color: #3f444d; }
+.cf-step ul { padding-left: 16px; display: grid; gap: 4px; }
+.cf-2 { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+.cf-card { background: var(--panel); border-radius: 16px; padding: 16px 18px; box-shadow: var(--soft); }
+.cf-card h2 { font-size: 15px; font-weight: 800; margin-bottom: 6px; }
+.cf-card > p { margin: 0; font-size: 13.5px; color: #4f545e; }
+.cf-task { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: start; padding: 10px 0; border-top: 1px solid var(--line); font-size: 13.5px; }
+.cf-task:first-of-type { border-top: 0; }
+.cf-task b { font-size: 14px; }
+.cf-task span { color: #4f545e; grid-column: 1; }
+.cf-task small { color: #8a909b; font-size: 12px; grid-column: 1 / -1; overflow-wrap: anywhere; }
+.cf-task .chip { grid-column: 2; grid-row: 1; white-space: nowrap; }
+.cf-team { display: flex; flex-wrap: wrap; gap: 8px; }
+.cf-team button { display: flex; align-items: center; gap: 8px; border: 1px solid var(--line); background: var(--panel); border-radius: 999px; padding: 4px 14px 4px 4px; font-size: 13px; font-weight: 700; text-align: left; }
+.cf-team button:hover { border-color: var(--area); background: var(--area-soft); }
+.cf-team svg { width: 30px; height: 30px; display: block; }
+.cf-team small { display: block; font-weight: 500; color: var(--muted); font-size: 11.5px; }
+.cf-flow { display: flex; flex-wrap: wrap; gap: 6px; }
+.cf-flow button { flex: 1 1 130px; text-align: left; border: 0; border-radius: 12px; padding: 10px 12px; background: var(--field); font-size: 12.5px; color: #4f545e; }
+.cf-flow button b { display: block; font-size: 13px; color: var(--fg); }
+.cf-flow button:hover { background: var(--area-soft); }
+.cf-flow button.eu { background: var(--area); color: #fff; }
+.cf-flow button.eu b { color: #fff; }
+.cf-rules { margin: 0; padding-left: 18px; font-size: 13.5px; color: #3f444d; display: grid; gap: 4px; }
+.opt { border: 0; box-shadow: var(--soft); border-left: 4px solid #b9bec8; }
+.opt.f-forte { border-left-color: var(--verde); }
+.opt.f-medio { border-left-color: #e0a52b; }
+.force { border-color: transparent; }
+.force.forte { background: #dff5e8; color: #157a45; }
+.force.medio { background: #fdeed8; color: #a85d08; }
+.force.fraco { background: #eceef2; color: #5a6270; }
+.soon-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 10px; margin: 14px 0; }
+.soon-grid div { background: var(--panel); border-radius: 14px; padding: 14px 16px; box-shadow: var(--soft); border-top: 4px solid var(--area); font-weight: 600; font-size: 14px; }
+@media (max-width: 980px) { .cf-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); } .cf-2 { grid-template-columns: minmax(0, 1fr); } }
+@media (max-width: 720px) {
+  .cf-steps { grid-template-columns: minmax(0, 1fr); }
+  .page-head, .ag-head, .ah { padding: 14px 16px; }
+  .page-head .ph-ic { width: 38px; height: 38px; border-radius: 11px; grid-row: 1 / span 2; align-self: start; }
+  .page-head p { grid-column: 1 / -1; }
+  .ah .face { width: 64px; height: 64px; }
+  .nav button { padding: 6px 12px 6px 6px; }
+}
 </style>
 
 <div class="app">
@@ -668,8 +778,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     { id: 'edicao', label: 'Edição' },
     // 02/11/2026: a pedido do Pedro, a aba passou a ter nome e fotos de antes e depois (só ele vê; os agentes não leem)
     { id: 'pacientes', label: 'Pacientes' },
-    { id: 'financeiro', label: 'Financeiro', soon: 'Entradas por clínica, metas do mês e o caminho até o consultório próprio.' },
-    { id: 'estudos', label: 'Estudos', soon: 'As aulas resumidas, o registro de horas e os temas do mês.' }
+    { id: 'financeiro', label: 'Financeiro', soon: 'Entradas por clínica, metas do mês e o caminho até o consultório próprio.', ag: 'kim', itens: ['Entradas por clínica e procedimento', 'Meta do mês e quanto falta', 'Custos de laboratório', 'Caminho até o consultório próprio'] },
+    { id: 'estudos', label: 'Estudos', soon: 'As aulas resumidas, o registro de horas e os temas do mês.', ag: 'nina', itens: ['Aulas da especialização resumidas', 'Registro de horas e pomodoros', 'Temas do mês e fila de temas', 'Resumo diário do PubMed'] }
   ];
 
   // Equipe: cada agente tem um nível (tier) e, quem tem "pos", uma sala no desenho em SVG. Salas sem "name" são vagas.
@@ -706,7 +816,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       funcs: ['Busca artigos (PubMed) sobre o tema pedido', 'Dá base científica aos conteúdos e aos planos de tratamento', 'Entrega referências curtas, com link'] }
   ];
 
-  var state = { section: 'agentes', agent: null, abertas: {}, days: [], selected: null, loading: true, slow: false, error: null, db: null, saving: {} };
+  var state = { section: 'agentes', agent: null, abertas: {}, agTab: {}, filtro: 'todos', days: [], selected: null, loading: true, slow: false, error: null, db: null, saving: {} };
 
   // abre na última aba usada neste aparelho (no celular, normalmente o Conteúdo)
   try { var aba = localStorage.getItem('painel:aba'); if (aba === 'agenda' || aba === 'conteudo' || aba === 'edicao' || aba === 'agentes' || aba === 'pacientes') state.section = aba; } catch (err) {}
@@ -728,7 +838,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   function renderNav() {
     nav.innerHTML = SECTIONS.map(function (s) {
       return '<li><button type="button" data-sec="' + s.id + '"' + (state.section === s.id ? ' aria-current="page"' : '') + '>' +
-        ICONS[s.id] + '<span>' + esc(s.label) + '</span>' + (s.soon ? '<span class="soon">em breve</span>' : '') +
+        '<span class="ic-t" style="--c:' + AREA[s.id] + '">' + ICONS[s.id] + '</span><span>' + esc(s.label) + '</span>' + (s.soon ? '<span class="soon">em breve</span>' : '') +
         (s.id === 'pacientes' && pcVencidos() ? '<span class="pc-badge" title="Retornos para chamar">' + pcVencidos() + '</span>' : '') + '</button></li>';
     }).join('');
   }
@@ -787,6 +897,94 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       { ag: 'anapaula', nome: 'Plano de tratamento', desc: 'Plano faseado a partir dos achados anonimizados.', quando: 'Quando você mandar um caso', sob: true }] },
     { id: 'treino', nome: 'Treino e dieta', tarefas: [] }
   ];
+
+  // ---------- cores e páginas dos agentes (10/11/2026, pedido do Pedro: mais intuitivo, interativo e colorido) ----------
+  var AREA = { agentes: '#4c5fd5', agenda: '#1479b8', conteudo: '#d6336c', edicao: '#7c3fd0', pacientes: '#0a7f70', financeiro: '#b5740a', estudos: '#24874a' };
+  var SCOR = { marketing: '#d6336c', edicao: '#7c3fd0', atendimento: '#0a7f70', gerencia: '#4c5fd5', estudos: '#24874a', financeiro: '#b5740a', clinico: '#1479b8', treino: '#d9622b' };
+  var SIC = {
+    marketing: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10v4h3l8 4V6l-8 4H4z"/><path d="M18 9.5a3.5 3.5 0 0 1 0 5"/></svg>',
+    atendimento: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 6h14v10H10l-4 3v-3H5z"/></svg>',
+    gerencia: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="8" width="16" height="11" rx="2"/><path d="M9 8V6h6v2M4 13h16"/></svg>',
+    treino: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M3 12h18M6 8v8M18 8v8M9 9.5v5M15 9.5v5"/></svg>'
+  };
+  function sic(id, cls) { return '<span class="st-ic ' + (cls || '') + '" style="--sc:' + SCOR[id] + '">' + (SIC[id] || ICONS[id] || ICONS.tooth) + '</span>'; }
+
+  // o que cada agente busca, o que recebe, o que entrega e a parte do Pedro. "com" = com quem trabalha.
+  var PERFIL = {
+    luzi: { objetivo: 'Manter a semana do consultório organizada e mostrar onde você precisa agir.', recebe: 'As notas do second brain e o que os outros agentes entregaram na semana.', entrega: 'A revisão da semana, todo domingo. O plano da semana ainda é proposta.', voce: 'Ler a revisão e confirmar as sugestões.', com: ['marketing', 'kim', 'nina'] },
+    marketing: { objetivo: 'Colocar paciente na cadeira, não ganhar seguidor.', recebe: 'O second brain (origem dos pacientes, ideias, plano do mês), os arquivos que você sobe e os números da Lisa.', entrega: 'De 3 a 5 opções de captação por dia e o cronograma de posts com legenda, já conferido pelo CFO.', voce: 'Escolher as opções, gravar, aprovar os posts e postar no Instagram.', com: ['rafa', 'lisa', 'bruno', 'caio'], regras: ['Sem preço e sem promessa de resultado', 'Nome e CRO em todo conteúdo', 'Sem dados de pacientes', 'No Instagram quem posta é você'] },
+    rafa: { objetivo: 'Deixar cada vídeo pronto para postar, sem você precisar editar.', recebe: 'Os vídeos que você manda para edição e o seu feedback.', entrega: 'O vídeo vertical, com gancho na tela e assinatura, na aba Edição.', voce: 'Conferir o vídeo e pedir para refazer se precisar.', com: ['marketing'], regras: ['Não ouve o áudio: corta pelo que vê e pelo pedido', 'Até 20 MB por vídeo'] },
+    lisa: { objetivo: 'Mostrar o que está funcionando nas redes e ajudar você a responder quem chama.', recebe: 'Os números do Metricool (Instagram e TikTok) e as mensagens que você cola aqui.', entrega: 'O relatório do dia e a resposta pronta para cada mensagem.', voce: 'Colar a mensagem sem nome nem @, copiar a resposta e enviar.', com: ['marketing'], regras: ['Nunca envia nada sozinha', 'Sem diagnóstico e sem preço por mensagem', 'Sem nome ou @ da pessoa (LGPD)'] },
+    kim: { objetivo: 'Mostrar quanto entra, quanto sobra e quanto falta para o consultório próprio.', recebe: 'Os valores que você registrar, por clínica e procedimento.', entrega: 'O fechamento do mês contra a meta.', voce: 'Registrar as entradas.', com: ['luzi'], regras: ['Só valores, nunca nomes de pacientes'] },
+    nina: { objetivo: 'Fazer a especialização render: menos tempo organizando, mais tempo estudando.', recebe: 'As aulas e os artigos que você manda e a sua fila de temas.', entrega: 'O menu de temas no domingo e o resumo das aulas.', voce: 'Escolher o tema da semana e mandar as aulas.', com: ['caio'] },
+    anapaula: { objetivo: 'Transformar os achados de um caso num plano de tratamento claro.', recebe: 'Os achados clínicos, sem o nome do paciente.', entrega: 'O plano faseado, com opções, e a versão para explicar ao paciente.', voce: 'Mandar o caso e revisar o plano. A decisão clínica é sua.', com: ['caio'], regras: ['Caso sempre anonimizado', 'A decisão clínica é do dentista'] },
+    amanda: { objetivo: 'Não perder paciente por falta de resposta ou de retorno.', recebe: 'Hoje, nada automático: os retornos ficam só na aba Pacientes.', entrega: 'Mensagens prontas de primeira resposta, confirmação, pós-consulta e retorno.', voce: 'Copiar a mensagem e enviar pelo seu WhatsApp.', com: ['bruno', 'lisa'], regras: ['Sigilo e LGPD', 'Não lê as fichas dos pacientes'] },
+    bruno: { objetivo: 'Garantir que nada vá a público fora das regras do CFO e da LGPD.', recebe: 'Os conteúdos da Duda e as mensagens-modelo.', entrega: 'O que mudar, com o motivo.', voce: 'Aplicar o ajuste antes de postar.', com: ['marketing', 'amanda'], nota: 'Hoje a própria Duda confere o CFO em cada conteúdo. O Bruno ainda é proposta.' },
+    caio: { objetivo: 'Dar base científica ao que você estuda e publica.', recebe: 'Os alertas do PubMed que chegam no seu e-mail.', entrega: 'O resumo traduzido dos artigos, por e-mail, todo dia às 21h.', voce: 'Ler o resumo.', com: ['nina', 'anapaula', 'marketing'] }
+  };
+  var AG_SETOR = { bruno: 'marketing' };
+  function setorDe(id) {
+    var s = SETORES.find(function (x) { return x.tarefas.some(function (t) { return t.ag === id; }); });
+    return s || SETORES.find(function (x) { return x.id === AG_SETOR[id]; }) || SETORES[0];
+  }
+  function tarefasDe(id) {
+    var l = [];
+    SETORES.forEach(function (s) { s.tarefas.forEach(function (t) { if (t.ag === id) l.push(Object.assign({ est: tarefaEstado(t) }, t)); }); });
+    return l;
+  }
+  var EST_CHIP = { ok: 'c-ok', late: 'c-bad', sem: 'c-warn', sob: 'c-off', parada: 'c-off' };
+  function agStatus(ts) {
+    if (ts.some(function (t) { return t.est.k === 'late'; })) return ['c-bad', 'Tarefa atrasada'];
+    if (ts.some(function (t) { return t.est.k === 'ok'; })) return ['c-ok', 'Rodando sozinho'];
+    if (ts.some(function (t) { return t.est.k === 'sem'; })) return ['c-warn', 'Sem registro ainda'];
+    if (ts.some(function (t) { return t.est.k === 'sob'; })) return ['c-off', 'Sob demanda'];
+    return ['c-off', 'Ainda não roda sozinho'];
+  }
+  var TAB_PADRAO = { marketing: 'hoje', lisa: 'numeros' };
+  function agTab(a) { return state.agTab[a.id] || TAB_PADRAO[a.id] || 'como'; }
+  function agTopo(a, tabs) {
+    var s = setorDe(a.id), st = agStatus(tarefasDe(a.id)), cur = agTab(a);
+    return '<button type="button" class="back" data-back="1">← Agentes</button>' +
+      '<header class="ah">' + face(a) + '<div class="ah-tx"><span class="eyebrow">' + esc(s.nome) + '</span><h1>' + esc(a.name) + '</h1>' +
+      '<p><b>' + esc(a.role) + '.</b> ' + esc(a.desc) + '</p>' +
+      '<div class="ah-chips"><span class="chip ' + st[0] + '">' + st[1] + '</span><span class="chip c-area">' + esc(a.when) + '</span></div></div></header>' +
+      (tabs ? '<div class="seg ag-tabs" role="group" aria-label="O que ver">' + tabs.map(function (t) {
+        return '<button type="button" data-agtab="' + t[0] + '" aria-pressed="' + (cur === t[0]) + '">' + esc(t[1]) + (t[2] ? '<span class="n">' + t[2] + '</span>' : '') + '</button>'; }).join('') + '</div>' : '');
+  }
+  var FLUXO_MKT = [
+    { quem: 'Você', oque: 'grava e sobe no painel', ir: 'conteudo' },
+    { quem: 'Duda', oque: 'analisa e monta o post', ag: 'marketing' },
+    { quem: 'Rafa', oque: 'edita o vídeo', ag: 'rafa' },
+    { quem: 'Você', oque: 'aprova e posta', ir: 'conteudo' },
+    { quem: 'Lisa', oque: 'mede e avisa a Duda', ag: 'lisa' }
+  ];
+  function agComo(a) {
+    var p = PERFIL[a.id] || {}, ts = tarefasDe(a.id), s = setorDe(a.id);
+    var passo = function (n, k, titulo, corpo) { return '<div class="cf-step" style="--k:' + k + '"><b><i>' + n + '</i>' + titulo + '</b>' + corpo + '</div>'; };
+    var html = '<div class="cf">' +
+      (p.objetivo ? '<div class="cf-obj"><small>Objetivo</small><p>' + esc(p.objetivo) + '</p></div>' : '') +
+      '<h2 class="cf-h">Como funciona</h2><div class="cf-steps">' +
+      passo(1, '#1479b8', 'Recebe', '<p>' + esc(p.recebe || '') + '</p>') +
+      passo(2, SCOR[s.id], 'Faz', '<ul>' + (a.funcs || []).map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>') +
+      passo(3, '#24874a', 'Entrega', '<p>' + esc(p.entrega || '') + '</p>') +
+      passo(4, '#d9622b', 'Sua parte', '<p>' + esc(p.voce || '') + '</p>') + '</div>';
+    if (s.id === 'marketing' || s.id === 'edicao') html += '<section class="cf-card"><h2>O caminho de um post</h2><div class="cf-flow">' + FLUXO_MKT.map(function (f, n) {
+      return '<button type="button" ' + (f.ag ? 'data-agent="' + f.ag + '"' : 'data-ir="' + f.ir + '"') + (f.ag === a.id ? ' class="eu"' : '') + '><b>' + (n + 1) + '. ' + f.quem + '</b>' + f.oque + '</button>'; }).join('') +
+      '</div><p style="margin-top:8px">Toque num passo para abrir. No TikTok, o vídeo aprovado é agendado sozinho; no Instagram, quem posta é você.</p></section>';
+    html += '<div class="cf-2"><section class="cf-card"><h2>Tarefas</h2>' + (ts.length ? ts.map(function (t) {
+        var pu = t.est.p;
+        return '<div class="cf-task"><b>' + esc(t.nome) + '</b><span class="chip ' + EST_CHIP[t.est.k] + '">' + esc(t.est.txt) + '</span><span>' + esc(t.desc) + '</span>' +
+          '<small>' + esc(t.quando) + (pu ? ' · Última rodada: ' + dataHora(pu.ultima) : '') + (pu && pu.resultado ? ' · ' + esc(pu.resultado) : '') + '</small></div>'; }).join('')
+        : '<p>Nenhuma tarefa ligada ainda. As funções acima são uma proposta: quando você aprovar, ' + esc(a.name) + ' ganha a tarefa agendada.</p>') +
+      (p.nota ? '<p style="margin-top:8px"><b>Nota:</b> ' + esc(p.nota) + '</p>' : '') + '</section><div class="cf">' +
+      ((p.com || []).length ? '<section class="cf-card"><h2>Trabalha com</h2><div class="cf-team">' + p.com.map(function (id) {
+        var o = AGENTS.find(function (x) { return x.id === id; });
+        return o ? '<button type="button" data-agent="' + o.id + '">' + avatar(o.id) + '<span>' + esc(o.name) + '<small>' + esc(o.role) + '</small></span></button>' : ''; }).join('') + '</div></section>' : '') +
+      ((p.regras || []).length ? '<section class="cf-card"><h2>Regras</h2><ul class="cf-rules">' + p.regras.map(function (r) { return '<li>' + esc(r) + '</li>'; }).join('') + '</ul></section>' : '') +
+      '</div></div></div>';
+    return html;
+  }
+  function renderAgente(a) { return agTopo(a, a.id === 'rafa' ? [['como', 'Como funciona'], ['ir:edicao', 'Ver os vídeos editados']] : null) + agComo(a); }
 
   function pulso(id) { return (ct.agentes || []).find(function (x) { return x.id === id; }); }
   function dataHora(iso) { var d = new Date(iso); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
@@ -870,7 +1068,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   function cartaoSetor(i, primeiro) {
     return '<button type="button" class="sg-card n-' + i.nivel + '" data-setor="' + i.s.id + '">' +
       (primeiro && i.nivel !== 'ok' && i.nivel !== 'parado' ? '<span class="sg-foco">Foco agora</span>' : '') +
-      '<span class="sg-top"><b>' + esc(i.s.nome) + '</b><em>' + (i.saude == null ? '–' : i.saude) + '</em></span>' +
+      '<span class="sg-top">' + sic(i.s.id, 'sm') + '<b>' + esc(i.s.nome) + '</b><em>' + (i.saude == null ? '–' : i.saude) + '</em></span>' +
       '<span class="sg-linha"><i style="width:' + (i.saude || 0) + '%"></i></span>' +
       '<span class="sg-sub">' + esc(resumoSetor(i)) + '</span>' + barraSetor(i) +
       '<span class="sg-pe"><span class="sg-dots">' + i.tar.map(function (t) { return '<i class="d-' + t.est.k + '"></i>'; }).join('') + '</span>' +
@@ -916,7 +1114,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   }
   function colunaSetor(i) {
     var aberto = state.abertas[i.s.id];
-    return '<section class="st-col" id="setor-' + i.s.id + '"><header><h3>' + esc(i.s.nome) + '</h3><span class="st-status n-' + (i.status === 'Em dia' ? 'ok' : i.status === 'Parado' ? 'parado' : i.nivel === 'foco' ? 'foco' : 'atencao') + '">' + esc(i.status) + '</span></header>' +
+    return '<section class="st-col" id="setor-' + i.s.id + '" style="--sc:' + SCOR[i.s.id] + '"><header>' + sic(i.s.id) + '<h3>' + esc(i.s.nome) + '</h3><span class="st-status n-' + (i.status === 'Em dia' ? 'ok' : i.status === 'Parado' ? 'parado' : i.nivel === 'foco' ? 'foco' : 'atencao') + '">' + esc(i.status) + '</span></header>' +
       '<p class="st-sub">' + esc(resumoSetor(i)) + '</p>' +
       (i.tar.length ? linhasAgentes(i.tar) : '<p class="st-vaga">Vaga. Ninguém contratado neste setor ainda.</p>') +
       (i.ab.length ? '<button type="button" class="st-mais" data-abertas="' + i.s.id + '">' + (aberto ? 'Esconder ' : 'Ver ') + plural(i.ab.length, 'tarefa aberta', 'tarefas abertas') + ' ›</button>' +
@@ -930,18 +1128,24 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var total = 0, rod = 0; infos.forEach(function (i) { i.tar.forEach(function (t) { total++; if (t.est.k === 'ok') rod++; }); });
     var foco = ativos.filter(function (i) { return i.saude < 70; }).length;
     var ult = (ct.agentes || []).map(function (x) { return x.ultima; }).filter(Boolean).sort().pop();
+    var FIL = { todos: function () { return true; }, voce: function (i) { return i.voce > 0 || i.atrasada > 0; }, rodando: function (i) { return i.ok > 0; }, parado: function (i) { return i.saude == null; } };
+    var filtros = '<div class="ag-filtros" role="group" aria-label="Filtrar setores">' + [['todos', 'Todos'], ['voce', 'Precisam de você'], ['rodando', 'Rodando sozinhos'], ['parado', 'Parados']].map(function (f) {
+      return '<button type="button" data-filtro="' + f[0] + '" aria-pressed="' + (state.filtro === f[0]) + '">' + f[1] + ' (' + infos.filter(FIL[f[0]]).length + ')</button>'; }).join('') + '</div>';
+    var visiveis = infos.filter(FIL[state.filtro] || FIL.todos);
+    var legenda = '<div class="ag-leg"><span><i style="background:var(--vermelho)"></i>Atrasada</span><span><i style="background:#1d3f8f"></i>Com você</span><span><i style="background:#6f8fd8"></i>Andando</span><span><i style="background:#c3c8ee"></i>Na fila</span><span><i style="background:var(--verde)"></i>Feita</span></div>';
     return head + '<div class="ag-right">' + (ult ? '<small>Atualizado ' + dataHora(ult) + '</small>' : '') +
       '<div class="ag-stats"><div><b>' + geral + '</b><span>Saúde geral</span></div><div><b>' + (total ? Math.round(rod / total * 100) : 0) + '%</b><span>Autonomia</span></div>' +
       '<div><b>' + foco + '</b><span>Setores pedindo foco</span></div></div></div></header>' +
       '<h2 class="ag-h2">Saúde dos setores</h2><p class="ag-p">Ordenado do que mais precisa de foco para o que está rodando bem. Toque num setor para ver as tarefas.</p>' +
-      '<div class="ag-grid">' + mapaEscritorio(infos) + '<div class="sg-cards">' + infos.map(function (i, n) { return cartaoSetor(i, n === 0); }).join('') + '</div></div>' +
-      '<h2 class="ag-h2 ag-setores">Setores</h2><div class="st-grid">' + infos.map(colunaSetor).join('') + '</div>' +
+      '<div class="ag-grid">' + mapaEscritorio(infos) + '<div class="sg-cards">' + infos.map(function (i, n) { return cartaoSetor(i, n === 0); }).join('') + '</div></div>' + legenda +
+      '<h2 class="ag-h2 ag-setores">Setores</h2>' + filtros + (visiveis.length ? '<div class="st-grid">' + visiveis.map(colunaSetor).join('') + '</div>' : '<div class="empty">Nenhum setor neste filtro.</div>') +
       '<p class="ag-nota">A saúde parte das tarefas automáticas em dia e perde 15 pontos por item atrasado e 6 por item esperando você (até 36). Setor sem tarefa automática e sem pendência fica "Parado", sem nota.</p>';
   }
 
   function irPara(s) {
     if (s === 'duda') { state.section = 'agentes'; state.agent = 'marketing'; }
-    else if (s === 'lisa') { state.section = 'agentes'; state.agent = 'lisa'; }
+    else if (s === 'lisa') { state.section = 'agentes'; state.agent = 'lisa'; state.agTab.lisa = 'mensagens'; }
+    else if (s.indexOf('ag:') === 0) { state.section = 'agentes'; state.agent = s.slice(3); }
     else { state.section = s; state.agent = null; try { localStorage.setItem('painel:aba', s); } catch (err) {} }
     if (s === 'conteudo') { ct.view = 'hoje'; ctEnter(); }
     render(); window.scrollTo(0, 0);
@@ -953,19 +1157,6 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     return l.join(', ');
   }
 
-  // página de quem ainda não trabalha sozinho: as funções propostas e quando vai rodar
-  function renderArriving(a) {
-    return '<button type="button" class="back" data-back="1">← Agentes</button>' +
-      '<div class="agent-hero">' + face(a, 'big') + '</div>' +
-      '<header class="page-head"><span class="eyebrow">' + esc(a.name + ' · ' + a.role) + '</span><h1>' + esc(a.name) + (a.active || autoDe(a) ? '' : ' está chegando') + '</h1>' +
-      '<p>' + esc(a.desc) + '</p></header>' +
-      '<div class="detail">' + (a.active ? '<div class="empty"><b>Já trabalha sozinho.</b> As edições aparecem na aba Edição.</div>'
-        : autoDe(a) ? '<div class="empty"><b>Já roda sozinho:</b> ' + esc(autoDe(a)) + '. O resto das funções abaixo ainda é proposta.</div>'
-        : '<div class="empty"><b>Ainda não trabalha sozinho.</b> As funções são uma proposta da IA. Quando você aprovar, ' + esc(a.name) + ' ganha a tarefa agendada e passa a entregar como a Duda.</div>') +
-      '<section class="panel role"><h2>Funções</h2><ul>' + a.funcs.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ul>' +
-      '<div class="meta"><span class="chip">' + esc(a.when) + '</span>' + '</div></section></div>';
-  }
-
   // ---------- Lisa: números do Instagram (coleção instagram, um documento por dia) e respostas de DM (coleção dm) ----------
   // A Lisa grava pelos números do Metricool; o painel só mostra. Nas DMs o Pedro cola a mensagem SEM nome ou @ (LGPD),
   // a Lisa escreve a resposta na rodada seguinte e o Pedro copia e envia. Nada é enviado sozinho.
@@ -973,13 +1164,13 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   function fmtNum(n) { return n == null || n === '' ? '–' : typeof n === 'number' ? n.toLocaleString('pt-BR') : String(n); }
   function renderLisa() {
     var a = AGENTS.find(function (x) { return x.id === 'lisa'; });
-    var html = '<button type="button" class="back" data-back="1">← Agentes</button>' +
-      '<div class="agent-hero">' + face(a, 'big') + '</div>' +
-      '<header class="page-head"><span class="eyebrow">Lisa · Estatísticas e interações</span><h1>Instagram e TikTok em números</h1>' +
-      '<p>A Lisa lê o Instagram e o TikTok pelo Metricool às 9h e às 18h, diz o que funcionou e escreve as respostas das mensagens que você colar aqui. Ela trabalha com a Duda: a Duda cria, a Lisa mede e conversa.</p></header>';
+    var prontas = (ct.dm || []).filter(function (x) { return x.estado === 'respondida'; }).length;
+    var html = agTopo(a, [['numeros', 'Números'], ['mensagens', 'Responder mensagens', prontas], ['como', 'Como funciona']]);
+    if (agTab(a) === 'como') return html + agComo(a);
+    var soMsg = agTab(a) === 'mensagens';
     if (!state.db) return html + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
     var rel = (ct.insta || [])[0];
-    if (!rel) html += '<div class="empty"><b>Ainda não há números.</b> A Lisa precisa do Metricool conectado ao Claude, ao seu Instagram e ao seu TikTok. Depois disso, o primeiro relatório sai na próxima rodada (9h ou 18h), com o app do Claude aberto no computador.</div>';
+    if (soMsg) { /* aba de mensagens: sem relatório */ } else if (!rel) html += '<div class="empty"><b>Ainda não há números.</b> A Lisa precisa do Metricool conectado ao Claude, ao seu Instagram e ao seu TikTok. Depois disso, o primeiro relatório sai na próxima rodada (9h ou 18h), com o app do Claude aberto no computador.</div>';
     else {
       var n = rel.numeros || {}, itens = [['seguidores', 'Seguidores'], ['alcance', 'Alcance (30 dias)'], ['visualizacoes', 'Visualizações (30 dias)'], ['interacoes', 'Interações (30 dias)'], ['visitas_perfil', 'Visitas ao perfil'], ['cliques_link', 'Cliques no link']];
       html += '<section class="panel li-rel"><div class="li-top"><h2>Relatório de ' + esc(fmtDay(rel.data || rel.id)) + '</h2>' + (rel.fonte === 'metricool' ? '' : '<span class="chip">sem Metricool</span>') + '</div>' +
@@ -999,6 +1190,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         ((rel.para_duda || []).length ? '<h3>Recado para a Duda</h3><ul class="li-list">' + rel.para_duda.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
         '</section>';
     }
+    if (!soMsg) return html;
     // respostas de DM e comentários
     var lista = ct.dm || [];
     html += '<section class="panel li-dm"><h2>Responder mensagens</h2>' +
@@ -1044,7 +1236,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (o.cta) rows += '<dt>Chamada</dt><dd>' + esc(o.cta) + '</dd>';
     if (o.porque) rows += '<dt>Por que capta</dt><dd>' + esc(o.porque) + '</dd>';
     if (o.cuidado) rows += '<dt>Cuidado</dt><dd>' + esc(o.cuidado) + '</dd>';
-    return '<article class="opt' + (st === 'feito' || st === 'descartado' ? ' done' : '') + '">' +
+    return '<article class="opt f-' + esc(o.forca) + (st === 'feito' || st === 'descartado' ? ' done' : '') + '">' +
       '<div class="opt-top"><span class="force ' + esc(o.forca) + '">' + esc(FORCE[o.forca] || o.forca) + '</span>' +
       '<span class="kind">' + esc(o.tipo || '') + '</span>' + (o.tempo ? '<span class="time">' + esc(o.tempo) + '</span>' : '') + '</div>' +
       '<h3>' + esc(o.titulo) + '</h3>' +
@@ -1058,10 +1250,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   }
 
   function renderMarketing() {
-    var html = '<button type="button" class="back" data-back="1">← Agentes</button>' +
-      '<div class="agent-hero">' + face(AGENTS[1], 'big') + '</div>' +
-      '<header class="page-head"><span class="eyebrow">Duda · Agência de marketing</span><h1>Opções para captar pacientes</h1>' +
-      '<p>Todo dia de manhã a Duda lê o second brain e traz o que fazer para encher a agenda.</p></header>';
+    var duda = AGENTS.find(function (x) { return x.id === 'marketing'; });
+    var html = agTopo(duda, [['hoje', 'Opções de hoje'], ['como', 'Como funciona']]);
+    if (agTab(duda) === 'como') return html + agComo(duda);
 
     var body = '';
     if (!state.db && !state.loading) {
@@ -1081,16 +1272,14 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         '<div class="options">' + (day.opcoes || []).map(function (o) { return renderOption(o, day); }).join('') + '</div>';
     }
 
-    var aside = '<section class="panel role"><h2>Função</h2><p>Lê o second brain (briefing do agente, origem dos pacientes, ideias de vídeo, plano do mês, aulas recentes) e entrega de 3 a 5 opções por dia.</p>' +
-      '<ul><li>Meta: paciente na cadeira, não seguidor.</li><li>Regras do CFO em tudo: sem preço, sem promessa, nome e CRO.</li><li>Sem dados de pacientes.</li></ul>' +
-      '<div class="meta"><span class="chip ok">Todo dia às 7h</span><span class="chip">Fase 1: captação</span></div></section>';
+    var aside = '';
     if (state.days.length > 1 || (state.days.length && state.days[0].data !== todayIso())) {
       aside += '<section class="panel history"><h2>Dias anteriores</h2><ol>' + state.days.slice(0, 14).map(function (d) {
         var cur = (state.selected || state.days[0].id) === d.id;
         return '<li><button type="button" data-day-pick="' + esc(d.id) + '" aria-current="' + cur + '"><span>' + esc(fmtDay(d.data)) + '</span><span class="n">' + (d.opcoes || []).length + ' opções</span></button></li>';
       }).join('') + '</ol></section>';
     }
-    return html + '<div class="detail"><div>' + body + '</div><div style="display:flex;flex-direction:column;gap:14px">' + aside + '</div></div>';
+    return html + (aside ? '<div class="detail"><div>' + body + '</div><div style="display:flex;flex-direction:column;gap:14px">' + aside + '</div></div>' : body);
   }
 
   // ---------- agenda (Google Agenda pelo conector do claude.ai) ----------
@@ -2415,7 +2604,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   }
 
   function renderSoon(s) {
-    return '<header class="page-head soon-page"><span class="eyebrow">' + esc(s.label) + '</span><h1>Em breve</h1><p>' + esc(s.soon) + '</p></header>';
+    var a = AGENTS.find(function (x) { return x.id === s.ag; });
+    return '<header class="page-head soon-page"><span class="eyebrow">Em breve</span><h1>' + esc(s.label) + '</h1><p>' + esc(s.soon) + '</p></header>' +
+      '<p class="note">Esta aba ainda não foi construída. O que está planejado para ela:</p>' +
+      '<div class="soon-grid">' + (s.itens || []).map(function (x) { return '<div>' + esc(x) + '</div>'; }).join('') + '</div>' +
+      (a ? '<button type="button" class="btn primary" data-ir="ag:' + a.id + '">Ver ' + esc(a.name) + ', agente desta área</button>' : '');
   }
 
   function render() {
@@ -2424,8 +2617,15 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     else if (state.section === 'conteudo') main.innerHTML = renderConteudo();
     else if (state.section === 'edicao') main.innerHTML = renderEdicao();
     else if (state.section === 'pacientes') main.innerHTML = renderPacientes();
-    else if (state.section === 'agentes') main.innerHTML = state.agent === 'marketing' ? renderMarketing() : state.agent === 'lisa' ? renderLisa() : state.agent ? renderArriving(AGENTS.find(function (a) { return a.id === state.agent; })) : renderAgentes();
+    else if (state.section === 'agentes') main.innerHTML = state.agent === 'marketing' ? renderMarketing() : state.agent === 'lisa' ? renderLisa() : state.agent ? renderAgente(AGENTS.find(function (a) { return a.id === state.agent; })) : renderAgentes();
     else main.innerHTML = renderSoon(SECTIONS.find(function (s) { return s.id === state.section; }));
+    main.style.setProperty('--area', state.section === 'agentes' && state.agent ? SCOR[setorDe(state.agent).id] : AREA[state.section] || AREA.agentes);
+    var ph = main.querySelector('.page-head');
+    if (ph) {
+      var eb = ph.querySelector('.eyebrow'), h1 = ph.querySelector('h1');
+      if (eb && h1 && eb.textContent === h1.textContent) eb.remove();
+      ph.insertAdjacentHTML('afterbegin', '<span class="ph-ic">' + ICONS[state.section] + '</span>');
+    }
   }
 
   nav.addEventListener('click', function (e) {
@@ -2443,6 +2643,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (state.section === 'conteudo' || state.section === 'edicao') { ctClick(e.target); return; }
     if (state.section === 'pacientes') { pcClick(e.target); return; }
     if (state.agent === 'lisa' && state.db && dmClick(e.target)) return;
+    if ((t = e.target.closest('[data-agtab]'))) { var tb = t.getAttribute('data-agtab'); if (tb.indexOf('ir:') === 0) irPara(tb.slice(3)); else { state.agTab[state.agent] = tb; render(); } return; }
+    if ((t = e.target.closest('[data-filtro]'))) { state.filtro = t.getAttribute('data-filtro'); render(); return; }
     if ((t = e.target.closest('[data-abertas]'))) { var ab = t.getAttribute('data-abertas'); state.abertas[ab] = !state.abertas[ab]; render(); return; }
     if ((t = e.target.closest('[data-ir]'))) { irPara(t.getAttribute('data-ir')); return; }
     if ((t = e.target.closest('[data-setor]'))) {
