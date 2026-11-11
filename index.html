@@ -527,7 +527,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .ed-item.st-pedida { border-left-color: var(--weak); }
 .ed-item.st-pronta { border-left-color: #2f8a5f; }
 .ed-item.st-falhou { border-left-color: var(--bad); }
-.ed-media video, .ed-media .pm { width: 100%; max-height: 320px; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 10px; background: #111; display: block; height: auto; }
+.ed-media video, .ed-media img, .ed-media .pm { width: 100%; max-height: 320px; aspect-ratio: 9 / 16; object-fit: cover; border-radius: 10px; background: #111; display: block; height: auto; }
 .ed-info { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 .ed-info h3 { font-size: 16px; font-weight: 800; }
 .ed-info p { margin: 0; font-size: 13.5px; }
@@ -1685,10 +1685,20 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var pastas = ct.pastas || [];
     if (ct.prog) return '<div class="ag-form"><h2>Enviando</h2><p class="hint">' + esc(ct.prog) + '</p><p class="hint">Não feche o painel até terminar.</p></div>';
     if (u.pasta === '__desafios') pastas = pastas.concat([{ id: '__desafios', nome: 'Desafios (pasta nova)' }]);
-    return '<div class="ag-form"><h2>' + (u.desafio ? 'Enviar o desafio ' + u.desafio : 'Enviar fotos e vídeos') + '</h2>' +
+    // caso (foto inicial e final): o Rafa monta o story no modelo aprovado pelo Pedro em 11/11/2026
+    var tipoEnvio = u.desafio ? '' : '<fieldset class="ct-radio"><legend>O que você vai enviar?</legend>' +
+      [['', 'Fotos e vídeos soltos'], ['1', 'Caso: foto inicial e foto final (o Rafa monta o story no seu modelo)']].map(function (o) {
+        return '<label><input type="radio" name="ct-caso" data-ct-f="caso" value="' + o[0] + '"' + ((u.caso || '') === o[0] ? ' checked' : '') + '> ' + o[1] + '</label>'; }).join('') + '</fieldset>';
+    var arquivos = u.caso
+      ? '<label>Foto inicial<input type="file" accept="image/*" data-ct-file="ini"></label><label>Foto final<input type="file" accept="image/*" data-ct-file="fim"></label></div>' +
+        '<div class="grid"><label>Palavra na caixa bordô<input type="text" maxlength="20" data-ct-f="destaque" value="' + esc(u.destaque || '') + '" placeholder="Ex.: Emergência"></label>' +
+        '<label>Resto do título<input type="text" maxlength="70" data-ct-f="titulo" value="' + esc(u.titulo || '') + '" placeholder="Ex.: da tarde: incisivo fraturado."></label></div>' +
+        '<p class="hint">Se deixar o título em branco, a Duda escreve um a partir do "O que é". Embaixo vai a chamada "Dente lascado, quebrado ou com algo que te incomoda no sorriso? Me chama." e o seu CRO.</p>'
+      : '<label>Arquivos<input type="file" multiple accept="image/*,video/*" data-ct-file="1"></label></div>';
+    return '<div class="ag-form"><h2>' + (u.desafio ? 'Enviar o desafio ' + u.desafio : u.caso ? 'Enviar um caso' : 'Enviar fotos e vídeos') + '</h2>' + tipoEnvio +
       '<div class="grid"><label>Pasta<select data-ct-f="pasta"><option value="">Escolha…</option>' + pastas.map(function (p) {
         return '<option value="' + esc(p.id) + '"' + (u.pasta === p.id ? ' selected' : '') + '>' + esc(p.nome) + '</option>'; }).join('') + '</select></label>' +
-      '<label>Arquivos<input type="file" multiple accept="image/*,video/*" data-ct-file="1"></label></div>' +
+      arquivos +
       '<fieldset class="ct-radio"><legend>Aparece paciente (rosto, sorriso, nome, prontuário)?</legend>' +
       [['nao', 'Não'], ['autorizado', 'Sim, e ele assinou a autorização de uso de imagem'], ['sem_tcle', 'Sim, mas ainda sem autorização']].map(function (o) {
         return '<label><input type="radio" name="ct-pac" data-ct-f="paciente" value="' + o[0] + '"' + (u.paciente === o[0] ? ' checked' : '') + '> ' + o[1] + '</label>'; }).join('') + '</fieldset>' +
@@ -1770,7 +1780,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // aba Edição: o que está na fila, sendo editado, pronto ou com problema
   function renderEdicao() {
     var head = '<header class="page-head"><span class="eyebrow">Edição</span><h1>Edição</h1>' +
-      '<p>Os vídeos que você mandou para o Rafa. Ele edita todo dia às 8h: corte vertical, gancho na tela e assinatura.</p></header>';
+      '<p>Os vídeos e os casos que você mandou para o Rafa. Ele edita todo dia às 8h: vídeo com corte vertical, gancho e assinatura; caso (foto inicial e final) vira story no seu modelo.</p></header>';
     if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
     var items = (ct.midia || []).filter(function (m) { return m.edicao; });
     if (ct.msg) head += '<div class="ag-warn">' + esc(ct.msg) + '</div>';
@@ -1778,13 +1788,13 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     return head + ['editando', 'pedida', 'pronta', 'falhou'].map(function (st) {
       var l = items.filter(function (m) { return m.edicao.status === st; }); if (!l.length) return '';
       return '<section class="ed-group"><h2>' + esc(ED_ST[st]) + ' <span>' + l.length + '</span></h2><div class="ed-list">' + l.map(function (m) {
-        var e = m.edicao;
-        return '<article class="ed-item st-' + st + '"><div class="ed-media">' + (st === 'pronta' && e.asset ? '<video src="' + blobUrl(e.asset) + '" controls playsinline preload="metadata"></video>' : thumb(m, 'pm')) + '</div>' +
-          '<div class="ed-info"><h3>' + esc(m.nota || 'Vídeo') + '</h3><p class="hint">' + esc(pastaNome(m.pasta)) + (e.pedido_em ? ' · pedido em ' + esc(fmtDay(e.pedido_em.slice(0, 10))) : '') + '</p>' +
+        var e = m.edicao, caso = e.tipo === 'caso';
+        return '<article class="ed-item st-' + st + '"><div class="ed-media">' + (st === 'pronta' && e.asset ? (caso ? '<img src="' + blobUrl(e.asset) + '" alt="Story do caso">' : '<video src="' + blobUrl(e.asset) + '" controls playsinline preload="metadata"></video>') : thumb(m, 'pm')) + '</div>' +
+          '<div class="ed-info"><h3>' + (caso ? '<span class="chip">Caso</span> ' : '') + esc(m.nota || 'Vídeo') + '</h3><p class="hint">' + esc(pastaNome(m.pasta)) + (e.pedido_em ? ' · pedido em ' + esc(fmtDay(e.pedido_em.slice(0, 10))) : '') + '</p>' +
           (e.pedido ? '<p><b>Pedido:</b> ' + esc(e.pedido) + '</p>' : '') +
           (e.feedback && (st === 'pedida' || st === 'editando') ? '<p class="ed-fbpedido"><b>Seu ajuste' + (e.rodada > 1 ? ' (versão ' + e.rodada + ')' : '') + ':</b> ' + esc(e.feedback) + '</p>' : '') +
           (e.notas ? '<p class="hint">' + esc(e.notas) + '</p>' : '') +
-          '<div class="acts">' + (st === 'pronta' && e.asset && ct.downloads ? '<button type="button" class="btn primary" data-ct-dl="' + esc(e.asset) + '" data-ct-dlname="' + esc(slug(m.nota || 'video')) + '-editado.mp4">Baixar vídeo</button>' : '') +
+          '<div class="acts">' + (st === 'pronta' && e.asset && ct.downloads ? '<button type="button" class="btn primary" data-ct-dl="' + esc(e.asset) + '" data-ct-dlname="' + esc(slug(m.nota || 'video')) + (caso ? '-story.jpg">Baixar imagem' : '-editado.mp4">Baixar vídeo') + '</button>' : '') +
           (st === 'pedida' || st === 'falhou' ? '<button type="button" class="btn" data-ct-unedit="' + esc(m.id) + '">Tirar da fila</button>' : '') +
           (st === 'falhou' ? '<button type="button" class="btn" data-ct-retry="' + esc(m.id) + '">Tentar de novo</button>' : '') +
           '<button type="button" class="btn" data-ct-open="' + esc(m.id) + '">Ver original</button></div>' +
@@ -2148,9 +2158,39 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     });
   }
 
+  // caso: sobe a foto inicial e a final e já pede o story ao Rafa (o pedido fica na mídia da foto inicial)
+  function ctSendCaso() {
+    var u = ct.up;
+    ct.upErr = !u.pasta ? 'Escolha a pasta.' : !u.ini ? 'Escolha a foto inicial.' : !u.fim ? 'Escolha a foto final.' : !u.paciente ? 'Diga se aparece paciente.' : null;
+    if (ct.upErr) { render(); return; }
+    var casoId = 'caso-' + Date.now().toString(36), agora = new Date().toISOString(), nota = (u.nota || '').trim();
+    function sobe(f, papel) {
+      return prepImage(f).then(function (b) { return ct.assets.upload(b, { type: 'image/jpeg' }); }, function () { return Promise.reject({ code: 'decode' }); })
+        .then(function (r) {
+          return state.db.doc('midia/' + r.id).set({ asset: r.id, tipo: 'foto', pasta: u.pasta, paciente: u.paciente, nota: (nota || 'Caso') + ' · ' + papel,
+            criado: agora, tamanho: r.sizeBytes, status: 'novo', caso: casoId, papel: papel }).then(function () { return r.id; });
+        });
+    }
+    ct.prog = 'Enviando a foto inicial…'; render();
+    sobe(u.ini, 'inicial').then(function (idIni) {
+      ct.prog = 'Enviando a foto final…'; render();
+      return sobe(u.fim, 'final').then(function (idFim) {
+        return state.db.doc('midia/' + idIni).update({ edicao: { status: 'pedida', tipo: 'caso', final_asset: idFim, destaque: (u.destaque || '').trim(), titulo: (u.titulo || '').trim(),
+          pedido: 'Story do caso no modelo (inicial e final do mesmo tamanho, caixa bordô)', pedido_em: agora } });
+      });
+    }).then(function () {
+      ct.prog = null; ct.up = null; ct.view = 'banco'; ct.pasta = u.pasta;
+      ct.msg = 'Caso enviado. O Rafa monta o story na próxima rodada dele (8h) e ele aparece na aba Edição.' + (u.paciente === 'sem_tcle' ? ' Sem a autorização do paciente, não poste.' : '');
+      render(); ctEnter();
+    }, function (e) {
+      ct.prog = null; ct.upErr = e && e.code === 'decode' ? 'Formato não aceito (foto HEIC: no iPhone use Ajustes › Câmera › Formatos › Mais compatível).' : 'Não deu certo. Tente de novo.'; render();
+    });
+  }
+
   function ctSend() {
     var u = ct.up;
-    ct.upErr = !u.pasta ? 'Escolha a pasta.' : !u.files || !u.files.length ? 'Escolha os arquivos.' : !u.paciente ? 'Diga se aparece paciente.' : null;
+    if (u.caso) { ctSendCaso(); return; }
+    ct.upErr =!u.pasta ? 'Escolha a pasta.' : !u.files || !u.files.length ? 'Escolha os arquivos.' : !u.paciente ? 'Diga se aparece paciente.' : null;
     if (ct.upErr) { render(); return; }
     // primeira vez que sobe um desafio: cria a pasta "Desafios"
     if (u.pasta === '__desafios') {
@@ -2689,7 +2729,12 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // conteúdo: arquivos escolhidos e mudanças de pasta / paciente de um arquivo
   main.addEventListener('change', function (e) {
     var el = e.target, id;
-    if (el.hasAttribute('data-ct-file') && ct.up) { ct.up.files = el.files; return; }
+    if (el.hasAttribute('data-ct-file') && ct.up) {
+      var qual = el.getAttribute('data-ct-file');
+      if (qual === 'ini') ct.up.ini = el.files[0] || null; else if (qual === 'fim') ct.up.fim = el.files[0] || null; else ct.up.files = el.files;
+      return;
+    }
+    if (el.getAttribute('data-ct-f') === 'caso' && ct.up) { ct.up.caso = el.value; ct.up.files = null; ct.up.ini = null; ct.up.fim = null; render(); return; }
     if (el.hasAttribute('data-pc-file') && pc.up) { pc.up.files = el.files; pc.up.err = null; return; }
     if (el.getAttribute('data-pc-f') === 'fase' && pc.up) { pc.up.fase = el.value; return; }
     if (el.getAttribute('data-pc-f') === 'retData') { pc.ret.data = el.value; return; }
