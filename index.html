@@ -57,7 +57,7 @@
 <title>Painel do Consultório</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Tinos&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: barra lateral escura com o item escolhido em branco, fundo claro (pedido do Pedro, 04/11/2026; antes era branco com seção verde). */
 :root, :root[data-theme="dark"] {
@@ -100,9 +100,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .side { background: var(--side); color: #fff; border-right: 0; display: flex; flex-direction: column; gap: 24px;
   padding-block: 24px; padding-left: max(18px, env(safe-area-inset-left, 0px)); padding-right: 18px;
   position: sticky; top: 0; height: 100vh; }
-.brand { display: flex; flex-direction: column; gap: 2px; padding-inline: 8px; }
-.brand b { font-size: 17px; font-weight: 800; letter-spacing: -0.01em; }
-.brand span { font-size: 12px; opacity: .6; }
+.brand { display: flex; align-items: center; gap: 10px; padding-inline: 4px; }
+.brand-logo { width: 40px; height: 40px; flex: none; }
+.brand-tx { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
+.brand b { font-family: "Times New Roman", Tinos, Times, serif; font-size: 22px; font-weight: 400; letter-spacing: .01em; line-height: 1.1; }
+.brand span { font-family: "Times New Roman", Tinos, Times, serif; font-size: 13px; opacity: .7; letter-spacing: .03em; }
 .nav { display: flex; flex-direction: column; gap: 2px; list-style: none; margin: 0; padding: 0; }
 .nav button { width: 100%; display: flex; align-items: center; gap: 10px; text-align: left;
   border: 0; background: transparent; color: #fff; padding: 10px 12px; border-radius: 999px; opacity: .72;
@@ -121,6 +123,39 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .page-head p { margin: 0; color: var(--muted); }
 
 /* página Agentes: estrutura pedida pelo Pedro em 04/11/2026 */
+/* Escritório (11/11/2026): resumo enxuto, só ícone colorido, nome e nota */
+.px-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; margin: 14px 0; }
+.px-item { display: flex; flex-direction: column; gap: 6px; padding: 0; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); overflow: hidden; text-align: left; cursor: pointer; }
+.px-item img, .px-item video { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; background: #111; display: block; }
+.px-item span { font-size: 12px; color: var(--muted); padding: 0 10px 10px; }
+.lz-res { font-size: 16px; margin: 6px 0 14px; }
+.lz-num { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.lz-num span { display: flex; flex-direction: column; padding: 8px 12px; border-radius: 12px; background: var(--panel); border: 1px solid var(--line); font-size: 12px; color: var(--muted); }
+.lz-num b { font-size: 18px; color: var(--fg); }
+.lz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; }
+.lz-b { border-radius: 14px; padding: 12px 14px; border: 1px solid var(--line); background: var(--panel); }
+.lz-b h3 { font-size: 14px; margin-bottom: 6px; }
+.lz-b ul { margin: 0; padding-left: 18px; }
+.lz-b.ok { border-left: 4px solid #2e9e5b; } .lz-b.bad { border-left: 4px solid #d1495b; } .lz-b.go { border-left: 4px solid #2f6fdf; }
+.lz-hist { margin-top: 14px; }
+.es-stats { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--muted); margin: -6px 0 18px; }
+.es-stats b { font-size: 22px; font-weight: 800; color: var(--fg); margin-right: 4px; }
+.es-h { font-size: 15px; font-weight: 800; margin: 18px 0 8px; display: flex; align-items: center; gap: 8px; }
+.es-h span { font-size: 12px; background: var(--vermelho); color: #fff; border-radius: 99px; padding: 1px 8px; }
+.es-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2px 18px; }
+.es-row { display: flex; align-items: center; gap: 10px; padding: 9px 4px; border: 0; border-bottom: 1px solid var(--line); background: none; text-align: left; font: inherit; color: var(--fg); cursor: pointer; min-width: 0; }
+.es-row:hover { background: var(--field); }
+.es-nome { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.es-nome b { font-size: 14px; }
+.es-nome small { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.es-nota { font-weight: 800; font-size: 16px; min-width: 28px; text-align: right; }
+.es-pend { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.es-pend button { width: 100%; display: flex; align-items: center; gap: 10px; padding: 9px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--panel); font: inherit; font-size: 14px; color: var(--fg); text-align: left; cursor: pointer; }
+.es-pend button span { flex: 1; }
+.es-pend .t-atrasada button { border-left: 4px solid var(--vermelho); }
+.es-pend .t-voce button { border-left: 4px solid #1d3f8f; }
+.es-pend i { font-style: normal; color: var(--muted); }
+.es-vazio { color: var(--verde); font-weight: 700; }
 .ag-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 16px; margin-bottom: 22px; }
 .ag-head h1 { font-size: 30px; font-weight: 600; letter-spacing: -.02em; }
 .ag-head p { margin: 2px 0 0; color: var(--muted); font-size: 14px; }
@@ -635,7 +670,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     padding-block: 12px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
   body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--side); }
   .side { border-right: 0; }
-  .brand { flex-direction: row; align-items: baseline; gap: 8px; padding: 0; }
+  .brand { gap: 8px; padding: 0; }
+  .brand-logo { width: 32px; height: 32px; }
+  .brand-tx { flex-direction: row; align-items: baseline; gap: 8px; }
   .nav { flex-direction: row; overflow-x: auto; gap: 4px; scrollbar-width: none; }
   .nav button { white-space: nowrap; padding: 8px 12px; }
   .nav .soon, .side-foot { display: none; }
@@ -755,7 +792,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
 <div class="app">
   <aside class="side">
-    <div class="brand"><b>Painel Portes</b><span>Dr. Pedro Portes</span></div>
+    <div class="brand"><img class="brand-logo" src="icones/logo-pp.png" alt="" width="40" height="40"><div class="brand-tx"><b>Painel Portes</b><span>Dr. Pedro Portes</span></div></div>
     <ul class="nav" id="nav"></ul>
     <div class="side-foot">Organização do consultório</div>
   </aside>
@@ -778,6 +815,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   };
 
   var SECTIONS = [
+    // 11/11/2026: o Escritório (resumo enxuto da saúde dos setores) fica acima dos Agentes, a pedido do Pedro
+    { id: 'escritorio', label: 'Escritório' },
     { id: 'agentes', label: 'Agentes' },
     { id: 'agenda', label: 'Agenda' },
     { id: 'conteudo', label: 'Conteúdo' },
@@ -791,14 +830,14 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // Equipe: cada agente tem um nível (tier) e, quem tem "pos", uma sala no desenho em SVG. Salas sem "name" são vagas.
   // Contratação de 01/11/2026: Luzi, Nina, Ana Paula, Amanda, Bruno e Caio chegam com funções propostas pela IA; só a Duda roda sozinha.
   var AGENTS = [
-    { id: 'luzi', name: 'Luzi', role: 'Gerente do consultório', desc: 'Monta a semana do consultório e coordena os outros agentes.', tier: 'chefe', when: 'Toda segunda às 7h30',
-      funcs: ['Toda segunda: plano da semana (dias de paciente, metas e o que cada agente entrega)', 'Mede a semana contra a meta de pacientes novos do mês', 'Aponta o que travou e quem precisa agir'] },
+    { id: 'luzi', name: 'Luzi', role: 'Gerente do consultório', desc: 'Toda noite junta o dia inteiro (redes, vídeos, desafios, posts, mensagens e dinheiro) e diz o que fazer amanhã.', tier: 'chefe', when: 'Todo dia às 21h',
+      funcs: ['Todo dia às 21h: revisão do dia, com redes, vídeos, desafios, posts, mensagens e dinheiro', 'Compara com a meta de pacientes novos do mês', 'Diz o que deu certo, o que precisa de atenção e o que fazer amanhã'] },
     { id: 'marketing', name: 'Duda', role: 'Marketing e captação', room: 'Agência de marketing', desc: 'Lê o second brain e traz opções de captação todo dia às 7h.', live: true, tier: 'contratado', when: 'Todo dia às 7h',
       // 09/11/2026: a Duda fica com a criação de conteúdo e a checagem do CFO; números, interações e DM passam para a Lisa
-      funcs: ['Cria o conteúdo: de 3 a 5 opções de captação por dia, às 7h, e o cronograma de posts com legenda', 'Confere as regras do CFO em cada conteúdo que cria', 'Analisa as fotos e os vídeos que você sobe no painel', 'Usa os números da Lisa para saber o que funciona', 'Deixa a edição pronta para o Rafa'],
+      funcs: ['Cria o conteúdo: de 3 a 5 opções de captação por dia, às 7h, e o cronograma de posts com legenda', 'Confere as regras do CFO em cada conteúdo que cria', 'Analisa as fotos e os vídeos que você sobe no painel', 'Usa os números da Lisa para saber o que funciona', 'Deixa a edição pronta para o Peixe'],
       look: { skin: '#e3b48e', hair: '#3a261b', shirt: '#5f9483', pants: '#2f3a44' }, pos: [0, 0] },
     // contratado pela Duda em 02/11/2026, a pedido do Pedro
-    { id: 'rafa', name: 'Rafa', role: 'Edição de vídeo', desc: 'Trabalha com a Duda: edita os vídeos do cronograma de posts.', tier: 'contratado', active: true, when: 'Todo dia às 8h, depois da Duda',
+    { id: 'rafa', name: 'Peixe', role: 'Edição de vídeo', desc: 'Trabalha com a Duda: edita os vídeos e monta os casos de antes e depois no seu modelo.', tier: 'contratado', active: true, when: 'Todo dia às 8h, depois da Duda',
       funcs: ['Edita os vídeos que a Duda pede no cronograma: cortes, formato vertical 9:16, texto do gancho e assinatura', 'Deixa cada vídeo pronto para postar, com até 20 MB', 'Não ouve o áudio: corta pelo que vê e pelo pedido da Duda'] },
     // contratada em 09/11/2026, a pedido do Pedro: trabalha com a Duda, cuida dos números e das conversas do Instagram
     { id: 'lisa', name: 'Lisa', role: 'Estatísticas e interações (Instagram e TikTok)', desc: 'Trabalha com a Duda: lê os números do Instagram e do TikTok pelo Metricool e escreve as respostas de DM e comentários.', tier: 'contratado', when: 'Todo dia às 9h e às 18h',
@@ -825,7 +864,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var state = { section: 'agentes', agent: null, abertas: {}, agTab: {}, filtro: 'todos', days: [], selected: null, loading: true, slow: false, error: null, db: null, saving: {} };
 
   // abre na última aba usada neste aparelho (no celular, normalmente o Conteúdo)
-  try { var aba = localStorage.getItem('painel:aba'); if (aba === 'agenda' || aba === 'conteudo' || aba === 'edicao' || aba === 'agentes' || aba === 'pacientes') state.section = aba; } catch (err) {}
+  try { var aba = localStorage.getItem('painel:aba'); if (aba === 'escritorio' || aba === 'agenda' || aba === 'conteudo' || aba === 'edicao' || aba === 'agentes' || aba === 'pacientes') state.section = aba; } catch (err) {}
 
   var nav = document.getElementById('nav');
   var main = document.getElementById('main');
@@ -892,21 +931,21 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       { ag: 'amanda', nome: 'Retornos', desc: 'A lista de quem chamar fica só na aba Pacientes.', quando: 'Na aba Pacientes', sob: true },
       { ag: 'amanda', nome: 'Mensagens prontas', desc: 'Primeira resposta, confirmação e pós-consulta.', quando: 'Fase 2, com WhatsApp' }] },
     { id: 'gerencia', nome: 'Gerência', tarefas: [
+      { ag: 'luzi', nome: 'Revisão do dia', desc: 'Junta tudo do dia: redes, vídeos, desafios, posts, mensagens e dinheiro, e diz o que fazer amanhã.', quando: 'Todo dia, 21h', auto: 'luzi-revisao-diaria', h: 30 },
       { ag: 'luzi', nome: 'Revisão da semana', desc: 'Atualiza o second brain com o que mudou e compara as semanas.', quando: 'Domingo, 9h', auto: 'revisao-semanal-second-brain', h: 192 },
       { ag: 'luzi', nome: 'Plano da semana', desc: 'Dias de paciente, metas e o que cada agente entrega.', quando: 'Toda segunda, 7h30' }] },
-    { id: 'estudos', nome: 'Estudos', tarefas: [
-      { ag: 'caio', nome: 'Resumo do PubMed', desc: 'Lê os alertas do PubMed, traduz, resume e manda por e-mail.', quando: 'Todo dia, 21h', auto: 'resumo-pubmed-diario', h: 30 },
-      { ag: 'nina', nome: 'Menu de temas', desc: 'Monta o menu semanal de estudo e registra na fila de temas.', quando: 'Domingo, 10h', auto: 'menu-de-temas-second-brain', h: 192 },
-      { ag: 'nina', nome: 'Resumo de aulas', desc: 'Resume as aulas da especialização que você mandar.', quando: 'Quando você mandar', sob: true }] },
+    // 11/11/2026: dos estudos fica só o Caio (os artigos que chegam por e-mail); a Nina saiu do painel a pedido do Pedro
+    { id: 'estudos', nome: 'Artigos do PubMed', tarefas: [
+      { ag: 'caio', nome: 'Resumo do PubMed', desc: 'Lê os alertas do PubMed, traduz, resume e manda por e-mail.', quando: 'Todo dia, 21h', auto: 'resumo-pubmed-diario', h: 30 }] },
     { id: 'financeiro', nome: 'Financeiro', tarefas: [
       { ag: 'kim', nome: 'Fechamento do mês', desc: 'Entradas por clínica contra a meta, sem nome de paciente.', quando: 'Todo domingo e no fim do mês' }] },
     { id: 'clinico', nome: 'Planejamento clínico', tarefas: [
-      { ag: 'anapaula', nome: 'Plano de tratamento', desc: 'Plano faseado a partir dos achados anonimizados.', quando: 'Quando você mandar um caso', sob: true }] },
-    { id: 'treino', nome: 'Treino e dieta', tarefas: [] }
+      { ag: 'anapaula', nome: 'Plano de tratamento', desc: 'Plano faseado a partir dos achados anonimizados.', quando: 'Quando você mandar um caso', sob: true }] }
+    // 11/11/2026: "Treino e dieta" saiu do painel a pedido do Pedro
   ];
 
   // ---------- cores e páginas dos agentes (10/11/2026, pedido do Pedro: mais intuitivo, interativo e colorido) ----------
-  var AREA = { agentes: '#4c5fd5', agenda: '#1479b8', conteudo: '#d6336c', edicao: '#7c3fd0', pacientes: '#0a7f70', financeiro: '#b5740a', estudos: '#24874a' };
+  var AREA = { escritorio: '#1f2a44', agentes: '#4c5fd5', agenda: '#1479b8', conteudo: '#d6336c', edicao: '#7c3fd0', pacientes: '#0a7f70', financeiro: '#b5740a', estudos: '#24874a' };
   var SCOR = { marketing: '#d6336c', edicao: '#7c3fd0', atendimento: '#0a7f70', gerencia: '#4c5fd5', estudos: '#24874a', financeiro: '#b5740a', clinico: '#1479b8', treino: '#d9622b' };
   var SIC = {
     marketing: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10v4h3l8 4V6l-8 4H4z"/><path d="M18 9.5a3.5 3.5 0 0 1 0 5"/></svg>',
@@ -947,7 +986,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (ts.some(function (t) { return t.est.k === 'sob'; })) return ['c-off', 'Sob demanda'];
     return ['c-off', 'Ainda não roda sozinho'];
   }
-  var TAB_PADRAO = { marketing: 'hoje', lisa: 'numeros' };
+  var TAB_PADRAO = { marketing: 'hoje', lisa: 'numeros', rafa: 'feitos', luzi: 'dia' };
   function agTab(a) { return state.agTab[a.id] || TAB_PADRAO[a.id] || 'como'; }
   function agTopo(a, tabs) {
     var s = setorDe(a.id), st = agStatus(tarefasDe(a.id)), cur = agTab(a);
@@ -961,7 +1000,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var FLUXO_MKT = [
     { quem: 'Você', oque: 'grava e sobe no painel', ir: 'conteudo' },
     { quem: 'Duda', oque: 'analisa e monta o post', ag: 'marketing' },
-    { quem: 'Rafa', oque: 'edita o vídeo', ag: 'rafa' },
+    { quem: 'Peixe', oque: 'edita o vídeo', ag: 'rafa' },
     { quem: 'Você', oque: 'aprova e posta', ir: 'conteudo' },
     { quem: 'Lisa', oque: 'mede e avisa a Duda', ag: 'lisa' }
   ];
@@ -991,7 +1030,33 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '</div></div></div>';
     return html;
   }
-  function renderAgente(a) { return agTopo(a, a.id === 'rafa' ? [['como', 'Como funciona'], ['ir:edicao', 'Ver os vídeos editados']] : null) + agComo(a); }
+  // Peixe (ex-Rafa, 11/11/2026): abre nos trabalhos prontos; Luzi abre na revisão do dia
+  function renderAgente(a) {
+    if (a.id === 'rafa') {
+      var feitos = (ct.midia || []).filter(function (m) { return m.edicao && m.edicao.asset && m.edicao.status === 'pronta'; });
+      var fila = (ct.midia || []).filter(function (m) { return m.edicao && (m.edicao.status === 'pedida' || m.edicao.status === 'editando'); }).length;
+      var tab = agTab(a);
+      return agTopo(a, [['feitos', 'Trabalhos prontos', feitos.length || ''], ['como', 'Como funciona']]) + (tab === 'como' ? agComo(a) :
+        (fila ? '<p class="hint">' + plural(fila, 'trabalho na fila', 'trabalhos na fila') + ' agora.</p>' : '') +
+        (feitos.length ? '<div class="px-grid">' + feitos.map(function (m) {
+          var caso = m.edicao.tipo === 'caso';
+          return '<button type="button" class="px-item" data-goto="edicao">' + (caso ? '<img src="' + blobUrl(m.edicao.asset) + '" alt="">' : '<video src="' + blobUrl(m.edicao.asset) + '#t=1" preload="metadata" muted playsinline></video>') +
+            '<span>' + (caso ? 'Caso' : 'Vídeo') + ' · ' + esc(m.nota || '') + '</span></button>'; }).join('') + '</div><p class="hint">Toque num trabalho para abrir na aba Edição, baixar ou pedir mudança.</p>'
+          : '<div class="empty">Nenhum trabalho pronto ainda. Mande um vídeo para edição ou um caso de antes e depois.</div>'));
+    }
+    if (a.id === 'luzi') return agTopo(a, [['dia', 'Revisão do dia'], ['como', 'Como funciona']]) + (agTab(a) === 'como' ? agComo(a) : luziDia());
+    return agTopo(a, null) + agComo(a);
+  }
+  function luziDia() {
+    var r = (ct.revisao || [])[0];
+    if (!r) return '<div class="empty"><b>A primeira revisão do dia sai hoje às 21h.</b> A Luzi junta redes, vídeos, desafios, posts, mensagens e dinheiro, e diz o que fazer amanhã.</div>';
+    var bloco = function (t, arr, cls) { return arr && arr.length ? '<section class="lz-b ' + cls + '"><h3>' + t + '</h3><ul>' + arr.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></section>' : ''; };
+    return '<p class="hint">Revisão de ' + esc(fmtDay(r.data)) + (r.feito_em ? ' · ' + dataHora(r.feito_em) : '') + '</p>' +
+      (r.resumo ? '<p class="lz-res">' + esc(r.resumo) + '</p>' : '') +
+      (r.numeros ? '<div class="lz-num">' + Object.keys(r.numeros).map(function (k) { return '<span><b>' + esc(fmtNum(r.numeros[k])) + '</b>' + esc(k) + '</span>'; }).join('') + '</div>' : '') +
+      '<div class="lz-grid">' + bloco('Deu certo', r.bom, 'ok') + bloco('Precisa de atenção', r.atencao, 'bad') + bloco('Amanhã', r.amanha, 'go') + '</div>' +
+      ((ct.revisao || []).length > 1 ? '<details class="lz-hist"><summary>Revisões anteriores</summary>' + ct.revisao.slice(1).map(function (x) { return '<p><b>' + esc(fmtDay(x.data)) + ':</b> ' + esc(x.resumo || '') + '</p>'; }).join('') + '</details>' : '');
+  }
 
   function pulso(id) { return (ct.agentes || []).find(function (x) { return x.id === id; }); }
   function dataHora(iso) { var d = new Date(iso); return pad(d.getDate()) + '/' + pad(d.getMonth() + 1) + ' ' + pad(d.getHours()) + ':' + pad(d.getMinutes()); }
@@ -1112,7 +1177,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<span class="tf-tx"><b>' + esc(a.name) + '</b><ul class="tf-tp">' + ts.map(function (t) {
         return '<li><span>' + esc(t.nome) + '</span><small>' + esc(t.quando) + ' · ' + esc(t.est.txt) + '</small></li>'; }).join('') + '</ul>' +
       (ult && ult.resultado ? '<span>Último resultado: ' + esc(ult.resultado) + '</span>' : '') +
-      '<small>' + (ult ? 'Última rodada: ' + dataHora(ult.ultima) : '') + ts.filter(function (t) { if (!t.auto || visto[t.auto]) return false; visto[t.auto] = 1; return true; }).map(function (t) { return (ult ? ' · ' : '') + 'skill ' + esc(t.auto); }).join('') + '</small></span></button>';
+      '<small>' + (ult ? 'Última rodada: ' + dataHora(ult.ultima) : '') + '</small></span></button>';
   }
   function linhasAgentes(tar) {
     var ordem = [], grupos = {};
@@ -1127,27 +1192,41 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       (i.ab.length ? '<button type="button" class="st-mais" data-abertas="' + i.s.id + '">' + (aberto ? 'Esconder ' : 'Ver ') + plural(i.ab.length, 'tarefa aberta', 'tarefas abertas') + ' ›</button>' +
         (aberto ? '<ul class="st-ab">' + i.ab.map(function (a) { return '<li class="t-' + a.tipo + '"><button type="button" data-ir="' + a.ir + '">' + esc(a.txt) + '</button></li>'; }).join('') + '</ul>' : '') : '') + '</section>';
   }
-  function renderAgentes() {
-    var head = '<header class="ag-head"><div><h1>Agentes</h1><p>O que roda sozinho, setor por setor, e o que espera a sua decisão.</p></div>';
-    if (!state.db) return head + '</header><div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
+  // ---------- Escritório (11/11/2026): o resumo da saúde dos setores, bem clean, acima dos Agentes ----------
+  function renderEscritorio() {
+    var head = '<header class="page-head"><span class="eyebrow">Escritório</span><h1>Escritório</h1><p>Como está cada setor e o que precisa de você agora.</p></header>';
+    if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
     var infos = setoresInfo(), ativos = infos.filter(function (i) { return i.saude != null; });
     var geral = ativos.length ? Math.round(ativos.reduce(function (s, i) { return s + i.saude; }, 0) / ativos.length) : 0;
-    var total = 0, rod = 0; infos.forEach(function (i) { i.tar.forEach(function (t) { total++; if (t.est.k === 'ok') rod++; }); });
-    var foco = ativos.filter(function (i) { return i.saude < 70; }).length;
+    var total = 0, rod = 0; infos.forEach(function (i) { i.tar.forEach(function (t) { if (t.auto) { total++; if (t.est.k === 'ok') rod++; } }); });
     var ult = (ct.agentes || []).map(function (x) { return x.ultima; }).filter(Boolean).sort().pop();
-    var FIL = { todos: function () { return true; }, voce: function (i) { return i.voce > 0 || i.atrasada > 0; }, rodando: function (i) { return i.ok > 0; }, parado: function (i) { return i.saude == null; } };
-    var filtros = '<div class="ag-filtros" role="group" aria-label="Filtrar setores">' + [['todos', 'Todos'], ['voce', 'Precisam de você'], ['rodando', 'Rodando sozinhos'], ['parado', 'Parados']].map(function (f) {
-      return '<button type="button" data-filtro="' + f[0] + '" aria-pressed="' + (state.filtro === f[0]) + '">' + f[1] + ' (' + infos.filter(FIL[f[0]]).length + ')</button>'; }).join('') + '</div>';
-    var visiveis = infos.filter(FIL[state.filtro] || FIL.todos);
-    var legenda = '<div class="ag-leg"><span><i style="background:var(--vermelho)"></i>Atrasada</span><span><i style="background:#1d3f8f"></i>Com você</span><span><i style="background:#6f8fd8"></i>Andando</span><span><i style="background:#c3c8ee"></i>Na fila</span><span><i style="background:var(--verde)"></i>Feita</span></div>';
-    return head + '<div class="ag-right">' + (ult ? '<small>Atualizado ' + dataHora(ult) + '</small>' : '') +
-      '<div class="ag-stats"><div><b>' + geral + '</b><span>Saúde geral</span></div><div><b>' + (total ? Math.round(rod / total * 100) : 0) + '%</b><span>Autonomia</span></div>' +
-      '<div><b>' + foco + '</b><span>Setores pedindo foco</span></div></div></div></header>' +
-      '<h2 class="ag-h2">Saúde dos setores</h2><p class="ag-p">Ordenado do que mais precisa de foco para o que está rodando bem. Toque num setor para ver as tarefas.</p>' +
-      '<div class="ag-grid">' + mapaEscritorio(infos) + '<div class="sg-cards">' + infos.map(function (i, n) { return cartaoSetor(i, n === 0); }).join('') + '</div></div>' + legenda +
-      '<h2 class="ag-h2 ag-setores">Setores</h2>' + filtros + (visiveis.length ? '<div class="st-grid">' + visiveis.map(colunaSetor).join('') + '</div>' : '<div class="empty">Nenhum setor neste filtro.</div>') +
-      '<p class="ag-nota">A saúde parte das tarefas automáticas em dia e perde 15 pontos por item atrasado e 6 por item esperando você (até 36). Setor sem tarefa automática e sem pendência fica "Parado", sem nota.</p>';
+    var pend = []; infos.forEach(function (i) { i.ab.forEach(function (a) { if (a.tipo === 'voce' || a.tipo === 'atrasada') pend.push({ a: a, s: i.s }); }); });
+    pend.sort(function (x, y) { return (x.a.tipo === 'atrasada' ? 0 : 1) - (y.a.tipo === 'atrasada' ? 0 : 1); });
+    var cor = function (n) { return n == null ? 'var(--muted)' : n < 50 ? 'var(--vermelho)' : n < 80 ? '#c98a12' : 'var(--verde)'; };
+    return head +
+      '<div class="es-stats"><span><b style="color:' + cor(geral) + '">' + geral + '</b> saúde geral</span><span><b>' + (total ? Math.round(rod / total * 100) : 0) + '%</b> das tarefas automáticas em dia</span>' +
+      (ult ? '<span>atualizado ' + dataHora(ult) + '</span>' : '') + '</div>' +
+      '<h2 class="es-h">Setores</h2><div class="es-list">' + infos.map(function (i) {
+        return '<button type="button" class="es-row" data-es-setor="' + i.s.id + '" style="--sc:' + SCOR[i.s.id] + '">' + sic(i.s.id, 'sm') +
+          '<span class="es-nome"><b>' + esc(i.s.nome) + '</b><small>' + esc(resumoSetor(i)) + '</small></span>' +
+          '<span class="es-nota" style="color:' + cor(i.saude) + '">' + (i.saude == null ? '–' : i.saude) + '</span></button>'; }).join('') + '</div>' +
+      '<h2 class="es-h">Precisa de você' + (pend.length ? ' <span>' + pend.length + '</span>' : '') + '</h2>' +
+      (pend.length ? '<ul class="es-pend">' + pend.map(function (p) {
+        return '<li class="t-' + p.a.tipo + '"><button type="button" data-ir="' + p.a.ir + '">' + sic(p.s.id, 'sm') + '<span>' + esc(p.a.txt) + '</span><i>›</i></button></li>'; }).join('') + '</ul>'
+        : '<p class="es-vazio">Nada esperando você agora. ✓</p>');
   }
+
+  function renderAgentes() {
+    var head = '<header class="ag-head"><div><h1>Agentes</h1><p>Quem faz o quê, setor por setor. O resumo da saúde fica no Escritório.</p></div>';
+    if (!state.db) return head + '</header><div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
+    var infos0 = setoresInfo();
+    var FIL0 = { todos: function () { return true; }, voce: function (i) { return i.voce > 0 || i.atrasada > 0; }, rodando: function (i) { return i.ok > 0; }, parado: function (i) { return i.saude == null; } };
+    var filtros0 = '<div class="ag-filtros" role="group" aria-label="Filtrar setores">' + [['todos', 'Todos'], ['voce', 'Precisam de você'], ['rodando', 'Rodando sozinhos'], ['parado', 'Parados']].map(function (f) {
+      return '<button type="button" data-filtro="' + f[0] + '" aria-pressed="' + (state.filtro === f[0]) + '">' + f[1] + ' (' + infos0.filter(FIL0[f[0]]).length + ')</button>'; }).join('') + '</div>';
+    var vis0 = infos0.filter(FIL0[state.filtro] || FIL0.todos);
+    return head + '</header>' + filtros0 + (vis0.length ? '<div class="st-grid">' + vis0.map(colunaSetor).join('') + '</div>' : '<div class="empty">Nenhum setor neste filtro.</div>');
+  }
+
 
   function irPara(s) {
     if (s === 'duda') { state.section = 'agentes'; state.agent = 'marketing'; }
@@ -1662,7 +1741,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
   // ---------- conteúdo: banco de fotos e vídeos + cronograma da Duda ----------
   // Os arquivos ficam no armazenamento do painel (assets); o índice fica no banco:
-  // config/conteudo (pastas), midia/<id do arquivo> e cronograma/<id> (escrito pela Duda e pelo Rafa).
+  // config/conteudo (pastas), midia/<id do arquivo> e cronograma/<id> (escrito pela Duda e pelo Peixe).
   var MAX_BYTES = 50 * 1024 * 1024;
   var PACIENTE = { nao: 'Sem paciente', autorizado: 'Paciente com autorização (TCLE)', sem_tcle: 'Paciente SEM autorização' };
   var MIDIA_ST = { novo: 'Novo', analisado: 'Analisado pela Duda', agendado: 'No cronograma', postado: 'Postado' };
@@ -1692,9 +1771,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var pastas = ct.pastas || [];
     if (ct.prog) return '<div class="ag-form"><h2>Enviando</h2><p class="hint">' + esc(ct.prog) + '</p><p class="hint">Não feche o painel até terminar.</p></div>';
     if (u.pasta === '__desafios') pastas = pastas.concat([{ id: '__desafios', nome: 'Desafios (pasta nova)' }]);
-    // caso (foto inicial e final): o Rafa monta o story no modelo aprovado pelo Pedro em 11/11/2026
+    // caso (foto inicial e final): o Peixe monta o story no modelo aprovado pelo Pedro em 11/11/2026
     var tipoEnvio = u.desafio ? '' : '<fieldset class="ct-radio"><legend>O que você vai enviar?</legend>' +
-      [['', 'Fotos e vídeos soltos'], ['1', 'Caso: foto inicial e foto final (o Rafa monta o story no seu modelo)']].map(function (o) {
+      [['', 'Fotos e vídeos soltos'], ['1', 'Caso: foto inicial e foto final (o Peixe monta o story no seu modelo)']].map(function (o) {
         return '<label><input type="radio" name="ct-caso" data-ct-f="caso" value="' + o[0] + '"' + ((u.caso || '') === o[0] ? ' checked' : '') + '> ' + o[1] + '</label>'; }).join('') + '</fieldset>';
     var arquivos = u.caso
       ? '<label>Foto inicial<input type="file" accept="image/*" data-ct-file="ini"></label><label>Foto final<input type="file" accept="image/*" data-ct-file="fim"></label></div>' +
@@ -1715,7 +1794,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<div class="acts"><button type="button" class="btn primary" data-ct-send="1">Enviar</button><button type="button" class="btn" data-ct-cancel="1">Cancelar</button></div></div>';
   }
 
-  var ED_ST = { pedida: 'Na fila do Rafa', editando: 'Rafa editando', pronta: 'Editado', falhou: 'A edição falhou' };
+  var ED_ST = { pedida: 'Na fila do Peixe', editando: 'Peixe editando', pronta: 'Editado', falhou: 'A edição falhou' };
   function lista(arr) { return arr && arr.length ? '<ul>' + arr.map(function (i) { return '<li>' + esc(i) + '</li>'; }).join('') + '</ul>' : ''; }
 
   // feedback da Duda: verde = está bom (pode ir para edição); vermelho = mudar antes
@@ -1728,7 +1807,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       if (ed) btn = '<p class="fb-ed">✂ ' + esc(ED_ST[ed.status] || ed.status) + ' · <button type="button" class="link-btn" data-goto="edicao">ver em Edição</button></p>';
       else if (m.paciente === 'sem_tcle') btn = '<p class="fb-ed">Sem autorização do paciente: não pode ir para edição.</p>';
       else btn = '<div class="acts"><button type="button" class="btn primary" data-ct-edit="' + esc(m.id) + '">Enviar para edição</button>' +
-        '<span class="hint">' + esc((a.edicao_sugerida && a.edicao_sugerida.pedido) || 'O Rafa faz o corte vertical com gancho e assinatura.') + '</span></div>';
+        '<span class="hint">' + esc((a.edicao_sugerida && a.edicao_sugerida.pedido) || 'O Peixe faz o corte vertical com gancho e assinatura.') + '</span></div>';
     }
     return '<div class="fb ' + (good ? 'good' : 'bad') + '"><b>' + (good ? '✓ Está bom' : '✕ Mudar antes de postar') + ' <span>· Duda</span></b>' +
       '<p>' + esc(a.resumo) + '</p>' +
@@ -1816,7 +1895,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // aba Edição: o que está na fila, sendo editado, pronto ou com problema
   function renderEdicao() {
     var head = '<header class="page-head"><span class="eyebrow">Edição</span><h1>Edição</h1>' +
-      '<p>Os vídeos e os casos que você mandou para o Rafa. Ele edita todo dia às 8h: vídeo com corte vertical, gancho e assinatura; caso (foto inicial e final) vira story no seu modelo na hora, em menos de 1 minuto, com o computador ligado.</p></header>';
+      '<p>Os vídeos e os casos que você mandou para o Peixe. Ele edita todo dia às 8h: vídeo com corte vertical, gancho e assinatura; caso (foto inicial e final) vira story no seu modelo na hora, em menos de 1 minuto, com o computador ligado.</p></header>';
     if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
     var items = (ct.midia || []).filter(function (m) { return m.edicao; });
     if (ct.msg) head += '<div class="ag-warn">' + esc(ct.msg) + '</div>';
@@ -1836,9 +1915,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
           '<button type="button" class="btn" data-ct-open="' + esc(m.id) + '">Ver original</button></div>' +
           (caso && (st === 'pronta' || st === 'falhou') ? ajusteCaso(m) : '') +
           (caso && (st === 'pedida' || st === 'editando') && e.destaque && e.titulo ? '<p class="hint">Montando na hora no seu computador: fica pronto em menos de 1 minuto (o computador precisa estar ligado).</p>' : '') +
-          // feedback da edição: o Pedro escreve o que mudar e o Rafa refaz a partir do original
+          // feedback da edição: o Pedro escreve o que mudar e o Peixe refaz a partir do original
           (st === 'pronta' || st === 'falhou' ? '<div class="ed-fb"><label>O que mudar na edição?<textarea rows="3" maxlength="1500" data-ct-fbtxt="' + esc(m.id) + '" placeholder="Ex.: o texto do gancho cobriu meu rosto; corta a parte em que eu gaguejo, perto dos 12 segundos">' + esc(ct.fbTxt[m.id] || '') + '</textarea></label>' +
-            '<div class="acts"><button type="button" class="btn primary" data-ct-refazer="' + esc(m.id) + '">Pedir para o Rafa refazer</button>' +
+            '<div class="acts"><button type="button" class="btn primary" data-ct-refazer="' + esc(m.id) + '">Pedir para o Peixe refazer</button>' +
             (st === 'pronta' && e.asset ? (ct.confirmEd === m.id ? '<span class="hint bad">Apagar o vídeo editado? O original continua no banco.</span><button type="button" class="btn" data-ct-edelok="' + esc(m.id) + '">Sim, apagar</button><button type="button" class="btn" data-ct-edelno="1">Não</button>'
               : '<button type="button" class="btn" data-ct-edel="' + esc(m.id) + '">Apagar vídeo editado</button>') : '') + '</div>' +
             (e.historico && e.historico.length ? '<details><summary class="hint">Ajustes anteriores (' + e.historico.length + ')</summary>' + e.historico.map(function (h) { return '<p class="hint">' + esc(fmtDay((h.data || '').slice(0, 10))) + ': ' + esc(h.feedback) + '</p>'; }).join('') + '</details>' : '') +
@@ -1851,8 +1930,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var midias = (p.midia || []).map(function (id) { return (ct.midia || []).find(function (m) { return m.id === id; }); }).filter(Boolean);
     var withEd = midias.find(function (m) { return m.edicao; });
     var ed = p.edicao || (withEd && withEd.edicao) || {}, st = p.estado || 'proposto';
-    var edicao = ed.status === 'pedida' || ed.status === 'editando' ? '<p class="ct-ed">✂ ' + (ed.status === 'editando' ? 'O Rafa está editando' : 'O Rafa vai editar') + ' este vídeo' + (ed.pedido ? ': ' + esc(ed.pedido) : '') + '</p>'
-      : ed.status === 'pronta' && ed.asset ? '<div class="ct-ed"><b>Vídeo editado pelo Rafa</b><video src="' + blobUrl(ed.asset) + '" controls playsinline preload="metadata"></video>' +
+    var edicao = ed.status === 'pedida' || ed.status === 'editando' ? '<p class="ct-ed">✂ ' + (ed.status === 'editando' ? 'O Peixe está editando' : 'O Peixe vai editar') + ' este vídeo' + (ed.pedido ? ': ' + esc(ed.pedido) : '') + '</p>'
+      : ed.status === 'pronta' && ed.asset ? '<div class="ct-ed"><b>Vídeo editado pelo Peixe</b><video src="' + blobUrl(ed.asset) + '" controls playsinline preload="metadata"></video>' +
         (ed.notas ? '<p class="hint">' + esc(ed.notas) + '</p>' : '') + (ct.downloads ? '<button type="button" class="btn" data-ct-dl="' + esc(ed.asset) + '" data-ct-dlname="post-' + esc(p.data || '') + '.mp4">Baixar vídeo</button>' : '') + '</div>'
       : ed.status === 'falhou' ? '<p class="ct-ed bad">A edição não deu certo: ' + esc(ed.notas || '') + '</p>' : '';
     // onde postar: vídeo (Reels) vai também para o TikTok; foto, carrossel e story ficam só no Instagram (09/11/2026)
@@ -1895,7 +1974,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var f = ct.pe;
     return '<div class="pe-form"><label>Título<input data-pe-f="titulo" value="' + esc(f.titulo) + '"></label>' +
       '<div class="pe-row"><label>Dia<input type="date" data-pe-f="data" value="' + esc(f.data) + '"></label><label>Hora<input type="time" data-pe-f="hora" value="' + esc(f.hora) + '"></label></div>' +
-      (temEd ? '<label>Vídeo<select data-pe-f="video"><option value="editado"' + (f.video !== 'original' ? ' selected' : '') + '>Editado pelo Rafa</option><option value="original"' + (f.video === 'original' ? ' selected' : '') + '>Original, sem edição</option></select></label>' : '') +
+      (temEd ? '<label>Vídeo<select data-pe-f="video"><option value="editado"' + (f.video !== 'original' ? ' selected' : '') + '>Editado pelo Peixe</option><option value="original"' + (f.video === 'original' ? ' selected' : '') + '>Original, sem edição</option></select></label>' : '') +
       '<label>Legenda<textarea rows="10" data-pe-f="legenda">' + esc(f.legenda) + '</textarea></label>' +
       '<p class="hint">Mantenha o CRO na legenda (regra do CFO). Sem preço, sem "grátis" e sem promessa de resultado.</p>' +
       (f.msg ? '<p class="tk-av bad">' + esc(f.msg) + '</p>' : '') +
@@ -1928,7 +2007,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var today = todayIso(), posts = (ct.posts || []).slice().sort(function (a, b) { return (a.data + (a.hora || '')).localeCompare(b.data + (b.hora || '')); });
     var next = posts.filter(function (p) { return p.data >= today && p.estado !== 'descartado'; });
     var old = posts.filter(function (p) { return !(p.data >= today && p.estado !== 'descartado'); }).reverse();
-    if (!posts.length) return '<div class="empty"><b>Ainda não há cronograma.</b> Quando houver fotos e vídeos no banco, a Duda monta os próximos posts com legenda, e o Rafa edita os vídeos. Ela roda todo dia às 7h.</div>';
+    if (!posts.length) return '<div class="empty"><b>Ainda não há cronograma.</b> Quando houver fotos e vídeos no banco, a Duda monta os próximos posts com legenda, e o Peixe edita os vídeos. Ela roda todo dia às 7h.</div>';
     return '<div class="posts">' + (next.length ? next.map(ctPost).join('') : '<div class="empty">Nenhum post marcado daqui para a frente.</div>') + '</div>' +
       (old.length ? '<button type="button" class="link-btn" data-ct-old="1">' + (ct.showOld ? 'Esconder' : 'Ver') + ' os anteriores e descartados (' + old.length + ')</button>' +
         (ct.showOld ? '<div class="posts old">' + old.map(ctPost).join('') + '</div>' : '') : '');
@@ -1980,7 +2059,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       minimo: 'Grave só o áudio por cima de uma foto sua.', cfo: DS_CFO },
     { nivel: 2, tipo: 'Reels', tempo: '20 min', gravar: true, titulo: 'Reels: 3 sinais de que você aperta os dentes',
       porque: 'Bruxismo é o seu público ideal: jovem, ansioso, com dor. E a placa é um tratamento que você já faz.',
-      passos: ['Grave sentado, com o celular em pé (vertical) na altura dos olhos', 'Até 40 segundos', 'Suba aqui: a Duda analisa e o Rafa põe gancho e assinatura'],
+      passos: ['Grave sentado, com o celular em pé (vertical) na altura dos olhos', 'Até 40 segundos', 'Suba aqui: a Duda analisa e o Peixe põe gancho e assinatura'],
       roteiro: { gancho: 'Você pode estar apertando os dentes e nem saber.', fala: '1. Acorda com a mandíbula cansada ou com dor de cabeça. 2. Os dentes estão ficando mais curtos ou lascando na ponta. 3. Sente o dente sensível ao gelado sem ter cárie.', chamada: 'Se você se identificou, vale uma avaliação. Me chama no direct.' },
       minimo: 'Faça um carrossel de 4 telas de texto no Canva com os 3 sinais.', cfo: DS_CFO },
     { nivel: 2, tipo: 'Story', tempo: '10 min', gravar: true, titulo: 'Responda uma dúvida falando, 20 segundos',
@@ -1998,7 +2077,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       minimo: 'Use uma foto que você já tem.', cfo: 'Nada de "o melhor" ou "referência": o CFO veta autopromoção comparativa.' },
     { nivel: 2, tipo: 'Reels', tempo: '20 min', gravar: true, titulo: 'Reels: limão em jejum faz bem para os dentes?',
       porque: 'Fala com quem tem vida "saudável" e está desgastando os dentes sem saber: o seu paciente ideal.',
-      passos: ['Até 40 segundos, falando para a câmera', 'Se quiser, mostre o copo de água com limão', 'Suba aqui para a Duda e o Rafa'],
+      passos: ['Até 40 segundos, falando para a câmera', 'Se quiser, mostre o copo de água com limão', 'Suba aqui para a Duda e o Peixe'],
       roteiro: { gancho: 'Água com limão em jejum: seus dentes não gostam.', fala: 'O ácido amolece o esmalte. Todo dia, isso vira desgaste e sensibilidade. Se for tomar, use canudo, enxágue a boca com água e espere uns 30 minutos para escovar.', chamada: 'Já sente o dente sensível? Me chama para avaliar.' },
       minimo: 'Story falando só a dica do canudo e da escova.', cfo: 'Sem gerar medo: informe e oriente.' },
     { nivel: 2, tipo: 'Revisão', tempo: '10 min', titulo: 'Revisão da semana: o que trouxe mensagem?',
@@ -2016,7 +2095,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       minimo: 'Só poste a enquete.', cfo: 'Na conversa, oriente e convide para avaliar, sem diagnóstico pelo direct.' },
     { nivel: 3, tipo: 'Reels', tempo: '10 min', titulo: 'Poste o 1º vídeo do lote',
       porque: 'Frequência faz o Instagram mostrar você para quem não te segue.',
-      passos: ['Pegue o vídeo editado pelo Rafa (aba Edição)', 'Cole a legenda do cronograma ou escreva 2 frases + CRO', 'Poste'],
+      passos: ['Pegue o vídeo editado pelo Peixe (aba Edição)', 'Cole a legenda do cronograma ou escreva 2 frases + CRO', 'Poste'],
       minimo: 'Poste nos stories.', cfo: DS_CFO },
     { nivel: 3, tipo: 'Story', tempo: '5 min', gravar: true, titulo: 'Bastidor com você aparecendo',
       porque: 'Você de jaleco no consultório reforça "esse é o meu dentista".',
@@ -2131,7 +2210,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     } else corpo = dsCard(d, null);
     return dsResumo() + corpo +
       '<p class="hint ds-regra">Um desafio por dia, meta de 5 dias por semana. Perdeu um dia? Nada zera: é só fazer o próximo. ' +
-      'O que você gravar sobe aqui: a Duda analisa e o Rafa edita.' + (duda ? ' <button type="button" class="link-btn" style="margin:0" data-ds-duda="1">A Duda trouxe ' + duda + ' ideias hoje</button>' : '') + '</p>';
+      'O que você gravar sobe aqui: a Duda analisa e o Peixe edita.' + (duda ? ' <button type="button" class="link-btn" style="margin:0" data-ds-duda="1">A Duda trouxe ' + duda + ' ideias hoje</button>' : '') + '</p>';
   }
 
   function ctTrilha() {
@@ -2171,7 +2250,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
   function renderConteudo() {
     var head = '<header class="page-head"><span class="eyebrow">Conteúdo</span><h1>Conteúdo</h1>' +
-      '<p>Um desafio pequeno por dia para você sair do zero no Instagram. O que você gravar sobe aqui: a Duda analisa e o Rafa edita.</p></header>';
+      '<p>Um desafio pequeno por dia para você sair do zero no Instagram. O que você gravar sobe aqui: a Duda analisa e o Peixe edita.</p></header>';
     if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b> Abra o painel pelo claude.ai, logado na sua conta.') + '</div>';
     var nPost = (ct.posts || []).filter(function (p) { return p.data >= todayIso() && p.estado !== 'descartado'; }).length;
     var views = [['hoje', 'Desafio de hoje'], ['trilha', 'Trilha'], ['banco', 'Meus arquivos'], ['cronograma', 'Cronograma' + (nPost ? ' (' + nPost + ')' : '')]];
@@ -2196,7 +2275,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     });
   }
 
-  // caso: sobe a foto inicial e a final e já pede o story ao Rafa (o pedido fica na mídia da foto inicial)
+  // caso: sobe a foto inicial e a final e já pede o story ao Peixe (o pedido fica na mídia da foto inicial)
   function ctSendCaso() {
     var u = ct.up;
     ct.upErr = !u.pasta ? 'Escolha a pasta.' : !u.ini ? 'Escolha a foto inicial.' : !u.fim ? 'Escolha a foto final.' : !u.paciente ? 'Diga se aparece paciente.' : null;
@@ -2218,7 +2297,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       });
     }).then(function () {
       ct.prog = null; ct.up = null; ct.view = 'banco'; ct.pasta = u.pasta;
-      ct.msg = (u.titulo && u.destaque ? 'Caso enviado. O story fica pronto na aba Edição em menos de 1 minuto (com o computador ligado).' : 'Caso enviado. Sem título, o Rafa escreve um e monta o story em até 15 minutos (com o computador ligado). Ele aparece na aba Edição.') + (u.paciente === 'sem_tcle' ? ' Sem a autorização do paciente, não poste.' : '');
+      ct.msg = (u.titulo && u.destaque ? 'Caso enviado. O story fica pronto na aba Edição em menos de 1 minuto (com o computador ligado).' : 'Caso enviado. Sem título, o Peixe escreve um e monta o story em até 15 minutos (com o computador ligado). Ele aparece na aba Edição.') + (u.paciente === 'sem_tcle' ? ' Sem a autorização do paciente, não poste.' : '');
       render(); ctEnter();
     }, function (e) {
       ct.prog = null; ct.upErr = e && e.code === 'decode' ? 'Formato não aceito (foto HEIC: no iPhone use Ajustes › Câmera › Formatos › Mais compatível).' : 'Não deu certo. Tente de novo.'; render();
@@ -2301,9 +2380,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       var ne = { status: 'pedida', pedido: e0.pedido || '', texto_gancho: e0.texto_gancho || '', cortes: e0.cortes || [], pedido_em: agora,
         feedback: fbt, rodada: (e0.rodada || 1) + 1, historico: (e0.historico || []).concat([{ data: agora, feedback: fbt }]) };
       if (e0.tipo === 'caso') { ne.tipo = 'caso'; ne.final_asset = e0.final_asset; ne.destaque = e0.destaque || ''; ne.titulo = e0.titulo || ''; }
-      if (e0.asset) ne.anterior = e0.asset;   // o Rafa apaga a versão antiga quando subir a nova
+      if (e0.asset) ne.anterior = e0.asset;   // o Peixe apaga a versão antiga quando subir a nova
       a.disabled = true; a.textContent = 'Enviando…';
-      state.db.doc('midia/' + mf.id).update({ edicao: ne }).then(function () { delete ct.fbTxt[mf.id]; ct.msg = 'Pedido enviado. O Rafa refaz na próxima rodada, às 8h.'; render(); },
+      state.db.doc('midia/' + mf.id).update({ edicao: ne }).then(function () { delete ct.fbTxt[mf.id]; ct.msg = 'Pedido enviado. O Peixe refaz na próxima rodada, às 8h.'; render(); },
         function (err) { ct.msg = 'O pedido não foi (' + ((err && (err.message || err.code)) || 'erro') + '). Tente de novo.'; render(); });
       return;
     }
@@ -2373,7 +2452,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // ---------- pacientes: ficha com fotos de antes e depois (só o Pedro vê) ----------
   // Banco: pacientes/<id> = { nome, busca, criado, divulgacao: 'nao'|'sim', obs, telefone, fotos: [{ asset, fase: 'antes'|'depois', data, enviado }],
   //   retornos: [{ id, data: 'aaaa-mm-dd', motivo, feito: null | data ISO }] }  (retornos desde 02/11/2026)
-  // As fotos ficam na pasta privada "pacientes", separada do banco de mídia; a Duda e o Rafa não leem nada daqui.
+  // As fotos ficam na pasta privada "pacientes", separada do banco de mídia; a Duda e o Peixe não leem nada daqui.
   var pc = { lista: null, busca: '', sel: null, novo: null, up: null, prog: null, msg: null, foto: null, cmp: { antes: null, depois: null }, confirmDel: false, editNome: null,
     ret: { motivo: '', data: '' }, verFeitos: false };
   var PC_JANELA = 30;   // a lista "para chamar" mostra os atrasados e os dos próximos 30 dias
@@ -2545,7 +2624,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<section class="pc-dados"><h3>Ficha</h3>' +
       '<label>Telefone (WhatsApp)<input type="tel" maxlength="20" data-pc-f="tel" value="' + esc(p.telefone || '') + '" placeholder="(41) 99999-9999"></label>' +
       '<label class="pc-check"><input type="checkbox" data-pc-div="1"' + (p.divulgacao === 'sim' ? ' checked' : '') + '> Assinou a autorização de uso de imagem (TCLE) para divulgação</label>' +
-      '<p class="hint">' + (p.divulgacao === 'sim' ? 'Pode virar post, mas só se você mesmo levar a foto para o Conteúdo.' : 'Sem autorização: estas fotos não podem ir para post.') + ' A Duda e o Rafa não veem esta aba.</p>' +
+      '<p class="hint">' + (p.divulgacao === 'sim' ? 'Pode virar post, mas só se você mesmo levar a foto para o Conteúdo.' : 'Sem autorização: estas fotos não podem ir para post.') + ' A Duda e o Peixe não veem esta aba.</p>' +
       '<label>Observações<textarea rows="3" maxlength="2000" data-pc-f="obs" placeholder="Ex.: facetas em resina 13 a 23">' + esc(p.obs || '') + '</textarea></label>' +
       '<div class="acts"><button type="button" class="btn" data-pc-obs="1">Salvar telefone e observações</button>' +
       (pc.confirmDel === 'pac' ? '<span class="hint bad">Apagar o paciente e todas as fotos?</span><button type="button" class="btn" data-pc-pacdelok="1">Sim, apagar tudo</button><button type="button" class="btn" data-pc-delno="1">Não</button>'
@@ -2693,7 +2772,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
   function render() {
     renderNav();
-    if (state.section === 'agenda') main.innerHTML = renderAgenda();
+    if (state.section === 'escritorio') main.innerHTML = renderEscritorio();
+    else if (state.section === 'agenda') main.innerHTML = renderAgenda();
     else if (state.section === 'conteudo') main.innerHTML = renderConteudo();
     else if (state.section === 'edicao') main.innerHTML = renderEdicao();
     else if (state.section === 'pacientes') main.innerHTML = renderPacientes();
@@ -2727,6 +2807,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if ((t = e.target.closest('[data-filtro]'))) { state.filtro = t.getAttribute('data-filtro'); render(); return; }
     if ((t = e.target.closest('[data-abertas]'))) { var ab = t.getAttribute('data-abertas'); state.abertas[ab] = !state.abertas[ab]; render(); return; }
     if ((t = e.target.closest('[data-ir]'))) { irPara(t.getAttribute('data-ir')); return; }
+    if ((t = e.target.closest('[data-es-setor]'))) {
+      var sid = t.getAttribute('data-es-setor'); state.section = 'agentes'; state.agent = null; state.filtro = 'todos'; render();
+      var c2 = document.getElementById('setor-' + sid); if (c2) { c2.classList.add('marcado'); c2.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      return;
+    }
     if ((t = e.target.closest('[data-setor]'))) {
       var col = document.getElementById('setor-' + t.getAttribute('data-setor'));
       if (col) { document.querySelectorAll('.st-col.marcado').forEach(function (x) { x.classList.remove('marcado'); }); col.classList.add('marcado'); col.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
@@ -2817,7 +2902,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       function ctSub(q, key) {
         q.onSnapshot(function (snap) {
           ct[key] = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
-          if (state.section === 'conteudo' || state.section === 'edicao' || state.section === 'agentes') render();
+          if (state.section === 'conteudo' || state.section === 'edicao' || state.section === 'agentes' || state.section === 'escritorio') render();
         }, function () { ct[key] = ct[key] || []; });
       }
       db.doc('config/conteudo').onSnapshot(function (snap) {
@@ -2834,6 +2919,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       // Lisa (09/11/2026): relatórios do Instagram e respostas de DM
       ctSub(db.collection('instagram').orderBy('data', 'desc').limit(30), 'insta');
       ctSub(db.collection('dm').orderBy('criado', 'desc').limit(100), 'dm');
+      // Luzi (11/11/2026): revisão do dia, toda noite
+      ctSub(db.collection('revisao').orderBy('data', 'desc').limit(30), 'revisao');
       // pacientes: só para o dono (o banco também recusa os outros)
       if (window.painelDono) db.collection('pacientes').limit(1000).onSnapshot(function (snap) {
         pc.lista = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
