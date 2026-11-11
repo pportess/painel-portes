@@ -2261,6 +2261,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       var e0 = mf.edicao, agora = new Date().toISOString();
       var ne = { status: 'pedida', pedido: e0.pedido || '', texto_gancho: e0.texto_gancho || '', cortes: e0.cortes || [], pedido_em: agora,
         feedback: fbt, rodada: (e0.rodada || 1) + 1, historico: (e0.historico || []).concat([{ data: agora, feedback: fbt }]) };
+      if (e0.tipo === 'caso') { ne.tipo = 'caso'; ne.final_asset = e0.final_asset; ne.destaque = e0.destaque || ''; ne.titulo = e0.titulo || ''; }
       if (e0.asset) ne.anterior = e0.asset;   // o Rafa apaga a versão antiga quando subir a nova
       a.disabled = true; a.textContent = 'Enviando…';
       state.db.doc('midia/' + mf.id).update({ edicao: ne }).then(function () { delete ct.fbTxt[mf.id]; ct.msg = 'Pedido enviado. O Rafa refaz na próxima rodada, às 8h.'; render(); },
