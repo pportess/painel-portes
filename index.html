@@ -458,6 +458,12 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 /* feedback da edição (aba Edição) */
 .ed-fb { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); display: grid; gap: 8px; }
 .ed-fb label { display: grid; gap: 6px; font-weight: 700; font-size: 14px; }
+.aj-caso { margin-top: 10px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; }
+.aj-caso summary { cursor: pointer; font-weight: 700; font-size: 14px; color: #7B1E2B; }
+.aj-caso label { display: grid; gap: 6px; font-weight: 700; font-size: 13px; margin-top: 10px; min-width: 0; }
+.aj-caso input[type=text] { font: inherit; font-size: 14px; font-weight: 400; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--panel); color: var(--fg); width: 100%; box-sizing: border-box; }
+.aj-caso input[type=range] { width: 100%; accent-color: #7B1E2B; }
+.aj-caso .acts { margin-top: 10px; }
 .ed-fb textarea { font: inherit; font-weight: 400; width: 100%; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); }
 .ed-fbpedido { padding: 8px 12px; border-radius: 10px; background: var(--accent-soft); }
 /* desafios diários na aba Conteúdo */
@@ -880,7 +886,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       { ag: 'marketing', nome: 'Agendar no TikTok', desc: 'Pega os posts de vídeo que você aprovou no cronograma e agenda no TikTok pelo Metricool. Nunca no Instagram.', quando: 'De hora em hora, das 7h às 22h', auto: 'agente-publicador-tiktok', h: 12 },
       { ag: 'lisa', nome: 'Respostas de DM', desc: 'Você cola a mensagem, ela escreve a resposta e você envia.', quando: 'Na rodada seguinte', sob: true }] },
     { id: 'edicao', nome: 'Edição de vídeo', tarefas: [
-      { ag: 'rafa', nome: 'Edição dos vídeos', desc: 'Corte vertical, gancho na tela e assinatura; refaz pelo seu feedback.', quando: 'Todo dia, 8h', auto: 'agente-edicao-video', h: 30 }] },
+      { ag: 'rafa', nome: 'Edição dos vídeos', desc: 'Corte vertical, gancho na tela e assinatura; refaz pelo seu feedback.', quando: 'Todo dia, 8h', auto: 'agente-edicao-video', h: 30 },
+      { ag: 'rafa', nome: 'Casos no modelo', desc: 'Monta o story do caso (foto inicial e final) na hora; sem título, escreve um.', quando: 'Na hora (e a cada 15 min, das 7h às 23h)', auto: 'rafa-casos-na-hora', h: 48 }] },
     { id: 'atendimento', nome: 'Atendimento e retornos', tarefas: [
       { ag: 'amanda', nome: 'Retornos', desc: 'A lista de quem chamar fica só na aba Pacientes.', quando: 'Na aba Pacientes', sob: true },
       { ag: 'amanda', nome: 'Mensagens prontas', desc: 'Primeira resposta, confirmação e pós-consulta.', quando: 'Fase 2, com WhatsApp' }] },
@@ -1662,7 +1669,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var POST_ST = { proposto: 'Proposta da Duda', aprovado: 'Aprovado', postado: 'Postado', descartado: 'Descartado' };
   var ct = { assets: null, downloads: null, ready: false, view: 'hoje', pastas: null, midia: null, posts: null, pasta: '', usage: null,
     up: null, upErr: null, prog: null, sel: null, confirmDel: false, msg: null, newFolder: null, showOld: false,
-    desafios: null, dsAdiantar: false, dsVer: null, confirmEd: null, fbTxt: {} };
+    desafios: null, dsAdiantar: false, dsVer: null, confirmEd: null, fbTxt: {}, aj: {}, ajOpen: null };
 
   function blobUrl(id) { return window.painelBlobUrl ? window.painelBlobUrl(id) : '/_blob/' + id; }
   function mb(n) { return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB'; }
@@ -1777,10 +1784,39 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       (all.length ? '' : '<p class="note">O banco está vazio. Envie as fotos e os vídeos que você gravar; a Duda analisa cada um.</p>');
   }
 
+  // caso: ajuste rápido na hora (título e posição de cada foto); o vigia do computador refaz em segundos (11/11/2026)
+  function ajusteCaso(m) {
+    var e = m.edicao, a = ct.aj[m.id] || (ct.aj[m.id] = { destaque: e.destaque || '', titulo: e.titulo || '',
+      fi: Math.round((e.foco_inicial != null ? e.foco_inicial : 0.5) * 100), ff: Math.round((e.foco_final != null ? e.foco_final : 0.5) * 100) });
+    function faixa(k, rot) { return '<label>' + rot + ' <span class="hint">(subir ↔ descer)</span><input type="range" min="0" max="100" step="5" data-aj-f="' + esc(m.id) + '|' + k + '" value="' + a[k] + '"></label>'; }
+    return '<details class="aj-caso"' + (ct.ajOpen === m.id ? ' open' : '') + '><summary data-aj-open="' + esc(m.id) + '">Ajustar e refazer agora</summary>' +
+      '<div class="grid"><label>Palavra na caixa bordô<input type="text" maxlength="20" data-aj-f="' + esc(m.id) + '|destaque" value="' + esc(a.destaque) + '"></label>' +
+      '<label>Resto do título<input type="text" maxlength="70" data-aj-f="' + esc(m.id) + '|titulo" value="' + esc(a.titulo) + '"></label></div>' +
+      faixa('fi', 'Foto inicial: posição') + faixa('ff', 'Foto final: posição') +
+      '<p class="hint">Use a posição se os dentes ficaram cortados: para a esquerda sobe o recorte, para a direita desce.</p>' +
+      '<div class="acts"><button type="button" class="btn primary" data-aj-go="' + esc(m.id) + '">Refazer agora</button></div></details>';
+  }
+  function ajClick(t) {
+    var a;
+    if ((a = t.closest('[data-aj-open]'))) { var id0 = a.getAttribute('data-aj-open'); ct.ajOpen = ct.ajOpen === id0 ? null : id0; return false; }
+    if (!(a = t.closest('[data-aj-go]'))) return false;
+    var id = a.getAttribute('data-aj-go'), m = (ct.midia || []).find(function (x) { return x.id === id; }); if (!m || !m.edicao) return true;
+    var v = ct.aj[id] || {}, e0 = m.edicao, agora = new Date().toISOString();
+    if (!(v.destaque || '').trim() || !(v.titulo || '').trim()) { ct.msg = 'Preencha a palavra da caixa e o título.'; render(); return true; }
+    var ne = Object.assign({}, e0, { status: 'pedida', destaque: v.destaque.trim(), titulo: v.titulo.trim(), foco_inicial: (+v.fi) / 100, foco_final: (+v.ff) / 100,
+      ajuste_rapido: true, pedido_em: agora, rodada: (e0.rodada || 1) + 1, notas: '' });
+    delete ne.feedback;
+    if (e0.status === 'pronta' && e0.asset) ne.anterior = e0.asset;
+    a.disabled = true; a.textContent = 'Enviando…';
+    state.db.doc('midia/' + id).update({ edicao: ne }).then(function () { delete ct.aj[id]; ct.ajOpen = null; ct.msg = 'Refazendo na hora: em menos de 1 minuto o story novo aparece aqui.'; render(); },
+      function () { ct.msg = 'Não salvou. Tente de novo.'; render(); });
+    return true;
+  }
+
   // aba Edição: o que está na fila, sendo editado, pronto ou com problema
   function renderEdicao() {
     var head = '<header class="page-head"><span class="eyebrow">Edição</span><h1>Edição</h1>' +
-      '<p>Os vídeos e os casos que você mandou para o Rafa. Ele edita todo dia às 8h: vídeo com corte vertical, gancho e assinatura; caso (foto inicial e final) vira story no seu modelo.</p></header>';
+      '<p>Os vídeos e os casos que você mandou para o Rafa. Ele edita todo dia às 8h: vídeo com corte vertical, gancho e assinatura; caso (foto inicial e final) vira story no seu modelo na hora, em menos de 1 minuto, com o computador ligado.</p></header>';
     if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
     var items = (ct.midia || []).filter(function (m) { return m.edicao; });
     if (ct.msg) head += '<div class="ag-warn">' + esc(ct.msg) + '</div>';
@@ -1798,6 +1834,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
           (st === 'pedida' || st === 'falhou' ? '<button type="button" class="btn" data-ct-unedit="' + esc(m.id) + '">Tirar da fila</button>' : '') +
           (st === 'falhou' ? '<button type="button" class="btn" data-ct-retry="' + esc(m.id) + '">Tentar de novo</button>' : '') +
           '<button type="button" class="btn" data-ct-open="' + esc(m.id) + '">Ver original</button></div>' +
+          (caso && (st === 'pronta' || st === 'falhou') ? ajusteCaso(m) : '') +
+          (caso && (st === 'pedida' || st === 'editando') && e.destaque && e.titulo ? '<p class="hint">Montando na hora no seu computador: fica pronto em menos de 1 minuto (o computador precisa estar ligado).</p>' : '') +
           // feedback da edição: o Pedro escreve o que mudar e o Rafa refaz a partir do original
           (st === 'pronta' || st === 'falhou' ? '<div class="ed-fb"><label>O que mudar na edição?<textarea rows="3" maxlength="1500" data-ct-fbtxt="' + esc(m.id) + '" placeholder="Ex.: o texto do gancho cobriu meu rosto; corta a parte em que eu gaguejo, perto dos 12 segundos">' + esc(ct.fbTxt[m.id] || '') + '</textarea></label>' +
             '<div class="acts"><button type="button" class="btn primary" data-ct-refazer="' + esc(m.id) + '">Pedir para o Rafa refazer</button>' +
@@ -2180,7 +2218,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       });
     }).then(function () {
       ct.prog = null; ct.up = null; ct.view = 'banco'; ct.pasta = u.pasta;
-      ct.msg = 'Caso enviado. O Rafa monta o story na próxima rodada dele (8h) e ele aparece na aba Edição.' + (u.paciente === 'sem_tcle' ? ' Sem a autorização do paciente, não poste.' : '');
+      ct.msg = (u.titulo && u.destaque ? 'Caso enviado. O story fica pronto na aba Edição em menos de 1 minuto (com o computador ligado).' : 'Caso enviado. Sem título, o Rafa escreve um e monta o story em até 15 minutos (com o computador ligado). Ele aparece na aba Edição.') + (u.paciente === 'sem_tcle' ? ' Sem a autorização do paciente, não poste.' : '');
       render(); ctEnter();
     }, function (e) {
       ct.prog = null; ct.upErr = e && e.code === 'decode' ? 'Formato não aceito (foto HEIC: no iPhone use Ajustes › Câmera › Formatos › Mais compatível).' : 'Não deu certo. Tente de novo.'; render();
@@ -2236,6 +2274,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   function ctClick(t) {
     var a;
     if (dsClick(t)) return;
+    if (ajClick(t)) return;
     if ((a = t.closest('[data-ct-view]'))) { ct.view = a.getAttribute('data-ct-view'); ct.dsVer = null; ct.dsAdiantar = false; render(); return; }
     if ((a = t.closest('[data-ct-pasta]'))) { ct.pasta = a.getAttribute('data-ct-pasta'); ct.sel = null; render(); return; }
     if (t.closest('[data-ct-up]')) { ct.up = { pasta: ct.pasta || '', paciente: '', nota: '', files: null }; ct.upErr = null; ct.msg = null; render(); window.scrollTo(0, 0); return; }
@@ -2713,7 +2752,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (dmf === 'tipo') ct.dmTipo = e.target.value;
     var pef = e.target.getAttribute && e.target.getAttribute('data-pe-f');
     if (pef && ct.pe) ct.pe[pef] = e.target.value;
-    var cf = e.target.getAttribute && e.target.getAttribute('data-ct-f');
+    var ajf = e.target.getAttribute && e.target.getAttribute('data-aj-f');
+    if (ajf) { var pp = ajf.split('|'); if (ct.aj[pp[0]]) ct.aj[pp[0]][pp[1]] = e.target.value; }
+    var cf =e.target.getAttribute && e.target.getAttribute('data-ct-f');
     if (cf === 'newFolder') ct.newFolder = e.target.value;
     else if (cf && ct.up) ct.up[cf] = e.target.value;
     // pacientes: a busca filtra só a lista, sem redesenhar o campo
