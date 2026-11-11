@@ -140,6 +140,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .lz-hist { margin-top: 14px; }
 .es-stats { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 14px; color: var(--muted); margin: -6px 0 18px; }
 .es-stats b { font-size: 22px; font-weight: 800; color: var(--fg); margin-right: 4px; }
+.es-mapa { margin: 0 0 22px; }
+.es-mapa .sala { cursor: pointer; }
 .es-h { font-size: 15px; font-weight: 800; margin: 18px 0 8px; display: flex; align-items: center; gap: 8px; }
 .es-h span { font-size: 12px; background: var(--vermelho); color: #fff; border-radius: 99px; padding: 1px 8px; }
 .es-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 2px 18px; }
@@ -1154,9 +1156,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       if (i) {
         polys += '<polygon class="sala n-' + i.nivel + '" data-setor="' + k + '" points="' + g.poly.map(function (p) { return p.join(','); }).join(' ') + '"><title>' + esc(i.s.nome) + '</title></polygon>';
         tags += '<button type="button" class="sala-tag n-' + i.nivel + '" data-setor="' + k + '" style="' + pos + '"><span>' + esc(i.s.nome) + '</span><b>' + (i.saude == null ? '–' : i.saude) + '</b></button>';
-      } else tags += '<span class="sala-tag n-parado" style="' + pos + '"><span>Sala de reunião</span></span>';
+      } else if (k === 'reuniao') tags += '<span class="sala-tag n-parado" style="' + pos + '"><span>Sala de reunião</span></span>';
     });
-    return '<div class="ag-mapa"><img src="' + IMG_ESCRITORIO + '" alt="Escritório do consultório em 3D, com uma sala para cada setor">' +
+    return '<div class="ag-mapa es-mapa"><img src="' + IMG_ESCRITORIO + '" alt="Escritório do consultório em 3D, com uma sala para cada setor">' +
       '<svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">' + polys + '</svg>' + tags + '</div>';
   }
   function linhaTarefa(t) {
@@ -1205,7 +1207,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var cor = function (n) { return n == null ? 'var(--muted)' : n < 50 ? 'var(--vermelho)' : n < 80 ? '#c98a12' : 'var(--verde)'; };
     return head +
       '<div class="es-stats"><span><b style="color:' + cor(geral) + '">' + geral + '</b> saúde geral</span><span><b>' + (total ? Math.round(rod / total * 100) : 0) + '%</b> das tarefas automáticas em dia</span>' +
-      (ult ? '<span>atualizado ' + dataHora(ult) + '</span>' : '') + '</div>' +
+      (ult ? '<span>atualizado ' + dataHora(ult) + '</span>' : '') + '</div>' + mapaEscritorio(infos) +
       '<h2 class="es-h">Setores</h2><div class="es-list">' + infos.map(function (i) {
         return '<button type="button" class="es-row" data-es-setor="' + i.s.id + '" style="--sc:' + SCOR[i.s.id] + '">' + sic(i.s.id, 'sm') +
           '<span class="es-nome"><b>' + esc(i.s.nome) + '</b><small>' + esc(resumoSetor(i)) + '</small></span>' +
@@ -2807,8 +2809,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if ((t = e.target.closest('[data-filtro]'))) { state.filtro = t.getAttribute('data-filtro'); render(); return; }
     if ((t = e.target.closest('[data-abertas]'))) { var ab = t.getAttribute('data-abertas'); state.abertas[ab] = !state.abertas[ab]; render(); return; }
     if ((t = e.target.closest('[data-ir]'))) { irPara(t.getAttribute('data-ir')); return; }
-    if ((t = e.target.closest('[data-es-setor]'))) {
-      var sid = t.getAttribute('data-es-setor'); state.section = 'agentes'; state.agent = null; state.filtro = 'todos'; render();
+    if ((t = e.target.closest('[data-es-setor], .es-mapa [data-setor]'))) {
+      var sid = t.getAttribute('data-es-setor') || t.getAttribute('data-setor'); state.section = 'agentes'; state.agent = null; state.filtro = 'todos'; render();
       var c2 = document.getElementById('setor-' + sid); if (c2) { c2.classList.add('marcado'); c2.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
       return;
     }
