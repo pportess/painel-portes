@@ -476,6 +476,79 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .ad-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
 .ad-plus { font-size: 40px; color: var(--muted); }
 .ad-rot { position: absolute; left: 10px; top: 10px; background: #7b1e2b; color: #fff; font-weight: 700; font-size: 13px; padding: 3px 10px; border-radius: 8px; }
+.mt-box { border-radius: 18px; padding: 16px; background: linear-gradient(135deg, #fff5f8, #f3f0ff 60%, #eef6ff); border: 1px solid var(--line); margin-bottom: 22px; }
+.mt-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
+.mt-head h2 { font-size: 20px; }
+.mt-placar { text-align: right; min-width: 90px; }
+.mt-placar b { font-size: 28px; font-weight: 800; color: #1f7a45; }
+.mt-placar small { font-size: 15px; color: var(--muted); }
+.mt-barra { height: 6px; border-radius: 9px; background: #e3e6ec; overflow: hidden; margin-top: 4px; }
+.mt-barra i { display: block; height: 100%; background: #2e9e5b; border-radius: 9px; transition: width .3s ease; }
+.mt-list { display: flex; flex-direction: column; gap: 8px; }
+.mt-item { display: flex; align-items: center; gap: 12px; padding: 12px 12px 12px 14px; border-radius: 14px; background: #fff; border-left: 5px solid var(--mc); box-shadow: 0 1px 3px rgba(20, 30, 50, .08); }
+.mt-item.ok { background: #f0faf3; border-left-color: #2e9e5b; }
+.mt-item.ok .mt-tx { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(46,158,91,.5); }
+.mt-tag { flex: none; font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: #fff; background: var(--mc); padding: 3px 8px; border-radius: 8px; }
+.mt-item.ok .mt-tag { background: #2e9e5b; }
+.mt-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; font-weight: 600; }
+.mt-tx small { font-weight: 500; font-size: 12px; color: #b5740a; text-decoration: none; }
+.mt-fiz { flex: none; border: 2px solid #2e9e5b; color: #1f7a45; background: #fff; font: 800 14px/1 var(--font-ui); padding: 10px 16px; border-radius: 12px; cursor: pointer; }
+.mt-fiz:hover { background: #e3f4ea; }
+.mt-fiz.on { background: #2e9e5b; color: #fff; }
+.mt-nova { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.mt-nova input { flex: 1; min-width: 180px; }
+.mt-box .link-btn { margin-top: 10px; }
+.mt-trilha { font-size: 16px; margin: 0 0 10px; color: var(--muted); }
+.px-obras { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.px-obra { display: flex; flex-direction: column; border-radius: 18px; overflow: hidden; background: var(--panel); border: 1px solid var(--line); box-shadow: var(--soft); }
+.px-obra.st-falhou { border-color: #e9b7bd; }
+.px-media { background: #14161c; display: grid; place-items: center; }
+.px-media img, .px-media video { width: 100%; max-height: 520px; object-fit: contain; display: block; }
+.px-wait { position: relative; width: 100%; aspect-ratio: 9 / 12; display: grid; place-items: center; }
+.px-wait .pm { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .35; }
+.px-wait span { position: relative; color: #fff; font-weight: 800; background: rgba(0,0,0,.45); padding: 8px 14px; border-radius: 999px; }
+.px-info { padding: 14px; display: flex; flex-direction: column; gap: 8px; }
+.px-top { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.px-st { font-size: 12px; font-weight: 800; }
+.px-st.st-pronta { color: #1f7a45; } .px-st.st-falhou { color: #a3283a; } .px-st.st-pedida, .px-st.st-editando { color: #7c3fd0; }
+.px-pedido { background: #f3f0ff; border-radius: 10px; padding: 8px 10px; margin: 0; font-size: 14px; }
+.px-av { margin: 0; font-size: 14px; border-left: 3px solid #7c3fd0; padding-left: 10px; }
+.px-av.duda { border-left-color: #d6336c; }
+.px-julgar { border-color: #7c3fd0; color: #5b33b0; font-weight: 800; }
+.li-cor > div { border-top: 4px solid var(--lc); }
+.li-cor b { color: var(--lc); }
+.li-sp { display: block; width: 100%; height: 28px; margin-top: 6px; }
+.li-sp.none { height: auto; font-size: 11px; color: var(--muted); }
+.li-var { display: block; font-size: 11px; font-weight: 700; margin-top: 2px; }
+.li-rede { margin-top: 6px; }
+.li-metas { margin-top: 16px; }
+.li-ind { font-size: 13px; font-weight: 800; padding: 4px 10px; border-radius: 999px; }
+.li-ind.ok { background: #e3f4ea; color: #1f7a45; } .li-ind.bad { background: #fbe4e6; color: #a3283a; }
+.li-bars { display: flex; align-items: flex-end; gap: 6px; height: 120px; padding: 6px 0; }
+.li-bar { flex: 1; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; gap: 4px; }
+.li-bar .tot { width: 100%; max-width: 26px; background: #e3e6ec; border-radius: 6px 6px 3px 3px; display: flex; align-items: flex-end; overflow: hidden; min-height: 3px; }
+.li-bar .tot i { display: block; width: 100%; background: #2e9e5b; }
+.li-bar small { font-size: 10px; color: var(--muted); }
+.li-bar.hoje small { color: var(--fg); font-weight: 800; }
+.li-obj { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.li-obj li { display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: 10px; }
+.li-obj li span { font-weight: 800; width: 22px; height: 22px; border-radius: 50%; display: grid; place-items: center; color: #fff; flex: none; font-size: 12px; }
+.li-obj li.ok { background: #f0faf3; } .li-obj li.ok span { background: #2e9e5b; }
+.li-obj li.no { background: #fdf2f3; } .li-obj li.no span { background: #d1495b; }
+.li-posts { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.li-post { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; }
+.li-post small { color: var(--muted); }
+.li-pn em { font-style: normal; font-weight: 800; }
+.li-post p { margin: 0; font-size: 13px; }
+.dd-feito { display: inline-flex; align-items: center; gap: 8px; font-weight: 800; }
+.dd-box { width: 20px; height: 20px; border: 2px solid #2e9e5b; border-radius: 6px; display: grid; place-items: center; color: #fff; font-size: 13px; }
+.dd-feito.on { border-color: #2e9e5b; color: #1f7a45; background: #e3f4ea; }
+.dd-feito.on .dd-box { background: #2e9e5b; }
+.dd-res { margin-top: 16px; }
+.ag-embed { border-radius: 16px; overflow: hidden; border: 1px solid var(--line); background: #fff; margin: 12px 0; }
+.ag-embed iframe { display: block; width: 100%; height: 72vh; min-height: 520px; border: 0; }
+.av-mini { display: inline-block; width: 26px; height: 26px; border-radius: 50%; overflow: hidden; background: #fff; border: 2px solid #0a7f70; vertical-align: middle; margin-right: 8px; }
+.av-mini svg { width: 100%; height: 100%; display: block; }
 .ct-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
 .tile { position: relative; aspect-ratio: 1; border: 0; border-radius: 16px; overflow: hidden; padding: 14px; text-align: left; font: inherit;
   display: flex; flex-direction: column; justify-content: flex-end; color: #fff; background: linear-gradient(160deg, #6fa594, #3f6f60); isolation: isolate; }
@@ -973,9 +1046,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       { ag: 'lisa', nome: 'Respostas de DM', desc: 'Você cola a mensagem, ela escreve a resposta e você envia.', quando: 'Na rodada seguinte', sob: true }] },
     { id: 'edicao', nome: 'Edição de vídeo', tarefas: [
       { ag: 'rafa', nome: 'Edição dos vídeos', desc: 'Corte vertical, gancho na tela e assinatura; refaz pelo seu feedback.', quando: 'Todo dia, 8h', auto: 'agente-edicao-video', h: 30 },
-      { ag: 'rafa', nome: 'Casos no modelo', desc: 'Monta o story do caso (foto inicial e final) na hora; sem título, escreve um.', quando: 'Na hora (e a cada 15 min, das 7h às 23h)', auto: 'rafa-casos-na-hora', h: 48 }] },
+      { ag: 'rafa', nome: 'Casos no modelo', desc: 'Monta o story do caso (foto inicial e final) na hora; sem título, escreve um.', quando: 'Na hora (e a cada 5 min, das 7h às 23h)', auto: 'rafa-casos-na-hora', h: 48 }] },
     { id: 'atendimento', nome: 'Atendimento e retornos', tarefas: [
-      { ag: 'amanda', nome: 'Retornos', desc: 'A lista de quem chamar fica só na aba Pacientes.', quando: 'Na aba Pacientes', sob: true },
+      { ag: 'amanda', nome: 'Retornos', desc: 'Junta os retornos de todos os pacientes, com WhatsApp pronto. Fica na página dela e em Pacientes.', quando: 'Sempre, ligada aos Pacientes', sob: true },
       { ag: 'amanda', nome: 'Mensagens prontas', desc: 'Primeira resposta, confirmação e pós-consulta.', quando: 'Fase 2, com WhatsApp' }] },
     { id: 'gerencia', nome: 'Gerência', tarefas: [
       { ag: 'luzi', nome: 'Revisão do dia', desc: 'Junta tudo do dia: redes, vídeos, desafios, posts, mensagens e dinheiro, e diz o que fazer amanhã.', quando: 'Todo dia, 21h', auto: 'luzi-revisao-diaria', h: 30 },
@@ -1034,7 +1107,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (ts.some(function (t) { return t.est.k === 'sob'; })) return ['c-off', 'Sob demanda'];
     return ['c-off', 'Ainda não roda sozinho'];
   }
-  var TAB_PADRAO = { marketing: 'hoje', lisa: 'numeros', rafa: 'feitos', luzi: 'dia' };
+  var TAB_PADRAO = { marketing: 'hoje', lisa: 'numeros', rafa: 'feitos', luzi: 'dia', amanda: 'retornos' };
   function agTab(a) { return state.agTab[a.id] || TAB_PADRAO[a.id] || 'como'; }
   function agTopo(a, tabs) {
     var s = setorDe(a.id), st = agStatus(tarefasDe(a.id)), cur = agTab(a);
@@ -1093,6 +1166,14 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
           : '<div class="empty">Nenhum trabalho pronto ainda. Mande um vídeo para edição ou um caso de antes e depois.</div>'));
     }
     if (a.id === 'luzi') return agTopo(a, [['dia', 'Revisão do dia'], ['como', 'Como funciona']]) + (agTab(a) === 'como' ? agComo(a) : luziDia());
+    // 12/11/2026: a Amanda fica ligada aos Pacientes: mostra os retornos para chamar, com WhatsApp pronto (só o Pedro vê)
+    if (a.id === 'amanda') {
+      var nv = window.painelDono && pc.lista ? pcAgenda().filter(function (x) { return diasAte(x.r.data) <= PC_JANELA; }).length : 0;
+      return agTopo(a, [['retornos', 'Retornos para chamar', nv || ''], ['como', 'Como funciona']]) + (agTab(a) === 'como' ? agComo(a) :
+        !window.painelDono ? '<div class="empty"><b>Só o Pedro vê os pacientes.</b> Por sigilo e LGPD.</div>' : pc.lista == null ? '<div class="empty">Carregando…</div>' :
+        (pcRetPainel() || '<div class="empty"><b>Nenhum retorno agendado.</b> Na ficha de cada paciente, em Pacientes, toque em "Em 6 meses" e "Agendar retorno". A Amanda junta todos aqui.</div>') +
+        '<div class="acts"><button type="button" class="btn" data-goto="pacientes">Abrir Pacientes</button></div>');
+    }
     return agTopo(a, null) + agComo(a);
   }
   function luziDia() {
@@ -1307,6 +1388,49 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // a Lisa escreve a resposta na rodada seguinte e o Pedro copia e envia. Nada é enviado sozinho.
   var DM_TIPO = { dm: 'Direct', comentario: 'Comentário', whatsapp: 'WhatsApp' };
   function fmtNum(n) { return n == null || n === '' ? '–' : typeof n === 'number' ? n.toLocaleString('pt-BR') : String(n); }
+  // 12/11/2026: cada número na sua cor, com um gráfico pequeno (verde se sobe, vermelho se cai), feito com os relatórios anteriores
+  var LI_COR = { seguidores: '#d6336c', alcance: '#2563eb', visualizacoes: '#7c3fd0', interacoes: '#0a7f70', visitas_perfil: '#b5740a', cliques_link: '#d9622b', videos: '#111113' };
+  function liSerie(rede, k) {
+    return (ct.insta || []).slice().sort(function (a, b) { return (a.data || a.id).localeCompare(b.data || b.id); }).map(function (r) {
+      var o = rede === 'tiktok' ? (r.tiktok || {}) : (r.numeros || {}); return typeof o[k] === 'number' ? o[k] : null; }).filter(function (v) { return v != null; }).slice(-14);
+  }
+  function liSpark(vals) {
+    if (vals.length < 2) return '<span class="li-sp none">sem histórico ainda</span>';
+    var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals), w = 100, h = 28, d = mx - mn || 1;
+    var pts = vals.map(function (v, i) { return (i / (vals.length - 1) * w).toFixed(1) + ',' + (h - 3 - (v - mn) / d * (h - 6)).toFixed(1); }).join(' ');
+    var a = vals[vals.length - 2], b = vals[vals.length - 1], cor = b > a ? '#2e9e5b' : b < a ? '#d1495b' : '#8c8f97';
+    var pct = a ? Math.round((b - a) / a * 100) : 0;
+    return '<svg class="li-sp" viewBox="0 0 100 28" preserveAspectRatio="none" aria-hidden="true"><polyline points="' + pts + '" fill="none" stroke="' + cor + '" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round" vector-effect="non-scaling-stroke"/></svg>' +
+      '<small class="li-var" style="color:' + cor + '">' + (b > a ? '▲' : b < a ? '▼' : '■') + ' ' + (pct > 0 ? '+' : '') + pct + '% desde o último relatório</small>';
+  }
+  function liCards(rede, obj, itens) {
+    return '<div class="li-nums li-cor">' + itens.filter(function (i) { return obj[i[0]] != null; }).map(function (i) {
+      return '<div style="--lc:' + (LI_COR[i[0]] || '#5a6270') + '"><b>' + esc(fmtNum(obj[i[0]])) + '</b><span>' + esc(i[1]) + '</span>' + liSpark(liSerie(rede, i[0])) + '</div>'; }).join('') + '</div>';
+  }
+  // metas do dia (desafios) para a Lisa: gráfico dos últimos 14 dias, objetivos de hoje e histórico
+  function liMetas() {
+    var hist = mtHistorico(14), hoje = mtHoje(), h = todayIso();
+    var sem = hist.slice(7), ant = hist.slice(0, 7);
+    var taxa = function (l) { var t = l.reduce(function (s, x) { return s + x.tot; }, 0), o = l.reduce(function (s, x) { return s + x.ok; }, 0); return t ? Math.round(o / t * 100) : 0; };
+    var tS = taxa(sem), tA = taxa(ant), bom = tS >= tA;
+    var mx = Math.max.apply(null, hist.map(function (x) { return x.tot; }).concat([1]));
+    var feitas = mtLista().filter(function (m) { return m.feito; }).sort(function (a, b) { return b.feito.localeCompare(a.feito); }).slice(0, 30);
+    return '<section class="panel li-metas"><div class="li-top"><h2>Metas do dia: estou indo bem?</h2><span class="li-ind ' + (bom ? 'ok' : 'bad') + '">' + (bom ? '▲ Positivo' : '▼ Negativo') + '</span></div>' +
+      '<p class="li-resumo">Nesta semana você cumpriu <b>' + tS + '%</b> das metas' + (tA || tS ? ' (na semana anterior, ' + tA + '%).' : '.') + (bom ? ' Continue assim.' : ' Hoje dá para virar: comece pela meta mais fácil.') + '</p>' +
+      '<div class="li-bars">' + hist.map(function (x) {
+        return '<div class="li-bar' + (x.iso === h ? ' hoje' : '') + '" title="' + esc(fmtDay(x.iso)) + ': ' + x.ok + ' de ' + x.tot + '"><span class="tot" style="height:' + Math.round(x.tot / mx * 100) + '%"><i style="height:' + (x.tot ? Math.round(x.ok / x.tot * 100) : 0) + '%"></i></span><small>' + x.iso.slice(8) + '</small></div>'; }).join('') + '</div>' +
+      '<p class="hint">Barra cinza: metas do dia. Verde: as que você fez.</p>' +
+      '<h3>Objetivos de hoje</h3>' + (hoje.length ? '<ul class="li-obj">' + hoje.map(function (m) { return '<li class="' + (m.feito ? 'ok' : 'no') + '"><span>' + (m.feito ? '✓' : '✕') + '</span>' + esc(m.texto) + '</li>'; }).join('') + '</ul>' : '<p class="hint">Sem metas hoje ainda.</p>') +
+      (feitas.length ? '<details class="li-hist"><summary>Histórico do que você fez (' + feitas.length + ')</summary><ul class="li-list">' + feitas.map(function (m) { return '<li><b>' + esc(fmtDay(m.feito)) + '</b> · ' + esc(m.texto) + '</li>'; }).join('') + '</ul></details>' : '') + '</section>';
+  }
+  // resultado de cada publicação (a Lisa grava em rel.posts pelo Metricool)
+  function liPosts(rel) {
+    var l = rel.posts || []; if (!l.length) return '';
+    return '<h3>Resultado de cada publicação</h3><div class="li-posts">' + l.map(function (p) {
+      return '<div class="li-post"><span class="chip">' + esc(p.rede === 'tiktok' ? 'TikTok' : 'Instagram') + (p.formato ? ' · ' + esc(p.formato) : '') + '</span><b>' + esc(p.titulo || '') + '</b><small>' + esc(fmtDay((p.data || '').slice(0, 10))) + '</small>' +
+        '<span class="li-pn">' + [['alcance', 'alcance'], ['visualizacoes', 'views'], ['interacoes', 'interações'], ['salvamentos', 'salvos'], ['compartilhamentos', 'envios']].filter(function (k) { return p[k[0]] != null; }).map(function (k) { return '<em style="color:' + (LI_COR[k[0]] || '#5a6270') + '">' + esc(fmtNum(p[k[0]])) + '</em> ' + k[1]; }).join(' · ') + '</span>' +
+        (p.leitura ? '<p>' + esc(p.leitura) + '</p>' : '') + '</div>'; }).join('') + '</div>';
+  }
   function renderLisa() {
     var a = AGENTS.find(function (x) { return x.id === 'lisa'; });
     var prontas = (ct.dm || []).filter(function (x) { return x.estado === 'respondida'; }).length;
@@ -1320,22 +1444,22 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       var n = rel.numeros || {}, itens = [['seguidores', 'Seguidores'], ['alcance', 'Alcance (30 dias)'], ['visualizacoes', 'Visualizações (30 dias)'], ['interacoes', 'Interações (30 dias)'], ['visitas_perfil', 'Visitas ao perfil'], ['cliques_link', 'Cliques no link']];
       html += '<section class="panel li-rel"><div class="li-top"><h2>Relatório de ' + esc(fmtDay(rel.data || rel.id)) + '</h2>' + (rel.fonte === 'metricool' ? '' : '<span class="chip">sem Metricool</span>') + '</div>' +
         (rel.resumo ? '<p class="li-resumo">' + esc(rel.resumo) + '</p>' : '') +
-        '<div class="li-nums">' + itens.filter(function (i) { return n[i[0]] != null; }).map(function (i) {
+        '<h3 class="li-rede">Instagram</h3>' + liCards('instagram', n, itens) + '<div class="li-nums" hidden>' + itens.filter(function (i) { return false; }).map(function (i) {
           var v = (rel.variacao || {})[i[0]];
           return '<div><b>' + esc(fmtNum(n[i[0]])) + '</b><span>' + esc(i[1]) + '</span>' + (v ? '<small>' + esc(v) + '</small>' : '') + '</div>'; }).join('') + '</div>' +
         (rel.tiktok ? '<h3>TikTok</h3>' + (function (tk) {
           var ti = [['seguidores', 'Seguidores'], ['visualizacoes', 'Visualizações'], ['alcance', 'Alcance'], ['interacoes', 'Interações'], ['visitas_perfil', 'Visitas ao perfil'], ['videos', 'Vídeos']].filter(function (i) { return tk[i[0]] != null; });
-          return (ti.length ? '<div class="li-nums">' + ti.map(function (i) { return '<div><b>' + esc(fmtNum(tk[i[0]])) + '</b><span>' + esc(i[1]) + '</span></div>'; }).join('') + '</div>' : '') +
+          return (ti.length ? liCards('tiktok', tk, ti) : '') +
             (tk.leitura ? '<p>' + esc(tk.leitura) + '</p>' : '');
         })(rel.tiktok) : '') +
         ((rel.melhores || []).length ? '<h3>O que funcionou</h3><ul class="li-list">' + rel.melhores.map(function (m) {
           return '<li><b>' + esc(m.titulo || '') + '</b>' + (m.formato ? ' · ' + esc(m.formato) : '') + (m.numeros ? '<br><small>' + esc(m.numeros) + '</small>' : '') + (m.porque ? '<br>' + esc(m.porque) : '') + '</li>'; }).join('') + '</ul>' : '') +
-        (rel.horario ? '<h3>Melhor horário para postar</h3><p>' + esc(rel.horario) + '</p>' : '') +
+        liPosts(rel) + (rel.horario ? '<h3>Melhor horário para postar</h3><p>' + esc(rel.horario) + '</p>' : '') +
         ((rel.leitura || []).length ? '<h3>Leitura da Lisa</h3><ul class="li-list">' + rel.leitura.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
         ((rel.para_duda || []).length ? '<h3>Recado para a Duda</h3><ul class="li-list">' + rel.para_duda.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '') +
         '</section>';
     }
-    if (!soMsg) return html;
+    if (!soMsg) return html + (ct.desafios ? liMetas() : '');
     // respostas de DM e comentários
     var lista = ct.dm || [];
     html += '<section class="panel li-dm"><h2>Responder mensagens</h2>' +
@@ -1389,11 +1513,27 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       (rows ? '<dl>' + rows + '</dl>' : '') +
       (o.fontes && o.fontes.length ? '<div class="src">Fontes: ' + o.fontes.map(esc).join(' · ') + '</div>' : '') +
       '<div class="acts">' +
-        '<button type="button" class="btn" data-mark="feito" data-day="' + esc(day.id) + '" data-opt="' + esc(o.id) + '" aria-pressed="' + (st === 'feito') + '"' + (busy ? ' disabled' : '') + '>' + (st === 'feito' ? '✓ Feito' : 'Marcar como feito') + '</button>' +
+        '<button type="button" class="btn dd-feito' + (st === 'feito' ? ' on' : '') + '" data-mark="feito" data-day="' + esc(day.id) + '" data-opt="' + esc(o.id) + '" aria-pressed="' + (st === 'feito') + '"' + (busy ? ' disabled' : '') + '><span class="dd-box">' + (st === 'feito' ? '✓' : '') + '</span>Feito</button>' +
         '<button type="button" class="btn" data-mark="descartado" data-day="' + esc(day.id) + '" data-opt="' + esc(o.id) + '" aria-pressed="' + (st === 'descartado') + '"' + (busy ? ' disabled' : '') + '>' + (st === 'descartado' ? 'Descartado' : 'Descartar') + '</button>' +
       '</div></article>';
   }
 
+  // 12/11/2026: resumo do dia da Duda (o que ele marcou) e "estou indo bem?" com os números do Instagram e do TikTok
+  function ddResumo(day) {
+    var est = day.estado || {}, op = day.opcoes || [];
+    var feitas = op.filter(function (o) { return est[o.id] === 'feito'; }), desc = op.filter(function (o) { return est[o.id] === 'descartado'; });
+    var pend = op.length - feitas.length - desc.length;
+    var seg = liSerie('instagram', 'seguidores'), tk = liSerie('tiktok', 'seguidores'), hist = mtHistorico(7);
+    var tot = hist.reduce(function (s, x) { return s + x.tot; }, 0), ok = hist.reduce(function (s, x) { return s + x.ok; }, 0);
+    var nota = feitas.length >= 2 ? 'Dia forte: ' + feitas.length + ' ideias feitas.' : feitas.length === 1 ? 'Uma ideia feita: já conta. Amanhã tente duas.' : pend ? 'Nenhuma feita ainda. Escolha a mais rápida e faça agora.' : 'Nenhuma feita hoje. Amanhã, comece pela mais curta.';
+    return '<section class="panel dd-res"><div class="li-top"><h2>Resumo do dia</h2><span class="li-ind ' + (feitas.length ? 'ok' : 'bad') + '">' + feitas.length + ' de ' + op.length + ' feitas</span></div>' +
+      '<p class="li-resumo">' + esc(nota) + (desc.length ? ' ' + plural(desc.length, 'descartada', 'descartadas') + '.' : '') + (pend ? ' Faltam ' + pend + '.' : '') + '</p>' +
+      (feitas.length ? '<ul class="li-obj">' + feitas.map(function (o) { return '<li class="ok"><span>✓</span>' + esc(o.titulo) + '</li>'; }).join('') + '</ul>' : '') +
+      '<h3>Estou indo bem?</h3><div class="li-nums li-cor">' +
+      '<div style="--lc:#d6336c"><b>' + esc(fmtNum(seg[seg.length - 1])) + '</b><span>Seguidores no Instagram</span>' + liSpark(seg) + '</div>' +
+      '<div style="--lc:#111113"><b>' + esc(fmtNum(tk[tk.length - 1])) + '</b><span>Seguidores no TikTok</span>' + liSpark(tk) + '</div>' +
+      '<div style="--lc:#2e9e5b"><b>' + (tot ? Math.round(ok / tot * 100) : 0) + '%</b><span>Metas cumpridas em 7 dias</span><small class="li-var">' + ok + ' de ' + tot + '</small></div></div></section>';
+  }
   function renderMarketing() {
     var duda = AGENTS.find(function (x) { return x.id === 'marketing'; });
     var html = agTopo(duda, [['hoje', 'Opções de hoje'], ['como', 'Como funciona']]);
@@ -1414,7 +1554,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       var done = Object.keys(day.estado || {}).filter(function (k) { return day.estado[k] === 'feito'; }).length;
       body = '<div class="day-head"><h2>' + (isToday ? 'Hoje' : esc(fmtDay(day.data))) + '</h2><span class="date">' + esc(day.data) + ' · ' + done + '/' + (day.opcoes || []).length + ' feitas</span></div>' +
         (day.foco ? '<div class="focus"><b>Foco do dia:</b> ' + esc(day.foco) + '</div>' : '') +
-        '<div class="options">' + (day.opcoes || []).map(function (o) { return renderOption(o, day); }).join('') + '</div>';
+        (!isToday && !state.selected ? '<div class="ag-warn">As opções de hoje ainda não chegaram (a Duda trabalha às 7h, com o app do Claude aberto). Abaixo, as do último dia.</div>' : '') +
+        '<div class="options">' + (day.opcoes || []).map(function (o) { return renderOption(o, day); }).join('') + '</div>' + ddResumo(day);
     }
 
     var aside = '';
@@ -1670,6 +1811,40 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<button type="button" class="btn" data-ag-cancel="1">Cancelar</button></div></div>';
   }
 
+  // 12/11/2026: no site (sem o conector do claude.ai), a Agenda mostra o próprio Google Agenda dentro do painel:
+  // sempre atualizado, com as mesmas cores, e editar abre o evento no Google. A conta fica só no banco do painel (não no código).
+  function agEmbed(head) {
+    if (state.db && ag.cfg === undefined) {
+      ag.cfg = null;
+      state.db.doc('config/agenda').get().then(function (s) { ag.cfg = (s.exists && s.data()) || {}; if (state.section === 'agenda') render(); }, function () { ag.cfg = {}; render(); });
+    }
+    if (!ag.cfg) return head + '<p class="note">Carregando a agenda…</p>';
+    var conta = ag.cfg.conta;
+    if (!conta || ag.trocarConta) return head + '<div class="ag-form"><h2>Ligar o seu Google Agenda</h2>' +
+      '<p class="hint">Escreva o e-mail da conta Google da sua agenda. Ele fica guardado só no banco do painel. Para aparecer aqui, o navegador precisa estar logado nessa conta Google.</p>' +
+      '<label>E-mail do Google<input type="email" data-agc-f="1" value="' + esc(ag.contaTxt != null ? ag.contaTxt : conta || '') + '" placeholder="seu-email@gmail.com" autocomplete="email"></label>' +
+      '<div class="acts"><button type="button" class="btn primary" data-agc-salvar="1">Ligar agenda</button>' + (conta ? '<button type="button" class="btn" data-agc-cancel="1">Cancelar</button>' : '') + '</div></div>';
+    var modo = ag.view === 'mes' ? 'MONTH' : ag.view === 'dia' ? 'AGENDA' : 'WEEK';
+    var src = 'https://calendar.google.com/calendar/embed?src=' + encodeURIComponent(conta) + '&ctz=America%2FSao_Paulo&mode=' + modo + '&hl=pt_BR&showTitle=0&showPrint=0&showTabs=0&showCalendars=0&wkst=2';
+    return head + '<div class="ag-bar"><div class="seg" role="group" aria-label="Visão">' + [['dia', 'Lista'], ['semana', 'Semana'], ['mes', 'Mês']].map(function (v) {
+        return '<button type="button" data-ag-view="' + v[0] + '" aria-pressed="' + (ag.view === v[0]) + '">' + v[1] + '</button>'; }).join('') + '</div>' +
+      '<a class="btn primary" href="https://calendar.google.com/calendar/r/eventedit" target="_blank" rel="noopener">+ Novo evento</a>' +
+      '<a class="btn" href="https://calendar.google.com/calendar/r" target="_blank" rel="noopener">Abrir no Google Agenda</a></div>' +
+      '<div class="ag-embed"><iframe src="' + esc(src) + '" title="Google Agenda" loading="lazy"></iframe></div>' +
+      '<p class="hint">Atualiza sozinha, com as cores do Google. Para editar, toque no evento e em "mais detalhes", ou use "Abrir no Google Agenda". Se aparecer em branco, entre na conta Google neste navegador. <button type="button" class="link-btn" data-agc-trocar="1">trocar conta</button></p>';
+  }
+  function agcClick(t) {
+    if (t.closest('[data-agc-trocar]')) { ag.trocarConta = true; ag.contaTxt = null; render(); return true; }
+    if (t.closest('[data-agc-cancel]')) { ag.trocarConta = false; render(); return true; }
+    if (t.closest('[data-agc-salvar]')) {
+      var v = (ag.contaTxt || '').trim();
+      if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v)) { ag.msg = 'Escreva um e-mail válido.'; render(); return true; }
+      state.db.doc('config/agenda').set(Object.assign({}, ag.cfg || {}, { conta: v })).then(function () { ag.cfg = Object.assign({}, ag.cfg, { conta: v }); ag.trocarConta = false; render(); },
+        function () { ag.msg = 'Não salvou. Tente de novo.'; render(); });
+      return true;
+    }
+    return false;
+  }
   function renderAgenda() {
     var w = weekRange(ag.week);
     var head = '<header class="page-head"><span class="eyebrow">Agenda</span><h1>Agenda</h1>' +
@@ -1681,8 +1856,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<div class="seg" role="group" aria-label="Visão">' + [['dia', 'Dia'], ['semana', 'Semana'], ['mes', 'Mês']].map(function (v) {
         return '<button type="button" data-ag-view="' + v[0] + '" aria-pressed="' + (ag.view === v[0]) + '">' + v[1] + '</button>'; }).join('') + '</div>' +
       '<button type="button" class="btn primary" data-ag-new="' + (ag.view === 'dia' ? ag.day : todayIso()) + '" data-ag-time="14:00">+ Novo evento</button></div>';
-    if (!ag.ready) return head + '<p class="note">Conectando ao Google Agenda…</p>';
-    if (!ag.mcp) return head + '<div class="empty"><b>A agenda ainda não está ligada neste site.</b> Por enquanto, use a Agenda pelo painel no claude.ai. A ligação com o Google é a próxima etapa.</div>';
+    if (!ag.ready && !window.painelDono && !state.db) return head + '<p class="note">Conectando ao Google Agenda…</p>';
+    if (!ag.ready) return agEmbed(head);
+    if (!ag.mcp) return agEmbed(head);
     var status = '';
     if (ag.msg) status += '<div class="ag-warn">' + esc(ag.msg) + '</div>';
     if (ag.error) status += '<div class="ag-warn">' + esc(agErrorText(ag.error)) +
@@ -1727,6 +1903,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       else ag.week = ag.week - s;
       agWatch(); render(); return true;
     }
+    if (agcClick(t)) return true;
     if (t.closest('[data-ag-today]')) { var n0 = new Date(); ag.week = 0; ag.day = todayIso(); ag.month = new Date(n0.getFullYear(), n0.getMonth(), 1); agWatch(); render(); return true; }
     if ((a = t.closest('[data-ag-view]'))) {
       var v = a.getAttribute('data-ag-view'), base;
@@ -1807,7 +1984,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var POST_ST = { proposto: 'Proposta da Duda', aprovado: 'Aprovado', postado: 'Postado', descartado: 'Descartado' };
   var ct = { assets: null, downloads: null, ready: false, view: 'banco', pastas: null, midia: null, posts: null, pasta: '', usage: null,
     up: null, upErr: null, prog: null, sel: null, confirmDel: false, msg: null, newFolder: null, showOld: false,
-    desafios: null, dsAdiantar: false, dsVer: null, confirmEd: null, fbTxt: {}, aj: {}, ajOpen: null };
+    desafios: null, dsAdiantar: false, dsVer: null, confirmEd: null, fbTxt: {}, aj: {}, ajOpen: null, julgar: null, mtNova: null, mtGerado: null };
 
   function blobUrl(id) { return window.painelBlobUrl ? window.painelBlobUrl(id) : '/_blob/' + id; }
   function mb(n) { return (n / 1048576).toFixed(n < 10485760 ? 1 : 0) + ' MB'; }
@@ -1955,38 +2132,36 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     return true;
   }
 
-  // aba Edição: o que está na fila, sendo editado, pronto ou com problema
+  // aba Edição (12/11/2026): só o trabalho do Peixe. Ver o resultado, baixar, ver o original, tirar da fila
+  // e "Julgar": o Pedro escreve o que mudar; o Peixe avalia, refaz e devolve o retorno dele e da Duda, na hora (computador ligado).
   function renderEdicao() {
-    var head = '<header class="page-head"><span class="eyebrow">Edição</span><h1>Edição</h1>' +
-      '<p>Os vídeos e os casos que você mandou para o Peixe. Ele edita todo dia às 8h: vídeo com corte vertical, gancho e assinatura; caso (foto inicial e final) vira story no seu modelo na hora, em menos de 1 minuto, com o computador ligado.</p></header>';
+    var head = '<header class="page-head"><span class="eyebrow">Edição</span><h1>Trabalho do Peixe</h1>' +
+      '<p>Os vídeos e os casos que o Peixe editou. Gostou? Baixe. Quer mudar? Toque em "Julgar" e escreva: ele avalia, refaz e responde em poucos minutos (a cada 5 min, com o computador ligado).</p></header>';
     if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b>') + '</div>';
-    var items = (ct.midia || []).filter(function (m) { return m.edicao; });
+    var items = (ct.midia || []).filter(function (m) { return m.edicao && !m.edicao.arquivado; });
     if (ct.msg) head += '<div class="ag-warn">' + esc(ct.msg) + '</div>';
-    if (!items.length) return head + '<div class="empty"><b>Nada em edição.</b> Abra um vídeo em Conteúdo e, se a Duda deu verde, toque em "Enviar para edição".</div>';
-    return head + ['editando', 'pedida', 'pronta', 'falhou'].map(function (st) {
-      var l = items.filter(function (m) { return m.edicao.status === st; }); if (!l.length) return '';
-      return '<section class="ed-group"><h2>' + esc(ED_ST[st]) + ' <span>' + l.length + '</span></h2><div class="ed-list">' + l.map(function (m) {
-        var e = m.edicao, caso = e.tipo === 'caso';
-        return '<article class="ed-item st-' + st + '"><div class="ed-media">' + (st === 'pronta' && e.asset ? (caso ? '<img src="' + blobUrl(e.asset) + '" alt="Story do caso">' : '<video src="' + blobUrl(e.asset) + '" controls playsinline preload="metadata"></video>') : thumb(m, 'pm')) + '</div>' +
-          '<div class="ed-info"><h3>' + (caso ? '<span class="chip">Caso</span> ' : '') + esc(m.nota || 'Vídeo') + '</h3><p class="hint">' + esc(pastaNome(m.pasta)) + (e.pedido_em ? ' · pedido em ' + esc(fmtDay(e.pedido_em.slice(0, 10))) : '') + '</p>' +
-          (e.pedido ? '<p><b>Pedido:</b> ' + esc(e.pedido) + '</p>' : '') +
-          (e.feedback && (st === 'pedida' || st === 'editando') ? '<p class="ed-fbpedido"><b>Seu ajuste' + (e.rodada > 1 ? ' (versão ' + e.rodada + ')' : '') + ':</b> ' + esc(e.feedback) + '</p>' : '') +
-          (e.notas ? '<p class="hint">' + esc(e.notas) + '</p>' : '') +
-          '<div class="acts">' + (st === 'pronta' && e.asset && ct.downloads ? '<button type="button" class="btn primary" data-ct-dl="' + esc(e.asset) + '" data-ct-dlname="' + esc(slug(m.nota || 'video')) + (caso ? '-story.jpg">Baixar imagem' : '-editado.mp4">Baixar vídeo') + '</button>' : '') +
-          (st === 'pedida' || st === 'falhou' ? '<button type="button" class="btn" data-ct-unedit="' + esc(m.id) + '">Tirar da fila</button>' : '') +
-          (st === 'falhou' ? '<button type="button" class="btn" data-ct-retry="' + esc(m.id) + '">Tentar de novo</button>' : '') +
-          '<button type="button" class="btn" data-ct-open="' + esc(m.id) + '">Ver original</button></div>' +
-          (caso && (st === 'pronta' || st === 'falhou') ? ajusteCaso(m) : '') +
-          (caso && (st === 'pedida' || st === 'editando') && e.destaque && e.titulo ? '<p class="hint">Montando na hora no seu computador: fica pronto em menos de 1 minuto (o computador precisa estar ligado).</p>' : '') +
-          // feedback da edição: o Pedro escreve o que mudar e o Peixe refaz a partir do original
-          (st === 'pronta' || st === 'falhou' ? '<div class="ed-fb"><label>O que mudar na edição?<textarea rows="3" maxlength="1500" data-ct-fbtxt="' + esc(m.id) + '" placeholder="Ex.: o texto do gancho cobriu meu rosto; corta a parte em que eu gaguejo, perto dos 12 segundos">' + esc(ct.fbTxt[m.id] || '') + '</textarea></label>' +
-            '<div class="acts"><button type="button" class="btn primary" data-ct-refazer="' + esc(m.id) + '">Pedir para o Peixe refazer</button>' +
-            (st === 'pronta' && e.asset ? (ct.confirmEd === m.id ? '<span class="hint bad">Apagar o vídeo editado? O original continua no banco.</span><button type="button" class="btn" data-ct-edelok="' + esc(m.id) + '">Sim, apagar</button><button type="button" class="btn" data-ct-edelno="1">Não</button>'
-              : '<button type="button" class="btn" data-ct-edel="' + esc(m.id) + '">Apagar vídeo editado</button>') : '') + '</div>' +
-            (e.historico && e.historico.length ? '<details><summary class="hint">Ajustes anteriores (' + e.historico.length + ')</summary>' + e.historico.map(function (h) { return '<p class="hint">' + esc(fmtDay((h.data || '').slice(0, 10))) + ': ' + esc(h.feedback) + '</p>'; }).join('') + '</details>' : '') +
-            '</div>' : '') + '</div></article>';
-      }).join('') + '</div></section>';
-    }).join('');
+    if (!items.length) return head + '<div class="empty"><b>Nada do Peixe ainda.</b> Mande um caso em Conteúdo › Antes e depois, ou um vídeo que a Duda aprovou.</div>';
+    var ord = { editando: 0, pedida: 1, pronta: 2, falhou: 3 };
+    items.sort(function (a, b) { return ord[a.edicao.status] - ord[b.edicao.status] || (b.edicao.pronto_em || b.edicao.pedido_em || '').localeCompare(a.edicao.pronto_em || a.edicao.pedido_em || ''); });
+    return head + '<div class="px-obras">' + items.map(function (m) {
+      var e = m.edicao, st = e.status, caso = e.tipo === 'caso', aberto = ct.julgar === m.id, av = e.avaliacao || {};
+      var midia = st === 'pronta' && e.asset ? (caso ? '<img src="' + blobUrl(e.asset) + '" alt="Story do caso">' : '<video src="' + blobUrl(e.asset) + '" controls playsinline preload="metadata"></video>')
+        : '<div class="px-wait">' + thumb(m, 'pm') + '<span>' + (st === 'falhou' ? '⚠ Não deu certo' : st === 'editando' ? '✂ Peixe trabalhando…' : '⏳ Na fila do Peixe') + '</span></div>';
+      return '<article class="px-obra st-' + st + '"><div class="px-media">' + midia + '</div><div class="px-info">' +
+        '<div class="px-top"><span class="chip">' + (caso ? 'Caso' : 'Vídeo') + '</span><span class="px-st st-' + st + '">' + esc(ED_ST[st] || st) + (e.rodada > 1 ? ' · versão ' + e.rodada : '') + '</span></div>' +
+        (e.feedback && (st === 'pedida' || st === 'editando') ? '<p class="px-pedido"><b>Seu julgamento:</b> ' + esc(e.feedback) + '</p>' : '') +
+        (av.peixe ? '<p class="px-av"><b>Peixe:</b> ' + esc(av.peixe) + '</p>' : '') + (av.duda ? '<p class="px-av duda"><b>Duda:</b> ' + esc(av.duda) + '</p>' : '') +
+        (e.notas && !av.peixe ? '<p class="hint">' + esc(e.notas) + '</p>' : '') +
+        '<div class="acts">' + (st === 'pronta' && e.asset && ct.downloads ? '<button type="button" class="btn primary" data-ct-dl="' + esc(e.asset) + '" data-ct-dlname="' + esc(slug(m.nota || 'peixe')) + (caso ? '-story.jpg">Baixar' : '-editado.mp4">Baixar') + '</button>' : '') +
+        (st === 'pronta' || st === 'falhou' ? '<button type="button" class="btn px-julgar" data-ed-julgar="' + esc(m.id) + '">⚖ Julgar</button>' : '') +
+        '<button type="button" class="btn" data-ct-open="' + esc(m.id) + '">Ver original</button>' +
+        (st !== 'editando' ? '<button type="button" class="btn" data-ct-unedit="' + esc(m.id) + '">Tirar da fila</button>' : '') + '</div>' +
+        (aberto ? '<div class="ed-fb"><label>O que você quer mudar?<textarea rows="3" maxlength="1500" data-ct-fbtxt="' + esc(m.id) + '" placeholder="' + (caso ? 'Ex.: a foto de cima ficou cortada nos dentes; troca o título para “Sorriso novo em uma sessão”' : 'Ex.: o texto do gancho cobriu meu rosto; corta a parte em que eu gaguejo, perto dos 12 segundos') + '">' + esc(ct.fbTxt[m.id] || '') + '</textarea></label>' +
+          '<div class="acts"><button type="button" class="btn primary" data-ct-refazer="' + esc(m.id) + '">Mandar para o Peixe agora</button><button type="button" class="btn" data-ed-julgar="' + esc(m.id) + '">Cancelar</button></div></div>' : '') +
+        (caso && st === 'pronta' ? ajusteCaso(m) : '') +
+        (e.historico && e.historico.length ? '<details><summary class="hint">Julgamentos anteriores (' + e.historico.length + ')</summary>' + e.historico.map(function (h) { return '<p class="hint">' + esc(fmtDay((h.data || '').slice(0, 10))) + ': ' + esc(h.feedback) + (h.resposta ? ' → ' + esc(h.resposta) : '') + '</p>'; }).join('') + '</details>' : '') +
+        '</div></article>';
+    }).join('') + '</div>';
   }
 
   function ctPost(p) {
@@ -2230,7 +2405,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var cur = ct.desafios || {}, f = Object.assign({}, cur.feitos || {});
     if (tipo) f[n] = midia ? { data: todayIso(), tipo: tipo, midia: midia } : { data: todayIso(), tipo: tipo };
     else delete f[n];
-    ct.desafios = { inicio: cur.inicio || todayIso(), feitos: f };   // mostra já; o banco confirma em seguida
+    ct.desafios = Object.assign({}, cur, { inicio: cur.inicio || todayIso(), feitos: f });   // mostra já; o banco confirma em seguida (mantém as metas)
     render();
     return state.db.doc('config/desafios').set(ct.desafios).catch(function () { ct.msg = 'O desafio não foi salvo. Tente de novo.'; render(); });
   }
@@ -2252,6 +2427,80 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
           '<button type="button" class="btn" data-ds-min="' + d.n + '">Fiz a versão mínima</button></div>') + '</article>';
   }
 
+  // ---------- Metas do dia (12/11/2026): vários objetivos concretos por dia, cada um com "Fiz" ----------
+  // Banco: config/desafios.metas = [{ id, texto, tipo, dia: 'aaaa-mm-dd' (quando entrou), feito: null | 'aaaa-mm-dd', por: 'lisa'|'painel'|'pedro' }]
+  // O que não foi feito passa para o dia seguinte. A Lisa lê o histórico para os gráficos e põe os posts do cronograma aqui.
+  var MT_TIPO = { story: ['Story', '#d6336c'], post: ['Post', '#7c3fd0'], reels: ['Reels', '#2563eb'], tiktok: ['TikTok', '#111113'], interacao: ['Interação', '#0a7f70'], estudo: ['Estudo', '#b5740a'], outro: ['Meta', '#5a6270'] };
+  var MT_BANCO = [
+    [['story', '3 stories: 1 atendendo, 1 estudando à noite e 1 da sua rotina'], ['interacao', 'Responder todas as DMs e comentários do dia'], ['interacao', 'Comentar em 5 perfis de Curitiba (clínicas, academias, cafés)']],
+    [['story', '2 stories: 1 do consultório e 1 explicando algo em 15 segundos'], ['reels', 'Gravar 1 vídeo curto com uma dúvida que paciente sempre faz'], ['interacao', 'Responder todas as DMs e comentários do dia']],
+    [['story', '3 stories: 1 correndo ou treinando, 1 atendendo e 1 estudando'], ['post', 'Postar o conteúdo aprovado do dia (ou um story com caixinha de perguntas)'], ['interacao', 'Mandar mensagem para 2 pacientes antigos perguntando como estão']],
+    [['story', '2 stories: bastidor de um caso (sem paciente) e 1 pessoal'], ['estudo', 'Separar 1 foto de antes e depois com permissão para o Peixe montar'], ['interacao', 'Comentar em 5 perfis de Curitiba']],
+    [['story', '3 stories: 1 com caixinha de perguntas, 1 atendendo e 1 da rotina'], ['tiktok', 'Subir 1 vídeo no painel para ir ao TikTok'], ['interacao', 'Responder todas as DMs e comentários do dia']]
+  ];
+  function mtLista() { return (ct.desafios && ct.desafios.metas) || []; }
+  function mtSalvar(metas, erro) {
+    var cur = ct.desafios || {};
+    ct.desafios = Object.assign({}, cur, { metas: metas }); render();
+    return state.db.doc('config/desafios').set(ct.desafios).catch(function () { ct.msg = erro || 'A meta não foi salva. Tente de novo.'; render(); });
+  }
+  // na primeira abertura do dia, se ninguém (nem a Lisa) pôs metas de hoje, o painel sugere 3 do banco
+  function mtGarantirHoje() {
+    if (!ct.desafios || !state.db || !ct.assets) return;
+    var h = todayIso(), l = mtLista();
+    if (l.some(function (m) { return m.dia === h; }) || ct.mtGerado === h) return;
+    ct.mtGerado = h;
+    var dn = Math.floor(new Date(h + 'T12:00:00').getTime() / 86400000), base = MT_BANCO[dn % MT_BANCO.length];
+    var pend = l.filter(function (m) { return !m.feito; }).map(function (m) { return m.texto; });
+    var novas = base.filter(function (b) { return pend.indexOf(b[1]) < 0; }).map(function (b, i) { return { id: h + '-p' + i, texto: b[1], tipo: b[0], dia: h, feito: null, por: 'painel' }; });
+    // guarda só os últimos 90 dias de histórico
+    var corte = isoOf(new Date(Date.now() - 90 * 86400000));
+    mtSalvar(l.filter(function (m) { return (m.feito || m.dia) >= corte || !m.feito; }).concat(novas));
+  }
+  function mtHoje() {
+    var h = todayIso(), l = mtLista();
+    return l.filter(function (m) { return !m.feito || m.feito === h; }).sort(function (a, b) { return (a.feito ? 1 : 0) - (b.feito ? 1 : 0) || (a.dia || '').localeCompare(b.dia || ''); });
+  }
+  function ctMetas() {
+    var h = todayIso(), l = mtHoje(), feitas = l.filter(function (m) { return m.feito; }).length;
+    var pct = l.length ? Math.round(feitas / l.length * 100) : 0;
+    return '<section class="mt-box"><div class="mt-head"><div><h2>Metas de hoje</h2><p class="hint">O que não fizer passa para amanhã. O que fizer vai para os gráficos da Lisa.</p></div>' +
+      '<div class="mt-placar"><b>' + feitas + '<small>/' + l.length + '</small></b><div class="mt-barra"><i style="width:' + pct + '%"></i></div></div></div>' +
+      (l.length ? '<div class="mt-list">' + l.map(function (m) {
+        var t = MT_TIPO[m.tipo] || MT_TIPO.outro, atraso = !m.feito && m.dia < h ? diasAte(m.dia) * -1 : 0;
+        return '<div class="mt-item' + (m.feito ? ' ok' : '') + '" style="--mc:' + t[1] + '"><span class="mt-tag">' + esc(t[0]) + '</span>' +
+          '<span class="mt-tx">' + esc(m.texto) + (atraso ? '<small>veio de ' + (atraso === 1 ? 'ontem' : 'há ' + atraso + ' dias') + '</small>' : '') + (m.por === 'lisa' ? '<small>pela Lisa</small>' : '') + '</span>' +
+          (m.feito ? '<button type="button" class="mt-fiz on" data-mt-desfaz="' + esc(m.id) + '" title="Desmarcar">✓ Fiz</button>' : '<button type="button" class="mt-fiz" data-mt-fiz="' + esc(m.id) + '">Fiz</button>') + '</div>';
+      }).join('') + '</div>' : '<p class="hint">Nenhuma meta para hoje ainda.</p>') +
+      (ct.mtNova != null ? '<div class="mt-nova"><select data-mt-f="tipo">' + Object.keys(MT_TIPO).map(function (k) { return '<option value="' + k + '"' + ((ct.mtNova.tipo || 'story') === k ? ' selected' : '') + '>' + MT_TIPO[k][0] + '</option>'; }).join('') + '</select>' +
+          '<input type="text" maxlength="120" data-mt-f="texto" value="' + esc(ct.mtNova.texto || '') + '" placeholder="Ex.: 1 story mostrando a clínica de Araucária"><button type="button" class="btn primary" data-mt-add="1">Pôr</button><button type="button" class="btn" data-mt-cancel="1">Cancelar</button></div>'
+        : '<button type="button" class="link-btn" data-mt-nova="1">+ Pôr uma meta minha</button>') + '</section>';
+  }
+  function mtClick(t) {
+    var a, l = mtLista(), h = todayIso();
+    if ((a = t.closest('[data-mt-fiz]'))) { var id = a.getAttribute('data-mt-fiz'); mtSalvar(l.map(function (m) { return m.id === id ? Object.assign({}, m, { feito: h }) : m; })); return true; }
+    if ((a = t.closest('[data-mt-desfaz]'))) { var id2 = a.getAttribute('data-mt-desfaz'); mtSalvar(l.map(function (m) { return m.id === id2 ? Object.assign({}, m, { feito: null }) : m; })); return true; }
+    if (t.closest('[data-mt-nova]')) { ct.mtNova = { tipo: 'story', texto: '' }; render(); return true; }
+    if (t.closest('[data-mt-cancel]')) { ct.mtNova = null; render(); return true; }
+    if (t.closest('[data-mt-add]')) {
+      var tx = ((ct.mtNova && ct.mtNova.texto) || '').trim(); if (!tx) return true;
+      var nova = { id: h + '-u' + Date.now().toString(36), texto: tx, tipo: ct.mtNova.tipo || 'outro', dia: h, feito: null, por: 'pedro' };
+      ct.mtNova = null; mtSalvar(l.concat([nova])); return true;
+    }
+    return false;
+  }
+  // histórico por dia (para a Lisa): feitas e total de cada dia, dos últimos n dias
+  function mtHistorico(n) {
+    var l = mtLista(), out = [];
+    for (var i = n - 1; i >= 0; i--) {
+      var iso = isoOf(new Date(Date.now() - i * 86400000));
+      var tot = l.filter(function (m) { return m.dia <= iso && (!m.feito || m.feito >= iso); }).length;
+      var ok = l.filter(function (m) { return m.feito === iso; }).length;
+      out.push({ iso: iso, ok: ok, tot: tot });
+    }
+    return out;
+  }
+
   function dsResumo() {
     var f = dsFeitos(), total = Object.keys(f).length, sem = dsSemana(), nSem = sem.filter(function (x) { return x.feito; }).length, h = todayIso();
     return '<div class="ds-resumo"><div><span class="ds-big">' + nSem + '<small> de 5</small></span><span class="hint">dias com desafio nesta semana</span>' +
@@ -2271,7 +2520,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         '<p class="hint">Amanhã: <b>' + esc(d.titulo) + '</b> (' + esc(d.tempo) + ')</p>' +
         '<div class="acts"><button type="button" class="btn" data-ds-adiantar="1">Quero adiantar o de amanhã</button></div></div>';
     } else corpo = dsCard(d, null);
-    return dsResumo() + corpo +
+    setTimeout(mtGarantirHoje);
+    return ctMetas() + '<h2 class="mt-trilha">Desafio da trilha</h2>' + dsResumo() + corpo +
       '<p class="hint ds-regra">Um desafio por dia, meta de 5 dias por semana. Perdeu um dia? Nada zera: é só fazer o próximo. ' +
       'O que você gravar sobe aqui: a Duda analisa e o Peixe edita.' + (duda ? ' <button type="button" class="link-btn" style="margin:0" data-ds-duda="1">A Duda trouxe ' + duda + ' ideias hoje</button>' : '') + '</p>';
   }
@@ -2434,7 +2684,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
   function renderConteudo() {
     var head = '<header class="page-head"><span class="eyebrow">Conteúdo</span><h1>Conteúdo</h1>' +
-      '<p>Um desafio pequeno por dia para você sair do zero no Instagram. O que você gravar sobe aqui: a Duda analisa e o Peixe edita.</p></header>';
+      '<p>Seus arquivos, os antes e depois e as metas do dia. O que você gravar sobe aqui: a Duda analisa e o Peixe edita.</p></header>';
     if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b> Abra o painel pelo claude.ai, logado na sua conta.') + '</div>';
     var nPost = (ct.posts || []).filter(function (p) { return p.data >= todayIso() && p.estado !== 'descartado'; }).length;
     var views = [['banco', 'Meus arquivos'], ['hoje', 'Desafios do dia'], ['trilha', 'Trilha'], ['cronograma', 'Posts da Lisa' + (nPost ? ' (' + nPost + ')' : '')]];
@@ -2539,6 +2789,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (dsClick(t)) return;
     if (ajClick(t)) return;
     if (adClick(t)) return;
+    if (mtClick(t)) return;
     if ((a = t.closest('[data-ct-view]'))) { ct.view = a.getAttribute('data-ct-view'); ct.dsVer = null; ct.dsAdiantar = false; render(); return; }
     if ((a = t.closest('[data-ct-pasta]'))) { ct.pasta = a.getAttribute('data-ct-pasta'); ct.sel = null; ad.novo = null; ad.msg = null; window.scrollTo(0, 0); render(); return; }
     if (t.closest('[data-ct-up]')) { ct.up = { pasta: ct.pasta || '', paciente: '', nota: '', files: null }; ct.upErr = null; ct.msg = null; render(); window.scrollTo(0, 0); return; }
@@ -2565,9 +2816,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       var ne = { status: 'pedida', pedido: e0.pedido || '', texto_gancho: e0.texto_gancho || '', cortes: e0.cortes || [], pedido_em: agora,
         feedback: fbt, rodada: (e0.rodada || 1) + 1, historico: (e0.historico || []).concat([{ data: agora, feedback: fbt }]) };
       if (e0.tipo === 'caso') { ne.tipo = 'caso'; ne.final_asset = e0.final_asset; ne.destaque = e0.destaque || ''; ne.titulo = e0.titulo || ''; }
+      ne.julgar = true;   // 12/11/2026: o vigia chama o Peixe na hora
       if (e0.asset) ne.anterior = e0.asset;   // o Peixe apaga a versão antiga quando subir a nova
       a.disabled = true; a.textContent = 'Enviando…';
-      state.db.doc('midia/' + mf.id).update({ edicao: ne }).then(function () { delete ct.fbTxt[mf.id]; ct.msg = 'Pedido enviado. O Peixe refaz na próxima rodada, às 8h.'; render(); },
+      state.db.doc('midia/' + mf.id).update({ edicao: ne }).then(function () { delete ct.fbTxt[mf.id]; ct.julgar = null; ct.msg = 'O Peixe recebeu seu julgamento e já está trabalhando: em poucos minutos aparece a nova versão aqui, com o retorno dele e da Duda (com o computador ligado).'; render(); },
         function (err) { ct.msg = 'O pedido não foi (' + ((err && (err.message || err.code)) || 'erro') + '). Tente de novo.'; render(); });
       return;
     }
@@ -2583,8 +2835,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         .then(render);
       return;
     }
+    if ((a = t.closest('[data-ed-julgar]'))) { var jid = a.getAttribute('data-ed-julgar'); ct.julgar = ct.julgar === jid ? null : jid; render(); return; }
     if ((a = t.closest('[data-ct-unedit]'))) {
       var mu = (ct.midia || []).find(function (x) { return x.id === a.getAttribute('data-ct-unedit'); }); if (!mu) return;
+      if (mu.edicao && mu.edicao.status === 'pronta') { state.db.doc('midia/' + mu.id).update({ edicao: Object.assign({}, mu.edicao, { arquivado: true }) }).catch(function () { ct.msg = 'Não deu para tirar da fila.'; render(); }); return; }
       var body = Object.assign({}, mu); delete body.id; delete body.edicao;
       state.db.doc('midia/' + mu.id).set(body).catch(function () { ct.msg = 'Não deu para tirar da fila.'; render(); });
       return;
@@ -2690,10 +2944,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<button type="button" class="btn primary" data-pc-retok="' + esc(p.id) + '|' + esc(r.id) + '">Feito</button>' +
       (comNome ? '' : '<button type="button" class="btn" data-pc-retdel="' + esc(r.id) + '">Apagar</button>') + '</div></div>';
   }
+  function avatarMini(id) { return '<span class="av-mini">' + avatar(id) + '</span>'; }
   function pcRetPainel() {
     var l = pcAgenda(), perto = l.filter(function (x) { return diasAte(x.r.data) <= PC_JANELA; }), depois = l.length - perto.length;
     if (!l.length) return '';
-    return '<section class="pc-rets"><h2>Retornos para chamar' + (perto.length ? ' (' + perto.length + ')' : '') + '</h2>' +
+    return '<section class="pc-rets"><h2>' + avatarMini('amanda') + 'Retornos para chamar' + (perto.length ? ' (' + perto.length + ')' : '') + ' <small class="hint">· Amanda</small></h2>' +
       (perto.length ? perto.map(function (x) { return pcRetLinha(x.p, x.r, true); }).join('') : '<p class="hint">Nenhum nos próximos ' + PC_JANELA + ' dias.</p>') +
       (depois ? '<p class="hint">Mais ' + depois + (depois === 1 ? ' retorno agendado' : ' retornos agendados') + ' depois disso.</p>' : '') + '</section>';
   }
@@ -3024,6 +3279,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (pef && ct.pe) ct.pe[pef] = e.target.value;
     var ajf = e.target.getAttribute && e.target.getAttribute('data-aj-f');
     if (ajf) { var pp = ajf.split('|'); if (ct.aj[pp[0]]) ct.aj[pp[0]][pp[1]] = e.target.value; }
+    if (e.target.hasAttribute && e.target.hasAttribute('data-agc-f')) ag.contaTxt = e.target.value;
+    var mtf = e.target.getAttribute && e.target.getAttribute('data-mt-f');
+    if (mtf && ct.mtNova) ct.mtNova[mtf] = e.target.value;
     var adf = e.target.getAttribute && e.target.getAttribute('data-ad-f');
     if (adf && ad.novo && adf !== 'perm') ad.novo[adf] = e.target.value;
     var cf =e.target.getAttribute && e.target.getAttribute('data-ct-f');
