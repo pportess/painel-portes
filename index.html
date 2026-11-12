@@ -441,6 +441,41 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .ct-ed { margin: 0; font-size: 13px; font-weight: 600; color: #3f6f60; display: flex; flex-direction: column; gap: 6px; }
 .ct-ed.bad { color: var(--bad); }
 .ct-ed video { width: 100%; max-height: 420px; border-radius: 10px; background: #111; }
+.pa-list { display: flex; flex-direction: column; gap: 8px; }
+.pa-row { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; font: inherit; color: var(--fg); padding: 10px 14px; border: 1px solid var(--line); border-left: 4px solid var(--pc, #8c8f97); border-radius: 14px; background: var(--panel); cursor: pointer; }
+.pa-row:hover { box-shadow: var(--soft); }
+.pa-row i { font-style: normal; color: var(--muted); font-size: 20px; }
+.pa-main { --pc: #7b1e2b; background: linear-gradient(90deg, #fbeef0, var(--panel)); padding: 14px; }
+.pa-ic { width: 44px; height: 44px; border-radius: 12px; display: grid; place-items: center; background: var(--pc, #8c8f97); color: #fff; font-size: 20px; flex: none; }
+.pa-th { width: 44px; height: 44px; border-radius: 12px; overflow: hidden; flex: none; }
+.pa-img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pa-tx { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+.pa-tx small { color: var(--muted); font-size: 12px; }
+.pa-n { font-weight: 800; color: var(--pc, var(--muted)); }
+.pa-new { border-style: dashed; }
+.pa-new input { flex: 1; }
+.ad-top { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.ad-list { display: flex; flex-direction: column; gap: 10px; }
+.ad-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; padding: 10px; border: 1px solid var(--line); border-radius: 14px; background: var(--panel); }
+.ad-abre { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 220px; border: 0; background: none; font: inherit; color: var(--fg); text-align: left; cursor: pointer; padding: 0; }
+.ad-par { display: flex; gap: 4px; flex: none; }
+.ad-par img, .ad-par i { width: 56px; height: 56px; border-radius: 10px; object-fit: cover; background: var(--field); display: block; }
+.ad-tx { display: flex; flex-direction: column; gap: 2px; }
+.ad-tx small { color: var(--muted); }
+.ad-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.ad-chip { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--field); }
+.ad-chip.ok { background: #e3f4ea; color: #1f7a45; } .ad-chip.bad { background: #fbe4e6; color: #a3283a; } .ad-chip.wait { background: #ece6fb; color: #5b33b0; }
+.ad-perm { display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
+.ad-perm legend { width: 100%; }
+.ad-perm label { display: inline-flex; align-items: center; gap: 6px; flex-direction: row; }
+.ad-perm input { width: auto; margin: 0; }
+.ad-boxes { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 12px 0; }
+.ad-box { position: relative; aspect-ratio: 4 / 5; border: 2px dashed var(--line); border-radius: 16px; display: grid; place-items: center; overflow: hidden; cursor: pointer; background: var(--field); }
+.ad-box.tem { border-style: solid; border-color: #7b1e2b; }
+.ad-box img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.ad-box input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+.ad-plus { font-size: 40px; color: var(--muted); }
+.ad-rot { position: absolute; left: 10px; top: 10px; background: #7b1e2b; color: #fff; font-weight: 700; font-size: 13px; padding: 3px 10px; border-radius: 8px; }
 .ct-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 12px; }
 .tile { position: relative; aspect-ratio: 1; border: 0; border-radius: 16px; overflow: hidden; padding: 14px; text-align: left; font: inherit;
   display: flex; flex-direction: column; justify-content: flex-end; color: #fff; background: linear-gradient(160deg, #6fa594, #3f6f60); isolation: isolate; }
@@ -1257,7 +1292,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     else if (s === 'lisa') { state.section = 'agentes'; state.agent = 'lisa'; state.agTab.lisa = 'mensagens'; }
     else if (s.indexOf('ag:') === 0) { state.section = 'agentes'; state.agent = s.slice(3); }
     else { state.section = s; state.agent = null; try { localStorage.setItem('painel:aba', s); } catch (err) {} }
-    if (s === 'conteudo') { ct.view = 'hoje'; ctEnter(); }
+    if (s === 'conteudo') { ct.view = 'banco'; ctEnter(); }
     render(); window.scrollTo(0, 0);
   }
 
@@ -1770,7 +1805,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var PACIENTE = { nao: 'Sem paciente', autorizado: 'Paciente com autorização (TCLE)', sem_tcle: 'Paciente SEM autorização' };
   var MIDIA_ST = { novo: 'Novo', analisado: 'Analisado pela Duda', agendado: 'No cronograma', postado: 'Postado' };
   var POST_ST = { proposto: 'Proposta da Duda', aprovado: 'Aprovado', postado: 'Postado', descartado: 'Descartado' };
-  var ct = { assets: null, downloads: null, ready: false, view: 'hoje', pastas: null, midia: null, posts: null, pasta: '', usage: null,
+  var ct = { assets: null, downloads: null, ready: false, view: 'banco', pastas: null, midia: null, posts: null, pasta: '', usage: null,
     up: null, upErr: null, prog: null, sel: null, confirmDel: false, msg: null, newFolder: null, showOld: false,
     desafios: null, dsAdiantar: false, dsVer: null, confirmEd: null, fbTxt: {}, aj: {}, ajOpen: null };
 
@@ -1869,21 +1904,25 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var pastas = ct.pastas || [], all = ct.midia || [];
     var m = ct.sel && all.find(function (x) { return x.id === ct.sel; });
     if (m) return ctDetail(m);
+    if (ct.pasta === '__ad') return ctAntesDepois();
     if (ct.pasta) {
       var list = all.filter(function (x) { return x.pasta === ct.pasta; });
       return '<button type="button" class="back" data-ct-pasta="">← Pastas</button><h2 class="ct-title">' + esc(pastaNome(ct.pasta)) + ' <span>' + list.length + '</span></h2>' +
         (list.length ? '<div class="ct-grid">' + list.map(card).join('') + '</div>' : '<div class="empty">Nada nesta pasta ainda. Toque em "+ Enviar fotos e vídeos".</div>');
     }
-    // "Antes e depois" leva às fichas dos pacientes (só o Pedro vê)
-    var ad = window.painelDono ? '<button type="button" class="tile tile-ad" data-goto="pacientes"><span class="tile-n">' + ((pc.lista || []).length) + '</span>' +
-      '<span class="tile-name">Antes e depois · pacientes</span></button>' : '';
-    return '<div class="ct-tiles">' + ad + pastas.map(function (p) {
+    // 11/11/2026: pastas em lista (linhas), com "Antes e depois" em destaque no topo (só o Pedro vê)
+    var CORES = ['#d6336c', '#7c3fd0', '#2563eb', '#0a7f70', '#b5740a', '#1479b8', '#d9622b'];
+    var nAd = window.painelDono ? adLista().length : 0;
+    var topo = window.painelDono ? '<button type="button" class="pa-row pa-main" data-ct-pasta="__ad"><span class="pa-ic">⇆</span>' +
+      '<span class="pa-tx"><b>Antes e depois</b><small>Nome, idade, permissão e as duas fotos · o Peixe monta o story</small></span><span class="pa-n">' + nAd + '</span><i>›</i></button>' : '';
+    return '<div class="pa-list">' + topo + pastas.filter(function (p) { return p.id !== AD_PASTA.id; }).map(function (p, n) {
       var items = all.filter(function (x) { return x.pasta === p.id; }), last = items[0];
-      return '<button type="button" class="tile" data-ct-pasta="' + esc(p.id) + '">' + (last ? thumb(last, 'tile-bg') : '') +
-        '<span class="tile-n">' + items.length + '</span><span class="tile-name">' + esc(p.nome) + '</span></button>';
+      return '<button type="button" class="pa-row" data-ct-pasta="' + esc(p.id) + '" style="--pc:' + CORES[n % CORES.length] + '">' +
+        (last ? '<span class="pa-th">' + thumb(last, 'pa-img') + '</span>' : '<span class="pa-ic">▢</span>') +
+        '<span class="pa-tx"><b>' + esc(p.nome) + '</b><small>' + (last ? 'Último: ' + esc(fmtDay((last.criado || '').slice(0, 10))) : 'Vazia') + '</small></span><span class="pa-n">' + items.length + '</span><i>›</i></button>';
     }).join('') +
-      (ct.newFolder != null ? '<div class="tile new"><input type="text" maxlength="40" data-ct-f="newFolder" value="' + esc(ct.newFolder) + '" placeholder="Nome da pasta"><button type="button" class="btn" data-ct-addyes="1">Criar</button></div>'
-        : '<button type="button" class="tile new" data-ct-addfolder="1"><span class="tile-n">+</span><span class="tile-name">Nova pasta</span></button>') + '</div>' +
+      (ct.newFolder != null ? '<div class="pa-row pa-new"><input type="text" maxlength="40" data-ct-f="newFolder" value="' + esc(ct.newFolder) + '" placeholder="Nome da pasta"><button type="button" class="btn" data-ct-addyes="1">Criar</button></div>'
+        : '<button type="button" class="pa-row pa-new" data-ct-addfolder="1"><span class="pa-ic">+</span><span class="pa-tx"><b>Nova pasta</b></span></button>') + '</div>' +
       (all.length ? '' : '<p class="note">O banco está vazio. Envie as fotos e os vídeos que você gravar; a Duda analisa cada um.</p>');
   }
 
@@ -2272,15 +2311,136 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     return false;
   }
 
+  // ---------- Antes e depois (11/11/2026): pasta principal de Meus arquivos; só o Pedro vê ----------
+  // O nome, a idade e as fotos ficam na ficha do paciente (coleção "pacientes", só o dono). Para o Peixe montar o story,
+  // as duas fotos vão também para o banco de mídia SEM nome nem idade, como um caso (foto inicial e final).
+  var ad = { novo: null, prog: null, err: null, msg: null, prev: {} };
+  var AD_PASTA = { id: 'antes-e-depois', nome: 'Antes e depois' };
+  function adLista() { return (pc.lista || []).filter(function (p) { return (p.fotos || []).length; }).sort(function (a, b) { return (b.criado || '').localeCompare(a.criado || ''); }); }
+  function adEstado(p) {
+    var m = p.caso_midia && (ct.midia || []).find(function (x) { return x.id === p.caso_midia; });
+    if (!m || !m.edicao) return '';
+    var st = m.edicao.status;
+    return '<span class="ad-chip ' + (st === 'pronta' ? 'ok' : st === 'falhou' ? 'bad' : 'wait') + '">' + (st === 'pronta' ? '✓ Story pronto' : st === 'falhou' ? 'Story falhou' : '✂ Peixe montando') + '</span>';
+  }
+  function adNovoForm() {
+    var n = ad.novo;
+    if (ad.prog) return '<div class="ag-form"><h2>Salvando</h2><p class="hint">' + esc(ad.prog) + '</p><p class="hint">Não feche o painel até terminar.</p></div>';
+    function caixa(k, rot) {
+      return '<label class="ad-box' + (ad.prev[k] ? ' tem' : '') + '">' + (ad.prev[k] ? '<img src="' + ad.prev[k] + '" alt="">' : '<span class="ad-plus">+</span>') +
+        '<span class="ad-rot">' + rot + '</span><input type="file" accept="image/*" data-ad-file="' + k + '"></label>';
+    }
+    return '<button type="button" class="back" data-ad-voltar="1">← Antes e depois</button>' +
+      '<div class="ag-form ad-form"><h2>Novo antes e depois</h2>' +
+      '<div class="grid ad-dados"><label>Nome<input type="text" maxlength="80" data-ad-f="nome" value="' + esc(n.nome) + '" placeholder="Nome do paciente"></label>' +
+      '<label>Idade<input type="number" min="0" max="120" inputmode="numeric" data-ad-f="idade" value="' + esc(n.idade) + '" placeholder="Ex.: 34"></label></div>' +
+      '<fieldset class="ct-radio ad-perm"><legend>Permissão de uso de imagem (TCLE assinado)?</legend>' +
+      [['sim', 'Sim'], ['nao', 'Não']].map(function (o) { return '<label><input type="radio" name="ad-perm" data-ad-f="perm" value="' + o[0] + '"' + (n.perm === o[0] ? ' checked' : '') + '> ' + o[1] + '</label>'; }).join('') + '</fieldset>' +
+      '<div class="ad-boxes">' + caixa('antes', 'Antes') + caixa('depois', 'Depois') + '</div>' +
+      '<details class="ad-tit"' + (n.destaque || n.titulo ? ' open' : '') + '><summary>Título do story (opcional)</summary><div class="grid">' +
+      '<label>Palavra na caixa bordô<input type="text" maxlength="20" data-ad-f="destaque" value="' + esc(n.destaque) + '" placeholder="Ex.: Emergência"></label>' +
+      '<label>Resto do título<input type="text" maxlength="70" data-ad-f="titulo" value="' + esc(n.titulo) + '" placeholder="Ex.: da tarde: incisivo fraturado."></label></div>' +
+      '<p class="hint">Com os dois preenchidos, o Peixe monta em menos de 1 minuto. Em branco, ele escreve o título e monta em até 15 minutos. O nome e a idade nunca vão para o story.</p></details>' +
+      (ad.err ? '<p class="hint bad">' + esc(ad.err) + '</p>' : '') +
+      (n.perm === 'nao' ? '<p class="hint">Sem permissão: as fotos ficam salvas, e o story pode ser montado, mas não pode ser postado.</p>' : '') +
+      '<div class="acts"><button type="button" class="btn primary" data-ad-salvar="peixe">Salvar e mandar para o Peixe</button><button type="button" class="btn" data-ad-salvar="so">Só salvar</button><button type="button" class="btn" data-ad-voltar="1">Cancelar</button></div></div>';
+  }
+  function ctAntesDepois() {
+    if (!window.painelDono) return '<button type="button" class="back" data-ct-pasta="">← Meus arquivos</button><div class="empty"><b>Só o Pedro vê os antes e depois.</b></div>';
+    if (pc.lista == null) return '<div class="empty">Carregando…</div>';
+    if (ad.novo) return adNovoForm();
+    var l = adLista();
+    return '<button type="button" class="back" data-ct-pasta="">← Meus arquivos</button>' +
+      '<div class="ad-top"><h2 class="ct-title">Antes e depois <span>' + l.length + '</span></h2><button type="button" class="btn primary" data-ad-novo="1">+ Novo</button></div>' +
+      (ad.msg ? '<div class="ag-warn">' + esc(ad.msg) + '</div>' : '') +
+      (l.length ? '<div class="ad-list">' + l.map(function (p) {
+        var a = fotosDe(p, 'antes'), d = fotosDe(p, 'depois'), fa = a[0], fd = d[d.length - 1];
+        return '<div class="ad-row"><button type="button" class="ad-abre" data-pc-abrir="' + esc(p.id) + '">' +
+          '<span class="ad-par">' + (fa ? '<img src="' + blobUrl(fa.asset) + '" alt="Antes" loading="lazy">' : '<i></i>') + (fd ? '<img src="' + blobUrl(fd.asset) + '" alt="Depois" loading="lazy">' : '<i></i>') + '</span>' +
+          '<span class="ad-tx"><b>' + esc(p.nome) + (p.idade ? ', ' + esc(p.idade) + ' anos' : '') + '</b><small>' + esc(fmtDay((p.criado || '').slice(0, 10))) + '</small>' +
+          '<span class="ad-chips"><span class="ad-chip ' + (p.divulgacao === 'sim' ? 'ok' : 'bad') + '">' + (p.divulgacao === 'sim' ? 'Com permissão' : 'Sem permissão') + '</span>' + adEstado(p) + '</span></span></button>' +
+          (fa && fd && !p.caso_midia ? '<button type="button" class="btn" data-ad-peixe="' + esc(p.id) + '">Mandar para o Peixe</button>' : '') + '</div>';
+      }).join('') + '</div>' : '<div class="empty"><b>Nenhum antes e depois ainda.</b> Toque em "+ Novo", ponha o nome, a idade, a permissão e as duas fotos.</div>');
+  }
+  // sobe as duas fotos para o banco de mídia (sem nome) e pede o story ao Peixe
+  function adMandarPeixe(p, fa, fd, destaque, titulo) {
+    var casoId = 'caso-' + Date.now().toString(36), agora = new Date().toISOString(), perm = p.divulgacao === 'sim' ? 'autorizado' : 'sem_tcle';
+    function garantePasta() {
+      if ((ct.pastas || []).some(function (x) { return x.id === AD_PASTA.id; })) return Promise.resolve();
+      var novas = (ct.pastas || []).concat([AD_PASTA]);
+      return state.db.doc('config/conteudo').set({ pastas: novas }).then(function () { ct.pastas = novas; });
+    }
+    function sobe(blob, papel) {
+      return ct.assets.upload(blob, { type: 'image/jpeg' }).then(function (r) {
+        return state.db.doc('midia/' + r.id).set({ asset: r.id, tipo: 'foto', pasta: AD_PASTA.id, paciente: perm, nota: 'Caso · ' + papel,
+          criado: agora, tamanho: r.sizeBytes, status: 'novo', caso: casoId, papel: papel }).then(function () { return r.id; });
+      });
+    }
+    return garantePasta().then(function () { return Promise.all([fa, fd]); }).then(function (bs) {
+      return sobe(bs[0], 'inicial').then(function (idIni) {
+        return sobe(bs[1], 'final').then(function (idFim) {
+          return state.db.doc('midia/' + idIni).update({ edicao: { status: 'pedida', tipo: 'caso', final_asset: idFim, destaque: (destaque || '').trim(), titulo: (titulo || '').trim(),
+            pedido: 'Story do caso no modelo (inicial e final do mesmo tamanho, caixa bordô)', pedido_em: agora } }).then(function () { return idIni; });
+        });
+      });
+    }).then(function (idIni) { return state.db.doc('pacientes/' + p.id).update({ caso_midia: idIni }).then(function () { return idIni; }); });
+  }
+  // baixa uma foto da ficha (pasta privada) para mandar ao Peixe
+  function adBlob(asset) { return fetch(blobUrl(asset)).then(function (r) { if (!r.ok) throw new Error('foto'); return r.blob(); }); }
+  function adSalvar(peixe) {
+    var n = ad.novo;
+    ad.err = !(n.nome || '').trim() ? 'Escreva o nome.' : !n.perm ? 'Diga se tem permissão.' : !n.antes || !n.depois ? 'Coloque a foto de antes e a de depois.' : null;
+    if (ad.err) { render(); return; }
+    var id = pcId(), agora = new Date().toISOString(), blobs = {};
+    ad.prog = 'Preparando as fotos…'; render();
+    Promise.all([prepImage(n.antes), prepImage(n.depois), dataDaFoto(n.antes), dataDaFoto(n.depois)]).then(function (r) {
+      blobs.antes = r[0]; blobs.depois = r[1];
+      ad.prog = 'Salvando as fotos na ficha…'; render();
+      return Promise.all([ct.assets.upload(r[0], { type: 'image/jpeg', bucket: 'pacientes' }), ct.assets.upload(r[1], { type: 'image/jpeg', bucket: 'pacientes' })]).then(function (up) {
+        var nome = n.nome.trim();
+        return state.db.doc('pacientes/' + id).set({ nome: nome, busca: semAcento(nome), idade: n.idade ? String(n.idade).trim() : '', criado: agora, divulgacao: n.perm, obs: '',
+          fotos: [{ asset: up[0].id, fase: 'antes', data: r[2], enviado: agora }, { asset: up[1].id, fase: 'depois', data: r[3], enviado: agora }] });
+      });
+    }, function () { return Promise.reject({ code: 'decode' }); }).then(function () {
+      if (!peixe) return null;
+      ad.prog = 'Mandando para o Peixe (sem nome nem idade)…'; render();
+      return adMandarPeixe({ id: id, divulgacao: n.perm }, blobs.antes, blobs.depois, n.destaque, n.titulo);
+    }).then(function (enviado) {
+      Object.keys(ad.prev).forEach(function (k) { try { URL.revokeObjectURL(ad.prev[k]); } catch (e) {} });
+      ad.prog = null; ad.novo = null; ad.prev = {};
+      ad.msg = enviado ? ((n.destaque || '').trim() && (n.titulo || '').trim() ? 'Salvo. O Peixe está montando o story: fica pronto na aba Edição em menos de 1 minuto (com o computador ligado).'
+        : 'Salvo. Sem título, o Peixe escreve um e monta em até 15 minutos (com o computador ligado). Aparece na aba Edição.') + (n.perm === 'nao' ? ' Sem permissão: não poste.' : '') : 'Salvo na ficha do paciente.';
+      render(); window.scrollTo(0, 0);
+    }, function (e) {
+      ad.prog = null; ad.err = e && e.code === 'decode' ? 'Formato não aceito (foto HEIC: no iPhone use Ajustes › Câmera › Formatos › Mais compatível).' : 'Não deu certo. Tente de novo.'; render();
+    });
+  }
+  function adClick(t) {
+    var a;
+    if (t.closest('[data-ad-novo]')) { ad.novo = { nome: '', idade: '', perm: '', antes: null, depois: null, destaque: '', titulo: '' }; ad.err = null; ad.msg = null; render(); window.scrollTo(0, 0); return true; }
+    if (t.closest('[data-ad-voltar]')) { ad.novo = null; ad.err = null; ad.prev = {}; render(); return true; }
+    if ((a = t.closest('[data-ad-salvar]'))) { adSalvar(a.getAttribute('data-ad-salvar') === 'peixe'); return true; }
+    if ((a = t.closest('[data-pc-abrir]'))) { state.section = 'pacientes'; pc.sel = a.getAttribute('data-pc-abrir'); pc.foto = null; pc.up = null; pc.msg = null; renderNav(); render(); window.scrollTo(0, 0); return true; }
+    if ((a = t.closest('[data-ad-peixe]'))) {
+      var p = (pc.lista || []).find(function (x) { return x.id === a.getAttribute('data-ad-peixe'); }); if (!p) return true;
+      var fa = fotosDe(p, 'antes')[0], d = fotosDe(p, 'depois'), fd = d[d.length - 1];
+      a.disabled = true; a.textContent = 'Mandando…';
+      adMandarPeixe(p, adBlob(fa.asset), adBlob(fd.asset), '', '').then(function () { ad.msg = 'Mandado para o Peixe. Sem título, ele escreve um e monta em até 15 minutos.'; render(); },
+        function () { ad.msg = 'Não deu para mandar. Tente de novo.'; render(); });
+      return true;
+    }
+    return false;
+  }
+
   function renderConteudo() {
     var head = '<header class="page-head"><span class="eyebrow">Conteúdo</span><h1>Conteúdo</h1>' +
       '<p>Um desafio pequeno por dia para você sair do zero no Instagram. O que você gravar sobe aqui: a Duda analisa e o Peixe edita.</p></header>';
     if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b> Abra o painel pelo claude.ai, logado na sua conta.') + '</div>';
     var nPost = (ct.posts || []).filter(function (p) { return p.data >= todayIso() && p.estado !== 'descartado'; }).length;
-    var views = [['hoje', 'Desafio de hoje'], ['trilha', 'Trilha'], ['banco', 'Meus arquivos'], ['cronograma', 'Cronograma' + (nPost ? ' (' + nPost + ')' : '')]];
+    var views = [['banco', 'Meus arquivos'], ['hoje', 'Desafios do dia'], ['trilha', 'Trilha'], ['cronograma', 'Posts da Lisa' + (nPost ? ' (' + nPost + ')' : '')]];
     var bar = '<div class="ag-bar"><div class="seg ds-seg" role="group" aria-label="Visão">' + views.map(function (v) {
         return '<button type="button" data-ct-view="' + v[0] + '" aria-pressed="' + (ct.view === v[0]) + '">' + esc(v[1]) + '</button>'; }).join('') + '</div>' +
-      (ct.assets && (ct.view === 'banco' || ct.view === 'cronograma') ? '<button type="button" class="btn primary" data-ct-up="1">+ Enviar fotos e vídeos</button>' : '') + '</div>';
+      (ct.assets && ct.view === 'banco' && ct.pasta !== '__ad' ? '<button type="button" class="btn primary" data-ct-up="1">+ Enviar fotos e vídeos</button>' : '') + '</div>';
     var notes = '';
     if (ct.ready && !ct.assets) notes += '<div class="ag-warn">Só quem edita o painel pode enviar arquivos.</div>';
     if (ct.msg) notes += '<div class="ag-warn">' + esc(ct.msg) + '</div>';
@@ -2378,8 +2538,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var a;
     if (dsClick(t)) return;
     if (ajClick(t)) return;
+    if (adClick(t)) return;
     if ((a = t.closest('[data-ct-view]'))) { ct.view = a.getAttribute('data-ct-view'); ct.dsVer = null; ct.dsAdiantar = false; render(); return; }
-    if ((a = t.closest('[data-ct-pasta]'))) { ct.pasta = a.getAttribute('data-ct-pasta'); ct.sel = null; render(); return; }
+    if ((a = t.closest('[data-ct-pasta]'))) { ct.pasta = a.getAttribute('data-ct-pasta'); ct.sel = null; ad.novo = null; ad.msg = null; window.scrollTo(0, 0); render(); return; }
     if (t.closest('[data-ct-up]')) { ct.up = { pasta: ct.pasta || '', paciente: '', nota: '', files: null }; ct.upErr = null; ct.msg = null; render(); window.scrollTo(0, 0); return; }
     if ((a = t.closest('[data-goto]'))) { state.section = a.getAttribute('data-goto'); try { localStorage.setItem('painel:aba', state.section); } catch (err) {} render(); window.scrollTo(0, 0); return; }
     if ((a = t.closest('[data-ct-open]'))) { state.section = 'conteudo'; ct.view = 'banco'; ct.sel = a.getAttribute('data-ct-open'); render(); window.scrollTo(0, 0); return; }
@@ -2863,6 +3024,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (pef && ct.pe) ct.pe[pef] = e.target.value;
     var ajf = e.target.getAttribute && e.target.getAttribute('data-aj-f');
     if (ajf) { var pp = ajf.split('|'); if (ct.aj[pp[0]]) ct.aj[pp[0]][pp[1]] = e.target.value; }
+    var adf = e.target.getAttribute && e.target.getAttribute('data-ad-f');
+    if (adf && ad.novo && adf !== 'perm') ad.novo[adf] = e.target.value;
     var cf =e.target.getAttribute && e.target.getAttribute('data-ct-f');
     if (cf === 'newFolder') ct.newFolder = e.target.value;
     else if (cf && ct.up) ct.up[cf] = e.target.value;
@@ -2885,6 +3048,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       if (qual === 'ini') ct.up.ini = el.files[0] || null; else if (qual === 'fim') ct.up.fim = el.files[0] || null; else ct.up.files = el.files;
       return;
     }
+    if (el.hasAttribute('data-ad-file') && ad.novo) { var qk = el.getAttribute('data-ad-file'), fl = el.files[0] || null; ad.novo[qk] = fl; if (ad.prev[qk]) try { URL.revokeObjectURL(ad.prev[qk]); } catch (x) {} ad.prev[qk] = fl ? URL.createObjectURL(fl) : null; ad.err = null; render(); return; }
+    if (el.getAttribute('data-ad-f') === 'perm' && ad.novo) { ad.novo.perm = el.value; render(); return; }
     if (el.getAttribute('data-ct-f') === 'caso' && ct.up) { ct.up.caso = el.value; ct.up.files = null; ct.up.ini = null; ct.up.fim = null; render(); return; }
     if (el.hasAttribute('data-pc-file') && pc.up) { pc.up.files = el.files; pc.up.err = null; return; }
     if (el.getAttribute('data-pc-f') === 'fase' && pc.up) { pc.up.fase = el.value; return; }
