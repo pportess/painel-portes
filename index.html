@@ -840,6 +840,17 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .mk-leg small, .mk-bloco small, .mk-onde small { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #8a6a55; }
 .mk-leg p { white-space: normal; color: #3b2a20; }
 .mk-cfo { font-size: 12px; color: #24874a; }
+.mk-pq { display: grid; gap: 8px; margin: 10px 0; }
+.mk-pq p { margin: 0; padding: 9px 12px; border-radius: 10px; background: #fbf7f2; border: 1px solid #eadfd2; font-size: 13.5px; line-height: 1.45; color: #3b2a20; }
+.mk-pq p.cap-pac { background: #f4e7e9; border-color: #e3c9cd; }
+.mk-pq small { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #8a6a55; margin-bottom: 2px; }
+.mk-rt { list-style: none; margin: 6px 0 0; padding: 0; }
+.mk-rt li { display: grid; grid-template-columns: 68px 1fr; gap: 4px 10px; padding: 8px 0; border-top: 1px solid #eadfd2; }
+.mk-rt li:first-child { border-top: 0; }
+.mk-rt b { font-size: 12px; color: #7a1f2b; padding-top: 2px; }
+.mk-rt span { font-size: 14px; color: #2a1d16; line-height: 1.45; }
+.mk-rt em { grid-column: 2; font-style: normal; font-size: 12px; color: #6b5444; }
+.mk-rt em i { font-style: normal; font-weight: 700; color: #7a1f2b; }
 .mk-gancho { margin: 12px 0; padding: 12px 14px; border-left: 4px solid var(--pc, #7a1f2b); background: #fbf7f2; font-size: 17px; font-weight: 700; color: #2a1d16; border-radius: 0 10px 10px 0; }
 .mk-onde { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 8px 0; font-size: 13px; }
 .mk-det summary { cursor: pointer; font-weight: 700; color: #7a1f2b; margin: 8px 0; }
@@ -3310,7 +3321,13 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         '<h3>' + esc(x.titulo || '') + '</h3>' +
         '<div class="mk-onde">' + (x.onde ? '<span><small>Onde</small>' + esc(x.onde) + '</span>' : '') + (x.roupa ? '<span><small>Roupa</small>' + esc(x.roupa) + '</span>' : '') +
         (x.postar_em ? '<span><small>Postar</small>' + esc(fmtDay(x.postar_em)) + (x.horario ? ', ' + esc(x.horario) : '') + '</span>' : '') + (x.duracao ? '<span><small>Duração</small>' + esc(x.duracao) + '</span>' : '') + '</div>' +
+        ((x.problema || x.por_que_capta || x.leva_a) ? '<div class="mk-pq">' +
+          (x.problema ? '<p><small>O problema real</small>' + mkTexto(x.problema) + '</p>' : '') +
+          (x.por_que_capta ? '<p class="cap-pac"><small>Por que traz paciente</small>' + mkTexto(x.por_que_capta) + '</p>' : '') +
+          (x.leva_a ? '<p><small>Leva a</small>' + mkTexto(x.leva_a) + '</p>' : '') + '</div>' : '') +
         (x.gancho ? '<blockquote class="mk-gancho">' + esc(x.gancho) + '</blockquote>' : '') +
+        ((x.roteiro || []).length ? '<div class="mk-bloco"><small>Roteiro, bloco a bloco</small><ol class="mk-rt">' + x.roteiro.map(function (r) {
+          return '<li><b>' + esc(r.t || '') + '</b><span>' + esc(r.fala || '') + '</span>' + (r.tela ? '<em><i>Na tela:</i> ' + esc(r.tela) + '</em>' : '') + (r.cena ? '<em><i>Cena:</i> ' + esc(r.cena) + '</em>' : '') + '</li>'; }).join('') + '</ol></div>' : '') +
         ((x.fala || []).length ? '<div class="mk-bloco"><small>O que falar</small><ol>' + x.fala.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ol></div>' : '') +
         (x.mostrar ? '<div class="mk-bloco"><small>O que mostrar</small><p>' + mkTexto(x.mostrar) + '</p></div>' : '') +
         (x.chamada ? '<div class="mk-bloco"><small>Fechamento</small><p>' + mkTexto(x.chamada) + '</p></div>' : '') +
