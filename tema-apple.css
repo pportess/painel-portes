@@ -3,13 +3,14 @@
    tipografia grande, uma cor de ação (azul do sistema), sem quadradinhos coloridos.
    Este arquivo vem depois do CSS do index.html, por isso ganha dele. ===== */
 :root, :root[data-theme="dark"] {
-  --bg: #f5f5f7; --panel: #ffffff; --field: #f5f5f7; --fg: #1d1d1f; --muted: #6e6e73; --line: #e5e5ea;
-  --ink: #1d1d1f; --on-ink: #ffffff; --accent: #0071e3; --accent-soft: #e8f1fc; --peach: #f5f5f7;
-  --bad: #d70015; --strong: #248a3d; --mid: #c93400; --weak: #8e8e93;
+  /* cores da marca: bordô #7a1f2b, creme #f6efe6, café #3b2a20 */
+  --bg: #f4eee7; --panel: #fffdfa; --field: #f6efe6; --fg: #2a1d16; --muted: #7d6a5d; --line: #e8ddd0;
+  --ink: #3b2a20; --on-ink: #ffffff; --accent: #7a1f2b; --accent-soft: #f4e6e6; --peach: #f6efe6;
+  --bad: #b3261e; --strong: #3f7a4f; --mid: #9a5a2c; --weak: #a3958a;
   --vermelho: #ff3b30; --laranja: #ff9500; --verde: #34c759;
   --font-ui: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Inter", "Segoe UI", system-ui, sans-serif;
   --font-display: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Inter", "Segoe UI", system-ui, sans-serif;
-  --radius: 18px; --side: rgba(251,251,253,.82); --mapa: #f5f5f7; --soft: none;
+  --radius: 18px; --side: rgba(250,245,239,.72); --mapa: #f5f5f7; --soft: none;
 }
 html, body { background: var(--bg); }
 body { color: var(--fg); font-size: 15px; -webkit-font-smoothing: antialiased; letter-spacing: -0.01em; }
@@ -104,18 +105,28 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 .mk-dot { background: var(--muted) !important; }
 .pa-ic, .st-ic { background: var(--field) !important; color: var(--fg) !important; }
 
-/* Botões: pílula azul (principal) e contorno azul (secundário), como na Apple */
-.btn { background: transparent; border: 1px solid var(--accent); color: var(--accent); border-radius: 980px !important; font-weight: 500; font-size: 14px; padding: 7px 16px; }
-.btn:hover { background: var(--accent-soft); }
-.btn.primary { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
-.btn.primary:hover { background: #0077ed !important; }
-.btn.mk-ok { background: #e3f5e8 !important; color: #1f7a34 !important; border-color: transparent !important; }
-.btn[aria-pressed="true"] { background: var(--accent) !important; color: #fff !important; border-color: var(--accent) !important; }
+/* Botões em "liquid glass" (vidro líquido do iOS/iPadOS 26):
+   o principal é vidro bordô; o secundário é vidro claro, translúcido, com brilho na borda de cima. */
+.btn { position: relative; border-radius: 980px !important; font-weight: 600; font-size: 14px; padding: 8px 18px; color: var(--ink);
+  background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.42)) !important;
+  border: 1px solid rgba(255,255,255,.85) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(59,42,32,.08), 0 1px 2px rgba(59,42,32,.08), 0 6px 18px rgba(59,42,32,.10) !important;
+  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease; }
+.btn:hover { filter: brightness(1.03); box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(59,42,32,.08), 0 2px 4px rgba(59,42,32,.08), 0 10px 24px rgba(59,42,32,.14) !important; }
+.btn:active { transform: scale(.97); }
+.btn.primary { color: #fff !important; border: 1px solid rgba(255,255,255,.28) !important;
+  background: linear-gradient(180deg, rgba(160,52,66,.94) 0%, rgba(122,31,43,.94) 55%, rgba(98,22,33,.96) 100%) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.38), inset 0 -2px 4px rgba(40,6,12,.25), 0 1px 2px rgba(122,31,43,.25), 0 8px 22px rgba(122,31,43,.28) !important;
+  text-shadow: 0 1px 0 rgba(0,0,0,.18); }
+.btn.primary:hover { filter: brightness(1.08); }
+.btn.mk-ok { color: #2f6b3f !important; background: linear-gradient(180deg, rgba(232,246,235,.9), rgba(214,238,220,.7)) !important; border-color: rgba(255,255,255,.85) !important; }
+.btn[aria-pressed="true"] { color: #fff !important; background: linear-gradient(180deg, rgba(160,52,66,.94), rgba(98,22,33,.96)) !important; }
 .link-btn { color: var(--accent); text-decoration: none; font-weight: 500; }
 .link-btn:hover { text-decoration: underline; }
 
 /* Controle segmentado do iOS */
-.seg, .mk-seg { background: #e8e8ed !important; border: 0 !important; border-radius: 10px !important; padding: 2px !important; }
+.seg, .mk-seg { background: linear-gradient(180deg, rgba(232,221,208,.75), rgba(240,231,221,.55)) !important; border: 1px solid rgba(255,255,255,.7) !important; border-radius: 12px !important; padding: 3px !important;
+  box-shadow: inset 0 1px 2px rgba(59,42,32,.08) !important; }
 .seg button, .mk-seg button { border-radius: 8px !important; background: transparent; color: var(--fg); font-weight: 500; font-size: 13px; border: 0; }
 .seg button[aria-pressed="true"], .mk-seg button.on, .mk-seg button[aria-pressed="true"], .mk-seg button[aria-current="true"] {
   background: #fff !important; color: var(--fg) !important; box-shadow: 0 3px 8px rgba(0,0,0,.12), 0 3px 1px rgba(0,0,0,.04) !important; font-weight: 600; }
@@ -123,18 +134,20 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 
 /* Campos */
 input, select, textarea { border: 1px solid #d2d2d7; border-radius: 10px; background: #fff; }
-input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(0,113,227,.15) !important; }
+input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(122,31,43,.14) !important; }
+.mk-num { background: linear-gradient(180deg, #a03442, #7a1f2b) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,.35) !important; }
+.mk-pq p.cap-pac { border-left: 3px solid var(--accent) !important; }
 
 /* Celular: barra de abas embaixo, como no iPhone */
 @media (max-width: 720px) {
   .side { position: sticky; top: 0; padding: 0 16px; min-height: 46px; justify-content: center; gap: 0;
-    -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(249,249,249,.97); }
+    -webkit-backdrop-filter: none; backdrop-filter: none; background: rgba(250,245,239,.97); }
   .mk-seg { display: flex !important; flex-wrap: nowrap !important; overflow-x: auto; scrollbar-width: none; max-width: 100%; }
   .mk-seg button { white-space: nowrap; flex: none; }
   .brand { justify-content: center; }
   .brand span { display: none; }
   .nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 30; justify-content: space-around; gap: 0;
-    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)); background: rgba(249,249,249,.92);
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)); background: rgba(250,245,239,.78);
     -webkit-backdrop-filter: saturate(180%) blur(20px); backdrop-filter: saturate(180%) blur(20px); border-top: 1px solid rgba(0,0,0,.12); overflow: visible; }
   .nav li { flex: 1; min-width: 0; }
   .nav li:has(.soon) { display: none; }
