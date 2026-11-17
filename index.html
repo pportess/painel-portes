@@ -57,7 +57,7 @@
 <title>Painel do Consultório</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Tinos&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Tinos&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: barra lateral escura com o item escolhido em branco, fundo claro (pedido do Pedro, 04/11/2026; antes era branco com seção verde). */
 :root, :root[data-theme="dark"] {
@@ -890,6 +890,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .mk-cores small { color: var(--muted); font-weight: 400; }
 .mk-regras { margin-top: 14px; border-top-color: #3b2a20; }
 @media (max-width: 640px) { .mk-cards { grid-template-columns: 1fr; } .mk-card { padding: 15px; } .mk-gancho { font-size: 16px; } }
+
+
 .chip.c-area { background: var(--area); color: #fff; }
 .chip.c-ok { background: #dff5e8; color: #157a45; }
 .chip.c-warn { background: #fdeed8; color: #a85d08; }
@@ -983,6 +985,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   .nav button { padding: 6px 12px 6px 6px; }
 }
 </style>
+<link rel="stylesheet" href="tema-apple.css?v=1">
 
 <div class="app">
   <aside class="side">
@@ -1028,7 +1031,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     { id: 'luzi', name: 'Luzi', role: 'Gerente do consultório', desc: 'Toda noite junta o dia inteiro (redes, vídeos, desafios, posts, mensagens e dinheiro) e diz o que fazer amanhã.', tier: 'chefe', when: 'Todo dia às 21h',
       funcs: ['Todo dia às 21h: revisão do dia, com redes, vídeos, desafios, posts, mensagens e dinheiro', 'Compara com a meta de pacientes novos do mês', 'Diz o que deu certo, o que precisa de atenção e o que fazer amanhã'] },
     // 16/11/2026: Duda, Peixe e Lisa saíram (recomeço do marketing). Um agente só, que lê o posicionamento e monta o comando do dia
-    { id: 'marketing', name: 'Leo', role: 'Marketing e posicionamento', room: 'Agência de marketing', desc: 'Lê o seu posicionamento e monta o comando do dia às 7h e o lote de gravação na sexta.', live: true, tier: 'contratado', when: 'Todo dia às 7h; o lote na sexta',
+    { id: 'marketing', name: 'Leo', role: 'Marketing e posicionamento', room: 'Agência de marketing', desc: 'Lê o seu posicionamento, monta o comando do dia e o lote, edita os vídeos que você manda, deixa o post como rascunho no Metricool e analisa o Instagram na sexta. Quem publica é você.', live: true, tier: 'contratado', when: 'Todo dia às 7h; o lote na sexta',
       funcs: ['Dia útil, 7h: o post de hoje com legenda pronta, a ideia do story e uma ação de captação fora da rede', 'Sexta, 7h: o lote da semana, com 3 roteiros (educativo, caso e pessoal ou bastidor), lugar, roupa, fala e legenda', 'Confere as regras do CFO em tudo o que escreve', 'Olha os arquivos que você sobe e os números da semana para ajustar o próximo lote'],
       look: { skin: '#e3b48e', hair: '#3a261b', shirt: '#7a1f2b', pants: '#2f3a44' }, pos: [0, 0] },
     { id: 'kim', name: 'Kim', role: 'Financeiro', room: 'Financeiro', desc: 'Entradas, metas, custos de laboratório e o caminho até o consultório próprio.', tier: 'contratado', when: 'Todo domingo e no fim do mês',
@@ -1109,7 +1112,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var SETORES = [
     { id: 'marketing', nome: 'Marketing e posicionamento', tarefas: [
       { ag: 'marketing', nome: 'Comando do dia', desc: 'O post de hoje com legenda, o story e uma ação de captação fora da rede.', quando: 'Todo dia, 7h', auto: 'mkt-comando-diario', h: 30 },
-      { ag: 'marketing', nome: 'Lote da semana', desc: '3 roteiros para gravar em sequência, com lugar, roupa, fala e legenda.', quando: 'Sexta, 7h (na mesma rodada)', auto: 'mkt-comando-diario', h: 30 }] },
+      { ag: 'marketing', nome: 'Lote da semana', desc: '3 roteiros para gravar em sequência, com lugar, roupa, fala e legenda.', quando: 'Sexta, 7h (na mesma rodada)', auto: 'mkt-comando-diario', h: 30 },
+      { ag: 'marketing', nome: 'Edição e rascunho', desc: 'Edita os vídeos marcados "O Leo edita" e deixa o post do dia como rascunho no Metricool, para você só conferir e agendar.', quando: 'Todo dia, 7h (na mesma rodada)', auto: 'mkt-comando-diario', h: 30 },
+      { ag: 'marketing', nome: 'Análise do Instagram', desc: 'Alcance, retenção e salvamentos de cada post, cruzados com as conversas e consultas da semana. Diz o que repetir e o que cortar.', quando: 'Sexta, 7h (na mesma rodada)', auto: 'mkt-comando-diario', h: 30 }] },
     { id: 'atendimento', nome: 'Atendimento e retornos', tarefas: [
       { ag: 'amanda', nome: 'Retornos', desc: 'Junta os retornos de todos os pacientes, com WhatsApp pronto. Fica na página dela e em Pacientes.', quando: 'Sempre, ligada aos Pacientes', sob: true },
       { ag: 'amanda', nome: 'Mensagens prontas', desc: 'Primeira resposta, confirmação e pós-consulta.', quando: 'Fase 2, com WhatsApp' }] },
@@ -3251,6 +3256,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   try { var mkv = localStorage.getItem('painel:mk'); if (mkv) mk.view = mkv; } catch (err) {}
   var MK_PAPEL = { educativo: ['Educativo', '#2563eb'], caso: ['Caso', '#7a1f2b'], pessoal: ['Pessoal', '#b5740a'], bastidor: ['Bastidor', '#0a7f70'] };
   var MK_PAC = { sem: 'Não aparece paciente', tcle: 'Paciente com TCLE assinado', sem_tcle: 'Paciente SEM TCLE (não postar)' };
+  var MK_EDITA = { leo: 'O Leo edita (cortes e texto na tela)', eu: 'Eu mesmo edito', pronto: 'Já está editado, é só postar' };
   var MK_USO = { lote: 'Vídeo do lote', caso: 'Foto de caso', pessoal: 'Pessoal ou bastidor', perfil: 'Foto de perfil', outro: 'Outro' };
   function mkDoc(id) { return mk.docs.find(function (d) { return d.id === id; }); }
   function mkDia(iso) { return mkDoc('dia-' + iso); }
@@ -3289,7 +3295,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         '<p class="mk-meta">' + (p.horario ? 'Melhor horário: <b>' + esc(p.horario) + '</b>' : '') + ((p.redes || []).length ? ' · ' + esc(p.redes.join(', ')) : '') + (p.de_lote ? ' · roteiro ' + esc(p.de_lote) + ' do lote' : '') + '</p>' +
         (p.legenda ? '<div class="mk-leg"><small>Legenda</small><p>' + mkTexto(p.legenda) + '</p>' + mkCopia('legenda', d.id, 'post.legenda') + '</div>' : '') +
         (p.cfo ? '<p class="mk-cfo">✓ CFO: ' + esc(p.cfo) + '</p>' : '') +
-        '<div class="acts">' + mkBtnFeito(d, 'post', 'Postado', 'Postei') + '</div></section>';
+        (p.metricool_url ? '<p class="hint">O Leo deixou o post como rascunho no Metricool, com vídeo, legenda e horário. Confira e toque em agendar.</p>' : '') +
+        '<div class="acts">' + (p.metricool_url && /^https:\/\//.test(p.metricool_url) ? '<a class="btn primary" href="' + esc(p.metricool_url) + '" target="_blank" rel="noopener">Abrir rascunho no Metricool</a>' : '') + mkBtnFeito(d, 'post', 'Postado', 'Postei') + '</div></section>';
     } else if (d.sem_post) html += '<section class="mk-card mk-off"><span class="mk-rot">Hoje não tem post</span><p>' + mkTexto(d.sem_post) + '</p></section>';
     if (d.story) html += '<section class="mk-card' + ((d.feito || {}).story ? ' feito' : '') + '"><div class="mk-top">' + rot('Story do dia') + '</div>' +
       '<h3>' + esc(d.story.ideia || '') + '</h3>' + (d.story.como ? '<p>' + mkTexto(d.story.como) + '</p>' : '') +
@@ -3333,12 +3340,25 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         (x.chamada ? '<div class="mk-bloco"><small>Fechamento</small><p>' + mkTexto(x.chamada) + '</p></div>' : '') +
         (x.legenda ? '<details class="mk-det"><summary>Legenda pronta</summary><p>' + mkTexto(x.legenda) + '</p>' + mkCopia('legenda', lt.id, 'itens.' + i + '.legenda') + '</details>' : '') +
         (x.cfo ? '<p class="mk-cfo">✓ CFO: ' + esc(x.cfo) + '</p>' : '') +
-        '<div class="acts"><button type="button" class="btn ' + (x.gravado ? 'mk-ok' : 'primary') + '" data-mk-gravado="' + i + '">' + (x.gravado ? 'Gravado ✓' : 'Marcar como gravado') + '</button></div></section>';
+        mkEnviados(lt, i, x) +
+        '<div class="acts"><button type="button" class="btn ' + (x.gravado ? 'mk-ok' : 'primary') + '" data-mk-gravado="' + i + '">' + (x.gravado ? 'Gravado ✓' : 'Marcar como gravado') + '</button>' +
+        (ct.assets && !(mk.up && mk.up.inline === i) ? '<button type="button" class="btn" data-mk-upitem="' + i + '">' + (mkArqsDo(lt, i).length ? 'Enviar outro arquivo' : 'Enviar o vídeo') + '</button>' : '') + '</div>' +
+        (mk.up && mk.up.inline === i ? mkUpForm() : '') + '</section>';
     }).join('') + '</div>';
     if (lt.depois) html += '<p class="hint">' + mkTexto(lt.depois) + '</p>';
     return html;
   }
 
+  function mkArqsDo(lt, i) {
+    return (ct.midia || []).filter(function (m) { return m.lote === lt.id && +m.lote_n === i; });
+  }
+  function mkEnviados(lt, i, x) {
+    var arqs = mkArqsDo(lt, i);
+    if (!arqs.length) return '';
+    var ult = arqs[0], ed = x.edita || ult.edita;
+    var st = ed === 'leo' ? (x.editado ? 'O Leo já editou: veja em Meus arquivos.' : 'O Leo vai editar na próxima rodada.') : ed === 'eu' ? 'Você edita.' : ed === 'pronto' ? 'Pronto para postar.' : '';
+    return '<p class="mk-env">✓ ' + arqs.length + (arqs.length === 1 ? ' arquivo enviado' : ' arquivos enviados') + (st ? ' · ' + esc(st) : '') + '</p>';
+  }
   function mkUpForm() {
     var u = mk.up; if (!u) return '';
     var lt = mkLote(), itens = lt ? lt.itens || [] : [];
@@ -3347,6 +3367,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<label>Arquivos (fotos ou vídeos, até 50 MB cada)<input type="file" multiple accept="image/*,video/*" data-mk-file="1"></label>' +
       '<label>O que é<select data-mk-f="up|uso"><option value="">Escolha…</option>' + opt(MK_USO, u.uso) + '</select></label>' +
       (u.uso === 'lote' && itens.length ? '<label>De qual roteiro<select data-mk-f="up|n"><option value="">Escolha…</option>' + itens.map(function (x, i) { return '<option value="' + i + '"' + (String(u.n) === String(i) ? ' selected' : '') + '>' + (x.n || i + 1) + '. ' + esc(x.titulo) + '</option>'; }).join('') + '</select></label>' : '') +
+      (u.uso === 'lote' ? '<label>Quem edita<select data-mk-f="up|edita"><option value="">Escolha…</option>' + opt(MK_EDITA, u.edita) + '</select></label>' : '') +
       '<label>Aparece paciente?<select data-mk-f="up|paciente"><option value="">Escolha…</option>' + opt(MK_PAC, u.paciente) + '</select></label>' +
       '<label>Nota (opcional)<input type="text" data-mk-f="up|nota" value="' + esc(u.nota || '') + '" placeholder="ex.: take 2 ficou melhor"></label>' +
       (mk.upErr ? '<p class="ag-warn">' + esc(mk.upErr) + '</p>' : '') + (mk.prog ? '<p class="hint">' + esc(mk.prog) + '</p>' : '') +
@@ -3368,7 +3389,17 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var postsAuto = mk.docs.filter(function (d) { return d.tipo === 'dia' && d.data >= seg && d.data <= isoOf(fim) && (d.feito || {}).post; }).length;
     var v = function (k, def) { return mk.num[k] != null ? mk.num[k] : atual[k] != null ? atual[k] : def != null ? def : ''; };
     var campo = function (k, rot, dica, def) { return '<label class="mk-campo"><span>' + rot + '<small>' + dica + '</small></span><input type="number" min="0" inputmode="numeric" data-mk-f="num|' + k + '" value="' + esc(v(k, def)) + '"></label>'; };
-    var html = '<section class="mk-card"><span class="mk-rot">Semana de ' + esc(shortDay(new Date(seg + 'T12:00:00'))) + ' a ' + esc(shortDay(fim)) + '</span>' +
+    var an = mk.docs.filter(function (d) { return d.tipo === 'analise'; }).sort(function (a, b) { return a.data < b.data ? 1 : -1; })[0];
+    var VER = { repetir: ['Repetir', 'c-ok'], ajustar: ['Ajustar', 'c-warn'], cortar: ['Cortar', 'c-bad'] };
+    var anHtml = !an ? '' : '<section class="mk-card mk-an"><span class="mk-rot">Análise do Leo · ' + esc(an.semana || fmtDay(an.data)) + '</span>' +
+      (an.resumo ? '<p class="mk-an-res">' + mkTexto(an.resumo) + '</p>' : '') +
+      '<div class="mk-an-nums"><div><b>' + fmtNum(an.conversas) + '</b><span>conversas</span></div><div><b>' + fmtNum(an.consultas) + '</b><span>consultas</span></div><div><b>' + fmtNum(an.novos) + '</b><span>pacientes novos</span></div></div>' +
+      ((an.posts || []).length ? '<ul class="mk-an-posts">' + an.posts.map(function (p) { var v = VER[p.veredito] || null;
+        return '<li><div><b>' + esc(p.titulo || '') + '</b>' + (v ? '<span class="chip ' + v[1] + '">' + v[0] + '</span>' : '') + '</div>' +
+          '<small>' + [p.alcance != null ? fmtNum(p.alcance) + ' alcance' : '', p.views != null ? fmtNum(p.views) + ' views' : '', p.retencao != null ? fmtNum(p.retencao) + '% retenção' : '', p.pulos_3s != null ? fmtNum(p.pulos_3s) + '% pularam em 3 s' : '', p.salvos != null ? fmtNum(p.salvos) + ' salvos' : '', p.compart != null ? fmtNum(p.compart) + ' envios' : ''].filter(Boolean).join(' · ') + '</small>' +
+          (p.porque ? '<p>' + esc(p.porque) + '</p>' : '') + '</li>'; }).join('') + '</ul>' : '') +
+      (an.proximo ? '<p class="hint"><b>Próximo lote:</b> ' + esc(an.proximo) + '</p>' : '') + '</section>';
+    var html = anHtml + '<section class="mk-card"><span class="mk-rot">Semana de ' + esc(shortDay(new Date(seg + 'T12:00:00'))) + ' a ' + esc(shortDay(fim)) + '</span>' +
       '<p class="hint">Anote na sexta. São só 4 números: o que importa é paciente na cadeira, não curtida.</p><div class="mk-campos">' +
       campo('posts', 'Posts feitos', 'o painel contou ' + postsAuto, postsAuto) + campo('conversas', 'Conversas no WhatsApp', 'gente nova que chamou') +
       campo('consultas', 'Consultas marcadas', 'de quem chamou') + campo('novos', 'Pacientes novos', 'que sentaram na cadeira') + '</div>' +
@@ -3418,7 +3449,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   }
   function mkSend() {
     var u = mk.up;
-    mk.upErr = !u.files || !u.files.length ? 'Escolha os arquivos.' : !u.uso ? 'Diga o que é.' : !u.paciente ? 'Diga se aparece paciente.' : (u.uso === 'lote' && u.n === '' ) ? 'Diga de qual roteiro.' : null;
+    mk.upErr = !u.files || !u.files.length ? 'Escolha os arquivos.' : !u.uso ? 'Diga o que é.' : !u.paciente ? 'Diga se aparece paciente.' : (u.uso === 'lote' && u.n === '' ) ? 'Diga de qual roteiro.' : (u.uso === 'lote' && !u.edita) ? 'Diga quem edita.' : null;
     if (mk.upErr) { render(); return; }
     var lt = mkLote(), item = u.uso === 'lote' && lt && u.n != null && u.n !== '' ? (lt.itens || [])[+u.n] : null;
     var files = Array.prototype.slice.call(u.files), done = 0, fails = [];
@@ -3426,8 +3457,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       if (i >= files.length) {
         mk.prog = null; mk.up = fails.length && !done ? u : null;
         mk.msg = done + (done === 1 ? ' arquivo enviado.' : ' arquivos enviados.') + (fails.length ? ' Não foram: ' + fails.join('; ') + '.' : '') + (u.paciente === 'sem_tcle' && done ? ' Sem o TCLE assinado, não poste.' : '');
-        if (item && done && !item.gravado) {
-          var itens = (lt.itens || []).map(function (x, k) { return k === +u.n ? Object.assign({}, x, { gravado: true }) : x; });
+        if (item && done) {
+          var itens = (lt.itens || []).map(function (x, k) { return k === +u.n ? Object.assign({}, x, { gravado: true, edita: u.edita || x.edita || '' }) : x; });
           mkSalvar(lt.id, { itens: itens });
         }
         render(); return;
@@ -3440,7 +3471,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       prep.then(function (x) {
         return ct.assets.upload(x.blob, { type: x.type }).then(function (r) {
           var doc = { asset: r.id, tipo: video ? 'video' : 'foto', uso: u.uso, paciente: u.paciente, nota: (u.nota || '').trim(), criado: new Date().toISOString(), tamanho: r.sizeBytes, status: 'novo' };
-          if (item) { doc.lote = lt.id; doc.lote_n = +u.n; doc.lote_titulo = item.titulo; }
+          if (item) { doc.lote = lt.id; doc.lote_n = +u.n; doc.lote_titulo = item.titulo; doc.edita = u.edita || ''; }
           return state.db.doc('midia/' + r.id).set(doc);
         });
       }).then(function () { done++; }, function (e) {
@@ -3470,6 +3501,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       return;
     }
     if (t.closest('[data-mk-up]')) { mk.up = { uso: '', paciente: '', nota: '', n: '' }; mk.upErr = null; mk.msg = null; render(); return; }
+    if ((a = t.closest('[data-mk-upitem]'))) { var ni = +a.getAttribute('data-mk-upitem'); mk.up = { uso: 'lote', paciente: 'sem', nota: '', n: String(ni), edita: '', inline: ni }; mk.upErr = null; mk.msg = null; render(); return; }
     if (t.closest('[data-mk-cancel]')) { mk.up = null; mk.upErr = null; render(); return; }
     if (t.closest('[data-mk-send]')) { if (!mk.prog) mkSend(); return; }
     if (t.closest('[data-mk-num]')) {
