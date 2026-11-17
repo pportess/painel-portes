@@ -814,6 +814,71 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 .btn[aria-pressed="true"] { background: var(--area-soft); border-color: var(--area); }
 .back { color: var(--area); }
 .panel { border: 0; box-shadow: var(--soft); }
+/* Marketing (16/11/2026): bordô, creme e marrom café, a paleta do posicionamento do Pedro */
+.mk-seg { flex-wrap: wrap; border-radius: 14px; }
+.mk-seg button .n { margin-left: 6px; background: #7a1f2b; color: #fff; border-radius: 999px; padding: 0 7px; font-size: 11px; }
+.mk-prog { display: grid; grid-template-columns: 1fr auto; gap: 6px 12px; align-items: center; background: #f6efe6; color: #3b2a20; border-radius: var(--radius); padding: 14px 16px; margin: 14px 0; }
+.mk-prog b { font-size: 16px; }
+.mk-prog b.cap { text-transform: capitalize; }
+.mk-prog span { font-size: 13px; font-weight: 600; }
+.mk-prog i { grid-column: 1 / -1; height: 6px; border-radius: 99px; background: linear-gradient(90deg, #7a1f2b var(--p), #e7d9c8 var(--p)); }
+.mk-nota { background: #fff; border-left: 3px solid #7a1f2b; padding: 10px 14px; border-radius: 8px; margin: 0 0 14px; box-shadow: var(--soft); }
+.mk-cards { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); align-items: start; }
+.mk-2 { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.mk-card { background: #fff; border-radius: var(--radius); padding: 18px; box-shadow: var(--soft); border-top: 4px solid var(--pc, #7a1f2b); min-width: 0; }
+.mk-card.feito { opacity: .62; }
+.mk-card.mk-off { border-top-color: #c8b9a6; }
+.mk-card h3 { font-size: 17px; margin: 8px 0 6px; color: #2a1d16; }
+.mk-card p { margin: 6px 0; }
+.mk-card ul, .mk-card ol { margin: 6px 0; padding-left: 20px; }
+.mk-card li { margin: 3px 0; }
+.mk-top { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+.mk-rot { font-size: 12px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: #7a1f2b; margin-right: auto; }
+.mk-num { width: 28px; height: 28px; border-radius: 50%; background: var(--pc); color: #fff; display: grid; place-items: center; font-weight: 800; margin-right: auto; }
+.mk-meta { color: var(--muted); font-size: 13px; }
+.mk-leg, .mk-bloco { background: #f6efe6; border-radius: 10px; padding: 10px 12px; margin: 10px 0; }
+.mk-leg small, .mk-bloco small, .mk-onde small { display: block; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #8a6a55; }
+.mk-leg p { white-space: normal; color: #3b2a20; }
+.mk-cfo { font-size: 12px; color: #24874a; }
+.mk-gancho { margin: 12px 0; padding: 12px 14px; border-left: 4px solid var(--pc, #7a1f2b); background: #fbf7f2; font-size: 17px; font-weight: 700; color: #2a1d16; border-radius: 0 10px 10px 0; }
+.mk-onde { display: flex; flex-wrap: wrap; gap: 8px 16px; margin: 8px 0; font-size: 13px; }
+.mk-det summary { cursor: pointer; font-weight: 700; color: #7a1f2b; margin: 8px 0; }
+.mk-card .acts { margin-top: 12px; display: flex; gap: 8px; flex-wrap: wrap; }
+.btn.sm { padding: 5px 10px; font-size: 12px; }
+.btn.mk-ok { background: #e6f4ea; color: #1d6b3a; border-color: transparent; }
+.mk-h { font-size: 15px; margin: 22px 0 10px; }
+.mk-prox { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.mk-prox li { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; background: #fff; padding: 10px 12px; border-radius: 10px; box-shadow: var(--soft); }
+.mk-prox b { text-transform: capitalize; min-width: 120px; }
+.mk-prox em { margin-left: auto; font-style: normal; font-size: 12px; color: #24874a; }
+.mk-prox em.nao { color: #b5740a; }
+.mk-dot { width: 10px; height: 10px; border-radius: 50%; }
+.mk-up label, .mk-campo { display: grid; gap: 4px; margin: 10px 0; font-size: 13px; font-weight: 600; }
+.mk-up input, .mk-up select, .mk-campo input { font: inherit; padding: 9px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--field); width: 100%; min-width: 0; }
+.mk-campos { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 0 14px; }
+.mk-campo small { display: block; font-weight: 400; color: var(--muted); }
+.mk-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 12px; margin-top: 14px; }
+.mk-arq { margin: 0; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: var(--soft); }
+.mk-arq.alerta { outline: 2px solid var(--vermelho); }
+.mk-th { width: 100%; aspect-ratio: 4 / 5; object-fit: cover; display: block; background: #eee; }
+.mk-arq figcaption { padding: 8px 10px; display: grid; gap: 2px; font-size: 12px; }
+.mk-tab { overflow-x: auto; background: #fff; border-radius: var(--radius); box-shadow: var(--soft); }
+.mk-tab table { border-collapse: collapse; width: 100%; font-size: 13px; }
+.mk-tab th, .mk-tab td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); }
+.mk-tab th { background: #f6efe6; color: #3b2a20; }
+.mk-marca-top { background: #7a1f2b; color: #f6efe6; border-radius: var(--radius); padding: 20px; margin: 14px 0; }
+.mk-marca-top small { text-transform: uppercase; letter-spacing: .06em; font-weight: 700; opacity: .8; }
+.mk-marca-top p { font-size: 18px; font-weight: 700; margin: 6px 0; line-height: 1.4; }
+.mk-marca-top span { font-size: 13px; opacity: .9; }
+.mk-prom { font-size: 16px; font-style: italic; color: #3b2a20; }
+.mk-pil { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.mk-pil span { background: #f6efe6; color: #3b2a20; border-radius: 999px; padding: 4px 10px; font-size: 13px; font-weight: 600; }
+.mk-cores { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 8px; }
+.mk-cores span { display: grid; justify-items: center; font-size: 12px; font-weight: 600; }
+.mk-cores i { width: 44px; height: 44px; border-radius: 12px; border: 1px solid var(--line); margin-bottom: 4px; }
+.mk-cores small { color: var(--muted); font-weight: 400; }
+.mk-regras { margin-top: 14px; border-top-color: #3b2a20; }
+@media (max-width: 640px) { .mk-cards { grid-template-columns: 1fr; } .mk-card { padding: 15px; } .mk-gancho { font-size: 16px; } }
 .chip.c-area { background: var(--area); color: #fff; }
 .chip.c-ok { background: #dff5e8; color: #157a45; }
 .chip.c-warn { background: #fdeed8; color: #a85d08; }
@@ -923,6 +988,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     escritorio: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20V6.5L12 3l8 3.5V20"/><path d="M3 20h18M9 20v-5h6v5M8.5 9.5h.01M12 9.5h.01M15.5 9.5h.01"/></svg>',
     agentes: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01M9 16h6"/></svg>',
     agenda: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+    marketing: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10v4h3l8 4V6l-8 4H4z"/><path d="M18 9.5a3.5 3.5 0 0 1 0 5"/></svg>',
     conteudo: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3.5" y="5" width="17" height="14" rx="2.5"/><path d="m10 9.5 5 2.5-5 2.5z"/></svg>',
     edicao: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="2.5"/><circle cx="6" cy="18" r="2.5"/><path d="M8.2 7.3 20 17M8.2 16.7 20 7"/></svg>',
     pacientes: '<svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></svg>',
@@ -937,8 +1003,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     { id: 'escritorio', label: 'Escritório' },
     { id: 'agentes', label: 'Agentes' },
     { id: 'agenda', label: 'Agenda' },
-    { id: 'conteudo', label: 'Conteúdo' },
-    { id: 'edicao', label: 'Edição' },
+    // 16/11/2026: recomeço do marketing a pedido do Pedro. Conteúdo e Edição deram lugar a uma aba só, com o comando do dia
+    { id: 'marketing', label: 'Marketing' },
     // 02/11/2026: a pedido do Pedro, a aba passou a ter nome e fotos de antes e depois (só ele vê; os agentes não leem)
     { id: 'pacientes', label: 'Pacientes' },
     { id: 'financeiro', label: 'Financeiro', soon: 'Entradas por clínica, metas do mês e o caminho até o consultório próprio.', ag: 'kim', itens: ['Entradas por clínica e procedimento', 'Meta do mês e quanto falta', 'Custos de laboratório', 'Caminho até o consultório próprio'] },
@@ -950,16 +1016,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var AGENTS = [
     { id: 'luzi', name: 'Luzi', role: 'Gerente do consultório', desc: 'Toda noite junta o dia inteiro (redes, vídeos, desafios, posts, mensagens e dinheiro) e diz o que fazer amanhã.', tier: 'chefe', when: 'Todo dia às 21h',
       funcs: ['Todo dia às 21h: revisão do dia, com redes, vídeos, desafios, posts, mensagens e dinheiro', 'Compara com a meta de pacientes novos do mês', 'Diz o que deu certo, o que precisa de atenção e o que fazer amanhã'] },
-    { id: 'marketing', name: 'Duda', role: 'Marketing e captação', room: 'Agência de marketing', desc: 'Lê o second brain e traz opções de captação todo dia às 7h.', live: true, tier: 'contratado', when: 'Todo dia às 7h',
-      // 09/11/2026: a Duda fica com a criação de conteúdo e a checagem do CFO; números, interações e DM passam para a Lisa
-      funcs: ['Cria o conteúdo: de 3 a 5 opções de captação por dia, às 7h, e o cronograma de posts com legenda', 'Confere as regras do CFO em cada conteúdo que cria', 'Analisa as fotos e os vídeos que você sobe no painel', 'Usa os números da Lisa para saber o que funciona', 'Deixa a edição pronta para o Peixe'],
-      look: { skin: '#e3b48e', hair: '#3a261b', shirt: '#5f9483', pants: '#2f3a44' }, pos: [0, 0] },
-    // contratado pela Duda em 02/11/2026, a pedido do Pedro
-    { id: 'rafa', name: 'Peixe', role: 'Edição de vídeo', desc: 'Trabalha com a Duda: edita os vídeos e monta os casos de antes e depois no seu modelo.', tier: 'contratado', active: true, when: 'Todo dia às 8h, depois da Duda',
-      funcs: ['Edita os vídeos que a Duda pede no cronograma: cortes, formato vertical 9:16, texto do gancho e assinatura', 'Deixa cada vídeo pronto para postar, com até 20 MB', 'Não ouve o áudio: corta pelo que vê e pelo pedido da Duda'] },
-    // contratada em 09/11/2026, a pedido do Pedro: trabalha com a Duda, cuida dos números e das conversas do Instagram
-    { id: 'lisa', name: 'Lisa', role: 'Estatísticas e interações (Instagram e TikTok)', desc: 'Trabalha com a Duda: lê os números do Instagram e do TikTok pelo Metricool e escreve as respostas de DM e comentários.', tier: 'contratado', when: 'Todo dia às 9h e às 18h',
-      funcs: ['Lê os números do Instagram e do TikTok pelo Metricool: alcance, visualizações, seguidores, interações e o melhor horário de cada rede', 'Compara as duas redes: em qual o mesmo vídeo foi melhor', 'Diz o que funcionou e o que não funcionou, e passa para a Duda', 'Escreve a resposta das DMs e dos comentários que você cola aqui, dentro das regras do CFO e da LGPD', 'Nunca envia nada sozinha: você copia e manda'] },
+    // 16/11/2026: Duda, Peixe e Lisa saíram (recomeço do marketing). Um agente só, que lê o posicionamento e monta o comando do dia
+    { id: 'marketing', name: 'Leo', role: 'Marketing e posicionamento', room: 'Agência de marketing', desc: 'Lê o seu posicionamento e monta o comando do dia às 7h e o lote de gravação na sexta.', live: true, tier: 'contratado', when: 'Todo dia às 7h; o lote na sexta',
+      funcs: ['Dia útil, 7h: o post de hoje com legenda pronta, a ideia do story e uma ação de captação fora da rede', 'Sexta, 7h: o lote da semana, com 3 roteiros (educativo, caso e pessoal ou bastidor), lugar, roupa, fala e legenda', 'Confere as regras do CFO em tudo o que escreve', 'Olha os arquivos que você sobe e os números da semana para ajustar o próximo lote'],
+      look: { skin: '#e3b48e', hair: '#3a261b', shirt: '#7a1f2b', pants: '#2f3a44' }, pos: [0, 0] },
     { id: 'kim', name: 'Kim', role: 'Financeiro', room: 'Financeiro', desc: 'Entradas, metas, custos de laboratório e o caminho até o consultório próprio.', tier: 'contratado', when: 'Todo domingo e no fim do mês',
       funcs: ['Registra entradas por clínica e procedimento (só valores, nunca nomes)', 'Fecha o mês contra a meta e mostra quanto sobra depois do laboratório', 'Alerta de impostos (carnê-leão, PF ou PJ) e reserva do consultório', 'Faz as contas das propostas de trabalho (ex.: 70/30 com o tio Zé)'],
       look: { skin: '#c99a72', hair: '#1c1c1f', shirt: '#d9a441', pants: '#3a3a40' }, pos: [1, 0] },
@@ -973,16 +1033,14 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       look: { skin: '#f2c3a0', hair: '#e0bd6e', shirt: '#7fa8c9', pants: '#3a3a40' }, pos: [0, 1] },
     { id: 'reuniao', room: 'Sala de reunião', meeting: true, pos: [2, 0] },
     { id: 'treino', room: 'Treino e dieta', desc: 'Treinos da semana e alimentação.', tier: 'contratado', pos: [2, 1] },
-    { id: 'bruno', name: 'Bruno', role: 'Revisor CFO e LGPD', desc: 'Confere tudo o que vai a público antes de sair.', tier: 'estagiario', when: 'Antes de cada post ou mensagem-modelo',
-      funcs: ['Revisa os conteúdos da Duda pelas regras de publicidade do CFO', 'Revisa as mensagens da Amanda pela LGPD', 'Devolve o que mudar, com o motivo'] },
-    { id: 'caio', name: 'Caio', role: 'Pesquisa de evidência', desc: 'Busca artigos e referências quando outro agente pedir.', tier: 'estagiario', when: 'Quando a Nina, a Ana Paula ou a Duda pedirem',
+    { id: 'caio', name: 'Caio', role: 'Pesquisa de evidência', desc: 'Busca artigos e referências quando outro agente pedir.', tier: 'estagiario', when: 'Quando a Nina, a Ana Paula ou o Leo pedirem',
       funcs: ['Busca artigos (PubMed) sobre o tema pedido', 'Dá base científica aos conteúdos e aos planos de tratamento', 'Entrega referências curtas, com link'] }
   ];
 
   var state = { section: 'agentes', agent: null, abertas: {}, agTab: {}, filtro: 'todos', days: [], selected: null, loading: true, slow: false, error: null, db: null, saving: {} };
 
   // abre na última aba usada neste aparelho (no celular, normalmente o Conteúdo)
-  try { var aba = localStorage.getItem('painel:aba'); if (aba === 'escritorio' || aba === 'agenda' || aba === 'conteudo' || aba === 'edicao' || aba === 'agentes' || aba === 'pacientes') state.section = aba; } catch (err) {}
+  try { var aba = localStorage.getItem('painel:aba'); if (aba === 'conteudo' || aba === 'edicao') aba = 'marketing'; if (aba === 'escritorio' || aba === 'agenda' || aba === 'marketing' || aba === 'agentes' || aba === 'pacientes') state.section = aba; } catch (err) {}
 
   var nav = document.getElementById('nav');
   var main = document.getElementById('main');
@@ -1017,7 +1075,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var DAY_MS = 86400000;
 
   // retrato em traço de cada agente
-  var AV = { luzi: 'coque', marketing: 'longo', rafa: 'bone', lisa: 'coque', kim: 'curto', nina: 'longo', anapaula: 'coque', amanda: 'longo', bruno: 'oculos', caio: 'oculos' };
+  var AV = { luzi: 'coque', marketing: 'curto', kim: 'curto', nina: 'longo', anapaula: 'coque', amanda: 'longo', bruno: 'oculos', caio: 'oculos' };
   function avatar(id) {
     var v = AV[id] || 'curto', topo = 'M15 20c-1-10 6-13 9-13s10 3 9 13c-2-5-5-7-9-7s-7 2-9 7z', x = '';
     if (v === 'longo') x = '<path d="M14.5 17c-3 8-2 15 0 18M33.5 17c3 8 2 15 0 18" stroke-width="3"/>';
@@ -1036,17 +1094,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var SALAS = {"atendimento":{"poly":[[31.11,21.29],[45.67,33.56],[29.35,47.87],[14.79,35.59]],"tag":[30.23,26.22]},"clinico":{"poly":[[14.79,35.59],[33.52,51.38],[21.28,62.11],[2.55,46.33]],"tag":[18.03,40.5]},"edicao":{"poly":[[70.64,54.6],[85.2,66.88],[68.88,81.19],[54.32,68.91]],"tag":[69.76,59.55]},"estudos":{"poly":[[59.99,24.57],[78.71,40.36],[66.48,51.1],[47.75,35.31]],"tag":[63.23,29.49]},"financeiro":{"poly":[[78.71,40.36],[97.44,56.15],[85.2,66.88],[66.48,51.1]],"tag":[81.96,45.27]},"gerencia":{"poly":[[43.35,10.55],[59.99,24.57],[47.75,35.31],[31.11,21.29]],"tag":[45.55,14.59]},"marketing":{"poly":[[45.67,33.56],[70.64,54.6],[54.32,68.91],[29.35,47.87]],"tag":[50,42.89]},"reuniao":{"poly":[[33.52,51.38],[54.32,68.91],[42.08,79.65],[21.28,62.11]],"tag":[37.8,57.16]},"treino":{"poly":[[54.32,68.91],[68.88,81.19],[56.65,91.92],[42.08,79.65]],"tag":[55.48,72.06]}};
   var IMG_ESCRITORIO = 'escritorio.jpg?v=3';
   // quem trabalha em cada sala do escritório 3D (11/11/2026)
-  var SALA_GENTE = { marketing: ['marketing', 'lisa'], edicao: ['rafa'], estudos: ['caio'], gerencia: ['luzi'], financeiro: ['kim'], atendimento: ['amanda'], clinico: ['anapaula'] };
+  var SALA_GENTE = { marketing: ['marketing'], edicao: [], estudos: ['caio'], gerencia: ['luzi'], financeiro: ['kim'], atendimento: ['amanda'], clinico: ['anapaula'] };
   var SETORES = [
-    { id: 'marketing', nome: 'Marketing, Instagram e TikTok', tarefas: [
-      { ag: 'marketing', nome: 'Opções de captação', desc: 'Lê o second brain e traz de 3 a 5 opções para encher a agenda.', quando: 'Todo dia, 7h', auto: 'agente-marketing-diario', h: 30 },
-      { ag: 'marketing', nome: 'Análise e cronograma', desc: 'Analisa o que você subiu e monta os posts com legenda, já conferidos pelo CFO.', quando: 'Todo dia, 7h', auto: 'agente-marketing-diario', h: 30 },
-      { ag: 'lisa', nome: 'Números do Instagram e TikTok', desc: 'Lê o Metricool nas duas redes e diz o que funcionou, para você e para a Duda.', quando: 'Todo dia, 9h e 18h', auto: 'agente-instagram-lisa', h: 30 },
-      { ag: 'marketing', nome: 'Agendar no TikTok', desc: 'Pega os posts de vídeo que você aprovou no cronograma e agenda no TikTok pelo Metricool. Nunca no Instagram.', quando: 'De hora em hora, das 7h às 22h', auto: 'agente-publicador-tiktok', h: 12 },
-      { ag: 'lisa', nome: 'Respostas de DM', desc: 'Você cola a mensagem, ela escreve a resposta e você envia.', quando: 'Na rodada seguinte', sob: true }] },
-    { id: 'edicao', nome: 'Edição de vídeo', tarefas: [
-      { ag: 'rafa', nome: 'Edição dos vídeos', desc: 'Corte vertical, gancho na tela e assinatura; refaz pelo seu feedback.', quando: 'Todo dia, 8h', auto: 'agente-edicao-video', h: 30 },
-      { ag: 'rafa', nome: 'Casos no modelo', desc: 'Monta o story do caso (foto inicial e final) na hora; sem título, escreve um.', quando: 'Na hora (e a cada 5 min, das 7h às 23h)', auto: 'rafa-casos-na-hora', h: 48 }] },
+    { id: 'marketing', nome: 'Marketing e posicionamento', tarefas: [
+      { ag: 'marketing', nome: 'Comando do dia', desc: 'O post de hoje com legenda, o story e uma ação de captação fora da rede.', quando: 'Todo dia, 7h', auto: 'mkt-comando-diario', h: 30 },
+      { ag: 'marketing', nome: 'Lote da semana', desc: '3 roteiros para gravar em sequência, com lugar, roupa, fala e legenda.', quando: 'Sexta, 7h (na mesma rodada)', auto: 'mkt-comando-diario', h: 30 }] },
     { id: 'atendimento', nome: 'Atendimento e retornos', tarefas: [
       { ag: 'amanda', nome: 'Retornos', desc: 'Junta os retornos de todos os pacientes, com WhatsApp pronto. Fica na página dela e em Pacientes.', quando: 'Sempre, ligada aos Pacientes', sob: true },
       { ag: 'amanda', nome: 'Mensagens prontas', desc: 'Primeira resposta, confirmação e pós-consulta.', quando: 'Fase 2, com WhatsApp' }] },
@@ -1065,9 +1117,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   ];
 
   // ---------- cores e páginas dos agentes (10/11/2026, pedido do Pedro: mais intuitivo, interativo e colorido) ----------
-  var AREA = { escritorio: '#1f2a44', agentes: '#4c5fd5', agenda: '#1479b8', conteudo: '#d6336c', edicao: '#7c3fd0', pacientes: '#0a7f70', financeiro: '#b5740a', estudos: '#2563eb' };
+  var AREA = { escritorio: '#1f2a44', agentes: '#4c5fd5', agenda: '#1479b8', marketing: '#7a1f2b', conteudo: '#d6336c', edicao: '#7c3fd0', pacientes: '#0a7f70', financeiro: '#b5740a', estudos: '#2563eb' };
   // 11/11/2026: estudos (Caio) em azul, a pedido do Pedro
-  var SCOR = { marketing: '#d6336c', edicao: '#7c3fd0', atendimento: '#0a7f70', gerencia: '#4c5fd5', estudos: '#2563eb', financeiro: '#b5740a', clinico: '#1479b8', treino: '#d9622b' };
+  var SCOR = { marketing: '#7a1f2b', edicao: '#7c3fd0', atendimento: '#0a7f70', gerencia: '#4c5fd5', estudos: '#2563eb', financeiro: '#b5740a', clinico: '#1479b8', treino: '#d9622b' };
   var SIC = {
     marketing: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M4 10v4h3l8 4V6l-8 4H4z"/><path d="M18 9.5a3.5 3.5 0 0 1 0 5"/></svg>',
     atendimento: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"><path d="M5 6h14v10H10l-4 3v-3H5z"/></svg>',
@@ -1079,17 +1131,14 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // o que cada agente busca, o que recebe, o que entrega e a parte do Pedro. "com" = com quem trabalha.
   var PERFIL = {
     luzi: { objetivo: 'Manter a semana do consultório organizada e mostrar onde você precisa agir.', recebe: 'As notas do second brain e o que os outros agentes entregaram na semana.', entrega: 'A revisão da semana, todo domingo. O plano da semana ainda é proposta.', voce: 'Ler a revisão e confirmar as sugestões.', com: ['marketing', 'kim', 'nina'] },
-    marketing: { objetivo: 'Colocar paciente na cadeira, não ganhar seguidor.', recebe: 'O second brain (origem dos pacientes, ideias, plano do mês), os arquivos que você sobe e os números da Lisa.', entrega: 'De 3 a 5 opções de captação por dia e o cronograma de posts com legenda, já conferido pelo CFO.', voce: 'Escolher as opções, gravar, aprovar os posts e postar no Instagram.', com: ['rafa', 'lisa', 'bruno', 'caio'], regras: ['Sem preço e sem promessa de resultado', 'Nome e CRO em todo conteúdo', 'Sem dados de pacientes', 'No Instagram quem posta é você'] },
-    rafa: { objetivo: 'Deixar cada vídeo pronto para postar, sem você precisar editar.', recebe: 'Os vídeos que você manda para edição e o seu feedback.', entrega: 'O vídeo vertical, com gancho na tela e assinatura, na aba Edição.', voce: 'Conferir o vídeo e pedir para refazer se precisar.', com: ['marketing'], regras: ['Não ouve o áudio: corta pelo que vê e pelo pedido', 'Até 20 MB por vídeo'] },
-    lisa: { objetivo: 'Mostrar o que está funcionando nas redes e ajudar você a responder quem chama.', recebe: 'Os números do Metricool (Instagram e TikTok) e as mensagens que você cola aqui.', entrega: 'O relatório do dia e a resposta pronta para cada mensagem.', voce: 'Colar a mensagem sem nome nem @, copiar a resposta e enviar.', com: ['marketing'], regras: ['Nunca envia nada sozinha', 'Sem diagnóstico e sem preço por mensagem', 'Sem nome ou @ da pessoa (LGPD)'] },
+    marketing: { objetivo: 'Colocar paciente na cadeira com um marketing que caiba na sua semana: 3 posts, stories e uma ação fora da rede por dia.', recebe: 'O seu posicionamento (persona, promessa, tom e grade), os arquivos que você sobe e os números que você anota na sexta.', entrega: 'O comando do dia, às 7h, e o lote de 3 roteiros na sexta, já conferidos pelo CFO.', voce: 'Gravar o lote, postar, marcar o que fez e anotar os números da semana.', com: ['caio'], regras: ['Sem preço, desconto, grátis ou promessa de resultado', 'Nome e CRO/PR 39911 em todo conteúdo', 'Antes e depois só de caso seu, com TCLE', 'Sem dados de pacientes', 'Nunca posta nem agenda: quem posta é você'] },
     kim: { objetivo: 'Mostrar quanto entra, quanto sobra e quanto falta para o consultório próprio.', recebe: 'Os valores que você registrar, por clínica e procedimento.', entrega: 'O fechamento do mês contra a meta.', voce: 'Registrar as entradas.', com: ['luzi'], regras: ['Só valores, nunca nomes de pacientes'] },
     nina: { objetivo: 'Fazer a especialização render: menos tempo organizando, mais tempo estudando.', recebe: 'As aulas e os artigos que você manda e a sua fila de temas.', entrega: 'O menu de temas no domingo e o resumo das aulas.', voce: 'Escolher o tema da semana e mandar as aulas.', com: ['caio'] },
     anapaula: { objetivo: 'Transformar os achados de um caso num plano de tratamento claro.', recebe: 'Os achados clínicos, sem o nome do paciente.', entrega: 'O plano faseado, com opções, e a versão para explicar ao paciente.', voce: 'Mandar o caso e revisar o plano. A decisão clínica é sua.', com: ['caio'], regras: ['Caso sempre anonimizado', 'A decisão clínica é do dentista'] },
     amanda: { objetivo: 'Não perder paciente por falta de resposta ou de retorno.', recebe: 'Hoje, nada automático: os retornos ficam só na aba Pacientes.', entrega: 'Mensagens prontas de primeira resposta, confirmação, pós-consulta e retorno.', voce: 'Copiar a mensagem e enviar pelo seu WhatsApp.', com: ['bruno', 'lisa'], regras: ['Sigilo e LGPD', 'Não lê as fichas dos pacientes'] },
-    bruno: { objetivo: 'Garantir que nada vá a público fora das regras do CFO e da LGPD.', recebe: 'Os conteúdos da Duda e as mensagens-modelo.', entrega: 'O que mudar, com o motivo.', voce: 'Aplicar o ajuste antes de postar.', com: ['marketing', 'amanda'], nota: 'Hoje a própria Duda confere o CFO em cada conteúdo. O Bruno ainda é proposta.' },
     caio: { objetivo: 'Dar base científica ao que você estuda e publica.', recebe: 'Os alertas do PubMed que chegam no seu e-mail.', entrega: 'O resumo traduzido dos artigos, por e-mail, todo dia às 21h.', voce: 'Ler o resumo.', com: ['nina', 'anapaula', 'marketing'] }
   };
-  var AG_SETOR = { bruno: 'marketing' };
+  var AG_SETOR = {};
   function setorDe(id) {
     var s = SETORES.find(function (x) { return x.tarefas.some(function (t) { return t.ag === id; }); });
     return s || SETORES.find(function (x) { return x.id === AG_SETOR[id]; }) || SETORES[0];
@@ -1107,7 +1156,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (ts.some(function (t) { return t.est.k === 'sob'; })) return ['c-off', 'Sob demanda'];
     return ['c-off', 'Ainda não roda sozinho'];
   }
-  var TAB_PADRAO = { marketing: 'hoje', lisa: 'numeros', rafa: 'feitos', luzi: 'dia', amanda: 'retornos' };
+  var TAB_PADRAO = { luzi: 'dia', amanda: 'retornos' };
   function agTab(a) { return state.agTab[a.id] || TAB_PADRAO[a.id] || 'como'; }
   function agTopo(a, tabs) {
     var s = setorDe(a.id), st = agStatus(tarefasDe(a.id)), cur = agTab(a);
@@ -1119,11 +1168,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         return '<button type="button" data-agtab="' + t[0] + '" aria-pressed="' + (cur === t[0]) + '">' + esc(t[1]) + (t[2] ? '<span class="n">' + t[2] + '</span>' : '') + '</button>'; }).join('') + '</div>' : '');
   }
   var FLUXO_MKT = [
-    { quem: 'Você', oque: 'grava e sobe no painel', ir: 'conteudo' },
-    { quem: 'Duda', oque: 'analisa e monta o post', ag: 'marketing' },
-    { quem: 'Peixe', oque: 'edita o vídeo', ag: 'rafa' },
-    { quem: 'Você', oque: 'aprova e posta', ir: 'conteudo' },
-    { quem: 'Lisa', oque: 'mede e avisa a Duda', ag: 'lisa' }
+    { quem: 'Leo', oque: 'manda o lote na sexta', ag: 'marketing' },
+    { quem: 'Você', oque: 'grava os 3 em sequência', ir: 'marketing' },
+    { quem: 'Leo', oque: 'manda o comando do dia', ag: 'marketing' },
+    { quem: 'Você', oque: 'posta e marca o que fez', ir: 'marketing' },
+    { quem: 'Você', oque: 'anota os números na sexta', ir: 'marketing' }
   ];
   function agComo(a) {
     var p = PERFIL[a.id] || {}, ts = tarefasDe(a.id), s = setorDe(a.id);
@@ -1137,7 +1186,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       passo(4, '#d9622b', 'Sua parte', '<p>' + esc(p.voce || '') + '</p>') + '</div>';
     if (s.id === 'marketing' || s.id === 'edicao') html += '<section class="cf-card"><h2>O caminho de um post</h2><div class="cf-flow">' + FLUXO_MKT.map(function (f, n) {
       return '<button type="button" ' + (f.ag ? 'data-agent="' + f.ag + '"' : 'data-ir="' + f.ir + '"') + (f.ag === a.id ? ' class="eu"' : '') + '><b>' + (n + 1) + '. ' + f.quem + '</b>' + f.oque + '</button>'; }).join('') +
-      '</div><p style="margin-top:8px">Toque num passo para abrir. No TikTok, o vídeo aprovado é agendado sozinho; no Instagram, quem posta é você.</p></section>';
+      '</div><p style="margin-top:8px">Toque num passo para abrir. Nada é postado sozinho: em todas as redes, quem posta é você.</p></section>';
     html += '<div class="cf-2"><section class="cf-card"><h2>Tarefas</h2>' + (ts.length ? ts.map(function (t) {
         var pu = t.est.p;
         return '<div class="cf-task"><b>' + esc(t.nome) + '</b><span class="chip ' + EST_CHIP[t.est.k] + '">' + esc(t.est.txt) + '</span><span>' + esc(t.desc) + '</span>' +
@@ -1206,26 +1255,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var l = [], hoje = todayIso();
     function add(tipo, txt, ir) { l.push({ tipo: tipo, txt: txt, ir: ir }); }
     if (id === 'marketing') {
-      var d = ct.desafios && dsAtual();
-      if (d && !dsFeitoHoje().length) add('voce', 'Desafio de hoje: ' + d.titulo, 'conteudo');
-      var dia = state.days[0];
-      if (dia && dia.data === hoje) {
-        var nOp = (dia.opcoes || []).filter(function (o) { return !(dia.estado || {})[o.id]; }).length;
-        if (nOp) add('voce', plural(nOp, 'opção de captação para decidir', 'opções de captação para decidir'), 'duda');
-      }
-      (ct.posts || []).forEach(function (p) {
-        var st = p.estado || 'proposto';
-        if (st === 'descartado' || st === 'postado') return;
-        if (p.data < hoje) add('atrasada', 'Post de ' + fmtDay(p.data) + ' não foi postado', 'conteudo');
-        else if (st === 'aprovado') add('fila', 'Postar em ' + fmtDay(p.data), 'conteudo');
-        else add('voce', 'Aprovar o post de ' + fmtDay(p.data), 'conteudo');
-      });
-      var novos = (ct.midia || []).filter(function (m) { return m.status === 'novo'; }).length;
-      if (novos) add('fila', plural(novos, 'arquivo esperando', 'arquivos esperando') + ' a análise da Duda', 'conteudo');
-      var dmPend = (ct.dm || []).filter(function (x) { return x.estado === 'pendente'; }).length;
-      if (dmPend) add('fila', plural(dmPend, 'mensagem esperando', 'mensagens esperando') + ' a resposta da Lisa', 'lisa');
-      var dmProntas = (ct.dm || []).filter(function (x) { return x.estado === 'respondida'; }).length;
-      if (dmProntas) add('voce', plural(dmProntas, 'resposta da Lisa pronta', 'respostas da Lisa prontas') + ' para enviar', 'lisa');
+      // 16/11/2026: o que está aberto sai do comando de hoje e do lote da semana
+      var dia = mkDia(hoje);
+      if (dia) mkPartes(dia).forEach(function (p) { if (!(dia.feito || {})[p.k]) add('voce', p.rot + ': ' + p.tit, 'marketing'); });
+      var lt = mkLote();
+      if (lt) { var falta = (lt.itens || []).filter(function (x) { return !x.gravado; }).length; if (falta) add('voce', plural(falta, 'roteiro do lote para gravar', 'roteiros do lote para gravar'), 'marketing'); }
     }
     if (id === 'edicao') (ct.midia || []).forEach(function (m) {
       var e = m.edicao; if (!e) return; var n = m.nota || 'Vídeo';
@@ -1243,7 +1277,6 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var autos = tar.filter(function (t) { return t.auto; });
     var ok = autos.filter(function (t) { return t.est.k === 'ok'; }).length, late = autos.filter(function (t) { return t.est.k === 'late'; }).length;
     var i = { s: s, tar: tar, ab: ab, voce: conta('voce'), atrasada: conta('atrasada') + late, andando: conta('andando'), fila: conta('fila'), feitas: ok, ok: ok };
-    if (s.id === 'marketing') i.feitas += dsSemana().filter(function (x) { return x.feito; }).length;
     // nota: parte da fração de tarefas automáticas em dia e perde pontos pelo que está atrasado ou esperando o Pedro
     var ativo = autos.length > 0 || ab.length > 0;
     i.saude = !ativo ? null : Math.max(0, Math.min(100, Math.round((autos.length ? 100 * ok / autos.length : 100) - 15 * i.atrasada - Math.min(36, 6 * i.voce))));
@@ -1369,11 +1402,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
 
   function irPara(s) {
-    if (s === 'duda') { state.section = 'agentes'; state.agent = 'marketing'; }
-    else if (s === 'lisa') { state.section = 'agentes'; state.agent = 'lisa'; state.agTab.lisa = 'mensagens'; }
-    else if (s.indexOf('ag:') === 0) { state.section = 'agentes'; state.agent = s.slice(3); }
+    if (s.indexOf('ag:') === 0) { state.section = 'agentes'; state.agent = s.slice(3); }
     else { state.section = s; state.agent = null; try { localStorage.setItem('painel:aba', s); } catch (err) {} }
-    if (s === 'conteudo') { ct.view = 'banco'; ctEnter(); }
     render(); window.scrollTo(0, 0);
   }
 
@@ -3202,6 +3232,240 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     }
   }
 
+  // ---------- Marketing (16/11/2026): recomeço a pedido do Pedro ----------
+  // Coleção "mkt": "marca" (posicionamento), "dia-AAAA-MM-DD" (comando do dia), "lote-AAAA-MM-DD" (sexta: 3 roteiros)
+  // e "num-AAAA-MM-DD" (números da semana, pela segunda-feira). Os arquivos que o Pedro sobe ficam em "midia".
+  // O agente Leo escreve o dia e o lote às 7h; o Pedro marca o que fez. Nada é postado sozinho.
+  var mk = { docs: [], view: 'hoje', up: null, upErr: null, prog: null, msg: null, num: {} };
+  try { var mkv = localStorage.getItem('painel:mk'); if (mkv) mk.view = mkv; } catch (err) {}
+  var MK_PAPEL = { educativo: ['Educativo', '#2563eb'], caso: ['Caso', '#7a1f2b'], pessoal: ['Pessoal', '#b5740a'], bastidor: ['Bastidor', '#0a7f70'] };
+  var MK_PAC = { sem: 'Não aparece paciente', tcle: 'Paciente com TCLE assinado', sem_tcle: 'Paciente SEM TCLE (não postar)' };
+  var MK_USO = { lote: 'Vídeo do lote', caso: 'Foto de caso', pessoal: 'Pessoal ou bastidor', perfil: 'Foto de perfil', outro: 'Outro' };
+  function mkDoc(id) { return mk.docs.find(function (d) { return d.id === id; }); }
+  function mkDia(iso) { return mkDoc('dia-' + iso); }
+  function mkLote() { return mk.docs.filter(function (d) { return d.tipo === 'lote'; }).sort(function (a, b) { return a.data < b.data ? 1 : -1; })[0]; }
+  function mkSegunda(d) { d = d ? new Date(d) : new Date(); d.setHours(0, 0, 0, 0); d.setDate(d.getDate() - (d.getDay() + 6) % 7); return isoOf(d); }
+  function mkPartes(d) {
+    var l = [];
+    if (d.post) l.push({ k: 'post', rot: 'Postar', tit: d.post.titulo || 'post de hoje' });
+    if (d.story) l.push({ k: 'story', rot: 'Story', tit: d.story.ideia || 'story do dia' });
+    if (d.acao) l.push({ k: 'acao', rot: 'Fora da rede', tit: d.acao.titulo || 'ação do dia' });
+    return l;
+  }
+  function mkPega(obj, path) { return path.split('.').reduce(function (o, k) { return o == null ? o : o[k]; }, obj); }
+  function mkTexto(t) { return esc(t || '').replace(/\n/g, '<br>'); }
+  function mkCopia(rot, docId, path) { return '<button type="button" class="btn sm" data-mk-copy="' + esc(docId + '|' + path) + '">Copiar ' + esc(rot) + '</button>'; }
+  function mkBtnFeito(d, k, sim, nao) {
+    var f = (d.feito || {})[k];
+    return '<button type="button" class="btn ' + (f ? 'mk-ok' : 'primary') + '" data-mk-feito="' + esc(d.id + '|' + k) + '">' + (f ? sim + ' ✓' : nao) + '</button>';
+  }
+
+  function mkHoje() {
+    var hoje = todayIso(), d = mkDia(hoje), lt = mkLote();
+    if (!d) return '<div class="empty"><b>O comando de hoje sai às 7h</b>, com o computador ligado. Ele traz o post do dia, a ideia do story e uma ação de captação fora da rede.' +
+      (lt ? '<br><br>Enquanto isso, o lote da semana já está pronto. <button type="button" class="link-btn" data-mk-view="lote">Abrir o lote</button>' : '') + '</div>';
+    var partes = mkPartes(d), feitos = partes.filter(function (p) { return (d.feito || {})[p.k]; }).length;
+    var html = '<div class="mk-prog"><b class="cap">' + esc(fmtDay(hoje)) + '</b><span>' + feitos + ' de ' + partes.length + ' feitos</span><i style="--p:' + (partes.length ? Math.round(100 * feitos / partes.length) : 0) + '%"></i></div>';
+    if (d.nota) html += '<p class="mk-nota">' + mkTexto(d.nota) + '</p>';
+    html += '<div class="mk-cards">';
+    var num = 0, rot = function (t) { num++; return '<span class="mk-rot">' + num + ' · ' + t + '</span>'; };
+    if (d.post) {
+      var p = d.post, pp = MK_PAPEL[p.papel] || null;
+      html += '<section class="mk-card' + ((d.feito || {}).post ? ' feito' : '') + '"><div class="mk-top">' + rot('Postar hoje') +
+        (pp ? '<span class="chip" style="background:' + pp[1] + ';color:#fff">' + pp[0] + '</span>' : '') +
+        (p.formato ? '<span class="chip">' + esc(p.formato) + '</span>' : '') + '</div>' +
+        '<h3>' + esc(p.titulo || '') + '</h3>' +
+        '<p class="mk-meta">' + (p.horario ? 'Melhor horário: <b>' + esc(p.horario) + '</b>' : '') + ((p.redes || []).length ? ' · ' + esc(p.redes.join(', ')) : '') + (p.de_lote ? ' · roteiro ' + esc(p.de_lote) + ' do lote' : '') + '</p>' +
+        (p.legenda ? '<div class="mk-leg"><small>Legenda</small><p>' + mkTexto(p.legenda) + '</p>' + mkCopia('legenda', d.id, 'post.legenda') + '</div>' : '') +
+        (p.cfo ? '<p class="mk-cfo">✓ CFO: ' + esc(p.cfo) + '</p>' : '') +
+        '<div class="acts">' + mkBtnFeito(d, 'post', 'Postado', 'Postei') + '</div></section>';
+    } else if (d.sem_post) html += '<section class="mk-card mk-off"><span class="mk-rot">Hoje não tem post</span><p>' + mkTexto(d.sem_post) + '</p></section>';
+    if (d.story) html += '<section class="mk-card' + ((d.feito || {}).story ? ' feito' : '') + '"><div class="mk-top">' + rot('Story do dia') + '</div>' +
+      '<h3>' + esc(d.story.ideia || '') + '</h3>' + (d.story.como ? '<p>' + mkTexto(d.story.como) + '</p>' : '') +
+      '<div class="acts">' + mkBtnFeito(d, 'story', 'Feito', 'Fiz o story') + '</div></section>';
+    if (d.acao) html += '<section class="mk-card mk-acao' + ((d.feito || {}).acao ? ' feito' : '') + '"><div class="mk-top">' + rot('Fora da rede') + (d.acao.tipo ? '<span class="chip">' + esc(d.acao.tipo) + '</span>' : '') + '</div>' +
+      '<h3>' + esc(d.acao.titulo || '') + '</h3>' + (d.acao.para ? '<p class="mk-meta">Para: <b>' + esc(d.acao.para) + '</b></p>' : '') +
+      (d.acao.texto ? '<div class="mk-leg"><small>Mensagem pronta</small><p>' + mkTexto(d.acao.texto) + '</p>' + mkCopia('mensagem', d.id, 'acao.texto') + '</div>' : '') +
+      (d.acao.porque ? '<p class="hint">' + mkTexto(d.acao.porque) + '</p>' : '') +
+      '<div class="acts">' + mkBtnFeito(d, 'acao', 'Feito', 'Fiz') + '</div></section>';
+    html += '</div>';
+    var prox = lt ? (lt.itens || []).filter(function (x) { return x.postar_em && x.postar_em > hoje; }) : [];
+    if (prox.length) html += '<h2 class="mk-h">Próximos posts da semana</h2><ul class="mk-prox">' + prox.map(function (x) {
+      var pp = MK_PAPEL[x.papel] || ['', '#888'];
+      return '<li><span class="mk-dot" style="background:' + pp[1] + '"></span><b>' + esc(fmtDay(x.postar_em)) + '</b><span>' + esc(x.titulo) + '</span>' + (x.gravado ? '<em>gravado</em>' : '<em class="nao">falta gravar</em>') + '</li>'; }).join('') + '</ul>';
+    return html;
+  }
+
+  function mkLoteView() {
+    var lt = mkLote();
+    if (!lt) return '<div class="empty"><b>O primeiro lote sai na sexta às 7h.</b> São 3 roteiros para gravar em sequência: um educativo, um caso e um pessoal ou bastidor, cada um com lugar, roupa, fala e legenda.</div>';
+    var itens = lt.itens || [], gr = itens.filter(function (x) { return x.gravado; }).length;
+    var html = '<div class="mk-prog"><b>Lote de ' + esc(lt.semana || fmtDay(lt.data)) + '</b><span>' + gr + ' de ' + itens.length + ' gravados</span><i style="--p:' + (itens.length ? Math.round(100 * gr / itens.length) : 0) + '%"></i></div>';
+    if (lt.nota) html += '<p class="mk-nota">' + mkTexto(lt.nota) + '</p>';
+    if ((lt.antes || []).length) html += '<section class="mk-card mk-antes"><span class="mk-rot">Antes de começar</span><ul>' + lt.antes.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></section>';
+    html += '<div class="mk-cards">' + itens.map(function (x, i) {
+      var pp = MK_PAPEL[x.papel] || [x.papel || '', '#888'];
+      return '<section class="mk-card mk-rot-card' + (x.gravado ? ' feito' : '') + '" style="--pc:' + pp[1] + '"><div class="mk-top"><span class="mk-num">' + (x.n || i + 1) + '</span><span class="chip" style="background:' + pp[1] + ';color:#fff">' + esc(pp[0]) + '</span>' +
+        (x.formato ? '<span class="chip">' + esc(x.formato) + '</span>' : '') + '</div>' +
+        '<h3>' + esc(x.titulo || '') + '</h3>' +
+        '<div class="mk-onde">' + (x.onde ? '<span><small>Onde</small>' + esc(x.onde) + '</span>' : '') + (x.roupa ? '<span><small>Roupa</small>' + esc(x.roupa) + '</span>' : '') +
+        (x.postar_em ? '<span><small>Postar</small>' + esc(fmtDay(x.postar_em)) + (x.horario ? ', ' + esc(x.horario) : '') + '</span>' : '') + (x.duracao ? '<span><small>Duração</small>' + esc(x.duracao) + '</span>' : '') + '</div>' +
+        (x.gancho ? '<blockquote class="mk-gancho">' + esc(x.gancho) + '</blockquote>' : '') +
+        ((x.fala || []).length ? '<div class="mk-bloco"><small>O que falar</small><ol>' + x.fala.map(function (f) { return '<li>' + esc(f) + '</li>'; }).join('') + '</ol></div>' : '') +
+        (x.mostrar ? '<div class="mk-bloco"><small>O que mostrar</small><p>' + mkTexto(x.mostrar) + '</p></div>' : '') +
+        (x.chamada ? '<div class="mk-bloco"><small>Fechamento</small><p>' + mkTexto(x.chamada) + '</p></div>' : '') +
+        (x.legenda ? '<details class="mk-det"><summary>Legenda pronta</summary><p>' + mkTexto(x.legenda) + '</p>' + mkCopia('legenda', lt.id, 'itens.' + i + '.legenda') + '</details>' : '') +
+        (x.cfo ? '<p class="mk-cfo">✓ CFO: ' + esc(x.cfo) + '</p>' : '') +
+        '<div class="acts"><button type="button" class="btn ' + (x.gravado ? 'mk-ok' : 'primary') + '" data-mk-gravado="' + i + '">' + (x.gravado ? 'Gravado ✓' : 'Marcar como gravado') + '</button></div></section>';
+    }).join('') + '</div>';
+    if (lt.depois) html += '<p class="hint">' + mkTexto(lt.depois) + '</p>';
+    return html;
+  }
+
+  function mkUpForm() {
+    var u = mk.up; if (!u) return '';
+    var lt = mkLote(), itens = lt ? lt.itens || [] : [];
+    var opt = function (obj, sel) { return Object.keys(obj).map(function (k) { return '<option value="' + k + '"' + (sel === k ? ' selected' : '') + '>' + esc(obj[k]) + '</option>'; }).join(''); };
+    return '<section class="mk-card mk-up"><span class="mk-rot">Enviar arquivos</span>' +
+      '<label>Arquivos (fotos ou vídeos, até 50 MB cada)<input type="file" multiple accept="image/*,video/*" data-mk-file="1"></label>' +
+      '<label>O que é<select data-mk-f="up|uso"><option value="">Escolha…</option>' + opt(MK_USO, u.uso) + '</select></label>' +
+      (u.uso === 'lote' && itens.length ? '<label>De qual roteiro<select data-mk-f="up|n"><option value="">Escolha…</option>' + itens.map(function (x, i) { return '<option value="' + i + '"' + (String(u.n) === String(i) ? ' selected' : '') + '>' + (x.n || i + 1) + '. ' + esc(x.titulo) + '</option>'; }).join('') + '</select></label>' : '') +
+      '<label>Aparece paciente?<select data-mk-f="up|paciente"><option value="">Escolha…</option>' + opt(MK_PAC, u.paciente) + '</select></label>' +
+      '<label>Nota (opcional)<input type="text" data-mk-f="up|nota" value="' + esc(u.nota || '') + '" placeholder="ex.: take 2 ficou melhor"></label>' +
+      (mk.upErr ? '<p class="ag-warn">' + esc(mk.upErr) + '</p>' : '') + (mk.prog ? '<p class="hint">' + esc(mk.prog) + '</p>' : '') +
+      '<div class="acts"><button type="button" class="btn primary" data-mk-send="1"' + (mk.prog ? ' disabled' : '') + '>Enviar</button><button type="button" class="btn" data-mk-cancel="1">Cancelar</button></div></section>';
+  }
+  function mkArquivos() {
+    var lista = (ct.midia || []);
+    var html = !ct.ready ? '' : !ct.assets ? '<div class="ag-warn">Só quem edita o painel pode enviar arquivos.</div>' : mk.up ? mkUpForm() : '<div class="acts"><button type="button" class="btn primary" data-mk-up="1">+ Enviar fotos e vídeos</button></div>';
+    if (!lista.length) return html + '<div class="empty"><b>Nenhum arquivo ainda.</b> Suba aqui os vídeos do lote, as fotos de caso (só com TCLE) e o que for pessoal. O Leo olha tudo na rodada seguinte.</div>';
+    return html + '<div class="mk-grid">' + lista.map(function (m) {
+      var pac = m.paciente === 'sem_tcle';
+      return '<figure class="mk-arq' + (pac ? ' alerta' : '') + '">' + thumb(m, 'mk-th') + '<figcaption><b>' + esc(MK_USO[m.uso] || m.tipo || '') + (m.lote_titulo ? ' · ' + esc(m.lote_titulo) : '') + '</b>' +
+        '<span>' + esc(MK_PAC[m.paciente] || '') + '</span>' + (m.nota ? '<span>' + esc(m.nota) + '</span>' : '') + '<small>' + (m.criado ? dataHora(m.criado) : '') + '</small></figcaption></figure>'; }).join('') + '</div>';
+  }
+
+  function mkNumeros() {
+    var seg = mkSegunda(), id = 'num-' + seg, atual = mkDoc(id) || {};
+    var fim = new Date(seg + 'T12:00:00'); fim.setDate(fim.getDate() + 6);
+    var postsAuto = mk.docs.filter(function (d) { return d.tipo === 'dia' && d.data >= seg && d.data <= isoOf(fim) && (d.feito || {}).post; }).length;
+    var v = function (k, def) { return mk.num[k] != null ? mk.num[k] : atual[k] != null ? atual[k] : def != null ? def : ''; };
+    var campo = function (k, rot, dica, def) { return '<label class="mk-campo"><span>' + rot + '<small>' + dica + '</small></span><input type="number" min="0" inputmode="numeric" data-mk-f="num|' + k + '" value="' + esc(v(k, def)) + '"></label>'; };
+    var html = '<section class="mk-card"><span class="mk-rot">Semana de ' + esc(shortDay(new Date(seg + 'T12:00:00'))) + ' a ' + esc(shortDay(fim)) + '</span>' +
+      '<p class="hint">Anote na sexta. São só 4 números: o que importa é paciente na cadeira, não curtida.</p><div class="mk-campos">' +
+      campo('posts', 'Posts feitos', 'o painel contou ' + postsAuto, postsAuto) + campo('conversas', 'Conversas no WhatsApp', 'gente nova que chamou') +
+      campo('consultas', 'Consultas marcadas', 'de quem chamou') + campo('novos', 'Pacientes novos', 'que sentaram na cadeira') + '</div>' +
+      '<label class="mk-campo full"><span>De onde vieram<small>indicação de quem, Instagram, Google, evento…</small></span><input type="text" data-mk-f="num|origem" value="' + esc(v('origem')) + '"></label>' +
+      (mk.numMsg ? '<p class="hint">' + esc(mk.numMsg) + '</p>' : '') +
+      '<div class="acts"><button type="button" class="btn primary" data-mk-num="1">Salvar a semana</button></div></section>';
+    var hist = mk.docs.filter(function (d) { return d.tipo === 'num'; }).sort(function (a, b) { return a.semana < b.semana ? 1 : -1; }).slice(0, 8);
+    if (hist.length) html += '<h2 class="mk-h">Semanas anteriores</h2><div class="mk-tab"><table><thead><tr><th>Semana</th><th>Posts</th><th>Conversas</th><th>Consultas</th><th>Novos</th></tr></thead><tbody>' +
+      hist.map(function (h) { return '<tr><td>' + esc(shortDay(new Date(h.semana + 'T12:00:00'))) + '</td><td>' + fmtNum(h.posts) + '</td><td>' + fmtNum(h.conversas) + '</td><td>' + fmtNum(h.consultas) + '</td><td><b>' + fmtNum(h.novos) + '</b></td></tr>'; }).join('') + '</tbody></table></div>';
+    return html;
+  }
+
+  function mkMarcaView() {
+    var m = mkDoc('marca');
+    if (!m) return '<div class="empty"><b>O posicionamento ainda não foi carregado.</b></div>';
+    var lista = function (arr) { return '<ul>' + (arr || []).map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>'; };
+    var html = '<section class="mk-marca-top"><small>Em uma frase</small><p>' + esc(m.frase || '') + '</p>' + (m.lema ? '<span>' + esc(m.lema) + '</span>' : '') + '</section>' +
+      '<div class="mk-cards mk-2">' +
+      '<section class="mk-card"><span class="mk-rot">Quem eu quero atingir</span>' + lista(m.persona) + '</section>' +
+      '<section class="mk-card"><span class="mk-rot">A promessa</span><p class="mk-prom">' + esc(m.promessa || '') + '</p></section>' +
+      '<section class="mk-card"><span class="mk-rot">Como eu falo</span>' + lista(m.tom) + '</section>' +
+      '<section class="mk-card"><span class="mk-rot">O que eu não sou</span>' + lista(m.nao) + '</section>' +
+      '<section class="mk-card"><span class="mk-rot">Pilares de conteúdo</span><div class="mk-pil">' + (m.pilares || []).map(function (p) { return '<span>' + esc(p) + '</span>'; }).join('') + '</div></section>' +
+      '<section class="mk-card"><span class="mk-rot">Cores</span><div class="mk-cores">' + (m.cores || []).map(function (c) { return '<span><i style="background:' + esc(c.hex) + '"></i>' + esc(c.nome) + '<small>' + esc(c.hex) + '</small></span>'; }).join('') + '</div>' + (m.visual ? lista(m.visual) : '') + '</section>' +
+      '</div>';
+    if ((m.grade || []).length) html += '<h2 class="mk-h">A semana</h2><div class="mk-tab"><table><thead><tr><th>Post</th><th>Formato</th><th>Para quê</th><th>Onde</th><th>Roupa</th></tr></thead><tbody>' +
+      m.grade.map(function (g) { return '<tr><td><b>' + esc(g.post) + '</b></td><td>' + esc(g.formato) + '</td><td>' + esc(g.funcao) + '</td><td>' + esc(g.onde || '') + '</td><td>' + esc(g.roupa || '') + '</td></tr>'; }).join('') + '</tbody></table></div>';
+    if ((m.regras || []).length) html += '<section class="mk-card mk-regras"><span class="mk-rot">Regras fixas</span>' + lista(m.regras) + '</section>';
+    return html;
+  }
+
+  function renderMkt() {
+    var head = '<header class="page-head"><span class="eyebrow">Marketing</span><h1>Marketing</h1><p>O comando do dia, o lote da semana e a sua marca. O Leo prepara; quem posta é sempre você.</p></header>';
+    if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b> Abra o painel logado na sua conta.') + '</div>';
+    var lt = mkLote(), dHoje = mkDia(todayIso());
+    var nHoje = dHoje ? mkPartes(dHoje).filter(function (p) { return !(dHoje.feito || {})[p.k]; }).length : 0;
+    var nLote = lt ? (lt.itens || []).filter(function (x) { return !x.gravado; }).length : 0;
+    var views = [['hoje', 'Hoje', nHoje], ['lote', 'Lote da semana', nLote], ['arquivos', 'Meus arquivos', 0], ['numeros', 'Números', 0], ['marca', 'Minha marca', 0]];
+    var bar = '<div class="ag-bar"><div class="seg ds-seg mk-seg" role="group" aria-label="Visão">' + views.map(function (v) {
+      return '<button type="button" data-mk-view="' + v[0] + '" aria-pressed="' + (mk.view === v[0]) + '">' + esc(v[1]) + (v[2] ? '<span class="n">' + v[2] + '</span>' : '') + '</button>'; }).join('') + '</div></div>';
+    var corpo = mk.view === 'lote' ? mkLoteView() : mk.view === 'arquivos' ? mkArquivos() : mk.view === 'numeros' ? mkNumeros() : mk.view === 'marca' ? mkMarcaView() : mkHoje();
+    return head + bar + (mk.msg ? '<div class="ag-warn">' + esc(mk.msg) + '</div>' : '') + corpo;
+  }
+
+  function mkSalvar(id, patch, erro) {
+    return state.db.doc('mkt/' + id).update(patch).catch(function () { mk.msg = erro || 'Não salvou. Tente de novo.'; render(); });
+  }
+  function mkSend() {
+    var u = mk.up;
+    mk.upErr = !u.files || !u.files.length ? 'Escolha os arquivos.' : !u.uso ? 'Diga o que é.' : !u.paciente ? 'Diga se aparece paciente.' : (u.uso === 'lote' && u.n === '' ) ? 'Diga de qual roteiro.' : null;
+    if (mk.upErr) { render(); return; }
+    var lt = mkLote(), item = u.uso === 'lote' && lt && u.n != null && u.n !== '' ? (lt.itens || [])[+u.n] : null;
+    var files = Array.prototype.slice.call(u.files), done = 0, fails = [];
+    function next(i) {
+      if (i >= files.length) {
+        mk.prog = null; mk.up = fails.length && !done ? u : null;
+        mk.msg = done + (done === 1 ? ' arquivo enviado.' : ' arquivos enviados.') + (fails.length ? ' Não foram: ' + fails.join('; ') + '.' : '') + (u.paciente === 'sem_tcle' && done ? ' Sem o TCLE assinado, não poste.' : '');
+        if (item && done && !item.gravado) {
+          var itens = (lt.itens || []).map(function (x, k) { return k === +u.n ? Object.assign({}, x, { gravado: true }) : x; });
+          mkSalvar(lt.id, { itens: itens });
+        }
+        render(); return;
+      }
+      var f = files[i], video = /^video\//.test(f.type) || /\.(mov|mp4|m4v|webm)$/i.test(f.name);
+      mk.prog = 'Enviando ' + (i + 1) + ' de ' + files.length + '…'; render();
+      var prep = video
+        ? (f.size > MAX_BYTES ? Promise.reject({ code: 'too_large' }) : Promise.resolve({ blob: f, type: /webm/i.test(f.type) || /\.webm$/i.test(f.name) ? 'video/webm' : 'video/mp4' }))
+        : prepImage(f).then(function (b) { return { blob: b, type: 'image/jpeg' }; }, function () { return Promise.reject({ code: 'decode' }); });
+      prep.then(function (x) {
+        return ct.assets.upload(x.blob, { type: x.type }).then(function (r) {
+          var doc = { asset: r.id, tipo: video ? 'video' : 'foto', uso: u.uso, paciente: u.paciente, nota: (u.nota || '').trim(), criado: new Date().toISOString(), tamanho: r.sizeBytes, status: 'novo' };
+          if (item) { doc.lote = lt.id; doc.lote_n = +u.n; doc.lote_titulo = item.titulo; }
+          return state.db.doc('midia/' + r.id).set(doc);
+        });
+      }).then(function () { done++; }, function (e) {
+        var c = e && e.code;
+        fails.push((i + 1) + 'º: ' + (c === 'too_large' ? 'passa de 50 MB' : c === 'decode' ? 'formato não aceito (no iPhone: Ajustes › Câmera › Formatos › Mais compatível)' : c === 'quota_or_state' ? 'armazenamento cheio' : 'falhou'));
+      }).then(function () { next(i + 1); });
+    }
+    next(0);
+  }
+  function mkClick(t) {
+    var a;
+    if ((a = t.closest('[data-mk-view]'))) { mk.view = a.getAttribute('data-mk-view'); mk.msg = null; try { localStorage.setItem('painel:mk', mk.view); } catch (err) {} render(); window.scrollTo(0, 0); return; }
+    if ((a = t.closest('[data-mk-feito]'))) {
+      var pf = a.getAttribute('data-mk-feito').split('|'), d = mkDoc(pf[0]); if (!d) return;
+      var feito = Object.assign({}, d.feito || {}); feito[pf[1]] = !feito[pf[1]];
+      d.feito = feito; render(); mkSalvar(d.id, { feito: feito }); return;
+    }
+    if ((a = t.closest('[data-mk-gravado]'))) {
+      var lt = mkLote(); if (!lt) return; var n = +a.getAttribute('data-mk-gravado');
+      lt.itens = (lt.itens || []).map(function (x, k) { return k === n ? Object.assign({}, x, { gravado: !x.gravado }) : x; });
+      render(); mkSalvar(lt.id, { itens: lt.itens }); return;
+    }
+    if ((a = t.closest('[data-mk-copy]'))) {
+      var pc2 = a.getAttribute('data-mk-copy').split('|'), dd = mkDoc(pc2[0]), txt = dd ? mkPega(dd, pc2[1]) : '';
+      if (txt && navigator.clipboard) navigator.clipboard.writeText(txt).then(function () { a.textContent = 'Copiado ✓'; }, function () { a.textContent = 'Selecione e copie à mão'; });
+      else a.textContent = 'Selecione e copie à mão';
+      return;
+    }
+    if (t.closest('[data-mk-up]')) { mk.up = { uso: '', paciente: '', nota: '', n: '' }; mk.upErr = null; mk.msg = null; render(); return; }
+    if (t.closest('[data-mk-cancel]')) { mk.up = null; mk.upErr = null; render(); return; }
+    if (t.closest('[data-mk-send]')) { if (!mk.prog) mkSend(); return; }
+    if (t.closest('[data-mk-num]')) {
+      var seg = mkSegunda(), id = 'num-' + seg, atual = mkDoc(id) || {}, body = { tipo: 'num', semana: seg, salvo_em: new Date().toISOString() };
+      ['posts', 'conversas', 'consultas', 'novos'].forEach(function (k) { var v = mk.num[k] != null ? mk.num[k] : atual[k]; body[k] = v === '' || v == null ? null : +v; });
+      body.origem = mk.num.origem != null ? mk.num.origem : atual.origem || '';
+      mk.numMsg = 'Salvando…'; render();
+      state.db.doc('mkt/' + id).set(body).then(function () { mk.num = {}; mk.numMsg = 'Semana salva ✓'; render(); }, function () { mk.numMsg = 'Não salvou. Tente de novo.'; render(); });
+      return;
+    }
+    if ((a = t.closest('[data-ir]'))) { irPara(a.getAttribute('data-ir')); return; }
+  }
+
   function renderSoon(s) {
     var a = AGENTS.find(function (x) { return x.id === s.ag; });
     return '<header class="page-head soon-page"><span class="eyebrow">Em breve</span><h1>' + esc(s.label) + '</h1><p>' + esc(s.soon) + '</p></header>' +
@@ -3214,10 +3478,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     renderNav();
     if (state.section === 'escritorio') main.innerHTML = renderEscritorio();
     else if (state.section === 'agenda') main.innerHTML = renderAgenda();
-    else if (state.section === 'conteudo') main.innerHTML = renderConteudo();
-    else if (state.section === 'edicao') main.innerHTML = renderEdicao();
+    else if (state.section === 'marketing') main.innerHTML = renderMkt();
     else if (state.section === 'pacientes') main.innerHTML = renderPacientes();
-    else if (state.section === 'agentes') main.innerHTML = state.agent === 'marketing' ? renderMarketing() : state.agent === 'lisa' ? renderLisa() : state.agent ? renderAgente(AGENTS.find(function (a) { return a.id === state.agent; })) : renderAgentes();
+    else if (state.section === 'agentes') main.innerHTML = state.agent ? renderAgente(AGENTS.find(function (a) { return a.id === state.agent; })) : renderAgentes();
     else main.innerHTML = renderSoon(SECTIONS.find(function (s) { return s.id === state.section; }));
     main.style.setProperty('--area', state.section === 'agentes' && state.agent ? SCOR[setorDe(state.agent).id] : AREA[state.section] || AREA.agentes);
     var ph = main.querySelector('.page-head');
@@ -3233,16 +3496,14 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     state.section = b.getAttribute('data-sec'); state.agent = null;
     try { localStorage.setItem('painel:aba', state.section); } catch (err) {}
     if (state.section === 'agenda') agWatch();
-    if (state.section === 'conteudo') ctEnter();
     render(); main.focus && window.scrollTo(0, 0);
   });
 
   main.addEventListener('click', function (e) {
     var t;
     if (state.section === 'agenda') { agClick(e.target); return; }
-    if (state.section === 'conteudo' || state.section === 'edicao') { ctClick(e.target); return; }
+    if (state.section === 'marketing') { mkClick(e.target); return; }
     if (state.section === 'pacientes') { pcClick(e.target); return; }
-    if (state.agent === 'lisa' && state.db && dmClick(e.target)) return;
     if ((t = e.target.closest('[data-agtab]'))) { var tb = t.getAttribute('data-agtab'); if (tb.indexOf('ir:') === 0) irPara(tb.slice(3)); else { state.agTab[state.agent] = tb; render(); } return; }
     if ((t = e.target.closest('[data-filtro]'))) { state.filtro = t.getAttribute('data-filtro'); render(); return; }
     if ((t = e.target.closest('[data-abertas]'))) { var ab = t.getAttribute('data-abertas'); state.abertas[ab] = !state.abertas[ab]; render(); return; }
@@ -3284,6 +3545,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (mtf && ct.mtNova) ct.mtNova[mtf] = e.target.value;
     var adf = e.target.getAttribute && e.target.getAttribute('data-ad-f');
     if (adf && ad.novo && adf !== 'perm') ad.novo[adf] = e.target.value;
+    var mkf = e.target.getAttribute && e.target.getAttribute('data-mk-f');
+    if (mkf) { var mp = mkf.split('|'); if (mp[0] === 'up' && mk.up) mk.up[mp[1]] = e.target.value; else if (mp[0] === 'num') mk.num[mp[1]] = e.target.value; }
     var cf =e.target.getAttribute && e.target.getAttribute('data-ct-f');
     if (cf === 'newFolder') ct.newFolder = e.target.value;
     else if (cf && ct.up) ct.up[cf] = e.target.value;
@@ -3301,6 +3564,8 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // conteúdo: arquivos escolhidos e mudanças de pasta / paciente de um arquivo
   main.addEventListener('change', function (e) {
     var el = e.target, id;
+    if (el.hasAttribute('data-mk-file') && mk.up) { mk.up.files = el.files; mk.upErr = null; return; }
+    if (el.getAttribute('data-mk-f') && mk.up) { var mq = el.getAttribute('data-mk-f').split('|'); if (mq[0] === 'up') { mk.up[mq[1]] = el.value; render(); } return; }
     if (el.hasAttribute('data-ct-file') && ct.up) {
       var qual = el.getAttribute('data-ct-file');
       if (qual === 'ini') ct.up.ini = el.files[0] || null; else if (qual === 'fim') ct.up.fim = el.files[0] || null; else ct.up.files = el.files;
@@ -3349,35 +3614,24 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       function ctSub(q, key) {
         q.onSnapshot(function (snap) {
           ct[key] = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
-          if (state.section === 'conteudo' || state.section === 'edicao' || state.section === 'agentes' || state.section === 'escritorio') render();
+          if (state.section === 'marketing' || state.section === 'agentes' || state.section === 'escritorio') render();
         }, function () { ct[key] = ct[key] || []; });
       }
-      db.doc('config/conteudo').onSnapshot(function (snap) {
-        ct.pastas = ((snap.exists ? snap.data() : null) || {}).pastas || [];
-        if (state.section === 'conteudo') render();
-      }, function () { ct.pastas = []; });
-      db.doc('config/desafios').onSnapshot(function (snap) {
-        ct.desafios = (snap.exists ? snap.data() : null) || {};
-        if (state.section === 'conteudo' || state.section === 'agentes') render();
-      }, function () { ct.desafios = ct.desafios || {}; });
+      // 16/11/2026: marketing novo. "midia" guarda os arquivos que o Pedro sobe; "mkt" guarda comando do dia, lote, números e marca
       ctSub(db.collection('midia').orderBy('criado', 'desc').limit(500), 'midia');
-      ctSub(db.collection('cronograma').orderBy('data', 'desc').limit(200), 'posts');
       ctSub(db.collection('agentes').limit(50), 'agentes');
-      // Lisa (09/11/2026): relatórios do Instagram e respostas de DM
-      ctSub(db.collection('instagram').orderBy('data', 'desc').limit(30), 'insta');
-      ctSub(db.collection('dm').orderBy('criado', 'desc').limit(100), 'dm');
       // Luzi (11/11/2026): revisão do dia, toda noite
       ctSub(db.collection('revisao').orderBy('data', 'desc').limit(30), 'revisao');
       // pacientes: só para o dono (o banco também recusa os outros)
       if (window.painelDono) db.collection('pacientes').limit(1000).onSnapshot(function (snap) {
         pc.lista = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
-        if (state.section === 'pacientes' || (state.section === 'conteudo' && !ct.pasta && !ct.sel)) render(); else renderNav();   // o número de retornos aparece no menu
+        if (state.section === 'pacientes') render(); else renderNav();   // o número de retornos aparece no menu
       }, function () { pc.lista = pc.lista || []; render(); });
       var timer = setTimeout(function () { state.slow = true; render(); }, 10000);
-      db.collection('marketing').orderBy('data', 'desc').limit(30).onSnapshot(function (snap) {
-        state.days = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
+      db.collection('mkt').limit(300).onSnapshot(function (snap) {
+        mk.docs = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
         if (!snap.metadata.fromCache) { clearTimeout(timer); state.loading = false; state.slow = false; }
-        else if (state.days.length) state.loading = false;
+        else if (mk.docs.length) state.loading = false;
         render();
       }, function (err) {
         clearTimeout(timer); state.loading = false;
@@ -3399,7 +3653,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   if (window.claude && window.claude.use) {
     Promise.all([window.claude.use('assets'), window.claude.use('downloads')]).then(function (r) {
       ct.assets = r[0]; ct.downloads = r[1]; ct.ready = true;
-      if (state.section === 'conteudo') { ctEnter(); render(); }
+      if (state.section === 'marketing') render();
     }, function () { ct.ready = true; render(); });
   } else ct.ready = true;
 
