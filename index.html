@@ -4,16 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="robots" content="noindex">
-<link rel="icon" type="image/png" sizes="16x16" href="icones/favicon-16.png?v=2">
-<link rel="icon" type="image/png" sizes="32x32" href="icones/favicon-32.png?v=2">
-<link rel="icon" type="image/png" sizes="48x48" href="icones/favicon-48.png?v=2">
-<link rel="apple-touch-icon" sizes="180x180" href="icones/icone-180.png?v=2">
+<link rel="icon" type="image/png" sizes="16x16" href="icones/favicon-16.png?v=3">
+<link rel="icon" type="image/png" sizes="32x32" href="icones/favicon-32.png?v=3">
+<link rel="icon" type="image/png" sizes="48x48" href="icones/favicon-48.png?v=3">
+<link rel="apple-touch-icon" sizes="180x180" href="icones/icone-180.png?v=3">
 <link rel="manifest" href="manifest.webmanifest?v=2">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Painel Portes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<meta name="theme-color" content="#0e1322">
+<meta name="theme-color" content="#f4eee7">
 <style>
 #ponte-login { position: fixed; inset: 0; z-index: 1000; background: #ffffff; display: grid; place-items: center; padding: 16px; font-family: "Manrope", "Segoe UI", system-ui, sans-serif; color: #121214; }
 #ponte-login .pl-card { width: min(380px, 100%); display: grid; gap: 14px; }
@@ -985,11 +985,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   .nav button { padding: 6px 12px 6px 6px; }
 }
 </style>
-<link rel="stylesheet" href="tema-apple.css?v=3">
+<link rel="stylesheet" href="tema-apple.css?v=4">
 
 <div class="app">
   <aside class="side">
-    <div class="brand"><img class="brand-logo" src="icones/logo-pp.png" alt="" width="40" height="40"><div class="brand-tx"><b>Painel Portes</b><span>Dr. Pedro Portes</span></div></div>
+    <div class="brand"><img class="brand-logo" src="icones/logo-pp.svg?v=1" alt="" width="40" height="40"><div class="brand-tx"><b>Painel Portes</b><span>Dr. Pedro Portes</span></div></div>
     <ul class="nav" id="nav"></ul>
     <div class="side-foot">Organização do consultório</div>
   </aside>
@@ -3383,6 +3383,69 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         '<span>' + esc(MK_PAC[m.paciente] || '') + '</span>' + (m.nota ? '<span>' + esc(m.nota) + '</span>' : '') + '<small>' + (m.criado ? dataHora(m.criado) : '') + '</small></figcaption></figure>'; }).join('') + '</div>';
   }
 
+  // ---------- Metricool (17/11/2026): a tarefa "metricool-painel" grava "mkt/metricool" 3x por dia e executa os pedidos "pub-*" ----------
+  var MC_SERIES = { alcance: ['Alcance', 'pessoas diferentes que viram'], views: ['Visualizações', 'vezes que o conteúdo apareceu'], seguidores: ['Seguidores', 'total no fim do dia'] };
+  function mcGrafico(serie, k) {
+    var pts = (serie || []).filter(function (p) { return p[k] != null; });
+    if (pts.length < 2) return '<p class="hint">Ainda não há dados suficientes para o gráfico.</p>';
+    var W = 900, H = 230, pl = 40, pb = 22, pt = 14, vals = pts.map(function (p) { return +p[k]; });
+    var max = Math.max.apply(null, vals), min = k === 'seguidores' ? Math.min.apply(null, vals) : 0;
+    if (max === min) { max = max + 1; min = Math.max(0, min - 1); }
+    var x = function (i) { return pl + (W - pl - 8) * (pts.length === 1 ? 0 : i / (pts.length - 1)); };
+    var y = function (v) { return pt + (H - pt - pb) * (1 - (v - min) / (max - min)); };
+    var svg = '<svg class="mc-svg" viewBox="0 0 ' + W + ' ' + H + '" preserveAspectRatio="xMidYMid meet" role="img" aria-label="' + esc(MC_SERIES[k][0]) + ' por dia">';
+    [0, 0.5, 1].forEach(function (f) { var v = min + (max - min) * f, yy = y(v); svg += '<line x1="' + pl + '" x2="' + W + '" y1="' + yy + '" y2="' + yy + '" class="mc-grid"/><text x="' + (pl - 6) + '" y="' + (yy + 4) + '" text-anchor="end" class="mc-ax">' + fmtNum(Math.round(v)) + '</text>'; });
+    if (k === 'seguidores') {
+      var d = pts.map(function (p, i) { return (i ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(+p[k]).toFixed(1); }).join(' ');
+      svg += '<path d="' + d + '" class="mc-line"/>';
+    } else {
+      var bw = Math.max(3, (W - pl - 8) / pts.length - 3);
+      pts.forEach(function (p, i) { var yy = y(+p[k]); svg += '<rect x="' + (x(i) - bw / 2).toFixed(1) + '" y="' + yy.toFixed(1) + '" width="' + bw.toFixed(1) + '" height="' + Math.max(1, H - pb - yy).toFixed(1) + '" rx="2" class="mc-bar"><title>' + esc(shortDay(new Date(p.d + 'T12:00:00'))) + ': ' + fmtNum(+p[k]) + '</title></rect>'; });
+    }
+    [0, Math.floor((pts.length - 1) / 2), pts.length - 1].forEach(function (i) { svg += '<text x="' + x(i) + '" y="' + (H - 6) + '" text-anchor="' + (i === 0 ? 'start' : i === pts.length - 1 ? 'end' : 'middle') + '" class="mc-ax">' + esc(shortDay(new Date(pts[i].d + 'T12:00:00'))) + '</text>'; });
+    return svg + '</svg>';
+  }
+  function mcQuando(iso) { if (!iso) return ''; var d = new Date(iso.length <= 16 ? iso + ':00' : iso); return isNaN(d) ? esc(iso) : esc(fmtDay(isoOf(d))) + ', ' + d.toTimeString().slice(0, 5); }
+  function mcPedido(postId) { return mk.docs.filter(function (d) { return d.tipo === 'pub' && d.post_uuid === postId; }).sort(function (a, b) { return a.criado < b.criado ? 1 : -1; })[0]; }
+  function mkMetricool() {
+    var m = mkDoc('metricool');
+    if (!m) return '<section class="mk-card mc"><span class="mk-rot">Instagram · Metricool</span><p>Os gráficos aparecem depois da primeira rodada da tarefa <b>metricool-painel</b> (7h30, 12h30 e 18h30, com o computador ligado).</p></section>';
+    var t = m.totais30 || {}, k = mk.mcSerie || 'alcance';
+    var kpi = function (v, rot, sub) { return '<div><b>' + (v == null ? '–' : fmtNum(v)) + '</b><span>' + rot + '</span>' + (sub ? '<small' + (/^-/.test(sub) ? ' class="neg"' : '') + '>' + sub + '</small>' : '') + '</div>'; };
+    var varSeg = m.seg_var30 == null ? '' : (m.seg_var30 > 0 ? '+' : '') + fmtNum(m.seg_var30) + ' em 30 dias';
+    var html = '<section class="mk-card mc"><div class="mc-head"><span class="mk-rot">Instagram · últimos 30 dias</span><small>Atualizado ' + (m.atualizado ? esc(dataHora(m.atualizado)) : '') + '</small></div>' +
+      '<div class="mc-kpis">' + kpi(m.seguidores, 'seguidores', varSeg) + kpi(t.alcance, 'alcance') + kpi(t.views, 'visualizações') + kpi(t.interacoes, 'interações') + kpi(t.posts, 'posts e reels') + '</div>' +
+      '<div class="seg ds-seg mc-seg" role="group" aria-label="Gráfico">' + Object.keys(MC_SERIES).map(function (s) { return '<button type="button" data-mc-serie="' + s + '" aria-pressed="' + (k === s) + '">' + MC_SERIES[s][0] + '</button>'; }).join('') + '</div>' +
+      '<div class="mc-chart">' + mcGrafico(m.serie, k) + '</div><p class="hint">' + esc(MC_SERIES[k][0]) + ' por dia: ' + esc(MC_SERIES[k][1]) + '.</p></section>';
+    // fila: rascunhos e agendados
+    var fila = m.fila || [], podeEditar = !!ct.assets;
+    html += '<h2 class="mk-h">Programar posts</h2>';
+    if (!fila.length) html += '<div class="empty">Nenhum rascunho no Metricool agora. Quando o Leo editar um vídeo do lote, ele aparece aqui para você escolher o dia e a hora.</div>';
+    else html += '<div class="mc-fila">' + fila.map(function (p) {
+      var ped = mcPedido(p.uuid), pend = ped && ped.status === 'pedido', err = ped && ped.status === 'erro';
+      var val = (mk.pub || {})[p.uuid] != null ? mk.pub[p.uuid] : (p.quando || p.sugestao || '').slice(0, 16);
+      var st = p.status === 'agendado' ? '<span class="chip c-ok">Programado · ' + mcQuando(p.quando) + '</span>' : '<span class="chip">Rascunho</span>';
+      return '<section class="mk-card mc-post">' + (p.img && /^https:\/\//.test(p.img) ? '<img src="' + esc(p.img) + '" alt="" loading="lazy">' : '<div class="mc-noimg"></div>') +
+        '<div class="mc-pb"><div class="mk-top">' + st + (p.tipo ? '<span class="chip">' + esc(p.tipo) + '</span>' : '') + '</div><h3>' + esc(p.titulo || 'Sem legenda') + '</h3>' +
+        (pend ? '<p class="hint">Pedido enviado: ' + (ped.acao === 'cancelar' ? 'voltar para rascunho' : 'programar para ' + mcQuando(ped.quando)) + '. Entra no Metricool na próxima rodada (7h30, 12h30 ou 18h30).</p>' : '') +
+        (err ? '<p class="ag-warn">O último pedido não foi: ' + esc(ped.erro || 'erro no Metricool') + '</p>' : '') +
+        (podeEditar && !pend ? '<div class="acts mc-acts"><input type="datetime-local" data-mk-f="pub|' + esc(p.uuid) + '" value="' + esc(val) + '" min="' + esc(todayIso()) + 'T00:00">' +
+          '<button type="button" class="btn primary" data-mc-prog="' + esc(p.uuid) + '">' + (p.status === 'agendado' ? 'Mudar horário' : 'Programar') + '</button>' +
+          (p.status === 'agendado' ? '<button type="button" class="btn" data-mc-cancel="' + esc(p.uuid) + '">Voltar para rascunho</button>' : '') + '</div>' : '') +
+        (p.planner_url && /^https:\/\//.test(p.planner_url) ? '<a class="link-btn" href="' + esc(p.planner_url) + '" target="_blank" rel="noopener">Abrir no Metricool</a>' : '') + '</div></section>';
+    }).join('') + '</div>';
+    if (mk.mcMsg) html += '<p class="hint">' + esc(mk.mcMsg) + '</p>';
+    // posts publicados
+    var posts = (m.posts || []).slice(0, 12);
+    if (posts.length) html += '<h2 class="mk-h">Resultado dos posts</h2><div class="mk-tab"><table class="mc-tab"><thead><tr><th>Post</th><th>Views</th><th>Alcance</th><th>Retenção</th><th>Pularam em 3 s</th><th>Salvos</th><th>Envios</th><th>Coment.</th></tr></thead><tbody>' +
+      posts.map(function (p) {
+        var tit = esc((p.titulo || 'post').slice(0, 60));
+        return '<tr><td><b>' + (p.url && /^https:\/\//.test(p.url) ? '<a href="' + esc(p.url) + '" target="_blank" rel="noopener">' + tit + '</a>' : tit) + '</b><small>' + esc(fmtDay(p.data)) + (p.tipo ? ' · ' + esc(p.tipo) : '') + '</small></td>' +
+          '<td>' + fmtNum(p.views) + '</td><td>' + fmtNum(p.alcance) + '</td><td>' + (p.retencao == null ? '–' : fmtNum(p.retencao) + '%') + '</td><td>' + (p.pulos_3s == null ? '–' : fmtNum(p.pulos_3s) + '%') + '</td><td>' + fmtNum(p.salvos) + '</td><td>' + fmtNum(p.compart) + '</td><td>' + fmtNum(p.coment) + '</td></tr>'; }).join('') +
+      '</tbody></table></div>';
+    return html;
+  }
+
   function mkNumeros() {
     var seg = mkSegunda(), id = 'num-' + seg, atual = mkDoc(id) || {};
     var fim = new Date(seg + 'T12:00:00'); fim.setDate(fim.getDate() + 6);
@@ -3399,7 +3462,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
           '<small>' + [p.alcance != null ? fmtNum(p.alcance) + ' alcance' : '', p.views != null ? fmtNum(p.views) + ' views' : '', p.retencao != null ? fmtNum(p.retencao) + '% retenção' : '', p.pulos_3s != null ? fmtNum(p.pulos_3s) + '% pularam em 3 s' : '', p.salvos != null ? fmtNum(p.salvos) + ' salvos' : '', p.compart != null ? fmtNum(p.compart) + ' envios' : ''].filter(Boolean).join(' · ') + '</small>' +
           (p.porque ? '<p>' + esc(p.porque) + '</p>' : '') + '</li>'; }).join('') + '</ul>' : '') +
       (an.proximo ? '<p class="hint"><b>Próximo lote:</b> ' + esc(an.proximo) + '</p>' : '') + '</section>';
-    var html = anHtml + '<section class="mk-card"><span class="mk-rot">Semana de ' + esc(shortDay(new Date(seg + 'T12:00:00'))) + ' a ' + esc(shortDay(fim)) + '</span>' +
+    var html = mkMetricool() + '<h2 class="mk-h">Paciente na cadeira</h2>' + anHtml + '<section class="mk-card"><span class="mk-rot">Semana de ' + esc(shortDay(new Date(seg + 'T12:00:00'))) + ' a ' + esc(shortDay(fim)) + '</span>' +
       '<p class="hint">Anote na sexta. São só 4 números: o que importa é paciente na cadeira, não curtida.</p><div class="mk-campos">' +
       campo('posts', 'Posts feitos', 'o painel contou ' + postsAuto, postsAuto) + campo('conversas', 'Conversas no WhatsApp', 'gente nova que chamou') +
       campo('consultas', 'Consultas marcadas', 'de quem chamou') + campo('novos', 'Pacientes novos', 'que sentaram na cadeira') + '</div>' +
@@ -3500,6 +3563,20 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       else a.textContent = 'Selecione e copie à mão';
       return;
     }
+    if ((a = t.closest('[data-mc-serie]'))) { mk.mcSerie = a.getAttribute('data-mc-serie'); render(); return; }
+    if ((a = t.closest('[data-mc-prog]')) || (a = t.closest('[data-mc-cancel]'))) {
+      var canc = a.hasAttribute('data-mc-cancel'), uu = a.getAttribute(canc ? 'data-mc-cancel' : 'data-mc-prog');
+      var mc = mkDoc('metricool') || {}, po = (mc.fila || []).find(function (x) { return x.uuid === uu; }); if (!po) return;
+      var inp = main.querySelector('[data-mk-f="pub|' + uu + '"]'), q = canc ? '' : ((mk.pub || {})[uu] || (inp && inp.value) || '');
+      if (!canc && (!q || new Date(q) < new Date(Date.now() + 30 * 60000))) { mk.mcMsg = 'Escolha um dia e uma hora pelo menos 30 minutos à frente.'; render(); return; }
+      if (!canc && !confirm('Programar "' + (po.titulo || 'post') + '" para ' + new Date(q).toLocaleString('pt-BR', { dateStyle: 'short', timeStyle: 'short' }) + '? Ele será publicado sozinho no Instagram nessa hora.')) return;
+      var pid = 'pub-' + Date.now();
+      mk.mcMsg = 'Enviando o pedido…'; render();
+      state.db.doc('mkt/' + pid).set({ tipo: 'pub', acao: canc ? 'cancelar' : 'programar', post_uuid: uu, post_id: po.id || '', titulo: po.titulo || '', quando: q, status: 'pedido', criado: new Date().toISOString() })
+        .then(function () { mk.mcMsg = canc ? 'Pedido enviado: o post volta para rascunho na próxima rodada.' : 'Pedido enviado ✓ O post entra programado no Metricool na próxima rodada.'; if (mk.pub) delete mk.pub[uu]; render(); },
+          function () { mk.mcMsg = 'Não salvou o pedido. Tente de novo.'; render(); });
+      return;
+    }
     if (t.closest('[data-mk-up]')) { mk.up = { uso: '', paciente: '', nota: '', n: '' }; mk.upErr = null; mk.msg = null; render(); return; }
     if ((a = t.closest('[data-mk-upitem]'))) { var ni = +a.getAttribute('data-mk-upitem'); mk.up = { uso: 'lote', paciente: 'sem', nota: '', n: String(ni), edita: '', inline: ni }; mk.upErr = null; mk.msg = null; render(); return; }
     if (t.closest('[data-mk-cancel]')) { mk.up = null; mk.upErr = null; render(); return; }
@@ -3595,7 +3672,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var adf = e.target.getAttribute && e.target.getAttribute('data-ad-f');
     if (adf && ad.novo && adf !== 'perm') ad.novo[adf] = e.target.value;
     var mkf = e.target.getAttribute && e.target.getAttribute('data-mk-f');
-    if (mkf) { var mp = mkf.split('|'); if (mp[0] === 'up' && mk.up) mk.up[mp[1]] = e.target.value; else if (mp[0] === 'num') mk.num[mp[1]] = e.target.value; }
+    if (mkf) { var mp = mkf.split('|'); if (mp[0] === 'up' && mk.up) mk.up[mp[1]] = e.target.value; else if (mp[0] === 'num') mk.num[mp[1]] = e.target.value; else if (mp[0] === 'pub') { mk.pub = mk.pub || {}; mk.pub[mp[1]] = e.target.value; } }
     var cf =e.target.getAttribute && e.target.getAttribute('data-ct-f');
     if (cf === 'newFolder') ct.newFolder = e.target.value;
     else if (cf && ct.up) ct.up[cf] = e.target.value;

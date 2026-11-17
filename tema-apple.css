@@ -175,3 +175,30 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--acce
   .mk-card { padding: 18px; }
   .mk-gancho { font-size: 21px; }
 }
+
+/* Metricool na aba Números (17/11/2026) */
+.mc .mc-head{display:flex;justify-content:space-between;align-items:baseline;gap:8px;flex-wrap:wrap}
+.mc .mc-head small{color:#8a7a70;font-size:12px}
+.mc-kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0 16px}
+.mc-kpis div{background:#f7f1ea;border-radius:12px;padding:12px 12px 10px}
+.mc-kpis b{display:block;font-size:24px;font-weight:650;letter-spacing:-.02em;color:var(--fg)}
+.mc-kpis span{font-size:12px;color:#6b5a50}
+.mc-kpis small{display:block;font-size:11px;color:#4f6f55;margin-top:2px}.mc-kpis small.neg{color:#8a7a70}
+.mc-seg{margin-bottom:10px}
+.mc-chart{width:100%}
+.mc-svg{width:100%;height:auto;display:block}
+.mc-grid{stroke:#e8ded4;stroke-width:1}
+.mc-ax{font-size:10px;fill:#8a7a70;font-family:inherit}
+.mc-bar{fill:#7a1f2b;opacity:.85}
+.mc-bar:hover{opacity:1}
+.mc-line{fill:none;stroke:#7a1f2b;stroke-width:2.2;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.mc-fila{display:grid;gap:12px}
+.mc-post{display:flex;gap:14px;align-items:flex-start;border-top:4px solid #a8672f}
+.mc-post img,.mc-post .mc-noimg{width:84px;height:120px;object-fit:cover;border-radius:10px;flex:none;background:#efe6dc}
+.mc-pb{flex:1;min-width:0}
+.mc-pb h3{margin:6px 0 8px;font-size:16px}
+.mc-acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.mc-acts input[type=datetime-local]{font:inherit;padding:8px 10px;border:1px solid #e0d5ca;border-radius:10px;background:#fff;color:var(--fg)}
+.mc-tab td small{display:block;color:#8a7a70;font-weight:400;font-size:11px}
+.mc-tab td a{color:var(--fg);text-decoration:none}
+@media (max-width:700px){.mc-kpis{grid-template-columns:repeat(2,1fr)}.mc-kpis div:first-child{grid-column:1/-1}.mc-post img,.mc-post .mc-noimg{width:64px;height:92px}}
