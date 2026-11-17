@@ -985,7 +985,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   .nav button { padding: 6px 12px 6px 6px; }
 }
 </style>
-<link rel="stylesheet" href="tema-apple.css?v=2">
+<link rel="stylesheet" href="tema-apple.css?v=3">
 
 <div class="app">
   <aside class="side">
@@ -3288,7 +3288,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var num = 0, rot = function (t) { num++; return '<span class="mk-rot">' + num + ' · ' + t + '</span>'; };
     if (d.post) {
       var p = d.post, pp = MK_PAPEL[p.papel] || null;
-      html += '<section class="mk-card' + ((d.feito || {}).post ? ' feito' : '') + '"><div class="mk-top">' + rot('Postar hoje') +
+      html += '<section class="mk-card mk-m-post' + ((d.feito || {}).post ? ' feito' : '') + '"><div class="mk-top">' + rot('Postar hoje') +
         (pp ? '<span class="chip" style="background:' + pp[1] + ';color:#fff">' + pp[0] + '</span>' : '') +
         (p.formato ? '<span class="chip">' + esc(p.formato) + '</span>' : '') + '</div>' +
         '<h3>' + esc(p.titulo || '') + '</h3>' +
@@ -3298,10 +3298,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         (p.metricool_url ? '<p class="hint">O Leo deixou o post como rascunho no Metricool, com vídeo, legenda e horário. Confira e toque em agendar.</p>' : '') +
         '<div class="acts">' + (p.metricool_url && /^https:\/\//.test(p.metricool_url) ? '<a class="btn primary" href="' + esc(p.metricool_url) + '" target="_blank" rel="noopener">Abrir rascunho no Metricool</a>' : '') + mkBtnFeito(d, 'post', 'Postado', 'Postei') + '</div></section>';
     } else if (d.sem_post) html += '<section class="mk-card mk-off"><span class="mk-rot">Hoje não tem post</span><p>' + mkTexto(d.sem_post) + '</p></section>';
-    if (d.story) html += '<section class="mk-card' + ((d.feito || {}).story ? ' feito' : '') + '"><div class="mk-top">' + rot('Story do dia') + '</div>' +
+    if (d.story) html += '<section class="mk-card mk-m-story' + ((d.feito || {}).story ? ' feito' : '') + '"><div class="mk-top">' + rot('Story do dia') + '</div>' +
       '<h3>' + esc(d.story.ideia || '') + '</h3>' + (d.story.como ? '<p>' + mkTexto(d.story.como) + '</p>' : '') +
       '<div class="acts">' + mkBtnFeito(d, 'story', 'Feito', 'Fiz o story') + '</div></section>';
-    if (d.acao) html += '<section class="mk-card mk-acao' + ((d.feito || {}).acao ? ' feito' : '') + '"><div class="mk-top">' + rot('Fora da rede') + (d.acao.tipo ? '<span class="chip">' + esc(d.acao.tipo) + '</span>' : '') + '</div>' +
+    if (d.acao) html += '<section class="mk-card mk-acao mk-m-acao' + ((d.feito || {}).acao ? ' feito' : '') + '"><div class="mk-top">' + rot('Fora da rede') + (d.acao.tipo ? '<span class="chip">' + esc(d.acao.tipo) + '</span>' : '') + '</div>' +
       '<h3>' + esc(d.acao.titulo || '') + '</h3>' + (d.acao.para ? '<p class="mk-meta">Para: <b>' + esc(d.acao.para) + '</b></p>' : '') +
       (d.acao.texto ? '<div class="mk-leg"><small>Mensagem pronta</small><p>' + mkTexto(d.acao.texto) + '</p>' + mkCopia('mensagem', d.id, 'acao.texto') + '</div>' : '') +
       (d.acao.porque ? '<p class="hint">' + mkTexto(d.acao.porque) + '</p>' : '') +
@@ -3323,7 +3323,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if ((lt.antes || []).length) html += '<section class="mk-card mk-antes"><span class="mk-rot">Antes de começar</span><ul>' + lt.antes.map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></section>';
     html += '<div class="mk-cards">' + itens.map(function (x, i) {
       var pp = MK_PAPEL[x.papel] || [x.papel || '', '#888'];
-      return '<section class="mk-card mk-rot-card' + (x.gravado ? ' feito' : '') + '" style="--pc:' + pp[1] + '"><div class="mk-top"><span class="mk-num">' + (x.n || i + 1) + '</span><span class="chip" style="background:' + pp[1] + ';color:#fff">' + esc(pp[0]) + '</span>' +
+      return '<section class="mk-card mk-rot-card mk-p-' + esc(x.papel || 'educativo') + (x.gravado ? ' feito' : '') + '" style="--pc:' + pp[1] + '"><div class="mk-top"><span class="mk-num">' + (x.n || i + 1) + '</span><span class="chip" style="background:' + pp[1] + ';color:#fff">' + esc(pp[0]) + '</span>' +
         (x.formato ? '<span class="chip">' + esc(x.formato) + '</span>' : '') + '</div>' +
         '<h3>' + esc(x.titulo || '') + '</h3>' +
         '<div class="mk-onde">' + (x.onde ? '<span><small>Onde</small>' + esc(x.onde) + '</span>' : '') + (x.roupa ? '<span><small>Roupa</small>' + esc(x.roupa) + '</span>' : '') +

@@ -105,22 +105,23 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 .mk-dot { background: var(--muted) !important; }
 .pa-ic, .st-ic { background: var(--field) !important; color: var(--fg) !important; }
 
-/* Botões em "liquid glass" (vidro líquido do iOS/iPadOS 26):
-   o principal é vidro bordô; o secundário é vidro claro, translúcido, com brilho na borda de cima. */
-.btn { position: relative; border-radius: 980px !important; font-weight: 600; font-size: 14px; padding: 8px 18px; color: var(--ink);
-  background: linear-gradient(180deg, rgba(255,255,255,.78), rgba(255,255,255,.42)) !important;
-  border: 1px solid rgba(255,255,255,.85) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.95), inset 0 -1px 1px rgba(59,42,32,.08), 0 1px 2px rgba(59,42,32,.08), 0 6px 18px rgba(59,42,32,.10) !important;
-  transition: transform .15s ease, box-shadow .15s ease, filter .15s ease; }
-.btn:hover { filter: brightness(1.03); box-shadow: inset 0 1px 0 #fff, inset 0 -1px 1px rgba(59,42,32,.08), 0 2px 4px rgba(59,42,32,.08), 0 10px 24px rgba(59,42,32,.14) !important; }
-.btn:active { transform: scale(.97); }
-.btn.primary { color: #fff !important; border: 1px solid rgba(255,255,255,.28) !important;
-  background: linear-gradient(180deg, rgba(160,52,66,.94) 0%, rgba(122,31,43,.94) 55%, rgba(98,22,33,.96) 100%) !important;
-  box-shadow: inset 0 1px 0 rgba(255,255,255,.38), inset 0 -2px 4px rgba(40,6,12,.25), 0 1px 2px rgba(122,31,43,.25), 0 8px 22px rgba(122,31,43,.28) !important;
-  text-shadow: 0 1px 0 rgba(0,0,0,.18); }
-.btn.primary:hover { filter: brightness(1.08); }
-.btn.mk-ok { color: #2f6b3f !important; background: linear-gradient(180deg, rgba(232,246,235,.9), rgba(214,238,220,.7)) !important; border-color: rgba(255,255,255,.85) !important; }
-.btn[aria-pressed="true"] { color: #fff !important; background: linear-gradient(180deg, rgba(160,52,66,.94), rgba(98,22,33,.96)) !important; }
+/* Botões lisos, em pílula: o principal é cheio na cor; o secundário é um tom claro da mesma cor. Sem brilho, sem sombra. */
+.btn { border-radius: 980px !important; font-weight: 600; font-size: 14px; padding: 8px 18px; border: 0 !important;
+  color: var(--bc, var(--accent)); background: color-mix(in srgb, var(--bc, var(--accent)) 10%, #fff) !important; box-shadow: none !important;
+  transition: background .15s ease, transform .1s ease; }
+.btn:hover { background: color-mix(in srgb, var(--bc, var(--accent)) 16%, #fff) !important; }
+.btn:active { transform: scale(.98); }
+.btn.primary { color: #fff !important; background: var(--bc, var(--accent)) !important; }
+.btn.primary:hover { background: color-mix(in srgb, var(--bc, var(--accent)) 86%, #000) !important; }
+.btn.mk-ok { color: #3f6b46 !important; background: #e6f0e4 !important; }
+.btn[aria-pressed="true"] { color: #fff !important; background: var(--bc, var(--accent)) !important; }
+
+/* Acessos e Sair: saem do canto flutuante e viram links discretos no rodapé */
+#ponte-barra { position: static !important; display: flex !important; justify-content: center; gap: 18px !important; padding: 8px 16px 36px; font-family: var(--font-ui) !important; }
+#ponte-barra button { background: transparent !important; border: 0 !important; box-shadow: none !important; padding: 4px 2px !important;
+  font-size: 12px !important; font-weight: 500 !important; color: var(--muted) !important; }
+#ponte-barra button:hover { color: var(--fg) !important; text-decoration: underline; }
+#ponte-barra span { background: var(--accent) !important; font-size: 10px !important; line-height: 16px !important; min-width: 16px !important; }
 .link-btn { color: var(--accent); text-decoration: none; font-weight: 500; }
 .link-btn:hover { text-decoration: underline; }
 
@@ -135,7 +136,21 @@ a.btn { text-decoration: none; display: inline-flex; align-items: center; }
 /* Campos */
 input, select, textarea { border: 1px solid #d2d2d7; border-radius: 10px; background: #fff; }
 input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--accent); box-shadow: 0 0 0 4px rgba(122,31,43,.14) !important; }
-.mk-num { background: linear-gradient(180deg, #a03442, #7a1f2b) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,.35) !important; }
+.mk-num { background: var(--mc, var(--accent)) !important; }
+
+/* Uma cor por missão, todas tiradas da marca (terrosas, combinando com o bordô e o creme).
+   Hoje: post = bordô, story = caramelo, fora da rede = sálvia.
+   Lote: educativo = azul-petróleo, caso = bordô, pessoal/bastidor = caramelo. */
+.mk-m-post, .mk-p-caso { --mc: #7a1f2b; }
+.mk-m-story, .mk-p-pessoal, .mk-p-bastidor { --mc: #a8672f; }
+.mk-m-acao { --mc: #4f6f55; }
+.mk-p-educativo { --mc: #2f5f6b; }
+.mk-card[class*="mk-m-"], .mk-card[class*="mk-p-"] { --bc: var(--mc); border-top: 4px solid var(--mc) !important; }
+.mk-card[class*="mk-m-"] .mk-rot, .mk-card[class*="mk-p-"] .mk-rot { color: var(--mc) !important; }
+.mk-card[class*="mk-m-"] .mk-leg, .mk-card[class*="mk-p-"] .mk-bloco, .mk-card[class*="mk-p-"] .mk-pq p { background: color-mix(in srgb, var(--mc) 6%, #fff) !important; }
+.mk-card[class*="mk-p-"] .mk-pq p.cap-pac { background: color-mix(in srgb, var(--mc) 11%, #fff) !important; border-left-color: var(--mc) !important; }
+.mk-card[class*="mk-p-"] .mk-gancho::before, .mk-card[class*="mk-p-"] .mk-rt b, .mk-card[class*="mk-p-"] .mk-det summary { color: var(--mc) !important; }
+.mk-card[class*="mk-p-"] .chip[style] { background: color-mix(in srgb, var(--mc) 12%, #fff) !important; color: var(--mc) !important; }
 .mk-pq p.cap-pac { border-left: 3px solid var(--accent) !important; }
 
 /* Celular: barra de abas embaixo, como no iPhone */
@@ -155,7 +170,8 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--acce
   .nav button[aria-current="page"] { color: var(--accent); font-weight: 600; }
   .nav .ic-t { display: grid; place-items: center; width: 26px; height: 26px; background: transparent !important; color: inherit !important; }
   .nav .ic-t .ic { width: 24px; height: 24px; }
-  .main { padding: 24px 16px calc(96px + env(safe-area-inset-bottom, 0px)); }
+  .main { padding: 24px 16px 24px; }
+  #ponte-barra { padding-bottom: calc(90px + env(safe-area-inset-bottom, 0px)) !important; }
   .mk-card { padding: 18px; }
   .mk-gancho { font-size: 21px; }
 }
