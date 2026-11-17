@@ -27,7 +27,7 @@
       el.id = 'ponte-login';
       document.body.appendChild(el);
     }
-    el.innerHTML = '<div class="pl-card"><div class="pl-marca">Consultório</div>' + html + '</div>';
+    el.innerHTML = '<div class="pl-card"><div class="pl-marca">Clínica Pedro Portes</div>' + html + '</div>';
     el.querySelectorAll('[data-ir]').forEach(function (a) {
       a.addEventListener('click', function (e) { e.preventDefault(); ({ entrar: entrar, criar: criarConta, esqueci: esqueci, sair: sair })[a.getAttribute('data-ir')](); });
     });

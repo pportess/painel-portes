@@ -1,6 +1,6 @@
 {
-  "name": "Painel Portes",
-  "short_name": "Painel Portes",
+  "name": "Clínica Pedro Portes",
+  "short_name": "Pedro Portes",
   "description": "Painel do consultório do Dr. Pedro Portes",
   "lang": "pt-BR",
   "start_url": "./",
@@ -9,8 +9,8 @@
   "background_color": "#f4eee7",
   "theme_color": "#f4eee7",
   "icons": [
-    { "src": "icones/icone-192.png?v=3", "sizes": "192x192", "type": "image/png", "purpose": "any" },
-    { "src": "icones/icone-512.png?v=3", "sizes": "512x512", "type": "image/png", "purpose": "any" },
-    { "src": "icones/icone-512.png?v=3", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+    { "src": "icones/icone-192.png?v=4", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icones/icone-512.png?v=4", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icones/icone-512.png?v=4", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
