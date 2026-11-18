@@ -57,7 +57,7 @@
 <title>Clínica Pedro Portes</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Tinos&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Tinos&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: barra lateral escura com o item escolhido em branco, fundo claro (pedido do Pedro, 04/11/2026; antes era branco com seção verde). */
 :root, :root[data-theme="dark"] {
@@ -985,7 +985,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   .nav button { padding: 6px 12px 6px 6px; }
 }
 </style>
-<link rel="stylesheet" href="tema-apple.css?v=4">
+<link rel="stylesheet" href="tema-apple.css?v=5">
 
 <div class="app">
   <aside class="side">
@@ -1031,7 +1031,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     { id: 'luzi', name: 'Luzi', role: 'Gerente do consultório', desc: 'Toda noite junta o dia inteiro (redes, vídeos, desafios, posts, mensagens e dinheiro) e diz o que fazer amanhã.', tier: 'chefe', when: 'Todo dia às 21h',
       funcs: ['Todo dia às 21h: revisão do dia, com redes, vídeos, desafios, posts, mensagens e dinheiro', 'Compara com a meta de pacientes novos do mês', 'Diz o que deu certo, o que precisa de atenção e o que fazer amanhã'] },
     // 16/11/2026: Duda, Peixe e Lisa saíram (recomeço do marketing). Um agente só, que lê o posicionamento e monta o comando do dia
-    { id: 'marketing', name: 'Leo', role: 'Marketing e posicionamento', room: 'Agência de marketing', desc: 'Lê o seu posicionamento, monta o comando do dia e o lote, edita os vídeos que você manda, deixa o post como rascunho no Metricool e analisa o Instagram na sexta. Quem publica é você.', live: true, tier: 'contratado', when: 'Todo dia às 7h; o lote na sexta',
+    { id: 'marketing', name: 'Duda', role: 'Marketing e conteúdo', room: 'Agência de marketing', desc: 'Escreve o roteiro das suas ideias no seu estilo, monta o comando do dia e o lote, edita os vídeos que você manda, deixa o post como rascunho no Metricool e analisa o Instagram na sexta. Quem publica é você.', live: true, tier: 'contratado', when: 'Todo dia às 7h; o lote na sexta',
       funcs: ['Dia útil, 7h: o post de hoje com legenda pronta, a ideia do story e uma ação de captação fora da rede', 'Sexta, 7h: o lote da semana, com 3 roteiros (educativo, caso e pessoal ou bastidor), lugar, roupa, fala e legenda', 'Confere as regras do CFO em tudo o que escreve', 'Olha os arquivos que você sobe e os números da semana para ajustar o próximo lote'],
       look: { skin: '#e3b48e', hair: '#3a261b', shirt: '#7a1f2b', pants: '#2f3a44' }, pos: [0, 0] },
     { id: 'kim', name: 'Kim', role: 'Financeiro', room: 'Financeiro', desc: 'Entradas, metas, custos de laboratório e o caminho até o consultório próprio.', tier: 'contratado', when: 'Todo domingo e no fim do mês',
@@ -1047,9 +1047,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       look: { skin: '#f2c3a0', hair: '#e0bd6e', shirt: '#7fa8c9', pants: '#3a3a40' }, pos: [0, 1] },
     { id: 'reuniao', room: 'Sala de reunião', meeting: true, pos: [2, 0] },
     { id: 'treino', room: 'Treino e dieta', desc: 'Treinos da semana e alimentação.', tier: 'contratado', pos: [2, 1] },
-    // 17/11/2026: o agente de pesquisa passou a se chamar Duda, a pedido do Pedro (o id 'caio' ficou, para não perder dados e tarefas)
-    { id: 'caio', name: 'Duda', role: 'Pesquisa de evidência', desc: 'Busca artigos e referências quando outro agente pedir.', tier: 'estagiario', when: 'Quando a Nina, a Ana Paula ou o Leo pedirem',
-      funcs: ['Busca artigos (PubMed) sobre o tema pedido', 'Dá base científica aos conteúdos e aos planos de tratamento', 'Entrega referências curtas, com link'] }
+    // 17/11/2026: o agente do PubMed passou a se chamar Botijão, e a Duda foi para o marketing (o id 'caio' ficou, para não perder dados e tarefas)
+    { id: 'caio', name: 'Botijão', role: 'Resumos do PubMed', desc: 'Lê os alertas do PubMed, traduz e resume os artigos.', tier: 'estagiario', when: 'Todo dia, 21h',
+      funcs: ['Lê os alertas do PubMed que chegam no seu e-mail', 'Traduz e resume cada artigo em poucas linhas', 'Manda o resumo por e-mail e dá base científica aos conteúdos da Duda'] }
   ];
 
   var state = { section: 'agentes', agent: null, abertas: {}, agTab: {}, filtro: 'todos', days: [], selected: null, loading: true, slow: false, error: null, db: null, saving: {} };
@@ -1090,7 +1090,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var DAY_MS = 86400000;
 
   // retrato em traço de cada agente
-  var AV = { luzi: 'coque', marketing: 'curto', kim: 'curto', nina: 'longo', anapaula: 'coque', amanda: 'longo', bruno: 'oculos', caio: 'oculos' };
+  var AV = { luzi: 'coque', marketing: 'longo', kim: 'curto', nina: 'longo', anapaula: 'coque', amanda: 'longo', bruno: 'oculos', caio: 'oculos' };
   function avatar(id) {
     var v = AV[id] || 'curto', topo = 'M15 20c-1-10 6-13 9-13s10 3 9 13c-2-5-5-7-9-7s-7 2-9 7z', x = '';
     if (v === 'longo') x = '<path d="M14.5 17c-3 8-2 15 0 18M33.5 17c3 8 2 15 0 18" stroke-width="3"/>';
@@ -1112,9 +1112,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   var SALA_GENTE = { marketing: ['marketing'], edicao: [], estudos: ['caio'], gerencia: ['luzi'], financeiro: ['kim'], atendimento: ['amanda'], clinico: ['anapaula'] };
   var SETORES = [
     { id: 'marketing', nome: 'Marketing e posicionamento', tarefas: [
+      { ag: 'marketing', nome: 'Roteiro na hora', desc: 'Quando você toca em gerar no novo conteúdo, a Duda escreve o roteiro com cortes, legenda e takes, no seu estilo.', quando: 'A cada 10 min, 7h–23h', auto: 'mkt-roteiro-na-hora', h: 30 },
       { ag: 'marketing', nome: 'Comando do dia', desc: 'O post de hoje com legenda, o story e uma ação de captação fora da rede.', quando: 'Todo dia, 7h', auto: 'mkt-comando-diario', h: 30 },
       { ag: 'marketing', nome: 'Lote da semana', desc: '3 roteiros para gravar em sequência, com lugar, roupa, fala e legenda.', quando: 'Sexta, 7h (na mesma rodada)', auto: 'mkt-comando-diario', h: 30 },
-      { ag: 'marketing', nome: 'Edição e rascunho', desc: 'Edita os vídeos marcados "O Leo edita" e deixa o post do dia como rascunho no Metricool, para você só conferir e agendar.', quando: 'Todo dia, 7h (na mesma rodada)', auto: 'mkt-comando-diario', h: 30 },
+      { ag: 'marketing', nome: 'Edição e rascunho', desc: 'Edita os vídeos marcados "A Duda edita" e deixa o post do dia como rascunho no Metricool, para você só conferir e agendar.', quando: 'Todo dia, 7h (na mesma rodada)', auto: 'mkt-comando-diario', h: 30 },
       { ag: 'marketing', nome: 'Análise do Instagram', desc: 'Alcance, retenção e salvamentos de cada post, cruzados com as conversas e consultas da semana. Diz o que repetir e o que cortar.', quando: 'Sexta, 7h (na mesma rodada)', auto: 'mkt-comando-diario', h: 30 }] },
     { id: 'atendimento', nome: 'Atendimento e retornos', tarefas: [
       { ag: 'amanda', nome: 'Retornos', desc: 'Junta os retornos de todos os pacientes, com WhatsApp pronto. Fica na página dela e em Pacientes.', quando: 'Sempre, ligada aos Pacientes', sob: true },
@@ -1185,9 +1186,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         return '<button type="button" data-agtab="' + t[0] + '" aria-pressed="' + (cur === t[0]) + '">' + esc(t[1]) + (t[2] ? '<span class="n">' + t[2] + '</span>' : '') + '</button>'; }).join('') + '</div>' : '');
   }
   var FLUXO_MKT = [
-    { quem: 'Leo', oque: 'manda o lote na sexta', ag: 'marketing' },
+    { quem: 'Duda', oque: 'manda o lote na sexta', ag: 'marketing' },
     { quem: 'Você', oque: 'grava os 3 em sequência', ir: 'marketing' },
-    { quem: 'Leo', oque: 'manda o comando do dia', ag: 'marketing' },
+    { quem: 'Duda', oque: 'manda o comando do dia', ag: 'marketing' },
     { quem: 'Você', oque: 'posta e marca o que fez', ir: 'marketing' },
     { quem: 'Você', oque: 'anota os números na sexta', ir: 'marketing' }
   ];
@@ -3252,13 +3253,13 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // ---------- Marketing (16/11/2026): recomeço a pedido do Pedro ----------
   // Coleção "mkt": "marca" (posicionamento), "dia-AAAA-MM-DD" (comando do dia), "lote-AAAA-MM-DD" (sexta: 3 roteiros)
   // e "num-AAAA-MM-DD" (números da semana, pela segunda-feira). Os arquivos que o Pedro sobe ficam em "midia".
-  // O agente Leo escreve o dia e o lote às 7h; o Pedro marca o que fez. Nada é postado sozinho.
+  // A agente Duda (ex-Leo) escreve o dia e o lote às 7h; o Pedro marca o que fez. Nada é postado sozinho.
   var mk = { docs: [], view: 'hoje', up: null, upErr: null, prog: null, msg: null, num: {} };
   try { var mkv = localStorage.getItem('painel:mk'); if (mkv) mk.view = mkv; } catch (err) {}
   var MK_PAPEL = { educativo: ['Educativo', '#2563eb'], caso: ['Caso', '#7a1f2b'], pessoal: ['Pessoal', '#b5740a'], bastidor: ['Bastidor', '#0a7f70'] };
   var MK_PAC = { sem: 'Não aparece paciente', tcle: 'Paciente com TCLE assinado', sem_tcle: 'Paciente SEM TCLE (não postar)' };
-  var MK_EDITA = { leo: 'O Leo edita (cortes e texto na tela)', eu: 'Eu mesmo edito', pronto: 'Já está editado, é só postar' };
-  var MK_USO = { lote: 'Vídeo do lote', caso: 'Foto de caso', pessoal: 'Pessoal ou bastidor', perfil: 'Foto de perfil', outro: 'Outro' };
+  var MK_EDITA = { duda: 'A Duda edita (cortes e texto na tela)', eu: 'Eu mesmo edito', pronto: 'Já está editado, é só postar' };
+  var MK_USO = { lote: 'Vídeo do lote', roteiro: 'Vídeo de roteiro', caso: 'Foto de caso', pessoal: 'Pessoal ou bastidor', perfil: 'Foto de perfil', outro: 'Outro' };
   function mkDoc(id) { return mk.docs.find(function (d) { return d.id === id; }); }
   function mkDia(iso) { return mkDoc('dia-' + iso); }
   function mkLote() { return mk.docs.filter(function (d) { return d.tipo === 'lote'; }).sort(function (a, b) { return a.data < b.data ? 1 : -1; })[0]; }
@@ -3296,7 +3297,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         '<p class="mk-meta">' + (p.horario ? 'Melhor horário: <b>' + esc(p.horario) + '</b>' : '') + ((p.redes || []).length ? ' · ' + esc(p.redes.join(', ')) : '') + (p.de_lote ? ' · roteiro ' + esc(p.de_lote) + ' do lote' : '') + '</p>' +
         (p.legenda ? '<div class="mk-leg"><small>Legenda</small><p>' + mkTexto(p.legenda) + '</p>' + mkCopia('legenda', d.id, 'post.legenda') + '</div>' : '') +
         (p.cfo ? '<p class="mk-cfo">✓ CFO: ' + esc(p.cfo) + '</p>' : '') +
-        (p.metricool_url ? '<p class="hint">O Leo deixou o post como rascunho no Metricool, com vídeo, legenda e horário. Confira e toque em agendar.</p>' : '') +
+        (p.metricool_url ? '<p class="hint">A Duda deixou o post como rascunho no Metricool, com vídeo, legenda e horário. Confira e toque em agendar.</p>' : '') +
         '<div class="acts">' + (p.metricool_url && /^https:\/\//.test(p.metricool_url) ? '<a class="btn primary" href="' + esc(p.metricool_url) + '" target="_blank" rel="noopener">Abrir rascunho no Metricool</a>' : '') + mkBtnFeito(d, 'post', 'Postado', 'Postei') + '</div></section>';
     } else if (d.sem_post) html += '<section class="mk-card mk-off"><span class="mk-rot">Hoje não tem post</span><p>' + mkTexto(d.sem_post) + '</p></section>';
     if (d.story) html += '<section class="mk-card mk-m-story' + ((d.feito || {}).story ? ' feito' : '') + '"><div class="mk-top">' + rot('Story do dia') + '</div>' +
@@ -3357,13 +3358,19 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var arqs = mkArqsDo(lt, i);
     if (!arqs.length) return '';
     var ult = arqs[0], ed = x.edita || ult.edita;
-    var st = ed === 'leo' ? (x.editado ? 'O Leo já editou: veja em Meus arquivos.' : 'O Leo vai editar na próxima rodada.') : ed === 'eu' ? 'Você edita.' : ed === 'pronto' ? 'Pronto para postar.' : '';
+    var st = (ed === 'leo' || ed === 'duda') ? (x.editado ? 'A Duda já editou: veja em Arquivos.' : 'A Duda vai editar na próxima rodada.') : ed === 'eu' ? 'Você edita.' : ed === 'pronto' ? 'Pronto para postar.' : '';
     return '<p class="mk-env">✓ ' + arqs.length + (arqs.length === 1 ? ' arquivo enviado' : ' arquivos enviados') + (st ? ' · ' + esc(st) : '') + '</p>';
   }
   function mkUpForm() {
     var u = mk.up; if (!u) return '';
     var lt = mkLote(), itens = lt ? lt.itens || [] : [];
     var opt = function (obj, sel) { return Object.keys(obj).map(function (k) { return '<option value="' + k + '"' + (sel === k ? ' selected' : '') + '>' + esc(obj[k]) + '</option>'; }).join(''); };
+    if (u.rot) return '<section class="mk-card mk-up"><span class="mk-rot">Enviar o vídeo deste roteiro</span>' +
+      '<label>Arquivos (fotos ou vídeos, até 50 MB cada)<input type="file" multiple accept="image/*,video/*" data-mk-file="1"></label>' +
+      '<label>Quem edita<select data-mk-f="up|edita"><option value="">Escolha…</option>' + opt(MK_EDITA, u.edita) + '</select></label>' +
+      '<label>Aparece paciente?<select data-mk-f="up|paciente">' + opt(MK_PAC, u.paciente) + '</select></label>' +
+      (mk.upErr ? '<p class="ag-warn">' + esc(mk.upErr) + '</p>' : '') + (mk.prog ? '<p class="hint">' + esc(mk.prog) + '</p>' : '') +
+      '<div class="acts"><button type="button" class="btn primary" data-mk-send="1"' + (mk.prog ? ' disabled' : '') + '>Enviar</button><button type="button" class="btn" data-mk-cancel="1">Cancelar</button></div></section>';
     return '<section class="mk-card mk-up"><span class="mk-rot">Enviar arquivos</span>' +
       '<label>Arquivos (fotos ou vídeos, até 50 MB cada)<input type="file" multiple accept="image/*,video/*" data-mk-file="1"></label>' +
       '<label>O que é<select data-mk-f="up|uso"><option value="">Escolha…</option>' + opt(MK_USO, u.uso) + '</select></label>' +
@@ -3377,7 +3384,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   function mkArquivos() {
     var lista = (ct.midia || []);
     var html = !ct.ready ? '' : !ct.assets ? '<div class="ag-warn">Só quem edita o painel pode enviar arquivos.</div>' : mk.up ? mkUpForm() : '<div class="acts"><button type="button" class="btn primary" data-mk-up="1">+ Enviar fotos e vídeos</button></div>';
-    if (!lista.length) return html + '<div class="empty"><b>Nenhum arquivo ainda.</b> Suba aqui os vídeos do lote, as fotos de caso (só com TCLE) e o que for pessoal. O Leo olha tudo na rodada seguinte.</div>';
+    if (!lista.length) return html + '<div class="empty"><b>Nenhum arquivo ainda.</b> Suba aqui os vídeos do lote, as fotos de caso (só com TCLE) e o que for pessoal. A Duda olha tudo na rodada seguinte.</div>';
     return html + '<div class="mk-grid">' + lista.map(function (m) {
       var pac = m.paciente === 'sem_tcle';
       return '<figure class="mk-arq' + (pac ? ' alerta' : '') + '">' + thumb(m, 'mk-th') + '<figcaption><b>' + esc(MK_USO[m.uso] || m.tipo || '') + (m.lote_titulo ? ' · ' + esc(m.lote_titulo) : '') + '</b>' +
@@ -3418,10 +3425,14 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<div class="mc-kpis">' + kpi(m.seguidores, 'seguidores', varSeg) + kpi(t.alcance, 'alcance') + kpi(t.views, 'visualizações') + kpi(t.interacoes, 'interações') + kpi(t.posts, 'posts e reels') + '</div>' +
       '<div class="seg ds-seg mc-seg" role="group" aria-label="Gráfico">' + Object.keys(MC_SERIES).map(function (s) { return '<button type="button" data-mc-serie="' + s + '" aria-pressed="' + (k === s) + '">' + MC_SERIES[s][0] + '</button>'; }).join('') + '</div>' +
       '<div class="mc-chart">' + mcGrafico(m.serie, k) + '</div><p class="hint">' + esc(MC_SERIES[k][0]) + ' por dia: ' + esc(MC_SERIES[k][1]) + '.</p></section>';
-    // fila: rascunhos e agendados
+    return html + mcPosts(m);
+  }
+  // 17/11/2026: "Programar posts" mudou para a guia Calendário; o resultado dos posts fica em Números
+  function mcFila() {
+    var m = mkDoc('metricool') || {}, html = '';
     var fila = m.fila || [], podeEditar = !!ct.assets;
-    html += '<h2 class="mk-h">Programar posts</h2>';
-    if (!fila.length) html += '<div class="empty">Nenhum rascunho no Metricool agora. Quando o Leo editar um vídeo do lote, ele aparece aqui para você escolher o dia e a hora.</div>';
+    html += '<h2 class="mk-h">Programar no Metricool</h2>';
+    if (!fila.length) html += '<div class="empty">Nenhum rascunho no Metricool agora. Quando a Duda editar um vídeo, ele aparece aqui para você escolher o dia e a hora.</div>';
     else html += '<div class="mc-fila">' + fila.map(function (p) {
       var ped = mcPedido(p.uuid), pend = ped && ped.status === 'pedido', err = ped && ped.status === 'erro';
       var val = (mk.pub || {})[p.uuid] != null ? mk.pub[p.uuid] : (p.quando || p.sugestao || '').slice(0, 16);
@@ -3436,7 +3447,10 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         (p.planner_url && /^https:\/\//.test(p.planner_url) ? '<a class="link-btn" href="' + esc(p.planner_url) + '" target="_blank" rel="noopener">Abrir no Metricool</a>' : '') + '</div></section>';
     }).join('') + '</div>';
     if (mk.mcMsg) html += '<p class="hint">' + esc(mk.mcMsg) + '</p>';
-    // posts publicados
+    return html;
+  }
+  function mcPosts(m) {
+    var html = '';
     var posts = (m.posts || []).slice(0, 12);
     if (posts.length) html += '<h2 class="mk-h">Resultado dos posts</h2><div class="mk-tab"><table class="mc-tab"><thead><tr><th>Post</th><th>Views</th><th>Alcance</th><th>Retenção</th><th>Pularam em 3 s</th><th>Salvos</th><th>Envios</th><th>Coment.</th></tr></thead><tbody>' +
       posts.map(function (p) {
@@ -3455,7 +3469,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var campo = function (k, rot, dica, def) { return '<label class="mk-campo"><span>' + rot + '<small>' + dica + '</small></span><input type="number" min="0" inputmode="numeric" data-mk-f="num|' + k + '" value="' + esc(v(k, def)) + '"></label>'; };
     var an = mk.docs.filter(function (d) { return d.tipo === 'analise'; }).sort(function (a, b) { return a.data < b.data ? 1 : -1; })[0];
     var VER = { repetir: ['Repetir', 'c-ok'], ajustar: ['Ajustar', 'c-warn'], cortar: ['Cortar', 'c-bad'] };
-    var anHtml = !an ? '' : '<section class="mk-card mk-an"><span class="mk-rot">Análise do Leo · ' + esc(an.semana || fmtDay(an.data)) + '</span>' +
+    var anHtml = !an ? '' : '<section class="mk-card mk-an"><span class="mk-rot">Análise da Duda · ' + esc(an.semana || fmtDay(an.data)) + '</span>' +
       (an.resumo ? '<p class="mk-an-res">' + mkTexto(an.resumo) + '</p>' : '') +
       '<div class="mk-an-nums"><div><b>' + fmtNum(an.conversas) + '</b><span>conversas</span></div><div><b>' + fmtNum(an.consultas) + '</b><span>consultas</span></div><div><b>' + fmtNum(an.novos) + '</b><span>pacientes novos</span></div></div>' +
       ((an.posts || []).length ? '<ul class="mk-an-posts">' + an.posts.map(function (p) { var v = VER[p.veredito] || null;
@@ -3495,17 +3509,252 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     return html;
   }
 
+  // ---------- Estúdio de conteúdo (17/11/2026, pedido do Pedro a partir de um print) ----------
+  // A ideia é sempre do Pedro. "gerar" cria mkt/rot-<ts> com status "pedido"; a tarefa "mkt-roteiro-na-hora" (a Duda,
+  // a cada 10 min com o computador ligado) escreve o roteiro pela skill "estilo-de-conteudo" e muda para "pronto".
+  // Outros documentos novos: mkt/ideia-<ts> (banco de ideias) e mkt/parc-<ts> (parcerias).
+  var MK_ESTILOS = [
+    { id: 'sinal', nome: 'reels de sinal', sub: 'o teste que a pessoa faz', tag: '▶ 35s', dur: '35s', grad: 'linear-gradient(135deg,#c79b74,#8a5a3b)',
+      paraque: 'A pessoa descobre algo na própria boca e lembra do seu nome. Topo de funil.', onde: 'Consultório · camisa e jaleco',
+      modelo: [[0, 2, 'gancho: o teste, falado e escrito'], [2, 10, 'a prova visual sem paciente'], [10, 22, 'o mecanismo + a quebra de expectativa'], [22, 30, 'o que dá para fazer e quem faz'], [30, 35, '"manda pra quem…" + palavra-chave + CRO']],
+      edicao: { texto_tela: 'frases curtas, creme no bordô', trilha: 'sem música na fala', transicao: 'corte seco', capa: 'gancho + close', horario: '18h' } },
+    { id: 'caso', nome: 'carrossel de caso', sub: 'história, antes e depois', tag: '1/7', dur: '7 slides', slides: true, grad: 'linear-gradient(135deg,#efe5d8,#cdb79c)',
+      paraque: 'Converter: o caso contado como a história do que a pessoa sentia. Fundo de funil.', onde: 'Fotos do caso · só com TCLE',
+      modelo: [[1, 1, 'capa: a queixa na voz da pessoa'], [2, 2, 'o que ela sentia no dia a dia'], [3, 3, 'o antes (TCLE)'], [4, 4, 'o porquê, simples'], [5, 5, 'o que foi feito, sem procedimento'], [6, 6, 'o depois'], [7, 7, 'o cuidado que fica + CRO']],
+      edicao: { texto_tela: 'título curto por slide', trilha: '—', transicao: 'um slide, uma ideia', capa: 'a queixa em letra grande', horario: 'ter · 18h' } },
+    { id: 'rapido', nome: 'reels rápido', sub: 'mito ou sinal em 15s', tag: '▶ 15s', dur: '15s', grad: 'linear-gradient(135deg,#a3b293,#5f6e53)',
+      paraque: 'Um mito ou um sinal, rápido, para circular e ser enviado. Alcance.', onde: 'Onde estiver · camisa',
+      modelo: [[0, 2, 'o mito ou o sinal, escrito grande'], [2, 10, '3 cortes de 2 a 3 s com a resposta'], [10, 15, '"manda pra quem…" + CRO']],
+      edicao: { texto_tela: 'uma frase por corte', trilha: 'sem música na fala', transicao: 'cortes de 2 s', capa: 'o mito com um ✕', horario: '12h' } },
+    { id: 'bastidor', nome: 'bastidor', sub: 'voice-over da rotina', tag: '▶ 45s', dur: '45s', grad: 'linear-gradient(135deg,#9a3a47,#4a1219)',
+      paraque: 'Lado humano e precisão de forma indireta: estudo, consultório, treino, guitarra ou cozinha.', onde: 'Casa ou consultório · camisa social',
+      modelo: [[0, 3, 'close + a frase do dia'], [3, 25, 'takes da rotina, um corte a cada 2 s'], [25, 40, 'voice-over com o porquê do cuidado'], [40, 45, 'fecho leve, sem pedir nada']],
+      edicao: { texto_tela: 'só a frase do dia', trilha: 'instrumental calma, baixa', transicao: 'corte seco', capa: 'frase + close', horario: 'dom · 19h' } }
+  ];
+  var MK_PALETA = [['creme', '#f6efe6'], ['areia', '#d9c7b0'], ['caramelo', '#b5835a'], ['sálvia', '#8a9a7b'], ['bordô', '#7a1f2b'], ['café', '#3b2a20']];
+  var MK_CORES = ['#b5835a', '#d9c7b0', '#8a9a7b', '#7a1f2b', '#c9a86a'];
+  var MK_GUIAS = [['novo', 'novo conteúdo', '#3b2a20'], ['ideias', 'banco de ideias', '#c9a86a'], ['estilos', 'meus estilos', '#8a9a7b'], ['calendario', 'calendário', '#8f8fc0'], ['roteiros', 'roteiros salvos', '#d08a84'], ['parcerias', 'parcerias', '#8fb0c8']];
+  var MK_GUIAS2 = [['numeros', 'números'], ['arquivos', 'arquivos']];
+  var MK_PARC_ST = [['ideia', 'ideia'], ['conversando', 'conversando'], ['combinado', 'combinado'], ['feito', 'feito']];
+  var MK_WD = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
+  (function () { var velho = { hoje: 'calendario', lote: 'roteiros', marca: 'estilos' }; if (velho[mk.view]) mk.view = velho[mk.view]; if (!MK_GUIAS.concat(MK_GUIAS2).some(function (g) { return g[0] === mk.view; })) mk.view = 'novo'; })();
+  mk.estilo = mk.estilo || 'sinal'; mk.ideia = mk.ideia || ''; mk.cal = mk.cal || 0;
+  function mkEstilo(id) { return MK_ESTILOS.find(function (e) { return e.id === id; }) || MK_ESTILOS[0]; }
+  function mkRots() { return mk.docs.filter(function (d) { return d.tipo === 'roteiro'; }).sort(function (a, b) { return (a.criado || '') < (b.criado || '') ? 1 : -1; }); }
+  function mkIdeias() { return mk.docs.filter(function (d) { return d.tipo === 'ideia'; }).sort(function (a, b) { return (a.criado || '') < (b.criado || '') ? 1 : -1; }); }
+  function mkParcs() { return mk.docs.filter(function (d) { return d.tipo === 'parceria'; }).sort(function (a, b) { return (a.criado || '') < (b.criado || '') ? 1 : -1; }); }
+  function mkSerif(a, b) { return '<h1 class="st-h1">' + esc(a) + (b ? ' <em>' + esc(b) + '</em>' : '') + '</h1>'; }
+  function mkDiaCurto(iso) { var d = new Date(iso + 'T12:00:00'); return MK_WD[d.getDay()] + ' ' + d.getDate() + '/' + (d.getMonth() + 1); }
+  // tudo o que tem data de postar: roteiros do estúdio e itens do lote
+  function mkAgendados() {
+    var l = [];
+    mkRots().forEach(function (r) { if (r.postar_em) l.push({ data: r.postar_em, hora: r.horario || '', titulo: r.titulo || r.ideia, estilo: mkEstilo(r.estilo).nome, rot: r.id, gravado: !!r.gravado }); });
+    var lt = mkLote();
+    if (lt) (lt.itens || []).forEach(function (x) { if (x.postar_em) l.push({ data: x.postar_em, hora: x.horario || '', titulo: x.titulo, estilo: x.formato || 'lote', lote: true, gravado: !!x.gravado }); });
+    return l.sort(function (a, b) { return a.data + a.hora < b.data + b.hora ? -1 : 1; });
+  }
+  function mkContagem() {
+    var ideias = mkIdeias().filter(function (i) { return !i.usada; }).length;
+    var lt = mkLote(), prontas = mkRots().filter(function (r) { return r.status === 'pronto' && !r.gravado; }).length + (lt ? (lt.itens || []).filter(function (x) { return !x.gravado; }).length : 0);
+    return { ideias: ideias, prontas: prontas };
+  }
+
+  function mkCortesHtml(cortes, est, esbo) {
+    var tot = 0; cortes.forEach(function (c) { tot += Math.max(1, (+c.ate - +c.de) || 1); });
+    var bar = '<div class="st-bar">' + cortes.map(function (c, i) { var w = Math.max(1, (+c.ate - +c.de) || 1);
+      return '<i style="flex:' + w + ';background:' + esc(c.cor || MK_CORES[i % MK_CORES.length]) + '"></i>'; }).join('') + '</div>';
+    var faixa = function (c) { return est.slides ? c.de + '/' + (cortes.length) : c.de + '–' + c.ate + 's'; };
+    return bar + '<ol class="st-cortes' + (esbo ? ' esbo' : '') + '">' + cortes.map(function (c) {
+      return '<li><span>' + esc(faixa(c)) + '</span><div><b>' + esc(c.oque || '') + '</b>' + (c.tela ? '<small>na tela: ' + esc(c.tela) + '</small>' : '') + '</div></li>'; }).join('') + '</ol>';
+  }
+  function mkProximos(atual) {
+    var seg = mkSegunda(), fim = new Date(seg + 'T12:00:00'); fim.setDate(fim.getDate() + 6); var f = isoOf(fim);
+    var l = mkAgendados().filter(function (x) { return x.data >= seg && x.data <= f; });
+    if (!l.length) return '<p class="st-vazio">Nada no calendário desta semana ainda.</p>';
+    return '<ul class="st-rows">' + l.map(function (x) { var este = atual && x.rot === atual.id;
+      return '<li><span>' + esc(MK_WD[new Date(x.data + 'T12:00:00').getDay()]) + '</span><b' + (este ? ' class="ok"' : '') + '>' + (este ? 'este ' + esc(x.estilo) + ' ✓' : esc(x.estilo) + ' · ' + esc((x.titulo || '').slice(0, 28))) + '</b></li>'; }).join('') + '</ul>';
+  }
+
+  function mkNovo() {
+    var r = mk.rotAtual ? mkDoc(mk.rotAtual) : null; // logo depois do gerar o documento pode ainda não ter chegado: o id fica guardado
+    var est = mkEstilo(r ? r.estilo : mk.estilo), pronto = r && r.status === 'pronto';
+    var html = '<div class="st-ideia"><span>minha ideia</span><input type="text" data-mk-f="ideia" value="' + esc(mk.ideia) + '" placeholder="' + esc(r ? r.ideia : 'ex.: por que a ponta do canino fica reta com o tempo') + '" maxlength="300">' +
+      '<button type="button" class="st-gerar" data-mk-gerar="1"' + (mk.gerando ? ' disabled' : '') + '>' + (mk.gerando ? 'enviando…' : 'gerar') + '</button></div>';
+    if (mk.gerMsg) html += '<p class="st-msg">' + esc(mk.gerMsg) + '</p>';
+    html += '<p class="st-lab">escolha o estilo</p><div class="st-estilos">' + MK_ESTILOS.map(function (e) {
+      return '<button type="button" class="st-est" data-mk-estilo="' + e.id + '" aria-pressed="' + (est.id === e.id) + '"><span class="st-th" style="background:' + e.grad + '"><small>' + esc(e.tag) + '</small></span><b>' + esc(e.nome) + '</b><span class="st-sub">' + esc(e.sub) + '</span></button>'; }).join('') + '</div>';
+    var cortes = pronto && (r.cortes || []).length ? r.cortes : est.modelo.map(function (m) { return { de: m[0], ate: m[1], oque: m[2] }; });
+    var esq = '<section class="st-card"><p class="st-lab">roteiro e cortes · ' + esc(pronto && r.duracao ? r.duracao : est.dur) + '</p>';
+    if (r) esq += '<h3 class="st-tit">' + esc(r.titulo || r.ideia) + '</h3>';
+    esq += mkCortesHtml(cortes, est, !pronto);
+    if (r && r.status === 'pedido') esq += '<p class="st-esc"><span class="st-pulse"></span>A Duda está escrevendo o roteiro de “' + esc(r.ideia) + '”. Ele aparece aqui assim que ela terminar. Pode sair da página.</p>';
+    else if (r && r.status === 'erro') esq += '<p class="ag-warn">Não deu para escrever: ' + esc(r.erro || 'erro') + '. Toque em gerar de novo.</p>';
+    else if (!r) esq += '<p class="st-vazio">Este é o esqueleto do estilo. Escreva a ideia e toque em gerar: a Duda preenche com a sua fala, a legenda e os takes.</p>';
+    if (pronto) {
+      if (r.legenda) esq += '<div class="st-leg"><p><b>legenda ·</b> ' + mkTexto(r.legenda) + '</p>' + mkCopia('legenda', r.id, 'legenda') + '</div>';
+      var tk = r.takes || [], ok = r.takes_ok || [];
+      if (tk.length) esq += '<p class="st-lab">takes pra gravar · ' + tk.length + (ok.length ? ' · ' + ok.length + (ok.length === 1 ? ' gravado' : ' gravados') : '') + '</p><div class="st-takes">' + tk.map(function (t, i) {
+        return '<button type="button" data-mk-take="' + i + '" aria-pressed="' + (ok.indexOf(i) >= 0) + '">' + esc(t) + '</button>'; }).join('') + '</div>';
+      if (r.cfo) esq += '<p class="mk-cfo">✓ CFO: ' + esc(r.cfo) + '</p>';
+      if (r.nota) esq += '<p class="st-nota">' + esc(r.nota) + '</p>';
+    }
+    esq += '</section>';
+    var ed = (pronto && r.edicao) || est.edicao;
+    var dir = '<section class="st-card"><p class="st-lab">edição no seu estilo</p><div class="st-pal">' + MK_PALETA.map(function (p) { return '<i title="' + esc(p[0]) + '" style="background:' + p[1] + '"></i>'; }).join('') + '</div>' +
+      '<ul class="st-rows">' + [['texto na tela', ed.texto_tela], ['trilha', ed.trilha], ['transição', ed.transicao], ['capa', ed.capa], ['melhor horário', ed.horario]].map(function (x) {
+        return '<li><span>' + x[0] + '</span><b>' + esc(x[1] || '—') + '</b></li>'; }).join('') + '</ul>' +
+      '<p class="st-lab">próximos da semana</p>' + mkProximos(r) + '</section>';
+    html += '<div class="st-grid">' + esq + dir + '</div>';
+    // rodapé: mandar pro calendário
+    var cal = '';
+    if (mk.calForm && r) cal = '<div class="st-calf"><input type="date" data-mk-f="cal|data" value="' + esc(mk.calForm.data || '') + '" min="' + todayIso() + '"><input type="time" data-mk-f="cal|hora" value="' + esc(mk.calForm.hora || '18:00') + '">' +
+      '<button type="button" class="st-verde" data-mk-calok="1">confirmar</button><button type="button" class="link-btn" data-mk-calx="1">cancelar</button></div>';
+    else if (r && r.postar_em) cal = '<span class="st-nocal">no calendário: ' + esc(mkDiaCurto(r.postar_em)) + (r.horario ? ', ' + esc(r.horario) : '') + '</span><button type="button" class="link-btn" data-mk-cal="1">mudar</button>';
+    else cal = '<button type="button" class="st-verde" data-mk-cal="1"' + (pronto ? '' : ' disabled') + '>mandar pro calendário</button>';
+    html += '<div class="st-foot"><p>✦ A ideia é sua. A skill só aplica o <b>seu estilo de edição e de legenda</b>.</p><div>' + cal + '</div></div>';
+    if (r && pronto) html += '<div class="st-mais">' + '<button type="button" class="link-btn" data-mk-gravado-r="' + esc(r.id) + '">' + (r.gravado ? 'gravado ✓ (desmarcar)' : 'marcar como gravado') + '</button>' +
+      (ct.assets ? '<button type="button" class="link-btn" data-mk-uprot="' + esc(r.id) + '">enviar o vídeo</button>' : '') + '<button type="button" class="link-btn" data-mk-limpar="1">nova ideia</button></div>' +
+      (mk.up && mk.up.rot === r.id ? mkUpForm() : '');
+    return html;
+  }
+
+  function mkIdeiasView() {
+    var l = mkIdeias(), livres = l.filter(function (i) { return !i.usada; }), usadas = l.filter(function (i) { return i.usada; });
+    var html = mkSerif('Banco de', 'ideias') + '<p class="st-intro">Guarde aqui o que vier na cabeça: no treino, no consultório, antes de dormir. Quando quiser gravar, toque em “usar” e escolha o estilo.</p>' +
+      '<div class="st-ideia"><span>nova ideia</span><input type="text" data-mk-f="novaIdeia" value="' + esc(mk.novaIdeia || '') + '" placeholder="ex.: o que o refluxo faz com o dente" maxlength="300"><button type="button" class="st-gerar" data-mk-guardar="1">guardar</button></div>';
+    if (!livres.length) html += '<div class="empty">Nenhuma ideia guardada ainda.</div>';
+    else html += '<ul class="st-lista">' + livres.map(function (i) {
+      return '<li><div><b>' + esc(i.texto) + '</b><small>' + (i.autor === 'duda' ? 'sugestão da Duda' : 'sua') + (i.criado ? ' · ' + esc(dataHora(i.criado)) : '') + (i.porque ? ' · ' + esc(i.porque) : '') + '</small></div>' +
+        '<span><button type="button" class="st-mini" data-mk-usar="' + esc(i.id) + '">usar</button><button type="button" class="link-btn" data-mk-del="' + esc(i.id) + '">apagar</button></span></li>'; }).join('') + '</ul>';
+    if (usadas.length) html += '<p class="st-lab" style="margin-top:28px">viraram roteiro</p><ul class="st-lista st-usadas">' + usadas.slice(0, 20).map(function (i) {
+      return '<li><div><b>' + esc(i.texto) + '</b></div><span><button type="button" class="link-btn" data-mk-abrir="' + esc(i.usada) + '">abrir roteiro</button></span></li>'; }).join('') + '</ul>';
+    return html;
+  }
+
+  function mkEstilosView() {
+    var html = mkSerif('Meus', 'estilos') + '<p class="st-intro">Os 4 jeitos de postar que a skill <b>estilo-de-conteudo</b> conhece. A Duda escreve cada roteiro por aqui. Para mudar um estilo, me fale no chat: a skill e esta página mudam juntas.</p>';
+    html += '<div class="st-estcards">' + MK_ESTILOS.map(function (e) {
+      return '<section class="st-card"><span class="st-th big" style="background:' + e.grad + '"><small>' + esc(e.tag) + '</small></span><h3 class="st-tit">' + esc(e.nome) + '</h3><p class="st-sub">' + esc(e.paraque) + '</p>' +
+        mkCortesHtml(e.modelo.map(function (m) { return { de: m[0], ate: m[1], oque: m[2] }; }), e, false) +
+        '<ul class="st-rows"><li><span>onde</span><b>' + esc(e.onde) + '</b></li><li><span>texto na tela</span><b>' + esc(e.edicao.texto_tela) + '</b></li><li><span>trilha</span><b>' + esc(e.edicao.trilha) + '</b></li><li><span>melhor horário</span><b>' + esc(e.edicao.horario) + '</b></li></ul></section>'; }).join('') + '</div>';
+    html += '<section class="st-card st-regras"><p class="st-lab">em todo conteúdo</p><ul>' +
+      ['Gancho em até 2 s, falado e escrito: um teste que a pessoa faz nela mesma', 'Uma ideia só; o mecanismo verdadeiro com uma quebra de expectativa', 'Prova visual sem paciente (manequim, espelho, gelo)', 'Motivo para enviar + palavra-chave para o direct', '“Curitiba” na fala ou na legenda; Dr. Pedro Portes · CRO/PR 39911 no fim', 'Sem preço, desconto, grátis ou promessa; antes e depois só seu, com TCLE']
+        .map(function (x) { return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></section>';
+    return html + '<h2 class="mk-h">Minha marca</h2>' + mkMarcaView();
+  }
+
+  function mkCalendario() {
+    var base = new Date(mkSegunda() + 'T12:00:00'); base.setDate(base.getDate() + 7 * mk.cal);
+    var dias = []; for (var i = 0; i < 7; i++) { var d = new Date(base); d.setDate(base.getDate() + i); dias.push(isoOf(d)); }
+    var ag = mkAgendados(), mc = (mkDoc('metricool') || {}).fila || [], hoje = todayIso();
+    var html = mkSerif('Calendário') + '<div class="st-calnav"><button type="button" class="st-mini" data-mk-calw="-1" aria-label="Semana anterior">‹</button><b>' + esc(shortDay(new Date(dias[0] + 'T12:00:00'))) + ' a ' + esc(shortDay(new Date(dias[6] + 'T12:00:00'))) + '</b><button type="button" class="st-mini" data-mk-calw="1" aria-label="Próxima semana">›</button>' + (mk.cal ? '<button type="button" class="link-btn" data-mk-calw="0">hoje</button>' : '') + '</div>';
+    html += '<div class="st-semana">' + dias.map(function (iso) {
+      var d = mkDia(iso), itens = '';
+      ag.filter(function (x) { return x.data === iso; }).forEach(function (x) {
+        itens += '<button type="button" class="st-ev ev-post"' + (x.rot ? ' data-mk-abrir="' + esc(x.rot) + '"' : ' data-mk-view="roteiros"') + '><small>' + esc(x.hora || '') + ' · ' + esc(x.estilo) + '</small>' + esc(x.titulo || '') + (x.gravado ? ' <em>gravado</em>' : '') + '</button>'; });
+      mc.filter(function (p) { return p.status === 'agendado' && (p.quando || '').slice(0, 10) === iso; }).forEach(function (p) {
+        itens += '<div class="st-ev ev-mc"><small>' + esc((p.quando || '').slice(11, 16)) + ' · programado no Instagram</small>' + esc((p.titulo || 'post').slice(0, 50)) + '</div>'; });
+      if (d) mkPartes(d).forEach(function (p) { var f = (d.feito || {})[p.k];
+        itens += '<button type="button" class="st-ev ev-' + p.k + (f ? ' feito' : '') + '" data-mk-feito="' + esc(d.id + '|' + p.k) + '"><small>' + esc(p.rot) + (f ? ' ✓' : '') + '</small>' + esc(p.tit) + '</button>'; });
+      return '<div class="st-dia' + (iso === hoje ? ' hoje' : '') + '"><p>' + esc(MK_WD[new Date(iso + 'T12:00:00').getDay()]) + ' <b>' + new Date(iso + 'T12:00:00').getDate() + '</b></p><div class="st-evs">' + (itens || '<span class="st-livre">—</span>') + '</div></div>'; }).join('') + '</div>';
+    html += '<p class="hint">Toque numa missão do dia (post, story, fora da rede) para marcar como feita. Os roteiros abrem no novo conteúdo.</p>';
+    if (!mk.cal) html += '<h2 class="mk-h">Hoje</h2>' + mkHoje();
+    return html + mcFila();
+  }
+
+  function mkRoteirosView() {
+    var l = mkRots(), html = mkSerif('Roteiros', 'salvos');
+    if (!l.length) html += '<div class="empty">Nenhum roteiro ainda. Escreva uma ideia em <button type="button" class="link-btn" data-mk-view="novo">novo conteúdo</button> e toque em gerar.</div>';
+    else html += '<div class="st-rotgrid">' + l.map(function (r) {
+      var e = mkEstilo(r.estilo), st = r.status === 'pedido' ? ['escrevendo…', 'c-warn'] : r.status === 'erro' ? ['deu erro', 'c-bad'] : r.gravado ? ['gravado', 'c-ok'] : r.postar_em ? ['no calendário · ' + mkDiaCurto(r.postar_em), ''] : ['pronto pra gravar', ''];
+      return '<section class="st-card st-rot"><span class="st-th" style="background:' + e.grad + '"><small>' + esc(e.tag) + '</small></span><div><p class="st-lab">' + esc(e.nome) + '</p><h3 class="st-tit">' + esc(r.titulo || r.ideia) + '</h3><span class="chip ' + st[1] + '">' + esc(st[0]) + '</span></div>' +
+        '<div class="st-rotacts"><button type="button" class="st-mini" data-mk-abrir="' + esc(r.id) + '">abrir</button><button type="button" class="link-btn" data-mk-del="' + esc(r.id) + '">apagar</button></div></section>'; }).join('') + '</div>';
+    return html + '<h2 class="mk-h">Lote da semana da Duda</h2>' + mkLoteView();
+  }
+
+  function mkParceriasView() {
+    var l = mkParcs(), f = mk.parc;
+    var html = mkSerif('Parcerias') + '<p class="st-intro">Gente que pode trazer paciente junto com você: o evento a três, academias, colegas de outras áreas. Uma linha por parceria, com o próximo passo.</p>';
+    if (f) html += '<section class="st-card st-pform"><label>Com quem<input type="text" data-mk-f="parc|quem" value="' + esc(f.quem || '') + '" placeholder="ex.: academia do bairro"></label>' +
+      '<label>A ideia<input type="text" data-mk-f="parc|ideia" value="' + esc(f.ideia || '') + '" placeholder="ex.: palestra de 15 min sobre bruxismo e treino"></label>' +
+      '<label>Próximo passo<input type="text" data-mk-f="parc|proximo" value="' + esc(f.proximo || '') + '" placeholder="ex.: mandar mensagem para o dono na sexta"></label>' +
+      '<div class="acts"><button type="button" class="st-verde" data-mk-parcok="1">guardar</button><button type="button" class="link-btn" data-mk-parcx="1">cancelar</button></div></section>';
+    else html += '<button type="button" class="st-gerar" data-mk-parcnova="1">+ nova parceria</button>';
+    if (!l.length) html += '<div class="empty" style="margin-top:16px">Nenhuma parceria ainda.</div>';
+    else html += '<div class="st-parcs">' + l.map(function (p) {
+      return '<section class="st-card"><div class="st-ph"><h3 class="st-tit">' + esc(p.quem) + '</h3><button type="button" class="link-btn" data-mk-del="' + esc(p.id) + '">apagar</button></div>' + (p.ideia ? '<p>' + esc(p.ideia) + '</p>' : '') +
+        '<div class="st-pst">' + MK_PARC_ST.map(function (s) { return '<button type="button" data-mk-parcst="' + esc(p.id + '|' + s[0]) + '" aria-pressed="' + (p.status === s[0]) + '">' + s[1] + '</button>'; }).join('') + '</div>' +
+        (p.proximo ? '<p class="st-prox"><span>próximo passo</span>' + esc(p.proximo) + '</p>' : '') + '</section>'; }).join('') + '</div>';
+    return html;
+  }
+
   function renderMkt() {
-    var head = '<header class="page-head"><span class="eyebrow">Marketing</span><h1>Marketing</h1><p>O comando do dia, o lote da semana e a sua marca. O Leo prepara; quem posta é sempre você.</p></header>';
-    if (!state.db) return head + '<div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b> Abra o painel logado na sua conta.') + '</div>';
-    var lt = mkLote(), dHoje = mkDia(todayIso());
-    var nHoje = dHoje ? mkPartes(dHoje).filter(function (p) { return !(dHoje.feito || {})[p.k]; }).length : 0;
-    var nLote = lt ? (lt.itens || []).filter(function (x) { return !x.gravado; }).length : 0;
-    var views = [['hoje', 'Hoje', nHoje], ['lote', 'Lote da semana', nLote], ['arquivos', 'Meus arquivos', 0], ['numeros', 'Números', 0], ['marca', 'Minha marca', 0]];
-    var bar = '<div class="ag-bar"><div class="seg ds-seg mk-seg" role="group" aria-label="Visão">' + views.map(function (v) {
-      return '<button type="button" data-mk-view="' + v[0] + '" aria-pressed="' + (mk.view === v[0]) + '">' + esc(v[1]) + (v[2] ? '<span class="n">' + v[2] + '</span>' : '') + '</button>'; }).join('') + '</div></div>';
-    var corpo = mk.view === 'lote' ? mkLoteView() : mk.view === 'arquivos' ? mkArquivos() : mk.view === 'numeros' ? mkNumeros() : mk.view === 'marca' ? mkMarcaView() : mkHoje();
-    return head + bar + (mk.msg ? '<div class="ag-warn">' + esc(mk.msg) + '</div>' : '') + corpo;
+    if (!state.db) return '<header class="page-head"><h1>Marketing</h1></header><div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b> Abra o painel logado na sua conta.') + '</div>';
+    var c = mkContagem(), v = mk.view;
+    var side = '<aside class="st-side"><div class="st-brand">studio <em>portes</em></div><nav class="st-nav">' + MK_GUIAS.map(function (g) {
+      return '<button type="button" data-mk-view="' + g[0] + '"' + (v === g[0] ? ' aria-current="page"' : '') + '><i style="background:' + g[2] + '"></i>' + esc(g[1]) + '</button>'; }).join('') +
+      '<span class="st-sep"></span>' + MK_GUIAS2.map(function (g) { return '<button type="button" class="st-g2" data-mk-view="' + g[0] + '"' + (v === g[0] ? ' aria-current="page"' : '') + '>' + esc(g[1]) + '</button>'; }).join('') + '</nav>' +
+      '<div class="st-count"><b>' + c.ideias + '</b><span>' + (c.ideias === 1 ? 'ideia guardada' : 'ideias guardadas') + '</span><span>' + c.prontas + (c.prontas === 1 ? ' pronta pra gravar' : ' prontas pra gravar') + '</span></div></aside>';
+    var corpo = v === 'ideias' ? mkIdeiasView() : v === 'estilos' ? mkEstilosView() : v === 'calendario' ? mkCalendario() : v === 'roteiros' ? mkRoteirosView() : v === 'parcerias' ? mkParceriasView()
+      : v === 'numeros' ? mkSerif('Números') + mkNumeros() : v === 'arquivos' ? mkSerif('Arquivos') + mkArquivos()
+      : '<div class="st-top">' + mkSerif('Novo', 'conteúdo') + '<span class="st-ativo">estilo do Pedro ativo</span></div>' + mkNovo();
+    return '<div class="st">' + side + '<div class="st-main">' + (mk.msg ? '<div class="ag-warn">' + esc(mk.msg) + '</div>' : '') + corpo + '</div></div>';
+  }
+
+  // ações do estúdio (chamadas no começo de mkClick)
+  function mkStudioClick(t) {
+    var a;
+    if ((a = t.closest('[data-mk-estilo]'))) { mk.estilo = a.getAttribute('data-mk-estilo'); if (mk.rotAtual) { var rr = mkDoc(mk.rotAtual); if (rr && rr.estilo !== mk.estilo) mk.rotAtual = null; } mk.calForm = null; render(); return true; }
+    if (t.closest('[data-mk-gerar]')) {
+      var txt = (mk.ideia || '').trim();
+      if (!txt) { mk.gerMsg = 'Escreva a ideia primeiro. Ela é sempre sua.'; render(); return true; }
+      var id = 'rot-' + Date.now(), orig = mk.ideiaOrigem;
+      mk.gerando = true; mk.gerMsg = null; render();
+      state.db.doc('mkt/' + id).set({ tipo: 'roteiro', ideia: txt, estilo: mk.estilo, status: 'pedido', autor: 'pedro', criado: new Date().toISOString() }).then(function () {
+        if (orig) state.db.doc('mkt/' + orig).update({ usada: id }).catch(function () {});
+        mk.gerando = false; mk.rotAtual = id; mk.ideia = ''; mk.ideiaOrigem = null; render();
+      }, function () { mk.gerando = false; mk.gerMsg = 'Não salvou o pedido. Tente de novo.'; render(); });
+      return true;
+    }
+    if ((a = t.closest('[data-mk-abrir]'))) { mk.rotAtual = a.getAttribute('data-mk-abrir'); var ro = mkDoc(mk.rotAtual); if (ro) mk.estilo = ro.estilo; mk.view = 'novo'; mk.calForm = null; mk.gerMsg = null; render(); window.scrollTo(0, 0); return true; }
+    if (t.closest('[data-mk-limpar]')) { mk.rotAtual = null; mk.calForm = null; mk.up = null; render(); return true; }
+    if ((a = t.closest('[data-mk-take]'))) {
+      var r = mkDoc(mk.rotAtual); if (!r) return true; var n = +a.getAttribute('data-mk-take'), ok = (r.takes_ok || []).slice(), p = ok.indexOf(n);
+      if (p >= 0) ok.splice(p, 1); else ok.push(n); r.takes_ok = ok; render(); mkSalvar(r.id, { takes_ok: ok }); return true;
+    }
+    if (t.closest('[data-mk-cal]')) { var r2 = mkDoc(mk.rotAtual); if (!r2) return true; var e2 = mkEstilo(r2.estilo), hh = /(\d{1,2})h/.exec(((r2.edicao || {}).horario) || e2.edicao.horario);
+      mk.calForm = { data: r2.postar_em || '', hora: r2.horario || (hh ? String(hh[1]).padStart(2, '0') + ':00' : '18:00') }; render(); return true; }
+    if (t.closest('[data-mk-calx]')) { mk.calForm = null; render(); return true; }
+    if (t.closest('[data-mk-calok]')) {
+      var r3 = mkDoc(mk.rotAtual), f = mk.calForm || {}; if (!r3) return true;
+      if (!f.data) { mk.gerMsg = 'Escolha o dia.'; render(); return true; }
+      r3.postar_em = f.data; r3.horario = f.hora || ''; mk.calForm = null; mk.gerMsg = 'No calendário ✓ A Duda usa este roteiro como o post do dia ' + mkDiaCurto(f.data) + '.'; render();
+      mkSalvar(r3.id, { postar_em: f.data, horario: f.hora || '' }); return true;
+    }
+    if ((a = t.closest('[data-mk-gravado-r]'))) { var r4 = mkDoc(a.getAttribute('data-mk-gravado-r')); if (!r4) return true; r4.gravado = !r4.gravado; render(); mkSalvar(r4.id, { gravado: r4.gravado }); return true; }
+    if ((a = t.closest('[data-mk-uprot]'))) { mk.up = { uso: 'roteiro', paciente: 'sem', nota: '', n: '', edita: '', rot: a.getAttribute('data-mk-uprot') }; mk.upErr = null; render(); return true; }
+    if (t.closest('[data-mk-guardar]')) {
+      var tx = (mk.novaIdeia || '').trim(); if (!tx) return true;
+      mk.novaIdeia = ''; state.db.doc('mkt/ideia-' + Date.now()).set({ tipo: 'ideia', texto: tx, autor: 'pedro', criado: new Date().toISOString() }).catch(function () { mk.msg = 'Não salvou a ideia.'; render(); });
+      render(); return true;
+    }
+    if ((a = t.closest('[data-mk-usar]'))) { var i = mkDoc(a.getAttribute('data-mk-usar')); if (!i) return true; mk.ideia = i.texto; mk.ideiaOrigem = i.id; mk.rotAtual = null; mk.view = 'novo'; render(); window.scrollTo(0, 0); return true; }
+    if ((a = t.closest('[data-mk-del]'))) {
+      var dd = mkDoc(a.getAttribute('data-mk-del')); if (!dd) return true;
+      if (!confirm('Apagar "' + (dd.texto || dd.titulo || dd.ideia || dd.quem || 'item') + '"?')) return true;
+      if (mk.rotAtual === dd.id) mk.rotAtual = null;
+      state.db.doc('mkt/' + dd.id).delete().catch(function () { mk.msg = 'Não deu para apagar.'; render(); }); return true;
+    }
+    if ((a = t.closest('[data-mk-calw]'))) { var w = +a.getAttribute('data-mk-calw'); mk.cal = w === 0 ? 0 : mk.cal + w; render(); return true; }
+    if (t.closest('[data-mk-parcnova]')) { mk.parc = {}; render(); return true; }
+    if (t.closest('[data-mk-parcx]')) { mk.parc = null; render(); return true; }
+    if (t.closest('[data-mk-parcok]')) {
+      var pf = mk.parc || {}; if (!(pf.quem || '').trim()) { mk.msg = 'Diga com quem é a parceria.'; render(); return true; }
+      state.db.doc('mkt/parc-' + Date.now()).set({ tipo: 'parceria', quem: pf.quem.trim(), ideia: (pf.ideia || '').trim(), proximo: (pf.proximo || '').trim(), status: 'ideia', criado: new Date().toISOString() }).catch(function () { mk.msg = 'Não salvou.'; render(); });
+      mk.parc = null; mk.msg = null; render(); return true;
+    }
+    if ((a = t.closest('[data-mk-parcst]'))) { var ps = a.getAttribute('data-mk-parcst').split('|'), pd = mkDoc(ps[0]); if (!pd) return true; pd.status = ps[1]; render(); mkSalvar(pd.id, { status: ps[1] }); return true; }
+    return false;
   }
 
   function mkSalvar(id, patch, erro) {
@@ -3513,9 +3762,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   }
   function mkSend() {
     var u = mk.up;
-    mk.upErr = !u.files || !u.files.length ? 'Escolha os arquivos.' : !u.uso ? 'Diga o que é.' : !u.paciente ? 'Diga se aparece paciente.' : (u.uso === 'lote' && u.n === '' ) ? 'Diga de qual roteiro.' : (u.uso === 'lote' && !u.edita) ? 'Diga quem edita.' : null;
+    mk.upErr = !u.files || !u.files.length ? 'Escolha os arquivos.' : !u.uso ? 'Diga o que é.' : !u.paciente ? 'Diga se aparece paciente.' : (u.uso === 'lote' && u.n === '' ) ? 'Diga de qual roteiro.' : ((u.uso === 'lote' || u.rot) && !u.edita) ? 'Diga quem edita.' : null;
     if (mk.upErr) { render(); return; }
-    var lt = mkLote(), item = u.uso === 'lote' && lt && u.n != null && u.n !== '' ? (lt.itens || [])[+u.n] : null;
+    var lt = mkLote(), item = u.uso === 'lote' && lt && u.n != null && u.n !== '' ? (lt.itens || [])[+u.n] : null, rot = u.rot ? mkDoc(u.rot) : null;
     var files = Array.prototype.slice.call(u.files), done = 0, fails = [];
     function next(i) {
       if (i >= files.length) {
@@ -3525,6 +3774,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
           var itens = (lt.itens || []).map(function (x, k) { return k === +u.n ? Object.assign({}, x, { gravado: true, edita: u.edita || x.edita || '' }) : x; });
           mkSalvar(lt.id, { itens: itens });
         }
+        if (rot && done) mkSalvar(rot.id, { gravado: true, edita: u.edita || '' });
         render(); return;
       }
       var f = files[i], video = /^video\//.test(f.type) || /\.(mov|mp4|m4v|webm)$/i.test(f.name);
@@ -3536,6 +3786,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         return ct.assets.upload(x.blob, { type: x.type }).then(function (r) {
           var doc = { asset: r.id, tipo: video ? 'video' : 'foto', uso: u.uso, paciente: u.paciente, nota: (u.nota || '').trim(), criado: new Date().toISOString(), tamanho: r.sizeBytes, status: 'novo' };
           if (item) { doc.lote = lt.id; doc.lote_n = +u.n; doc.lote_titulo = item.titulo; doc.edita = u.edita || ''; }
+          if (rot) { doc.roteiro = rot.id; doc.lote_titulo = rot.titulo || rot.ideia; doc.edita = u.edita || ''; }
           return state.db.doc('midia/' + r.id).set(doc);
         });
       }).then(function () { done++; }, function (e) {
@@ -3547,6 +3798,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   }
   function mkClick(t) {
     var a;
+    if (mkStudioClick(t)) return;
     if ((a = t.closest('[data-mk-view]'))) { mk.view = a.getAttribute('data-mk-view'); mk.msg = null; try { localStorage.setItem('painel:mk', mk.view); } catch (err) {} render(); window.scrollTo(0, 0); return; }
     if ((a = t.closest('[data-mk-feito]'))) {
       var pf = a.getAttribute('data-mk-feito').split('|'), d = mkDoc(pf[0]); if (!d) return;
@@ -3673,7 +3925,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     var adf = e.target.getAttribute && e.target.getAttribute('data-ad-f');
     if (adf && ad.novo && adf !== 'perm') ad.novo[adf] = e.target.value;
     var mkf = e.target.getAttribute && e.target.getAttribute('data-mk-f');
-    if (mkf) { var mp = mkf.split('|'); if (mp[0] === 'up' && mk.up) mk.up[mp[1]] = e.target.value; else if (mp[0] === 'num') mk.num[mp[1]] = e.target.value; else if (mp[0] === 'pub') { mk.pub = mk.pub || {}; mk.pub[mp[1]] = e.target.value; } }
+    if (mkf) { var mp = mkf.split('|'); if (mp[0] === 'ideia') { mk.ideia = e.target.value; mk.gerMsg = null; } else if (mp[0] === 'novaIdeia') mk.novaIdeia = e.target.value;
+      else if (mp[0] === 'cal' && mk.calForm) mk.calForm[mp[1]] = e.target.value; else if (mp[0] === 'parc' && mk.parc) mk.parc[mp[1]] = e.target.value;
+      else if (mp[0] === 'up' && mk.up) mk.up[mp[1]] = e.target.value; else if (mp[0] === 'num') mk.num[mp[1]] = e.target.value; else if (mp[0] === 'pub') { mk.pub = mk.pub || {}; mk.pub[mp[1]] = e.target.value; } }
     var cf =e.target.getAttribute && e.target.getAttribute('data-ct-f');
     if (cf === 'newFolder') ct.newFolder = e.target.value;
     else if (cf && ct.up) ct.up[cf] = e.target.value;
@@ -3687,6 +3941,12 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     else if (pf === 'editNome') pc.editNome = e.target.value;
     else if (pf === 'retMotivo') pc.ret.motivo = e.target.value;
     else if (pf === 'retData') pc.ret.data = e.target.value;
+  });
+  // estúdio: Enter no campo da ideia gera (ou guarda, no banco de ideias)
+  main.addEventListener('keydown', function (e) {
+    if (e.key !== 'Enter' || !e.target.getAttribute) return;
+    var k = e.target.getAttribute('data-mk-f'), b = k === 'ideia' ? main.querySelector('[data-mk-gerar]') : k === 'novaIdeia' ? main.querySelector('[data-mk-guardar]') : null;
+    if (b) { e.preventDefault(); b.click(); }
   });
   // conteúdo: arquivos escolhidos e mudanças de pasta / paciente de um arquivo
   main.addEventListener('change', function (e) {
@@ -3755,7 +4015,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
         if (state.section === 'pacientes') render(); else renderNav();   // o número de retornos aparece no menu
       }, function () { pc.lista = pc.lista || []; render(); });
       var timer = setTimeout(function () { state.slow = true; render(); }, 10000);
-      db.collection('mkt').limit(300).onSnapshot(function (snap) {
+      db.collection('mkt').limit(800).onSnapshot(function (snap) {
         mk.docs = snap.docs.map(function (d) { var x = Object.assign({}, d.data()); x.id = d.id; return x; });
         if (!snap.metadata.fromCache) { clearTimeout(timer); state.loading = false; state.slow = false; }
         else if (mk.docs.length) state.loading = false;
