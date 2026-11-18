@@ -333,7 +333,27 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--acce
 .st-prox { background: #f8f4ee; border-radius: 10px; padding: 9px 12px; font-size: 13.5px; margin: 0; }
 .st-prox span { display: block; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--st-mut); margin-bottom: 2px; }
 .st .mk-h { font-family: var(--st-serif); font-weight: 400; font-size: 26px; }
+.st-hoje { border-color: #e2d3bf; }
+.st-hoje-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; }
+.st-hoje-top .st-tit { margin: 0; }
+.st-placar { font-size: 13.5px; color: var(--st-mut); white-space: nowrap; }
+.st-placar b { font-family: var(--st-serif); font-size: 24px; font-weight: 400; color: var(--st-ink); }
+.st-prog { height: 4px; background: #efe7dc; border-radius: 4px; margin: 12px 0 4px; overflow: hidden; }
+.st-prog i { display: block; height: 100%; background: var(--st-salvia); border-radius: 4px; transition: width .3s; }
+.st-dodia { border: 0; margin-top: 6px; }
+.st-dodia li { padding: 12px 2px; }
+.st-lista li { justify-content: flex-start; }
+.st-lista li > div { flex: 1; min-width: 0; }
+.st-check { width: 24px; height: 24px; flex: none; border-radius: 7px; border: 1.5px solid #cdbfae; background: #fff; cursor: pointer; padding: 0; display: grid; place-items: center; }
+.st-check[aria-pressed="true"] { background: var(--st-salvia); border-color: var(--st-salvia); }
+.st-check[aria-pressed="true"]::after { content: "\2713"; color: #fff; font-size: 14px; font-weight: 700; }
+.st-lista li.feita b { color: var(--st-mut); text-decoration: line-through; }
+.st-resumo { background: #f8f4ee; border-radius: 12px; padding: 12px 14px; margin-top: 10px; }
+.st-resumo .st-lab { margin: 0 0 4px; }
+.st-resumo p:last-child { margin: 0; font-size: 14px; line-height: 1.45; }
 @media (max-width: 900px) {
+  .st-lista li { flex-wrap: wrap; }
+  .st-dodia li > span { margin-left: 36px; }
   .st { grid-template-columns: minmax(0, 1fr); border-radius: 20px; min-height: 0; }
   .st-side { padding: 14px 12px 6px; gap: 8px; }
   .st-brand { font-size: 20px; }

@@ -3554,7 +3554,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     return l.sort(function (a, b) { return a.data + a.hora < b.data + b.hora ? -1 : 1; });
   }
   function mkContagem() {
-    var ideias = mkIdeias().filter(function (i) { return !i.usada; }).length;
+    var ideias = mkIdeias().filter(function (i) { return !i.usada && !i.feito; }).length;
     var lt = mkLote(), prontas = mkRots().filter(function (r) { return r.status === 'pronto' && !r.gravado; }).length + (lt ? (lt.itens || []).filter(function (x) { return !x.gravado; }).length : 0);
     return { ideias: ideias, prontas: prontas };
   }
@@ -3618,16 +3618,44 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     return html;
   }
 
+  // 17/11/2026: "unir como era antes e como é agora": as ideias do dia da Duda voltam com "Feito" e resumo do dia (como em 11/11),
+  // e o que não for feito continua no banco, acumulando.
+  function mkDiaDe(iso) { if (!iso) return ''; var d = new Date(iso); return isNaN(d) ? '' : isoOf(d); }
+  function mkIdeiaLi(i, comFeito) {
+    var est = i.estilo ? mkEstilo(i.estilo).nome : '';
+    return '<li' + (i.feito ? ' class="feita"' : '') + '>' + (comFeito ? '<button type="button" class="st-check" data-mk-ifeito="' + esc(i.id) + '" aria-pressed="' + !!i.feito + '" aria-label="Feito"></button>' : '') +
+      '<div><b>' + esc(i.texto) + '</b><small>' + (i.autor === 'duda' ? 'sugestão da Duda' + (est ? ' · ' + esc(est) : '') : 'sua') +
+      (!comFeito && i.criado ? ' · ' + esc(mkDiaCurto(mkDiaDe(i.criado))) : '') + (i.porque ? ' · ' + esc(i.porque) : '') + '</small></div>' +
+      '<span>' + (i.feito ? '' : '<button type="button" class="st-mini" data-mk-usar="' + esc(i.id) + '">usar</button>') +
+      (comFeito ? '' : '<button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">feito</button><button type="button" class="link-btn" data-mk-del="' + esc(i.id) + '">apagar</button>') + '</span></li>';
+  }
   function mkIdeiasView() {
-    var l = mkIdeias(), livres = l.filter(function (i) { return !i.usada; }), usadas = l.filter(function (i) { return i.usada; });
-    var html = mkSerif('Banco de', 'ideias') + '<p class="st-intro">Guarde aqui o que vier na cabeça: no treino, no consultório, antes de dormir. Quando quiser gravar, toque em “usar” e escolha o estilo.</p>' +
+    var l = mkIdeias(), hoje = todayIso();
+    var doDia = l.filter(function (i) { return i.autor === 'duda' && mkDiaDe(i.criado) === hoje; }).sort(function (a, b) { return a.criado < b.criado ? -1 : 1; });
+    var livres = l.filter(function (i) { return !i.usada && !i.feito && doDia.indexOf(i) < 0; });
+    var feitas = l.filter(function (i) { return i.feito && doDia.indexOf(i) < 0; }).sort(function (a, b) { return (a.feito_em || '') < (b.feito_em || '') ? 1 : -1; });
+    var usadas = l.filter(function (i) { return i.usada && !i.feito && doDia.indexOf(i) < 0; });
+    var html = mkSerif('Banco de', 'ideias');
+    var nf = doDia.filter(function (i) { return i.feito; }).length;
+    html += '<section class="st-card st-hoje"><div class="st-hoje-top"><div><p class="st-lab">ideias de hoje da Duda</p><h3 class="st-tit">' + esc(fmtDay(hoje)) + '</h3></div>' +
+      (doDia.length ? '<span class="st-placar"><b>' + nf + '</b> de ' + doDia.length + ' feitas</span>' : '') + '</div>';
+    if (!doDia.length) html += '<p class="st-vazio">A Duda põe as ideias de hoje às 7h, com o computador ligado. Enquanto isso, o banco abaixo tem as dos outros dias.</p>';
+    else {
+      html += '<div class="st-prog"><i style="width:' + Math.round(100 * nf / doDia.length) + '%"></i></div><ul class="st-lista st-dodia">' + doDia.map(function (i) { return mkIdeiaLi(i, true); }).join('') + '</ul>';
+      var hora = new Date().getHours(), falta = doDia.filter(function (i) { return !i.feito; });
+      if (nf || hora >= 18) html += '<div class="st-resumo"><p class="st-lab">resumo do dia</p><p>' +
+        (nf === doDia.length ? 'Você fez todas as ' + doDia.length + ' de hoje. Dia completo.' : nf ? 'Você fez ' + nf + ' de ' + doDia.length + ': ' + esc(doDia.filter(function (i) { return i.feito; }).map(function (i) { return i.texto.split(/[:?.]/)[0]; }).join('; ')) + '.' : 'Nenhuma feita ainda hoje.') +
+        (falta.length ? ' ' + (falta.length === 1 ? 'A que ficou continua' : 'As ' + falta.length + ' que ficaram continuam') + ' no banco para os próximos dias.' : '') + '</p></div>';
+    }
+    html += '</section>';
+    html += '<p class="st-lab" style="margin-top:28px">banco · ' + livres.length + (livres.length === 1 ? ' ideia' : ' ideias') + '</p>' +
       '<div class="st-ideia"><span>nova ideia</span><input type="text" data-mk-f="novaIdeia" value="' + esc(mk.novaIdeia || '') + '" placeholder="ex.: o que o refluxo faz com o dente" maxlength="300"><button type="button" class="st-gerar" data-mk-guardar="1">guardar</button></div>';
-    if (!livres.length) html += '<div class="empty">Nenhuma ideia guardada ainda.</div>';
-    else html += '<ul class="st-lista">' + livres.map(function (i) {
-      return '<li><div><b>' + esc(i.texto) + '</b><small>' + (i.autor === 'duda' ? 'sugestão da Duda' + (i.estilo ? ' · ' + mkEstilo(i.estilo).nome : '') : 'sua') + (i.criado ? ' · ' + esc(dataHora(i.criado)) : '') + (i.porque ? ' · ' + esc(i.porque) : '') + '</small></div>' +
-        '<span><button type="button" class="st-mini" data-mk-usar="' + esc(i.id) + '">usar</button><button type="button" class="link-btn" data-mk-del="' + esc(i.id) + '">apagar</button></span></li>'; }).join('') + '</ul>';
+    if (!livres.length) html += '<div class="empty" style="margin-top:12px">Nenhuma ideia guardada ainda.</div>';
+    else html += '<ul class="st-lista">' + livres.map(function (i) { return mkIdeiaLi(i, false); }).join('') + '</ul>';
     if (usadas.length) html += '<p class="st-lab" style="margin-top:28px">viraram roteiro</p><ul class="st-lista st-usadas">' + usadas.slice(0, 20).map(function (i) {
       return '<li><div><b>' + esc(i.texto) + '</b></div><span><button type="button" class="link-btn" data-mk-abrir="' + esc(i.usada) + '">abrir roteiro</button></span></li>'; }).join('') + '</ul>';
+    if (feitas.length) html += '<p class="st-lab" style="margin-top:28px">feitas · ' + feitas.length + '</p><ul class="st-lista st-usadas">' + feitas.slice(0, 30).map(function (i) {
+      return '<li><div><b>' + esc(i.texto) + '</b><small>feita ' + esc(i.feito_em ? mkDiaCurto(mkDiaDe(i.feito_em)) : '') + '</small></div><span><button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">desfazer</button></span></li>'; }).join('') + '</ul>';
     return html;
   }
 
@@ -3738,6 +3766,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       mk.novaIdeia = ''; state.db.doc('mkt/ideia-' + Date.now()).set({ tipo: 'ideia', texto: tx, autor: 'pedro', criado: new Date().toISOString() }).catch(function () { mk.msg = 'Não salvou a ideia.'; render(); });
       render(); return true;
     }
+    if ((a = t.closest('[data-mk-ifeito]'))) { var fi = mkDoc(a.getAttribute('data-mk-ifeito')); if (!fi) return true; fi.feito = !fi.feito; fi.feito_em = fi.feito ? new Date().toISOString() : null; render(); mkSalvar(fi.id, { feito: fi.feito, feito_em: fi.feito_em }); return true; }
     if ((a = t.closest('[data-mk-usar]'))) { var i = mkDoc(a.getAttribute('data-mk-usar')); if (!i) return true; mk.ideia = i.texto; mk.ideiaOrigem = i.id; if (i.estilo && MK_ESTILOS.some(function (e) { return e.id === i.estilo; })) mk.estilo = i.estilo; mk.rotAtual = null; mk.view = 'novo'; render(); window.scrollTo(0, 0); return true; }
     if ((a = t.closest('[data-mk-del]'))) {
       var dd = mkDoc(a.getAttribute('data-mk-del')); if (!dd) return true;
