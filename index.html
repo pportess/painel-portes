@@ -3624,7 +3624,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       '<div class="st-ideia"><span>nova ideia</span><input type="text" data-mk-f="novaIdeia" value="' + esc(mk.novaIdeia || '') + '" placeholder="ex.: o que o refluxo faz com o dente" maxlength="300"><button type="button" class="st-gerar" data-mk-guardar="1">guardar</button></div>';
     if (!livres.length) html += '<div class="empty">Nenhuma ideia guardada ainda.</div>';
     else html += '<ul class="st-lista">' + livres.map(function (i) {
-      return '<li><div><b>' + esc(i.texto) + '</b><small>' + (i.autor === 'duda' ? 'sugestão da Duda' : 'sua') + (i.criado ? ' · ' + esc(dataHora(i.criado)) : '') + (i.porque ? ' · ' + esc(i.porque) : '') + '</small></div>' +
+      return '<li><div><b>' + esc(i.texto) + '</b><small>' + (i.autor === 'duda' ? 'sugestão da Duda' + (i.estilo ? ' · ' + mkEstilo(i.estilo).nome : '') : 'sua') + (i.criado ? ' · ' + esc(dataHora(i.criado)) : '') + (i.porque ? ' · ' + esc(i.porque) : '') + '</small></div>' +
         '<span><button type="button" class="st-mini" data-mk-usar="' + esc(i.id) + '">usar</button><button type="button" class="link-btn" data-mk-del="' + esc(i.id) + '">apagar</button></span></li>'; }).join('') + '</ul>';
     if (usadas.length) html += '<p class="st-lab" style="margin-top:28px">viraram roteiro</p><ul class="st-lista st-usadas">' + usadas.slice(0, 20).map(function (i) {
       return '<li><div><b>' + esc(i.texto) + '</b></div><span><button type="button" class="link-btn" data-mk-abrir="' + esc(i.usada) + '">abrir roteiro</button></span></li>'; }).join('') + '</ul>';
@@ -3738,7 +3738,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       mk.novaIdeia = ''; state.db.doc('mkt/ideia-' + Date.now()).set({ tipo: 'ideia', texto: tx, autor: 'pedro', criado: new Date().toISOString() }).catch(function () { mk.msg = 'Não salvou a ideia.'; render(); });
       render(); return true;
     }
-    if ((a = t.closest('[data-mk-usar]'))) { var i = mkDoc(a.getAttribute('data-mk-usar')); if (!i) return true; mk.ideia = i.texto; mk.ideiaOrigem = i.id; mk.rotAtual = null; mk.view = 'novo'; render(); window.scrollTo(0, 0); return true; }
+    if ((a = t.closest('[data-mk-usar]'))) { var i = mkDoc(a.getAttribute('data-mk-usar')); if (!i) return true; mk.ideia = i.texto; mk.ideiaOrigem = i.id; if (i.estilo && MK_ESTILOS.some(function (e) { return e.id === i.estilo; })) mk.estilo = i.estilo; mk.rotAtual = null; mk.view = 'novo'; render(); window.scrollTo(0, 0); return true; }
     if ((a = t.closest('[data-mk-del]'))) {
       var dd = mkDoc(a.getAttribute('data-mk-del')); if (!dd) return true;
       if (!confirm('Apagar "' + (dd.texto || dd.titulo || dd.ideia || dd.quem || 'item') + '"?')) return true;
