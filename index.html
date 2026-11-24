@@ -985,7 +985,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   .nav button { padding: 6px 12px 6px 6px; }
 }
 </style>
-<link rel="stylesheet" href="tema-apple.css?v=5">
+<link rel="stylesheet" href="tema-apple.css?v=6">
 
 <div class="app">
   <aside class="side">
@@ -1421,7 +1421,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
 
   function irPara(s) {
     if (s.indexOf('ag:') === 0) { state.section = 'agentes'; state.agent = s.slice(3); }
-    else { state.section = s; state.agent = null; try { localStorage.setItem('painel:aba', s); } catch (err) {} }
+    else { if (s === 'marketing' && state.section !== 'marketing') mk.view = 'ideias'; state.section = s; state.agent = null; try { localStorage.setItem('painel:aba', s); } catch (err) {} }
     render(); window.scrollTo(0, 0);
   }
 
@@ -2841,7 +2841,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if ((a = t.closest('[data-ct-view]'))) { ct.view = a.getAttribute('data-ct-view'); ct.dsVer = null; ct.dsAdiantar = false; render(); return; }
     if ((a = t.closest('[data-ct-pasta]'))) { ct.pasta = a.getAttribute('data-ct-pasta'); ct.sel = null; ad.novo = null; ad.msg = null; window.scrollTo(0, 0); render(); return; }
     if (t.closest('[data-ct-up]')) { ct.up = { pasta: ct.pasta || '', paciente: '', nota: '', files: null }; ct.upErr = null; ct.msg = null; render(); window.scrollTo(0, 0); return; }
-    if ((a = t.closest('[data-goto]'))) { state.section = a.getAttribute('data-goto'); try { localStorage.setItem('painel:aba', state.section); } catch (err) {} render(); window.scrollTo(0, 0); return; }
+    if ((a = t.closest('[data-goto]'))) { if (a.getAttribute('data-goto') === 'marketing' && state.section !== 'marketing') mk.view = 'ideias'; state.section = a.getAttribute('data-goto'); try { localStorage.setItem('painel:aba', state.section); } catch (err) {} render(); window.scrollTo(0, 0); return; }
     if ((a = t.closest('[data-ct-open]'))) { state.section = 'conteudo'; ct.view = 'banco'; ct.sel = a.getAttribute('data-ct-open'); render(); window.scrollTo(0, 0); return; }
     if ((a = t.closest('[data-ct-edit]'))) {
       var me = (ct.midia || []).find(function (x) { return x.id === a.getAttribute('data-ct-edit'); }); if (!me) return;
@@ -3255,7 +3255,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // e "num-AAAA-MM-DD" (números da semana, pela segunda-feira). Os arquivos que o Pedro sobe ficam em "midia".
   // A agente Duda (ex-Leo) escreve o dia e o lote às 7h; o Pedro marca o que fez. Nada é postado sozinho.
   var mk = { docs: [], view: 'hoje', up: null, upErr: null, prog: null, msg: null, num: {} };
-  try { var mkv = localStorage.getItem('painel:mk'); if (mkv) mk.view = mkv; } catch (err) {}
+  // 23/11/2026: o Marketing sempre abre no banco de ideias (não lembra a última guia)
   var MK_PAPEL = { educativo: ['Educativo', '#2563eb'], caso: ['Caso', '#7a1f2b'], pessoal: ['Pessoal', '#b5740a'], bastidor: ['Bastidor', '#0a7f70'] };
   var MK_PAC = { sem: 'Não aparece paciente', tcle: 'Paciente com TCLE assinado', sem_tcle: 'Paciente SEM TCLE (não postar)' };
   var MK_EDITA = { duda: 'A Duda edita (cortes e texto na tela)', eu: 'Eu mesmo edito', pronto: 'Já está editado, é só postar' };
@@ -3533,11 +3533,11 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   ];
   var MK_PALETA = [['creme', '#f6efe6'], ['areia', '#d9c7b0'], ['caramelo', '#b5835a'], ['sálvia', '#8a9a7b'], ['bordô', '#7a1f2b'], ['café', '#3b2a20']];
   var MK_CORES = ['#b5835a', '#d9c7b0', '#8a9a7b', '#7a1f2b', '#c9a86a'];
-  var MK_GUIAS = [['novo', 'novo conteúdo', '#3b2a20'], ['ideias', 'banco de ideias', '#c9a86a'], ['estilos', 'meus estilos', '#8a9a7b'], ['calendario', 'calendário', '#8f8fc0'], ['roteiros', 'roteiros salvos', '#d08a84'], ['parcerias', 'parcerias', '#8fb0c8']];
+  var MK_GUIAS = [['ideias', 'banco de ideias', '#c9a86a'], ['estilos', 'meus estilos', '#8a9a7b'], ['calendario', 'calendário', '#8f8fc0'], ['roteiros', 'roteiros salvos', '#d08a84'], ['parcerias', 'parcerias', '#8fb0c8']];
   var MK_GUIAS2 = [['numeros', 'números'], ['arquivos', 'arquivos']];
   var MK_PARC_ST = [['ideia', 'ideia'], ['conversando', 'conversando'], ['combinado', 'combinado'], ['feito', 'feito']];
   var MK_WD = ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sáb'];
-  (function () { var velho = { hoje: 'calendario', lote: 'roteiros', marca: 'estilos' }; if (velho[mk.view]) mk.view = velho[mk.view]; if (!MK_GUIAS.concat(MK_GUIAS2).some(function (g) { return g[0] === mk.view; })) mk.view = 'novo'; })();
+  (function () { var velho = { hoje: 'ideias', novo: 'ideias', lote: 'roteiros', marca: 'estilos' }; if (velho[mk.view]) mk.view = velho[mk.view]; if (!MK_GUIAS.concat(MK_GUIAS2).some(function (g) { return g[0] === mk.view; })) mk.view = 'ideias'; })();
   mk.estilo = mk.estilo || 'sinal'; mk.ideia = mk.ideia || ''; mk.cal = mk.cal || 0;
   function mkEstilo(id) { return MK_ESTILOS.find(function (e) { return e.id === id; }) || MK_ESTILOS[0]; }
   function mkRots() { return mk.docs.filter(function (d) { return d.tipo === 'roteiro'; }).sort(function (a, b) { return (a.criado || '') < (b.criado || '') ? 1 : -1; }); }
@@ -3549,6 +3549,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   function mkAgendados() {
     var l = [];
     mkRots().forEach(function (r) { if (r.postar_em) l.push({ data: r.postar_em, hora: r.horario || '', titulo: r.titulo || r.ideia, estilo: mkEstilo(r.estilo).nome, rot: r.id, gravado: !!r.gravado }); });
+    mkIdeias().forEach(function (i) { if (i.postar_em) l.push({ data: i.postar_em, hora: i.horario || '', titulo: mkIdeiaTxt(i), estilo: (mkFmt(i.formato) || { nome: 'post' }).nome, ideia: i.id, gravado: !!i.feito }); });
     var lt = mkLote();
     if (lt) (lt.itens || []).forEach(function (x) { if (x.postar_em) l.push({ data: x.postar_em, hora: x.horario || '', titulo: x.titulo, estilo: x.formato || 'lote', lote: true, gravado: !!x.gravado }); });
     return l.sort(function (a, b) { return a.data + a.hora < b.data + b.hora ? -1 : 1; });
@@ -3573,6 +3574,148 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     if (!l.length) return '<p class="st-vazio">Nada no calendário desta semana ainda.</p>';
     return '<ul class="st-rows">' + l.map(function (x) { var este = atual && x.rot === atual.id;
       return '<li><span>' + esc(MK_WD[new Date(x.data + 'T12:00:00').getDay()]) + '</span><b' + (este ? ' class="ok"' : '') + '>' + (este ? 'este ' + esc(x.estilo) + ' ✓' : esc(x.estilo) + ' · ' + esc((x.titulo || '').slice(0, 28))) + '</b></li>'; }).join('') + '</ul>';
+  }
+
+
+  // ---------- 23/11/2026: o Marketing abre no banco de ideias. "usar" leva à escolha do formato (reels, stories, carrossel, post)
+  // e a Duda diz o que fazer, montado com os campos da ideia (gancho, fala, tela, cta, porque, prova, fotos).
+  var MK_FMTS = [
+    { id: 'reels', nome: 'reels', sub: 'você falando, até 35 s', tag: '▶ reels', grad: 'linear-gradient(135deg,#c79b74,#8a5a3b)' },
+    { id: 'stories', nome: 'stories', sub: '5 telas no mesmo dia', tag: '◷ stories', grad: 'linear-gradient(135deg,#a3b293,#5f6e53)' },
+    { id: 'carrossel', nome: 'carrossel', sub: 'slides para salvar', tag: '1/7', grad: 'linear-gradient(135deg,#efe5d8,#cdb79c)' },
+    { id: 'post', nome: 'post', sub: 'uma imagem + legenda', tag: '▢ post', grad: 'linear-gradient(135deg,#9a3a47,#4a1219)' }
+  ];
+  var MK_TEMAS = [['todas', 'todas'], ['fortes', 'só as fortes'], ['bruxismo', 'bruxismo e sono'], ['acido', 'desgaste, ácido e sensibilidade'], ['gengiva', 'gengiva e limpeza'], ['estetica', 'estética, restauração e casos'], ['mitos', 'mitos e curiosidades'], ['eu', 'sobre mim e bastidor'], ['collab', 'collabs']];
+  var MK_FORCA = { forte: 'forte', medio: 'média', fraco: 'alcance' };
+  var MK_ASSIN = 'Dr. Pedro Portes · Cirurgião-dentista · CRO/PR 39911 · Curitiba';
+  mk.copias = mk.copias || {};
+  mk.tema = mk.tema || 'todas';
+  function mkFmt(id) { return MK_FMTS.find(function (f) { return f.id === id; }) || null; }
+  function mkFrases(t) { return ((t || '').match(/[^.!?]+[.!?]*["”]?/g) || []).map(function (s) { return s.trim(); }).filter(Boolean); }
+  function mkPal(t) { return (t || '').split(/\s+/).filter(Boolean).length; }
+  function mkChave(i) { var m = /\b([A-ZÁÉÍÓÚÃÕÇ]{4,})\b/.exec(i.cta || ''); return m && m[1] !== 'CRO' ? m[1] : ''; }
+  function mkCopiaTxt(rot, txt) { var k = 'c' + Object.keys(mk.copias).length; mk.copias[k] = txt; return '<button type="button" class="st-mini" data-mk-copytxt="' + k + '">copiar ' + esc(rot) + '</button>'; }
+  function mkLegenda(i) {
+    var tags = { bruxismo: '#bruxismo', acido: '#desgastedental', gengiva: '#gengiva', estetica: '#resinacomposta', mitos: '#saudebucal', eu: '#dentista', collab: '#saudebucal' }[i.tema] || '#saudebucal';
+    return [i.gancho || i.texto, i.fala, i.cta].filter(Boolean).join('\n\n') + '\n\n' + MK_ASSIN + '\n#dentistacuritiba #curitiba ' + tags;
+  }
+  function mkIdeiaTxt(i) { return i.titulo || i.texto || ''; }
+
+  // o que cada formato pede, a partir da ideia
+  function mkMontar(i, f) {
+    var fr = mkFrases(i.fala || ''), chave = mkChave(i), tela = i.tela || i.gancho || mkIdeiaTxt(i), o = { blocos: [] };
+    if (f === 'reels') {
+      var t = 0, cortes = [], cor = 0;
+      var add = function (dur, oque, telaTxt) { var de = t; t += dur; cortes.push({ de: de, ate: t, oque: oque, tela: telaTxt, cor: MK_CORES[cor++ % MK_CORES.length] }); };
+      add(3, 'gancho: “' + (i.gancho || mkIdeiaTxt(i)) + '”', tela);
+      var junta = []; fr.forEach(function (s) { if (junta.length && mkPal(junta[junta.length - 1]) < 9) junta[junta.length - 1] += ' ' + s; else junta.push(s); });
+      junta.forEach(function (s) { add(Math.max(3, Math.round(mkPal(s) / 2.6)), s); });
+      if (i.cta) add(4, 'chamada: “' + i.cta + '”', chave ? 'manda ' + chave : '');
+      add(3, 'assinatura na tela', MK_ASSIN);
+      o.dur = t + 's'; o.cortes = cortes;
+      o.duda = 'Grave em pé, celular na altura dos olhos, luz de janela de frente. Fala de ' + t + ' segundos: se passar de 40, corte uma frase do meio, nunca o gancho.' + (t > 40 ? ' Esta está longa: escolha as frases mais fortes.' : '');
+      o.takes = ['gancho olhando para a câmera (grave 3 vezes e use a melhor)', 'a fala em 2 ou 3 trechos, um por respiração', 'a chamada no fim, com calma'].concat(i.prova ? ['close da prova: ' + i.prova] : ['close seu de jaleco no consultório, para cobrir os cortes']).concat(['5 s de “respiro”: você olhando para o celular ou a cadeira vazia']);
+      o.edicao = [['texto na tela', 'frases curtas, creme no bordô, desde o 1º segundo'], ['trilha', 'sem música na fala'], ['transição', 'corte seco a cada frase'], ['capa', '“' + tela + '” + close seu'], ['melhor horário', '18h, de seg a qui']];
+    } else if (f === 'stories') {
+      var meio = Math.ceil(fr.length / 2), p1 = fr.slice(0, meio).join(' '), p2 = fr.slice(meio).join(' ');
+      o.stories = [
+        { n: 1, oque: 'a pergunta', filme: 'você de selfie, ou fundo creme liso', sticker: /\?\s*$/.test(i.gancho || '') ? 'enquete: “' + i.gancho + '” · sim / não' : 'texto: “' + (i.gancho || tela) + '” + enquete: “fez o teste?” · fiz / vou fazer' },
+        { n: 2, oque: 'a explicação', filme: 'você falando para a câmera, até 15 s', fala: p1 },
+        p2 ? { n: 3, oque: 'o resto da explicação', filme: i.prova ? 'mostre a prova: ' + i.prova : 'você falando, ou o texto sobre fundo creme', fala: p2 } : { n: 3, oque: 'a prova', filme: i.prova || 'close do espelho, do copo ou do manequim, sem paciente' },
+        { n: 4, oque: 'a caixinha', filme: 'fundo creme ou foto sua no consultório', sticker: 'caixinha de perguntas: “me pergunta sobre ' + mkIdeiaTxt(i).toLowerCase().replace(/[?.!]+$/, '') + '”' },
+        { n: 5, oque: 'a chamada', filme: 'você, sorrindo, apontando para o texto', sticker: i.cta || 'me chama no direct', assin: true }
+      ];
+      o.duda = 'Os 5 no mesmo dia, entre 12h e 19h. No dia seguinte, responda as caixinhas: cada resposta vira um story novo e puxa conversa no direct.';
+      o.edicao = [['texto', 'fonte “Clássico” do Instagram, creme ou bordô, curto'], ['música', 'só nos que não têm fala'], ['duração', 'até 15 s por story'], ['destaque', 'salve no destaque “dúvidas”']];
+    } else if (f === 'carrossel') {
+      var sl = [{ txt: tela, foto: i.caso ? 'foto inicial do caso (com TCLE), com o título por cima' : (i.prova ? 'close da prova: ' + i.prova : 'foto sua de jaleco, fundo neutro, olhando para a câmera') }];
+      if (i.gancho && i.gancho !== tela) sl.push({ txt: i.gancho, foto: 'fundo creme, texto bordô' });
+      var grupos = []; fr.forEach(function (s) { if (grupos.length && mkPal(grupos[grupos.length - 1]) < 14) grupos[grupos.length - 1] += ' ' + s; else grupos.push(s); });
+      while (grupos.length > 5) { var a2 = grupos.pop(); grupos[grupos.length - 1] += ' ' + a2; }
+      grupos.forEach(function (g, k) { sl.push({ txt: g, foto: i.caso && k === grupos.length - 1 ? 'foto final do caso (com TCLE), mesma luz e ângulo da inicial' : 'fundo creme, texto bordô; um ícone simples se ajudar' }); });
+      if (i.cta) sl.push({ txt: i.cta, foto: 'fundo bordô, texto creme' });
+      sl.push({ txt: 'Salva e manda para quem precisa. ' + MK_ASSIN, foto: 'foto sua sorrindo, nome e CRO embaixo' });
+      o.slides = sl;
+      o.fotos = i.fotos || (i.caso ? 'Fotos inicial e final do caso, só com TCLE assinado, mesma luz e ângulo. Nada de procedimento em andamento.' : 'Só a capa e o último slide levam foto sua (escolha das que você já tem, de jaleco, fundo limpo). ' + (i.prova ? 'Se tiver, uma foto da prova: ' + i.prova + '. ' : '') + 'O resto é texto sobre fundo creme: sem foto de paciente.');
+      o.duda = sl.length + ' slides no Canva, formato 1080 × 1350 (4:5). Título em letra serifada, até 14 palavras por slide, mesma margem em todos.';
+      o.edicao = [['fundo', 'creme #f6efe6; o da chamada em bordô #7a1f2b'], ['texto', 'café #3b2a20, título grande'], ['capa', '“' + tela + '” em letra grande'], ['melhor horário', 'ter ou qua, 18h']];
+    } else {
+      o.arte = { txt: tela, como: i.caso ? 'antes e depois lado a lado (com TCLE), com a frase por cima' : 'a frase em letra grande, creme sobre bordô; ou foto sua de jaleco com a frase embaixo', canto: 'CRO/PR 39911 no canto de baixo' };
+      o.duda = 'Uma imagem só, 1080 × 1350. Quem faz o trabalho é a legenda: a primeira linha precisa prender.';
+      o.edicao = [['formato', '1080 × 1350 (4:5)'], ['texto na arte', 'até 8 palavras'], ['primeira linha', 'o gancho, sem emoji no começo'], ['melhor horário', '12h ou 18h']];
+    }
+    o.legenda = mkLegenda(i);
+    return o;
+  }
+
+  function mkGuiaHtml(i, f) {
+    var o = mkMontar(i, f), fm = mkFmt(f), h = '';
+    h += '<section class="st-card st-duda"><p class="st-lab">a Duda diz · ' + esc(fm.nome) + (o.dur ? ' · ' + esc(o.dur) : '') + '</p><p class="st-dudafala">' + esc(o.duda) + '</p></section>';
+    var esq = '<section class="st-card">';
+    if (f === 'reels') {
+      esq += '<p class="st-lab">roteiro e cortes</p>' + mkCortesHtml(o.cortes, { slides: false }, false);
+      esq += '<p class="st-lab">o que falar</p><div class="st-script"><p><b>' + esc(i.gancho || mkIdeiaTxt(i)) + '</b></p>' + (i.fala ? '<p>' + esc(i.fala) + '</p>' : '') + (i.cta ? '<p><b>' + esc(i.cta) + '</b></p>' : '') + '</div>' +
+        mkCopiaTxt('a fala', [i.gancho, i.fala, i.cta].filter(Boolean).join('\n\n'));
+      var ok = ((i.takes_ok || {})[f]) || [];
+      esq += '<p class="st-lab">takes pra gravar · ' + o.takes.length + (ok.length ? ' · ' + ok.length + (ok.length === 1 ? ' gravado' : ' gravados') : '') + '</p><div class="st-takes">' + o.takes.map(function (t, k) {
+        return '<button type="button" data-mk-itake="' + k + '" aria-pressed="' + (ok.indexOf(k) >= 0) + '">' + esc(t) + '</button>'; }).join('') + '</div>';
+    } else if (f === 'stories') {
+      esq += '<p class="st-lab">os 5 stories</p><ol class="st-seq">' + o.stories.map(function (s) {
+        return '<li><span>' + s.n + '</span><div><b>' + esc(s.oque) + '</b><small>filme: ' + esc(s.filme) + '</small>' + (s.fala ? '<p>“' + esc(s.fala) + '”</p>' : '') + (s.sticker ? '<p class="st-stk">' + esc(s.sticker) + '</p>' : '') + (s.assin ? '<small>' + esc(MK_ASSIN) + '</small>' : '') + '</div></li>'; }).join('') + '</ol>';
+    } else if (f === 'carrossel') {
+      esq += '<p class="st-lab">os slides · ' + o.slides.length + '</p><ol class="st-seq">' + o.slides.map(function (s, k) {
+        return '<li><span>' + (k + 1) + '</span><div><b>' + esc(s.txt) + '</b><small>' + esc(s.foto) + '</small></div></li>'; }).join('') + '</ol>' +
+        mkCopiaTxt('os textos dos slides', o.slides.map(function (s, k) { return (k + 1) + '. ' + s.txt; }).join('\n'));
+      esq += '<p class="st-lab">as fotos</p><p class="st-fotos">' + esc(o.fotos) + '</p>';
+    } else {
+      esq += '<p class="st-lab">a arte</p><div class="st-arte"><b>' + esc(o.arte.txt) + '</b><small>' + esc(MK_ASSIN) + '</small></div><ul class="st-rows"><li><span>como</span><b>' + esc(o.arte.como) + '</b></li><li><span>no canto</span><b>' + esc(o.arte.canto) + '</b></li></ul>';
+    }
+    esq += '<div class="st-leg"><p><b>legenda ·</b> ' + mkTexto(o.legenda) + '</p>' + mkCopiaTxt('a legenda', o.legenda) + '</div>';
+    esq += '<p class="mk-cfo">✓ CFO: sem preço, sem promessa, sem paciente sem TCLE, nome e CRO no fim.</p></section>';
+    var dir = '<section class="st-card"><p class="st-lab">edição no seu estilo</p><div class="st-pal">' + MK_PALETA.map(function (p) { return '<i title="' + esc(p[0]) + '" style="background:' + p[1] + '"></i>'; }).join('') + '</div>' +
+      '<ul class="st-rows">' + o.edicao.map(function (x) { return '<li><span>' + esc(x[0]) + '</span><b>' + esc(x[1]) + '</b></li>'; }).join('') + '</ul>' +
+      (i.porque ? '<p class="st-lab">por que traz paciente</p><p class="st-nota">' + esc(i.porque) + '</p>' : '') +
+      '<p class="st-lab">próximos da semana</p>' + mkProximos(null) + '</section>';
+    return h + '<div class="st-grid">' + esq + dir + '</div>';
+  }
+
+  function mkIdeiaView() {
+    var i = mkDoc(mk.ideiaAtual);
+    if (!i) return '<button type="button" class="link-btn" data-mk-view="ideias">‹ banco de ideias</button><div class="empty">Esta ideia não existe mais.</div>';
+    var f = mk.fmt || i.formato || '', fm = mkFmt(f);
+    var html = '<button type="button" class="link-btn st-voltar" data-mk-view="ideias">‹ banco de ideias</button>' + mkSerif(mkIdeiaTxt(i)) +
+      (i.gancho && i.gancho !== mkIdeiaTxt(i) ? '<p class="st-gancho">“' + esc(i.gancho) + '”</p>' : '') +
+      '<p class="st-meta">' + [i.tema ? (MK_TEMAS.find(function (t) { return t[0] === i.tema; }) || [, ''])[1] : '', i.forca ? 'lead ' + MK_FORCA[i.forca] : '', i.autor === 'pedro' ? 'sua' : 'da Duda', i.gravado ? 'já gravado' : ''].filter(Boolean).map(esc).join(' · ') + '</p>';
+    html += '<p class="st-lab">como você quer postar?</p><div class="st-estilos">' + MK_FMTS.map(function (x) {
+      return '<button type="button" class="st-est" data-mk-fmt="' + x.id + '" aria-pressed="' + (f === x.id) + '"><span class="st-th" style="background:' + x.grad + '"><small>' + esc(x.tag) + '</small></span><b>' + esc(x.nome) + '</b><span class="st-sub">' + esc(x.sub) + (i.sugerido === x.id ? ' · a Duda sugere' : '') + '</span></button>'; }).join('') + '</div>';
+    if (!fm) return html + '<p class="st-vazio">Escolha um formato e a Duda diz o que fazer: o roteiro, o que filmar, as fotos e a legenda.</p>';
+    html += mkGuiaHtml(i, f);
+    var cal = '';
+    if (mk.calForm) cal = '<div class="st-calf"><input type="date" data-mk-f="cal|data" value="' + esc(mk.calForm.data || '') + '" min="' + todayIso() + '"><input type="time" data-mk-f="cal|hora" value="' + esc(mk.calForm.hora || '18:00') + '">' +
+      '<button type="button" class="st-verde" data-mk-icalok="1">confirmar</button><button type="button" class="link-btn" data-mk-calx="1">cancelar</button></div>';
+    else if (i.postar_em) cal = '<span class="st-nocal">no calendário: ' + esc(mkDiaCurto(i.postar_em)) + (i.horario ? ', ' + esc(i.horario) : '') + '</span><button type="button" class="link-btn" data-mk-ical="1">mudar</button>';
+    else cal = '<button type="button" class="st-verde" data-mk-ical="1">mandar pro calendário</button>';
+    html += '<div class="st-foot"><p>✦ A ideia é sua. A Duda só aplica o <b>seu jeito de gravar, editar e escrever</b>.</p><div>' + cal + '</div></div>';
+    html += '<div class="st-mais"><button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">' + (i.feito ? 'postado ✓ (desfazer)' : 'marcar como postado') + '</button></div>';
+    return html;
+  }
+
+  // as 5 do dia: as que a Duda criou hoje e, para completar, um sorteio fixo do banco (guardado em mkt/hoje-<data>)
+  function mkHojeIds() {
+    var hoje = todayIso(), doc = mkDoc('hoje-' + hoje), l = mkIdeias();
+    var criadas = l.filter(function (i) { return i.autor === 'duda' && mkDiaDe(i.criado) === hoje; }).map(function (i) { return i.id; });
+    if (doc) return criadas.concat((doc.ids || []).filter(function (id) { return criadas.indexOf(id) < 0 && mkDoc(id); })).slice(0, 5);
+    if (criadas.length >= 5) return criadas.slice(0, 5);
+    var ja = {}; mk.docs.forEach(function (d) { if (/^hoje-/.test(d.id)) (d.ids || []).forEach(function (id) { ja[id] = 1; }); });
+    var livres = l.filter(function (i) { return !i.feito && !i.formato && !i.usada && criadas.indexOf(i.id) < 0; });
+    var novas = livres.filter(function (i) { return !ja[i.id]; }); if (novas.length < 5) novas = livres;
+    var seed = +hoje.replace(/-/g, ''), rnd = function () { seed = (seed * 9301 + 49297) % 233280; return seed / 233280; };
+    var mist = novas.slice().sort(function (a, b) { return a.id < b.id ? -1 : 1; }).map(function (i) { return [rnd(), i]; }).sort(function (a, b) { return a[0] - b[0]; }).map(function (x) { return x[1]; });
+    var pega = [], quer = ['forte', 'forte', 'forte', 'medio', null];
+    quer.forEach(function (q) { var x = mist.find(function (i) { return pega.indexOf(i) < 0 && (!q || i.forca === q); }) || mist.find(function (i) { return pega.indexOf(i) < 0; }); if (x) pega.push(x); });
+    var ids = criadas.concat(pega.map(function (i) { return i.id; })).slice(0, 5);
+    if (ids.length && !mk.hojeSalvando) { mk.hojeSalvando = true; state.db.doc('mkt/hoje-' + hoje).set({ tipo: 'hoje', ids: ids, criado: new Date().toISOString() }).catch(function () {}).then(function () { mk.hojeSalvando = false; }); }
+    return ids;
   }
 
   function mkNovo() {
@@ -3622,40 +3765,44 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   // e o que não for feito continua no banco, acumulando.
   function mkDiaDe(iso) { if (!iso) return ''; var d = new Date(iso); return isNaN(d) ? '' : isoOf(d); }
   function mkIdeiaLi(i, comFeito) {
-    var est = i.estilo ? mkEstilo(i.estilo).nome : '';
-    return '<li' + (i.feito ? ' class="feita"' : '') + '>' + (comFeito ? '<button type="button" class="st-check" data-mk-ifeito="' + esc(i.id) + '" aria-pressed="' + !!i.feito + '" aria-label="Feito"></button>' : '') +
-      '<div><b>' + esc(i.texto) + '</b><small>' + (i.autor === 'duda' ? 'sugestão da Duda' + (est ? ' · ' + esc(est) : '') : 'sua') +
-      (!comFeito && i.criado ? ' · ' + esc(mkDiaCurto(mkDiaDe(i.criado))) : '') + (i.porque ? ' · ' + esc(i.porque) : '') + '</small></div>' +
+    var tema = i.tema ? (MK_TEMAS.find(function (t) { return t[0] === i.tema; }) || [, ''])[1] : '';
+    var meta = [i.autor === 'pedro' ? 'sua' : 'da Duda', tema, i.forca ? 'lead ' + MK_FORCA[i.forca] : '', i.gravado ? 'já gravado' : '', i.formato ? 'em andamento · ' + (mkFmt(i.formato) || { nome: '' }).nome : ''].filter(Boolean).join(' · ');
+    return '<li' + (i.feito ? ' class="feita"' : '') + '>' + (comFeito ? '<button type="button" class="st-check" data-mk-ifeito="' + esc(i.id) + '" aria-pressed="' + !!i.feito + '" aria-label="Postado"></button>' : '') +
+      '<div><b>' + esc(mkIdeiaTxt(i)) + '</b>' + (i.gancho && i.gancho !== mkIdeiaTxt(i) ? '<small class="st-ganchop">“' + esc(i.gancho) + '”</small>' : '') + '<small>' + esc(meta) + '</small></div>' +
       '<span>' + (i.feito ? '' : '<button type="button" class="st-mini" data-mk-usar="' + esc(i.id) + '">usar</button>') +
-      (comFeito ? '' : '<button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">feito</button><button type="button" class="link-btn" data-mk-del="' + esc(i.id) + '">apagar</button>') + '</span></li>';
+      (comFeito ? '' : '<button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">postado</button><button type="button" class="link-btn" data-mk-del="' + esc(i.id) + '">apagar</button>') + '</span></li>';
   }
   function mkIdeiasView() {
     var l = mkIdeias(), hoje = todayIso();
-    var doDia = l.filter(function (i) { return i.autor === 'duda' && mkDiaDe(i.criado) === hoje; }).sort(function (a, b) { return a.criado < b.criado ? -1 : 1; });
+    var doDia = mkHojeIds().map(mkDoc).filter(Boolean);
     var livres = l.filter(function (i) { return !i.usada && !i.feito && doDia.indexOf(i) < 0; });
+    var tot = livres.length;
+    if (mk.tema === 'fortes') livres = livres.filter(function (i) { return i.forca === 'forte'; });
+    else if (mk.tema !== 'todas') livres = livres.filter(function (i) { return i.tema === mk.tema; });
+    livres.sort(function (a, b) { var fa = !!a.formato, fb = !!b.formato; if (fa !== fb) return fa ? -1 : 1; return (a.ordem || 9999) - (b.ordem || 9999) || ((a.criado || '') < (b.criado || '') ? 1 : -1); });
     var feitas = l.filter(function (i) { return i.feito && doDia.indexOf(i) < 0; }).sort(function (a, b) { return (a.feito_em || '') < (b.feito_em || '') ? 1 : -1; });
     var usadas = l.filter(function (i) { return i.usada && !i.feito && doDia.indexOf(i) < 0; });
     var html = mkSerif('Banco de', 'ideias');
     var nf = doDia.filter(function (i) { return i.feito; }).length;
-    html += '<section class="st-card st-hoje"><div class="st-hoje-top"><div><p class="st-lab">ideias de hoje da Duda</p><h3 class="st-tit">' + esc(fmtDay(hoje)) + '</h3></div>' +
-      (doDia.length ? '<span class="st-placar"><b>' + nf + '</b> de ' + doDia.length + ' feitas</span>' : '') + '</div>';
-    if (!doDia.length) html += '<p class="st-vazio">A Duda põe as ideias de hoje às 7h, com o computador ligado. Enquanto isso, o banco abaixo tem as dos outros dias.</p>';
+    html += '<section class="st-card st-hoje"><div class="st-hoje-top"><div><p class="st-lab">as 5 de hoje da Duda</p><h3 class="st-tit">' + esc(fmtDay(hoje)) + '</h3></div>' +
+      (doDia.length ? '<span class="st-placar"><b>' + nf + '</b> de ' + doDia.length + ' postadas</span>' : '') + '</div>';
+    if (!doDia.length) html += '<p class="st-vazio">O banco está vazio. Guarde uma ideia abaixo.</p>';
     else {
       html += '<div class="st-prog"><i style="width:' + Math.round(100 * nf / doDia.length) + '%"></i></div><ul class="st-lista st-dodia">' + doDia.map(function (i) { return mkIdeiaLi(i, true); }).join('') + '</ul>';
       var hora = new Date().getHours(), falta = doDia.filter(function (i) { return !i.feito; });
       if (nf || hora >= 18) html += '<div class="st-resumo"><p class="st-lab">resumo do dia</p><p>' +
-        (nf === doDia.length ? 'Você fez todas as ' + doDia.length + ' de hoje. Dia completo.' : nf ? 'Você fez ' + nf + ' de ' + doDia.length + ': ' + esc(doDia.filter(function (i) { return i.feito; }).map(function (i) { return i.texto.split(/[:?.]/)[0]; }).join('; ')) + '.' : 'Nenhuma feita ainda hoje.') +
+        (nf === doDia.length ? 'Você postou todas as ' + doDia.length + ' de hoje. Dia completo.' : nf ? 'Você postou ' + nf + ' de ' + doDia.length + ': ' + esc(doDia.filter(function (i) { return i.feito; }).map(function (i) { return i.texto.split(/[:?.]/)[0]; }).join('; ')) + '.' : 'Nenhuma postada ainda hoje. Uma já basta: escolha a mais fácil.') +
         (falta.length ? ' ' + (falta.length === 1 ? 'A que ficou continua' : 'As ' + falta.length + ' que ficaram continuam') + ' no banco para os próximos dias.' : '') + '</p></div>';
     }
     html += '</section>';
-    html += '<p class="st-lab" style="margin-top:28px">banco · ' + livres.length + (livres.length === 1 ? ' ideia' : ' ideias') + '</p>' +
+    html += '<p class="st-lab" style="margin-top:28px">banco · ' + tot + (tot === 1 ? ' ideia' : ' ideias') + '</p><div class="st-temas">' + MK_TEMAS.map(function (t) { return '<button type="button" data-mk-tema="' + t[0] + '" aria-pressed="' + (mk.tema === t[0]) + '">' + esc(t[1]) + '</button>'; }).join('') + '</div>' +
       '<div class="st-ideia"><span>nova ideia</span><input type="text" data-mk-f="novaIdeia" value="' + esc(mk.novaIdeia || '') + '" placeholder="ex.: o que o refluxo faz com o dente" maxlength="300"><button type="button" class="st-gerar" data-mk-guardar="1">guardar</button></div>';
-    if (!livres.length) html += '<div class="empty" style="margin-top:12px">Nenhuma ideia guardada ainda.</div>';
+    if (!livres.length) html += '<div class="empty" style="margin-top:12px">' + (tot ? 'Nenhuma ideia neste tema.' : 'Nenhuma ideia guardada ainda.') + '</div>';
     else html += '<ul class="st-lista">' + livres.map(function (i) { return mkIdeiaLi(i, false); }).join('') + '</ul>';
     if (usadas.length) html += '<p class="st-lab" style="margin-top:28px">viraram roteiro</p><ul class="st-lista st-usadas">' + usadas.slice(0, 20).map(function (i) {
       return '<li><div><b>' + esc(i.texto) + '</b></div><span><button type="button" class="link-btn" data-mk-abrir="' + esc(i.usada) + '">abrir roteiro</button></span></li>'; }).join('') + '</ul>';
-    if (feitas.length) html += '<p class="st-lab" style="margin-top:28px">feitas · ' + feitas.length + '</p><ul class="st-lista st-usadas">' + feitas.slice(0, 30).map(function (i) {
-      return '<li><div><b>' + esc(i.texto) + '</b><small>feita ' + esc(i.feito_em ? mkDiaCurto(mkDiaDe(i.feito_em)) : '') + '</small></div><span><button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">desfazer</button></span></li>'; }).join('') + '</ul>';
+    if (feitas.length) html += '<p class="st-lab" style="margin-top:28px">postadas · ' + feitas.length + '</p><ul class="st-lista st-usadas">' + feitas.slice(0, 30).map(function (i) {
+      return '<li><div><b>' + esc(i.texto) + '</b><small>postada ' + esc(i.feito_em ? mkDiaCurto(mkDiaDe(i.feito_em)) : '') + '</small></div><span><button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">desfazer</button></span></li>'; }).join('') + '</ul>';
     return html;
   }
 
@@ -3679,20 +3826,22 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     html += '<div class="st-semana">' + dias.map(function (iso) {
       var d = mkDia(iso), itens = '';
       ag.filter(function (x) { return x.data === iso; }).forEach(function (x) {
-        itens += '<button type="button" class="st-ev ev-post"' + (x.rot ? ' data-mk-abrir="' + esc(x.rot) + '"' : ' data-mk-view="roteiros"') + '><small>' + esc(x.hora || '') + ' · ' + esc(x.estilo) + '</small>' + esc(x.titulo || '') + (x.gravado ? ' <em>gravado</em>' : '') + '</button>'; });
+        itens += '<button type="button" class="st-ev ev-post"' + (x.rot ? ' data-mk-abrir="' + esc(x.rot) + '"' : x.ideia ? ' data-mk-usar="' + esc(x.ideia) + '"' : ' data-mk-view="roteiros"') + '><small>' + esc(x.hora || '') + ' · ' + esc(x.estilo) + '</small>' + esc(x.titulo || '') + (x.gravado ? ' <em>gravado</em>' : '') + '</button>'; });
       mc.filter(function (p) { return p.status === 'agendado' && (p.quando || '').slice(0, 10) === iso; }).forEach(function (p) {
         itens += '<div class="st-ev ev-mc"><small>' + esc((p.quando || '').slice(11, 16)) + ' · programado no Instagram</small>' + esc((p.titulo || 'post').slice(0, 50)) + '</div>'; });
       if (d) mkPartes(d).forEach(function (p) { var f = (d.feito || {})[p.k];
         itens += '<button type="button" class="st-ev ev-' + p.k + (f ? ' feito' : '') + '" data-mk-feito="' + esc(d.id + '|' + p.k) + '"><small>' + esc(p.rot) + (f ? ' ✓' : '') + '</small>' + esc(p.tit) + '</button>'; });
       return '<div class="st-dia' + (iso === hoje ? ' hoje' : '') + '"><p>' + esc(MK_WD[new Date(iso + 'T12:00:00').getDay()]) + ' <b>' + new Date(iso + 'T12:00:00').getDate() + '</b></p><div class="st-evs">' + (itens || '<span class="st-livre">—</span>') + '</div></div>'; }).join('') + '</div>';
-    html += '<p class="hint">Toque numa missão do dia (post, story, fora da rede) para marcar como feita. Os roteiros abrem no novo conteúdo.</p>';
+    html += '<p class="hint">Toque numa missão do dia (post, story, fora da rede) para marcar como feita. Os posts abrem com o passo a passo da Duda.</p>';
     if (!mk.cal) html += '<h2 class="mk-h">Hoje</h2>' + mkHoje();
     return html + mcFila();
   }
 
   function mkRoteirosView() {
     var l = mkRots(), html = mkSerif('Roteiros', 'salvos');
-    if (!l.length) html += '<div class="empty">Nenhum roteiro ainda. Escreva uma ideia em <button type="button" class="link-btn" data-mk-view="novo">novo conteúdo</button> e toque em gerar.</div>';
+    var anda = mkIdeias().filter(function (i) { return i.formato && !i.feito; });
+    if (anda.length) html += '<p class="st-lab">em andamento</p><ul class="st-lista">' + anda.map(function (i) { return '<li><div><b>' + esc(mkIdeiaTxt(i)) + '</b><small>' + esc((mkFmt(i.formato) || { nome: '' }).nome + (i.postar_em ? ' · ' + mkDiaCurto(i.postar_em) : '')) + '</small></div><span><button type="button" class="st-mini" data-mk-usar="' + esc(i.id) + '">abrir</button></span></li>'; }).join('') + '</ul>';
+    if (!l.length) html += '<div class="empty">Nenhum roteiro antigo. Os novos saem do <button type="button" class="link-btn" data-mk-view="ideias">banco de ideias</button>: toque em usar e escolha o formato.</div>';
     else html += '<div class="st-rotgrid">' + l.map(function (r) {
       var e = mkEstilo(r.estilo), st = r.status === 'pedido' ? ['escrevendo…', 'c-warn'] : r.status === 'erro' ? ['deu erro', 'c-bad'] : r.gravado ? ['gravado', 'c-ok'] : r.postar_em ? ['no calendário · ' + mkDiaCurto(r.postar_em), ''] : ['pronto pra gravar', ''];
       return '<section class="st-card st-rot"><span class="st-th" style="background:' + e.grad + '"><small>' + esc(e.tag) + '</small></span><div><p class="st-lab">' + esc(e.nome) + '</p><h3 class="st-tit">' + esc(r.titulo || r.ideia) + '</h3><span class="chip ' + st[1] + '">' + esc(st[0]) + '</span></div>' +
@@ -3717,15 +3866,18 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   }
 
   function renderMkt() {
+    mk.copias = {};
     if (!state.db) return '<header class="page-head"><h1>Marketing</h1></header><div class="empty">' + (state.loading ? 'Carregando…' : '<b>O banco não carregou.</b> Abra o painel logado na sua conta.') + '</div>';
     var c = mkContagem(), v = mk.view;
     var side = '<aside class="st-side"><div class="st-brand">studio <em>portes</em></div><nav class="st-nav">' + MK_GUIAS.map(function (g) {
-      return '<button type="button" data-mk-view="' + g[0] + '"' + (v === g[0] ? ' aria-current="page"' : '') + '><i style="background:' + g[2] + '"></i>' + esc(g[1]) + '</button>'; }).join('') +
+      return '<button type="button" data-mk-view="' + g[0] + '"' + (v === g[0] || (g[0] === 'ideias' && v === 'ideia') ? ' aria-current="page"' : '') + '><i style="background:' + g[2] + '"></i>' + esc(g[1]) + '</button>'; }).join('') +
       '<span class="st-sep"></span>' + MK_GUIAS2.map(function (g) { return '<button type="button" class="st-g2" data-mk-view="' + g[0] + '"' + (v === g[0] ? ' aria-current="page"' : '') + '>' + esc(g[1]) + '</button>'; }).join('') + '</nav>' +
       '<div class="st-count"><b>' + c.ideias + '</b><span>' + (c.ideias === 1 ? 'ideia guardada' : 'ideias guardadas') + '</span><span>' + c.prontas + (c.prontas === 1 ? ' pronta pra gravar' : ' prontas pra gravar') + '</span></div></aside>';
-    var corpo = v === 'ideias' ? mkIdeiasView() : v === 'estilos' ? mkEstilosView() : v === 'calendario' ? mkCalendario() : v === 'roteiros' ? mkRoteirosView() : v === 'parcerias' ? mkParceriasView()
+    var corpo = v === 'estilos' ? mkEstilosView() : v === 'calendario' ? mkCalendario() : v === 'roteiros' ? mkRoteirosView() : v === 'parcerias' ? mkParceriasView()
       : v === 'numeros' ? mkSerif('Números') + mkNumeros() : v === 'arquivos' ? mkSerif('Arquivos') + mkArquivos()
-      : '<div class="st-top">' + mkSerif('Novo', 'conteúdo') + '<span class="st-ativo">estilo do Pedro ativo</span></div>' + mkNovo();
+      : v === 'ideia' ? mkIdeiaView()
+      : v === 'novo' ? '<div class="st-top">' + mkSerif('Roteiro') + '<span class="st-ativo">estilo do Pedro ativo</span></div>' + mkNovo()
+      : mkIdeiasView();
     return '<div class="st">' + side + '<div class="st-main">' + (mk.msg ? '<div class="ag-warn">' + esc(mk.msg) + '</div>' : '') + corpo + '</div></div>';
   }
 
@@ -3766,8 +3918,19 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
       mk.novaIdeia = ''; state.db.doc('mkt/ideia-' + Date.now()).set({ tipo: 'ideia', texto: tx, autor: 'pedro', criado: new Date().toISOString() }).catch(function () { mk.msg = 'Não salvou a ideia.'; render(); });
       render(); return true;
     }
-    if ((a = t.closest('[data-mk-ifeito]'))) { var fi = mkDoc(a.getAttribute('data-mk-ifeito')); if (!fi) return true; fi.feito = !fi.feito; fi.feito_em = fi.feito ? new Date().toISOString() : null; render(); mkSalvar(fi.id, { feito: fi.feito, feito_em: fi.feito_em }); return true; }
-    if ((a = t.closest('[data-mk-usar]'))) { var i = mkDoc(a.getAttribute('data-mk-usar')); if (!i) return true; mk.ideia = i.texto; mk.ideiaOrigem = i.id; if (i.estilo && MK_ESTILOS.some(function (e) { return e.id === i.estilo; })) mk.estilo = i.estilo; mk.rotAtual = null; mk.view = 'novo'; render(); window.scrollTo(0, 0); return true; }
+    if ((a = t.closest('[data-mk-ifeito]'))) { var fi = mkDoc(a.getAttribute('data-mk-ifeito')); if (!fi) return true; mk.msg = null; fi.feito = !fi.feito; fi.feito_em = fi.feito ? new Date().toISOString() : null; render(); mkSalvar(fi.id, { feito: fi.feito, feito_em: fi.feito_em }); return true; }
+    if ((a = t.closest('[data-mk-usar]'))) { var i = mkDoc(a.getAttribute('data-mk-usar')); if (!i) return true; mk.ideiaAtual = i.id; mk.fmt = null; mk.calForm = null; mk.view = 'ideia'; render(); window.scrollTo(0, 0); return true; }
+    if ((a = t.closest('[data-mk-fmt]'))) { var iF = mkDoc(mk.ideiaAtual); if (!iF) return true; mk.fmt = a.getAttribute('data-mk-fmt'); mk.calForm = null; iF.formato = mk.fmt; render(); mkSalvar(iF.id, { formato: mk.fmt }); return true; }
+    if ((a = t.closest('[data-mk-tema]'))) { mk.tema = a.getAttribute('data-mk-tema'); render(); return true; }
+    if ((a = t.closest('[data-mk-copytxt]'))) { var ct2 = mk.copias[a.getAttribute('data-mk-copytxt')] || '';
+      if (ct2 && navigator.clipboard) navigator.clipboard.writeText(ct2).then(function () { a.textContent = 'copiado ✓'; }, function () { a.textContent = 'selecione e copie à mão'; }); else a.textContent = 'selecione e copie à mão'; return true; }
+    if ((a = t.closest('[data-mk-itake]'))) { var iT = mkDoc(mk.ideiaAtual); if (!iT) return true; var fT = mk.fmt || iT.formato, tk = Object.assign({}, iT.takes_ok || {}), lt2 = (tk[fT] || []).slice(), nT = +a.getAttribute('data-mk-itake'), pT = lt2.indexOf(nT);
+      if (pT >= 0) lt2.splice(pT, 1); else lt2.push(nT); tk[fT] = lt2; iT.takes_ok = tk; render(); mkSalvar(iT.id, { takes_ok: tk }); return true; }
+    if (t.closest('[data-mk-ical]')) { var iC = mkDoc(mk.ideiaAtual); if (!iC) return true; mk.calForm = { data: iC.postar_em || '', hora: iC.horario || '18:00' }; render(); return true; }
+    if (t.closest('[data-mk-icalok]')) { var iK = mkDoc(mk.ideiaAtual), fK = mk.calForm || {}; if (!iK) return true;
+      if (!fK.data) { mk.msg = 'Escolha o dia.'; render(); return true; }
+      var fmtK = mk.fmt || iK.formato || 'reels'; iK.postar_em = fK.data; iK.horario = fK.hora || ''; iK.formato = fmtK; mk.calForm = null; mk.msg = null; render();
+      mkSalvar(iK.id, { postar_em: fK.data, horario: fK.hora || '', formato: fmtK }); return true; }
     if ((a = t.closest('[data-mk-del]'))) {
       var dd = mkDoc(a.getAttribute('data-mk-del')); if (!dd) return true;
       if (!confirm('Apagar "' + (dd.texto || dd.titulo || dd.ideia || dd.quem || 'item') + '"?')) return true;

@@ -370,3 +370,27 @@ input:focus, select:focus, textarea:focus { outline: 0; border-color: var(--acce
   .st-ideia { padding-left: 14px; }
   .st-ideia span { display: none; }
 }
+
+/* ===== 23/11/2026: banco de ideias → formato → o que a Duda manda fazer ===== */
+.st-voltar { margin-bottom: 6px; }
+.st-gancho { font-family: var(--st-serif); font-style: italic; font-size: 19px; color: var(--st-ink); margin: -4px 0 6px; line-height: 1.35; }
+.st-meta { color: var(--st-mut); font-size: 13px; margin: 0 0 8px; }
+.st-ganchop { font-style: italic; display: block; margin: 2px 0 1px; }
+.st-temas { display: flex; flex-wrap: wrap; gap: 7px; margin: 10px 0 4px; }
+.st-temas button { border: 1px solid var(--st-line); background: #fff; border-radius: 999px; padding: 6px 13px; font: 400 13px var(--font-ui); color: var(--st-ink); cursor: pointer; }
+.st-temas button[aria-pressed="true"] { background: var(--st-ink); border-color: var(--st-ink); color: #fff; }
+.st-duda { margin: 18px 0 14px; background: #f6efe6; border-color: #e8dccb; }
+.st-dudafala { margin: 4px 0 0; font-size: 15px; line-height: 1.5; color: var(--st-ink); }
+.st-script { background: #fbf8f3; border: 1px solid var(--st-line); border-radius: 12px; padding: 4px 14px; margin: 6px 0 10px; }
+.st-script p { margin: 10px 0; line-height: 1.5; font-size: 14.5px; }
+.st-seq { list-style: none; margin: 6px 0 10px; padding: 0; display: grid; gap: 8px; }
+.st-seq li { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 10px; align-items: start; background: #fbf8f3; border: 1px solid var(--st-line); border-radius: 12px; padding: 10px 12px; }
+.st-seq li > span { width: 26px; height: 26px; border-radius: 50%; background: var(--st-ink); color: #fff; font: 600 12px var(--font-ui); display: flex; align-items: center; justify-content: center; }
+.st-seq b { font-weight: 600; display: block; line-height: 1.35; }
+.st-seq small { display: block; color: var(--st-mut); font-size: 12.5px; margin-top: 3px; line-height: 1.4; }
+.st-seq p { margin: 6px 0 0; font-size: 14px; line-height: 1.45; }
+.st-stk { display: inline-block; background: #fff; border: 1px solid var(--st-line); border-radius: 10px; padding: 5px 10px; font-size: 13px !important; }
+.st-fotos { margin: 4px 0 12px; line-height: 1.5; font-size: 14px; }
+.st-arte { aspect-ratio: 4 / 5; max-width: 240px; background: #7a1f2b; color: #f6efe6; border-radius: 14px; padding: 22px 18px; display: flex; flex-direction: column; justify-content: space-between; margin: 6px 0 12px; }
+.st-arte b { font-family: var(--st-serif); font-weight: 400; font-size: 22px; line-height: 1.2; }
+.st-arte small { font-size: 9.5px; opacity: .8; }
