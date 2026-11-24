@@ -985,7 +985,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   .nav button { padding: 6px 12px 6px 6px; }
 }
 </style>
-<link rel="stylesheet" href="tema-apple.css?v=6">
+<link rel="stylesheet" href="tema-apple.css?v=7">
 
 <div class="app">
   <aside class="side">
@@ -3555,7 +3555,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     return l.sort(function (a, b) { return a.data + a.hora < b.data + b.hora ? -1 : 1; });
   }
   function mkContagem() {
-    var ideias = mkIdeias().filter(function (i) { return !i.usada && !i.feito; }).length;
+    var ideias = mkIdeias().filter(function (i) { return !i.feito; }).length;
     var lt = mkLote(), prontas = mkRots().filter(function (r) { return r.status === 'pronto' && !r.gravado; }).length + (lt ? (lt.itens || []).filter(function (x) { return !x.gravado; }).length : 0);
     return { ideias: ideias, prontas: prontas };
   }
@@ -3696,7 +3696,9 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     else if (i.postar_em) cal = '<span class="st-nocal">no calendário: ' + esc(mkDiaCurto(i.postar_em)) + (i.horario ? ', ' + esc(i.horario) : '') + '</span><button type="button" class="link-btn" data-mk-ical="1">mudar</button>';
     else cal = '<button type="button" class="st-verde" data-mk-ical="1">mandar pro calendário</button>';
     html += '<div class="st-foot"><p>✦ A ideia é sua. A Duda só aplica o <b>seu jeito de gravar, editar e escrever</b>.</p><div>' + cal + '</div></div>';
-    html += '<div class="st-mais"><button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">' + (i.feito ? 'postado ✓ (desfazer)' : 'marcar como postado') + '</button></div>';
+    html += i.feito
+      ? '<div class="st-fiz feito"><p><b>Feito ✓</b> ' + esc(i.feito_em ? mkDiaCurto(mkDiaDe(i.feito_em)) : '') + '. No banco ela aparece riscada.</p><div><button type="button" class="st-mini" data-mk-fiz="0">desfazer</button></div></div>'
+      : '<div class="st-fiz"><p><b>Fez este conteúdo?</b> Marque e ele fica riscado no banco.</p><div><button type="button" class="st-verde" data-mk-fiz="1">fiz</button><button type="button" class="st-mini" data-mk-fiz="0">não fiz</button></div></div>';
     return html;
   }
 
@@ -3767,42 +3769,37 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   function mkIdeiaLi(i, comFeito) {
     var tema = i.tema ? (MK_TEMAS.find(function (t) { return t[0] === i.tema; }) || [, ''])[1] : '';
     var meta = [i.autor === 'pedro' ? 'sua' : 'da Duda', tema, i.forca ? 'lead ' + MK_FORCA[i.forca] : '', i.gravado ? 'já gravado' : '', i.formato ? 'em andamento · ' + (mkFmt(i.formato) || { nome: '' }).nome : ''].filter(Boolean).join(' · ');
-    return '<li' + (i.feito ? ' class="feita"' : '') + '>' + (comFeito ? '<button type="button" class="st-check" data-mk-ifeito="' + esc(i.id) + '" aria-pressed="' + !!i.feito + '" aria-label="Postado"></button>' : '') +
+    if (i.feito) meta = 'fiz ✓ ' + (i.feito_em ? mkDiaCurto(mkDiaDe(i.feito_em)) : '') + (i.formato ? ' · ' + (mkFmt(i.formato) || { nome: '' }).nome : '');
+    return '<li' + (i.feito ? ' class="feita"' : '') + '>' + (comFeito ? '<button type="button" class="st-check" data-mk-ifeito="' + esc(i.id) + '" aria-pressed="' + !!i.feito + '" aria-label="Fiz"></button>' : '') +
       '<div><b>' + esc(mkIdeiaTxt(i)) + '</b>' + (i.gancho && i.gancho !== mkIdeiaTxt(i) ? '<small class="st-ganchop">“' + esc(i.gancho) + '”</small>' : '') + '<small>' + esc(meta) + '</small></div>' +
-      '<span>' + (i.feito ? '' : '<button type="button" class="st-mini" data-mk-usar="' + esc(i.id) + '">usar</button>') +
-      (comFeito ? '' : '<button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">postado</button><button type="button" class="link-btn" data-mk-del="' + esc(i.id) + '">apagar</button>') + '</span></li>';
+      '<span>' + (i.feito ? '<button type="button" class="link-btn" data-mk-usar="' + esc(i.id) + '">ver</button>' + (comFeito ? '' : '<button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">desfazer</button>')
+        : '<button type="button" class="st-mini" data-mk-usar="' + esc(i.id) + '">usar</button>' + (comFeito ? '' : '<button type="button" class="link-btn" data-mk-del="' + esc(i.id) + '">apagar</button>')) + '</span></li>';
   }
   function mkIdeiasView() {
     var l = mkIdeias(), hoje = todayIso();
     var doDia = mkHojeIds().map(mkDoc).filter(Boolean);
-    var livres = l.filter(function (i) { return !i.usada && !i.feito && doDia.indexOf(i) < 0; });
-    var tot = livres.length;
+    var livres = l.filter(function (i) { return doDia.indexOf(i) < 0; });
+    var tot = livres.filter(function (i) { return !i.feito; }).length, nfeitas = livres.length - tot;
     if (mk.tema === 'fortes') livres = livres.filter(function (i) { return i.forca === 'forte'; });
     else if (mk.tema !== 'todas') livres = livres.filter(function (i) { return i.tema === mk.tema; });
-    livres.sort(function (a, b) { var fa = !!a.formato, fb = !!b.formato; if (fa !== fb) return fa ? -1 : 1; return (a.ordem || 9999) - (b.ordem || 9999) || ((a.criado || '') < (b.criado || '') ? 1 : -1); });
-    var feitas = l.filter(function (i) { return i.feito && doDia.indexOf(i) < 0; }).sort(function (a, b) { return (a.feito_em || '') < (b.feito_em || '') ? 1 : -1; });
-    var usadas = l.filter(function (i) { return i.usada && !i.feito && doDia.indexOf(i) < 0; });
+    livres.sort(function (a, b) { if (!!a.feito !== !!b.feito) return a.feito ? 1 : -1; var fa = !!a.formato, fb = !!b.formato; if (fa !== fb) return fa ? -1 : 1; return (a.ordem || 9999) - (b.ordem || 9999) || ((a.criado || '') < (b.criado || '') ? 1 : -1); });
     var html = mkSerif('Banco de', 'ideias');
     var nf = doDia.filter(function (i) { return i.feito; }).length;
     html += '<section class="st-card st-hoje"><div class="st-hoje-top"><div><p class="st-lab">as 5 de hoje da Duda</p><h3 class="st-tit">' + esc(fmtDay(hoje)) + '</h3></div>' +
-      (doDia.length ? '<span class="st-placar"><b>' + nf + '</b> de ' + doDia.length + ' postadas</span>' : '') + '</div>';
+      (doDia.length ? '<span class="st-placar"><b>' + nf + '</b> de ' + doDia.length + ' feitas</span>' : '') + '</div>';
     if (!doDia.length) html += '<p class="st-vazio">O banco está vazio. Guarde uma ideia abaixo.</p>';
     else {
       html += '<div class="st-prog"><i style="width:' + Math.round(100 * nf / doDia.length) + '%"></i></div><ul class="st-lista st-dodia">' + doDia.map(function (i) { return mkIdeiaLi(i, true); }).join('') + '</ul>';
       var hora = new Date().getHours(), falta = doDia.filter(function (i) { return !i.feito; });
       if (nf || hora >= 18) html += '<div class="st-resumo"><p class="st-lab">resumo do dia</p><p>' +
-        (nf === doDia.length ? 'Você postou todas as ' + doDia.length + ' de hoje. Dia completo.' : nf ? 'Você postou ' + nf + ' de ' + doDia.length + ': ' + esc(doDia.filter(function (i) { return i.feito; }).map(function (i) { return i.texto.split(/[:?.]/)[0]; }).join('; ')) + '.' : 'Nenhuma postada ainda hoje. Uma já basta: escolha a mais fácil.') +
+        (nf === doDia.length ? 'Você fez todas as ' + doDia.length + ' de hoje. Dia completo.' : nf ? 'Você fez ' + nf + ' de ' + doDia.length + ': ' + esc(doDia.filter(function (i) { return i.feito; }).map(function (i) { return i.texto.split(/[:?.]/)[0]; }).join('; ')) + '.' : 'Nenhuma feita ainda hoje. Uma já basta: escolha a mais fácil.') +
         (falta.length ? ' ' + (falta.length === 1 ? 'A que ficou continua' : 'As ' + falta.length + ' que ficaram continuam') + ' no banco para os próximos dias.' : '') + '</p></div>';
     }
     html += '</section>';
-    html += '<p class="st-lab" style="margin-top:28px">banco · ' + tot + (tot === 1 ? ' ideia' : ' ideias') + '</p><div class="st-temas">' + MK_TEMAS.map(function (t) { return '<button type="button" data-mk-tema="' + t[0] + '" aria-pressed="' + (mk.tema === t[0]) + '">' + esc(t[1]) + '</button>'; }).join('') + '</div>' +
+    html += '<p class="st-lab" style="margin-top:28px">banco · ' + tot + (tot === 1 ? ' ideia' : ' ideias') + (nfeitas ? ' · ' + nfeitas + (nfeitas === 1 ? ' feita' : ' feitas') : '') + '</p><div class="st-temas">' + MK_TEMAS.map(function (t) { return '<button type="button" data-mk-tema="' + t[0] + '" aria-pressed="' + (mk.tema === t[0]) + '">' + esc(t[1]) + '</button>'; }).join('') + '</div>' +
       '<div class="st-ideia"><span>nova ideia</span><input type="text" data-mk-f="novaIdeia" value="' + esc(mk.novaIdeia || '') + '" placeholder="ex.: o que o refluxo faz com o dente" maxlength="300"><button type="button" class="st-gerar" data-mk-guardar="1">guardar</button></div>';
     if (!livres.length) html += '<div class="empty" style="margin-top:12px">' + (tot ? 'Nenhuma ideia neste tema.' : 'Nenhuma ideia guardada ainda.') + '</div>';
     else html += '<ul class="st-lista">' + livres.map(function (i) { return mkIdeiaLi(i, false); }).join('') + '</ul>';
-    if (usadas.length) html += '<p class="st-lab" style="margin-top:28px">viraram roteiro</p><ul class="st-lista st-usadas">' + usadas.slice(0, 20).map(function (i) {
-      return '<li><div><b>' + esc(i.texto) + '</b></div><span><button type="button" class="link-btn" data-mk-abrir="' + esc(i.usada) + '">abrir roteiro</button></span></li>'; }).join('') + '</ul>';
-    if (feitas.length) html += '<p class="st-lab" style="margin-top:28px">postadas · ' + feitas.length + '</p><ul class="st-lista st-usadas">' + feitas.slice(0, 30).map(function (i) {
-      return '<li><div><b>' + esc(i.texto) + '</b><small>postada ' + esc(i.feito_em ? mkDiaCurto(mkDiaDe(i.feito_em)) : '') + '</small></div><span><button type="button" class="link-btn" data-mk-ifeito="' + esc(i.id) + '">desfazer</button></span></li>'; }).join('') + '</ul>';
     return html;
   }
 
@@ -3838,7 +3835,7 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
   }
 
   function mkRoteirosView() {
-    var l = mkRots(), html = mkSerif('Roteiros', 'salvos');
+    var l = mkRots().filter(function (r) { return r.status !== 'pedido'; }), html = mkSerif('Roteiros', 'salvos');
     var anda = mkIdeias().filter(function (i) { return i.formato && !i.feito; });
     if (anda.length) html += '<p class="st-lab">em andamento</p><ul class="st-lista">' + anda.map(function (i) { return '<li><div><b>' + esc(mkIdeiaTxt(i)) + '</b><small>' + esc((mkFmt(i.formato) || { nome: '' }).nome + (i.postar_em ? ' · ' + mkDiaCurto(i.postar_em) : '')) + '</small></div><span><button type="button" class="st-mini" data-mk-usar="' + esc(i.id) + '">abrir</button></span></li>'; }).join('') + '</ul>';
     if (!l.length) html += '<div class="empty">Nenhum roteiro antigo. Os novos saem do <button type="button" class="link-btn" data-mk-view="ideias">banco de ideias</button>: toque em usar e escolha o formato.</div>';
@@ -3920,7 +3917,12 @@ h1, h2, h3 { text-wrap: balance; margin: 0; }
     }
     if ((a = t.closest('[data-mk-ifeito]'))) { var fi = mkDoc(a.getAttribute('data-mk-ifeito')); if (!fi) return true; mk.msg = null; fi.feito = !fi.feito; fi.feito_em = fi.feito ? new Date().toISOString() : null; render(); mkSalvar(fi.id, { feito: fi.feito, feito_em: fi.feito_em }); return true; }
     if ((a = t.closest('[data-mk-usar]'))) { var i = mkDoc(a.getAttribute('data-mk-usar')); if (!i) return true; mk.ideiaAtual = i.id; mk.fmt = null; mk.calForm = null; mk.view = 'ideia'; render(); window.scrollTo(0, 0); return true; }
-    if ((a = t.closest('[data-mk-fmt]'))) { var iF = mkDoc(mk.ideiaAtual); if (!iF) return true; mk.fmt = a.getAttribute('data-mk-fmt'); mk.calForm = null; iF.formato = mk.fmt; render(); mkSalvar(iF.id, { formato: mk.fmt }); return true; }
+    if ((a = t.closest('[data-mk-fmt]'))) { var iF = mkDoc(mk.ideiaAtual); if (!iF) return true; mk.fmt = a.getAttribute('data-mk-fmt'); mk.calForm = null; iF.formato = mk.fmt; render(); mkSalvar(iF.id, { formato: mk.fmt });
+      setTimeout(function () { var el = document.querySelector('.st-duda'); if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 30); return true; }
+    if ((a = t.closest('[data-mk-fiz]'))) { var iZ = mkDoc(mk.ideiaAtual); if (!iZ) return true; var sim = a.getAttribute('data-mk-fiz') === '1';
+      if (sim || iZ.feito) { iZ.feito = sim; iZ.feito_em = sim ? new Date().toISOString() : null; mkSalvar(iZ.id, { feito: iZ.feito, feito_em: iZ.feito_em, formato: iZ.formato || mk.fmt || null }); }
+      if (!sim && iZ.feito === false && a.textContent === 'desfazer') { render(); return true; }
+      mk.view = 'ideias'; mk.fmt = null; mk.calForm = null; render(); window.scrollTo(0, 0); return true; }
     if ((a = t.closest('[data-mk-tema]'))) { mk.tema = a.getAttribute('data-mk-tema'); render(); return true; }
     if ((a = t.closest('[data-mk-copytxt]'))) { var ct2 = mk.copias[a.getAttribute('data-mk-copytxt')] || '';
       if (ct2 && navigator.clipboard) navigator.clipboard.writeText(ct2).then(function () { a.textContent = 'copiado ✓'; }, function () { a.textContent = 'selecione e copie à mão'; }); else a.textContent = 'selecione e copie à mão'; return true; }
